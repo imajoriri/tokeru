@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 void main() {
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
+}
+
+@pragma('vm:entry-point')
+void panel() {
   runApp(
     const ProviderScope(
       child: MyApp(),
@@ -46,10 +56,24 @@ final todosProvider = StateProvider<List<String>>((ref) {
 class MyHomePage extends HookConsumerWidget {
   const MyHomePage({super.key});
 
+  void addTodo(
+      WidgetRef ref, TextEditingController textController, List<String> todos) {
+    ref.read(submitButtonTypeProvider.notifier).state = SubmitButtonType.todos;
+    ref.read(todosProvider.notifier).state = [...todos, textController.text];
+    textController.clear();
+  }
+
+  void addMessage(
+      WidgetRef ref, TextEditingController textController, List<String> memos) {
+    ref.read(submitButtonTypeProvider.notifier).state = SubmitButtonType.memo;
+    ref.read(memosProvider.notifier).state = [...memos, textController.text];
+    textController.clear();
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textController = useTextEditingController();
-    final focusNode = FocusNode();
+    final focus = useFocusNode();
     final submitButtonType = ref.watch(submitButtonTypeProvider);
     final memos = ref.watch(memosProvider);
     final todos = ref.watch(todosProvider);
@@ -80,10 +104,24 @@ class MyHomePage extends HookConsumerWidget {
               ],
             ),
           ),
-          RawKeyboardListener(
-            focusNode: focusNode,
-            onKey: (value) {
-              print(value);
+          MultiKeyBoardShortcuts(
+            onCommandLeftArrow: () {
+              ref.read(submitButtonTypeProvider.notifier).state =
+                  SubmitButtonType.todos;
+            },
+            onCommandRightArrow: () {
+              ref.read(submitButtonTypeProvider.notifier).state =
+                  SubmitButtonType.memo;
+            },
+            onCommandEnter: () {
+              if (!focus.hasFocus) {
+                return;
+              }
+              if (submitButtonType == SubmitButtonType.todos) {
+                addTodo(ref, textController, todos);
+              } else {
+                addMessage(ref, textController, memos);
+              }
             },
             child: Row(
               children: [
@@ -91,32 +129,21 @@ class MyHomePage extends HookConsumerWidget {
                     text: "add todo",
                     canSubmit: submitButtonType == SubmitButtonType.todos,
                     onTap: () {
-                      ref.read(submitButtonTypeProvider.notifier).state =
-                          SubmitButtonType.todos;
-                      ref.read(todosProvider.notifier).state = [
-                        ...todos,
-                        textController.text
-                      ];
-                      textController.clear();
+                      addTodo(ref, textController, todos);
                     }),
                 Expanded(
                   child: TextField(
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
                     controller: textController,
+                    focusNode: focus,
                   ),
                 ),
                 SubmitButton(
                     text: "add memo",
                     canSubmit: submitButtonType == SubmitButtonType.memo,
                     onTap: () {
-                      ref.read(submitButtonTypeProvider.notifier).state =
-                          SubmitButtonType.memo;
-                      ref.read(memosProvider.notifier).state = [
-                        ...memos,
-                        textController.text
-                      ];
-                      textController.clear();
+                      addMessage(ref, textController, memos);
                     }),
               ],
             ),
@@ -148,6 +175,70 @@ class SubmitButton extends StatelessWidget {
       ),
       child: Text(text,
           style: TextStyle(color: canSubmit ? Colors.white : Colors.grey)),
+    );
+  }
+}
+
+class CommandEnterIntent extends Intent {}
+
+class CommandRightArrowIntent extends Intent {}
+
+class CommandLeftArrowIntent extends Intent {}
+
+class MultiKeyBoardShortcuts extends StatelessWidget {
+  const MultiKeyBoardShortcuts({
+    super.key,
+    required this.onCommandEnter,
+    required this.onCommandRightArrow,
+    required this.onCommandLeftArrow,
+    required this.child,
+  });
+
+  final VoidCallback onCommandEnter;
+  final VoidCallback onCommandRightArrow;
+  final VoidCallback onCommandLeftArrow;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Shortcuts(
+      shortcuts: <LogicalKeySet, Intent>{
+        LogicalKeySet(
+          LogicalKeyboardKey.meta,
+          LogicalKeyboardKey.enter,
+        ): CommandEnterIntent(),
+        LogicalKeySet(
+          LogicalKeyboardKey.meta,
+          LogicalKeyboardKey.arrowRight,
+        ): CommandRightArrowIntent(),
+        LogicalKeySet(
+          LogicalKeyboardKey.meta,
+          LogicalKeyboardKey.arrowLeft,
+        ): CommandLeftArrowIntent(),
+      },
+      child: Actions(
+        actions: <Type, Action<Intent>>{
+          CommandEnterIntent: CallbackAction(
+            onInvoke: (intent) {
+              onCommandEnter();
+              return null;
+            },
+          ),
+          CommandRightArrowIntent: CallbackAction(
+            onInvoke: (intent) {
+              onCommandRightArrow();
+              return null;
+            },
+          ),
+          CommandLeftArrowIntent: CallbackAction(
+            onInvoke: (intent) {
+              onCommandLeftArrow();
+              return null;
+            },
+          ),
+        },
+        child: child,
+      ),
     );
   }
 }
