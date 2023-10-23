@@ -1,10 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:native_shared_preferences/original_shared_preferences/original_shared_preferences.dart';
+// import 'package:native_shared_preferences/original_shared_preferences/original_shared_preferences.dart';
 
 void main() {
   runApp(
@@ -49,24 +47,24 @@ final bookmarkProvider = StateProvider<List<String>>((ref) {
 
 Future<void> saveStringList(
     {required String key, required List<String> values}) async {
-  final prefs = await SharedPreferences.getInstance();
+  // final prefs = await SharedPreferences.getInstance();
 
-  // Stringの配列をJSON形式の文字列にエンコード
-  final jsonString = jsonEncode(values);
+  // // Stringの配列をJSON形式の文字列にエンコード
+  // final jsonString = jsonEncode(values);
 
-  prefs.setString(key, jsonString);
+  // prefs.setString(key, jsonString);
 }
 
 Future<List<String>> getStringList({
   required String key,
 }) async {
-  final prefs = await SharedPreferences.getInstance();
+  // final prefs = await SharedPreferences.getInstance();
 
-  // JSON形式の文字列を取得してStringの配列にデコード
-  final jsonString = prefs.getString(key);
-  if (jsonString != null) {
-    return List<String>.from(jsonDecode(jsonString));
-  }
+  // // JSON形式の文字列を取得してStringの配列にデコード
+  // final jsonString = prefs.getString(key);
+  // if (jsonString != null) {
+  //   return List<String>.from(jsonDecode(jsonString));
+  // }
   return [];
 }
 
