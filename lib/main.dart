@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:native_shared_preferences/original_shared_preferences/original_shared_preferences.dart';
 
 void main() {
   runApp(
@@ -36,37 +39,60 @@ class MyApp extends StatelessWidget {
   }
 }
 
-enum SubmitButtonType {
-  todos,
-  memo,
-}
-
-final submitButtonTypeProvider = StateProvider<SubmitButtonType>((ref) {
-  return SubmitButtonType.todos;
-});
-
 final memosProvider = StateProvider<List<String>>((ref) {
   return [];
 });
 
-final todosProvider = StateProvider<List<String>>((ref) {
+final bookmarkProvider = StateProvider<List<String>>((ref) {
   return [];
 });
 
+Future<void> saveStringList(
+    {required String key, required List<String> values}) async {
+  final prefs = await SharedPreferences.getInstance();
+
+  // Stringの配列をJSON形式の文字列にエンコード
+  final jsonString = jsonEncode(values);
+
+  prefs.setString(key, jsonString);
+}
+
+Future<List<String>> getStringList({
+  required String key,
+}) async {
+  final prefs = await SharedPreferences.getInstance();
+
+  // JSON形式の文字列を取得してStringの配列にデコード
+  final jsonString = prefs.getString(key);
+  if (jsonString != null) {
+    return List<String>.from(jsonDecode(jsonString));
+  }
+  return [];
+}
+
 class MyHomePage extends HookConsumerWidget {
   const MyHomePage({super.key});
+  final String bookmarkKey = "bookmark_key";
 
-  void addTodo(
-      WidgetRef ref, TextEditingController textController, List<String> todos) {
-    ref.read(submitButtonTypeProvider.notifier).state = SubmitButtonType.todos;
-    ref.read(todosProvider.notifier).state = [...todos, textController.text];
-    textController.clear();
+  void addBookmark(WidgetRef ref, String memo) {
+    final bookmarks = ref.read(bookmarkProvider);
+    final newBookmarks = [...bookmarks, memo];
+    ref.read(bookmarkProvider.notifier).state = newBookmarks;
+    saveStringList(key: bookmarkKey, values: newBookmarks);
+  }
+
+  void removeBookmark(WidgetRef ref, int index) {
+    final bookmarks = ref.read(bookmarkProvider);
+    final newBookmarks = [...bookmarks];
+    newBookmarks.removeAt(index);
+    ref.read(bookmarkProvider.notifier).state = newBookmarks;
+    saveStringList(key: bookmarkKey, values: newBookmarks);
   }
 
   void addMessage(
       WidgetRef ref, TextEditingController textController, List<String> memos) {
-    ref.read(submitButtonTypeProvider.notifier).state = SubmitButtonType.memo;
-    ref.read(memosProvider.notifier).state = [...memos, textController.text];
+    final newMemos = [...memos, textController.text];
+    ref.read(memosProvider.notifier).state = newMemos;
     textController.clear();
   }
 
@@ -74,78 +100,104 @@ class MyHomePage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final textController = useTextEditingController();
     final focus = useFocusNode();
-    final submitButtonType = ref.watch(submitButtonTypeProvider);
     final memos = ref.watch(memosProvider);
-    final todos = ref.watch(todosProvider);
+    final bookmarks = ref.watch(bookmarkProvider);
+
+    useEffect(() {
+      getStringList(key: bookmarkKey).then((value) {
+        ref.read(bookmarkProvider.notifier).state = value;
+      });
+    }, []);
+
     return Scaffold(
       body: Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return Row(
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          removeBookmark(ref, index);
+                        },
+                        icon: const Icon(
+                          Icons.bookmark,
+                          color: Colors.deepPurple,
+                        )),
+                    Text(bookmarks[index]),
+                  ],
+                );
+              },
+              itemCount: bookmarks.length,
+            ),
+          ),
+          OutlinedButton(
+            onPressed: () {
+              ref.read(memosProvider.notifier).state = [];
+            },
+            child: const Text("reset"),
+          ),
           Expanded(
-            child: Row(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return Text(todos[index]);
-                    },
-                    itemCount: todos.length,
-                  ),
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return Text(memos[index]);
-                    },
-                    itemCount: memos.length,
-                  ),
-                ),
-              ],
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return Row(
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            addBookmark(ref, memos[index]);
+                          },
+                          icon: const Icon(
+                            Icons.bookmark,
+                            color: Colors.grey,
+                          )),
+                      Text(memos[index]),
+                    ],
+                  );
+                },
+                itemCount: memos.length,
+              ),
             ),
           ),
           MultiKeyBoardShortcuts(
-            onCommandLeftArrow: () {
-              ref.read(submitButtonTypeProvider.notifier).state =
-                  SubmitButtonType.todos;
-            },
-            onCommandRightArrow: () {
-              ref.read(submitButtonTypeProvider.notifier).state =
-                  SubmitButtonType.memo;
-            },
             onCommandEnter: () {
               if (!focus.hasFocus) {
                 return;
               }
-              if (submitButtonType == SubmitButtonType.todos) {
-                addTodo(ref, textController, todos);
-              } else {
-                addMessage(ref, textController, memos);
-              }
+              addMessage(ref, textController, memos);
             },
-            child: Row(
-              children: [
-                SubmitButton(
-                    text: "add todo",
-                    canSubmit: submitButtonType == SubmitButtonType.todos,
-                    onTap: () {
-                      addTodo(ref, textController, todos);
-                    }),
-                Expanded(
-                  child: TextField(
-                    keyboardType: TextInputType.multiline,
-                    maxLines: null,
-                    controller: textController,
-                    focusNode: focus,
+            onEsc: () {
+              if (!focus.hasFocus) {
+                return;
+              }
+              focus.unfocus();
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: TextField(
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      controller: textController,
+                      focusNode: focus,
+                      autofocus: true,
+                    ),
                   ),
-                ),
-                SubmitButton(
-                    text: "add memo",
-                    canSubmit: submitButtonType == SubmitButtonType.memo,
-                    onTap: () {
-                      addMessage(ref, textController, memos);
-                    }),
-              ],
+                  SubmitButton(
+                      text: "add memo",
+                      onTap: () {
+                        addMessage(ref, textController, memos);
+                      }),
+                ],
+              ),
             ),
           ),
         ],
@@ -155,13 +207,8 @@ class MyHomePage extends HookConsumerWidget {
 }
 
 class SubmitButton extends StatelessWidget {
-  const SubmitButton(
-      {super.key,
-      required this.text,
-      required this.canSubmit,
-      required this.onTap});
+  const SubmitButton({super.key, required this.text, required this.onTap});
 
-  final bool canSubmit;
   final String text;
   final VoidCallback onTap;
 
@@ -170,33 +217,27 @@ class SubmitButton extends StatelessWidget {
     return OutlinedButton(
       onPressed: onTap,
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(
-            canSubmit ? Colors.deepPurple : Colors.transparent),
+        backgroundColor: MaterialStateProperty.all<Color>(Colors.deepPurple),
       ),
-      child: Text(text,
-          style: TextStyle(color: canSubmit ? Colors.white : Colors.grey)),
+      child: Text(text, style: const TextStyle(color: Colors.white)),
     );
   }
 }
 
 class CommandEnterIntent extends Intent {}
 
-class CommandRightArrowIntent extends Intent {}
-
-class CommandLeftArrowIntent extends Intent {}
+class EscIntent extends Intent {}
 
 class MultiKeyBoardShortcuts extends StatelessWidget {
   const MultiKeyBoardShortcuts({
     super.key,
     required this.onCommandEnter,
-    required this.onCommandRightArrow,
-    required this.onCommandLeftArrow,
+    required this.onEsc,
     required this.child,
   });
 
   final VoidCallback onCommandEnter;
-  final VoidCallback onCommandRightArrow;
-  final VoidCallback onCommandLeftArrow;
+  final VoidCallback onEsc;
   final Widget child;
 
   @override
@@ -208,13 +249,8 @@ class MultiKeyBoardShortcuts extends StatelessWidget {
           LogicalKeyboardKey.enter,
         ): CommandEnterIntent(),
         LogicalKeySet(
-          LogicalKeyboardKey.meta,
-          LogicalKeyboardKey.arrowRight,
-        ): CommandRightArrowIntent(),
-        LogicalKeySet(
-          LogicalKeyboardKey.meta,
-          LogicalKeyboardKey.arrowLeft,
-        ): CommandLeftArrowIntent(),
+          LogicalKeyboardKey.escape,
+        ): EscIntent(),
       },
       child: Actions(
         actions: <Type, Action<Intent>>{
@@ -224,15 +260,9 @@ class MultiKeyBoardShortcuts extends StatelessWidget {
               return null;
             },
           ),
-          CommandRightArrowIntent: CallbackAction(
+          EscIntent: CallbackAction(
             onInvoke: (intent) {
-              onCommandRightArrow();
-              return null;
-            },
-          ),
-          CommandLeftArrowIntent: CallbackAction(
-            onInvoke: (intent) {
-              onCommandLeftArrow();
+              onEsc();
               return null;
             },
           ),
