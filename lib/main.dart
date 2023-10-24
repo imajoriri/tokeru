@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-// import 'package:native_shared_preferences/original_shared_preferences/original_shared_preferences.dart';
 
 void main() {
   runApp(
