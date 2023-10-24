@@ -1,9 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:quick_flutter/firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(
     const ProviderScope(
       child: MyApp(),
@@ -104,6 +111,7 @@ class MyHomePage extends HookConsumerWidget {
       getStringList(key: bookmarkKey).then((value) {
         ref.read(bookmarkProvider.notifier).state = value;
       });
+      return null;
     }, []);
 
     return Scaffold(
@@ -132,8 +140,32 @@ class MyHomePage extends HookConsumerWidget {
             ),
           ),
           OutlinedButton(
-            onPressed: () {
+            onPressed: () async {
               ref.read(memosProvider.notifier).state = [];
+              print("hoge");
+              final db = FirebaseFirestore.instance;
+              final cities = db.collection("test");
+              final data1 = <String, dynamic>{
+                "name": "San Francisco",
+                "state": "CA",
+                "country": "USA",
+                "capital": false,
+                "population": 860000,
+                "regions": ["west_coast", "norcal"]
+              };
+              // await cities.doc("hoge").set(data1);
+              await cities.add({"hoge": "fuga"});
+              final docRef = db.collection("test").doc("hoge");
+              docRef.get().then(
+                (DocumentSnapshot doc) {
+                  final data = doc.data() as Map<String, dynamic>;
+                  // ...
+                  print("fugaffff");
+                  print(data);
+                },
+                onError: (e) => print("Error getting document: $e"),
+              );
+              print("ffff");
             },
             child: const Text("reset"),
           ),
