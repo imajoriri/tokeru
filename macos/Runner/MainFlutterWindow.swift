@@ -2,6 +2,7 @@ import Cocoa
 import FlutterMacOS
 import HotKey
 import SwiftUI
+import Firebase
 
 class MainFlutterWindow: NSWindow {
   let hotKey = HotKey(key: .r, modifiers: [.command, .option])
@@ -9,6 +10,7 @@ class MainFlutterWindow: NSWindow {
   lazy var flutterEngine = FlutterEngine(name: "my flutter engine", project: nil)
   
   override func awakeFromNib() {
+    FirebaseApp.configure()
     let flutterViewController = FlutterViewController()
     let windowFrame = self.frame
     self.contentViewController = flutterViewController
