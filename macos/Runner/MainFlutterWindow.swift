@@ -10,7 +10,7 @@ class MainFlutterWindow: NSWindow {
   lazy var flutterEngine = FlutterEngine(name: "my flutter engine", project: nil)
   
   override func awakeFromNib() {
-    FirebaseApp.configure()
+//    FirebaseApp.configure()
     let flutterViewController = FlutterViewController()
     let windowFrame = self.frame
     self.contentViewController = flutterViewController

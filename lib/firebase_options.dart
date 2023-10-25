@@ -3,6 +3,7 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'package:quick_flutter/systems/flavor.dart';
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -16,6 +17,7 @@ import 'package:flutter/foundation.dart'
 /// ```
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
+    const flavorEnv = String.fromEnvironment('flavor');
     if (kIsWeb) {
       throw UnsupportedError(
         'DefaultFirebaseOptions have not been configured for web - '
@@ -34,7 +36,7 @@ class DefaultFirebaseOptions {
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.macOS:
-        return macos;
+        return flavorEnv == Flavor.prod.name ? macosProd : macosDev;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -52,12 +54,21 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions macos = FirebaseOptions(
+  static const FirebaseOptions macosDev = FirebaseOptions(
     apiKey: 'AIzaSyBASHnaNJ0ry00TlXoPeJVQAZkv2cd414w',
     appId: '1:998557904358:ios:214b952a04fa28e417fa27',
     messagingSenderId: '998557904358',
     projectId: 'quick-chat-dev-a442c',
     storageBucket: 'quick-chat-dev-a442c.appspot.com',
     iosBundleId: 'com.example.quickFlutter.dev',
+  );
+
+  static const FirebaseOptions macosProd = FirebaseOptions(
+    apiKey: 'AIzaSyDlDMQe3k9nq3I9LTTEEO4xpBJogJyt5rY',
+    appId: '1:93729662960:ios:ad17b70c1e190213f81f35',
+    messagingSenderId: '93729662960',
+    projectId: 'quick-chat-pro',
+    storageBucket: 'quick-chat-pro.appspot.com',
+    iosBundleId: 'com.example.quickFlutter.prod',
   );
 }
