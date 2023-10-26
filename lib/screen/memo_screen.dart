@@ -17,6 +17,24 @@ final addMemoProvider =
   return;
 });
 
+class UpdateMemoParams {
+  UpdateMemoParams({
+    required this.id,
+    this.content,
+    this.isBookmark,
+  });
+  final String id;
+  final String? content;
+  final bool? isBookmark;
+}
+
+final updateMemoContentProvider = Provider.autoDispose
+    .family<Future<void>, UpdateMemoParams>((ref, params) async {
+  ref.watch(memoRepositoryProvider).update(
+      id: params.id, content: params.content, isBookmark: params.isBookmark);
+  return;
+});
+
 final bookmarkProvider = FutureProvider.autoDispose<List<Memo>>((ref) async {
   return ref.watch(memoRepositoryProvider).getBookmarks();
 });

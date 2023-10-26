@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/firebase_options.dart';
 import 'package:quick_flutter/screen/memo_screen.dart';
+import 'package:quick_flutter/screen/sidebar_screen/controller.dart';
 import 'package:quick_flutter/screen/sidebar_screen/sidebar_screen.dart';
 
 void main() async {
@@ -30,22 +31,22 @@ void panel() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      // home: const MemoScreen(),
-      home: const Row(
+      home: Row(
         children: [
-          Flexible(child: MemoScreen()),
-          Flexible(child: SidebarScreen()),
+          const Flexible(child: MemoScreen()),
+          if (ref.watch(sidebarScreenControllerProvider).isShow)
+            const Flexible(child: SidebarScreen()),
         ],
       ),
     );

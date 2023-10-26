@@ -7,6 +7,7 @@ final memoRepositoryProvider = Provider((ref) => MemoRepository(ref: ref));
 class MemoRepository {
   MemoRepository({required this.ref});
   final Ref ref;
+
   Future<void> add(String content) async {
     // 追加する処理
     final firestore = ref.read(firestoreProvider);
@@ -15,6 +16,18 @@ class MemoRepository {
       "createdAt": DateTime.now(),
       "isBookmark": false,
     });
+  }
+
+  // 更新
+  Future<void> update(
+      {required String id, String? content, bool? isBookmark}) async {
+    final firestore = ref.read(firestoreProvider);
+    // null以外を更新
+    final data = {
+      if (content != null) "content": content,
+      if (isBookmark != null) "isBookmark": isBookmark,
+    };
+    await firestore.collection("memos").doc(id).update(data);
   }
 
   Future<List<Memo>> getAll() async {

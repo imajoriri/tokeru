@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:quick_flutter/model/memo.dart';
+import 'package:quick_flutter/screen/memo_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'controller.freezed.dart';
@@ -25,5 +26,16 @@ class SidebarScreenController extends _$SidebarScreenController {
       isShow: true,
       memo: memo,
     );
+  }
+
+  void update({required String content}) {
+    ref.read(updateMemoContentProvider(
+      UpdateMemoParams(
+        id: state.memo!.id,
+        content: content,
+      ),
+    ));
+    ref.invalidate(memosProvider);
+    ref.invalidate(bookmarkProvider);
   }
 }
