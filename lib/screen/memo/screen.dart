@@ -2,54 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/model/memo.dart';
-import 'package:quick_flutter/repository/memo_repository.dart';
 import 'package:quick_flutter/screen/sidebar_screen/controller.dart';
+import 'package:quick_flutter/store/bookmark_store.dart';
+import 'package:quick_flutter/store/memo_store.dart';
 import 'package:quick_flutter/widget/chat_tile.dart';
 import 'package:quick_flutter/widget/multi_keyboard_shortcuts.dart';
-
-final memosProvider = FutureProvider.autoDispose<List<Memo>>((ref) {
-  return ref.watch(memoRepositoryProvider).getAll();
-});
-
-final addMemoProvider =
-    Provider.autoDispose.family<Future<void>, String>((ref, content) async {
-  ref.watch(memoRepositoryProvider).add(content);
-  return;
-});
-
-class UpdateMemoParams {
-  UpdateMemoParams({
-    required this.id,
-    this.content,
-    this.isBookmark,
-  });
-  final String id;
-  final String? content;
-  final bool? isBookmark;
-}
-
-final updateMemoContentProvider = Provider.autoDispose
-    .family<Future<void>, UpdateMemoParams>((ref, params) async {
-  ref.watch(memoRepositoryProvider).update(
-      id: params.id, content: params.content, isBookmark: params.isBookmark);
-  return;
-});
-
-final bookmarkProvider = FutureProvider.autoDispose<List<Memo>>((ref) async {
-  return ref.watch(memoRepositoryProvider).getBookmarks();
-});
-
-final addBookmarkProvider =
-    Provider.autoDispose.family<Future<void>, String>((ref, id) async {
-  await ref.watch(memoRepositoryProvider).addBookmark(id);
-  return;
-});
-
-final removeBookmarkProvider =
-    Provider.autoDispose.family<Future<void>, String>((ref, id) async {
-  await ref.watch(memoRepositoryProvider).removeBookmark(id);
-  return;
-});
 
 class MemoScreen extends HookConsumerWidget {
   const MemoScreen({super.key});

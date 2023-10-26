@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:quick_flutter/model/memo.dart';
-import 'package:quick_flutter/screen/memo_screen.dart';
+import 'package:quick_flutter/store/bookmark_store.dart';
+import 'package:quick_flutter/store/memo_store.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'controller.freezed.dart';
