@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/model/memo.dart';
 import 'package:quick_flutter/repository/memo_repository.dart';
+import 'package:quick_flutter/widget/chat_tile.dart';
+import 'package:quick_flutter/widget/multi_keyboard_shortcuts.dart';
 
 final memosProvider = FutureProvider.autoDispose<List<Memo>>((ref) {
   return ref.watch(memoRepositoryProvider).getAll();
@@ -134,20 +135,7 @@ class _AllMemoList extends HookConsumerWidget {
       shrinkWrap: true,
       reverse: true,
       itemBuilder: (context, index) {
-        return Row(
-          children: [
-            IconButton(
-                onPressed: () {
-                  onTapBookmark.call(memos[index]);
-                },
-                icon: Icon(
-                  Icons.bookmark,
-                  color:
-                      memos[index].isBookmark ? Colors.deepPurple : Colors.grey,
-                )),
-            Text(memos[index].content),
-          ],
-        );
+        return ChatTile(memo: memos[index], onTapBookmark: onTapBookmark);
       },
       itemCount: memos.length,
     );
@@ -179,19 +167,7 @@ class _BookmarkList extends HookConsumerWidget {
       child: ListView.builder(
         shrinkWrap: true,
         itemBuilder: (context, index) {
-          return Row(
-            children: [
-              IconButton(
-                  onPressed: () {
-                    onTapBookmark.call(bookmarks[index]);
-                  },
-                  icon: const Icon(
-                    Icons.bookmark,
-                    color: Colors.deepPurple,
-                  )),
-              Text(bookmarks[index].content),
-            ],
-          );
+          return ChatTile(memo: bookmarks[index], onTapBookmark: onTapBookmark);
         },
         itemCount: bookmarks.length,
       ),
@@ -213,55 +189,6 @@ class SubmitButton extends StatelessWidget {
         backgroundColor: MaterialStateProperty.all<Color>(Colors.deepPurple),
       ),
       child: Text(text, style: const TextStyle(color: Colors.white)),
-    );
-  }
-}
-
-class CommandEnterIntent extends Intent {}
-
-class EscIntent extends Intent {}
-
-class MultiKeyBoardShortcuts extends StatelessWidget {
-  const MultiKeyBoardShortcuts({
-    super.key,
-    required this.onCommandEnter,
-    required this.onEsc,
-    required this.child,
-  });
-
-  final VoidCallback onCommandEnter;
-  final VoidCallback onEsc;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Shortcuts(
-      shortcuts: <LogicalKeySet, Intent>{
-        LogicalKeySet(
-          LogicalKeyboardKey.meta,
-          LogicalKeyboardKey.enter,
-        ): CommandEnterIntent(),
-        LogicalKeySet(
-          LogicalKeyboardKey.escape,
-        ): EscIntent(),
-      },
-      child: Actions(
-        actions: <Type, Action<Intent>>{
-          CommandEnterIntent: CallbackAction(
-            onInvoke: (intent) {
-              onCommandEnter();
-              return null;
-            },
-          ),
-          EscIntent: CallbackAction(
-            onInvoke: (intent) {
-              onEsc();
-              return null;
-            },
-          ),
-        },
-        child: child,
-      ),
     );
   }
 }
