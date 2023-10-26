@@ -13,6 +13,9 @@ class ChatTile extends HookConsumerWidget {
     required this.onTapBookmark,
   }) : super(key: key);
 
+  // 改行がある場合は1行目を3点リーダー付きで返す
+  String get text => '${memo.content.split('\n').first}...';
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final onHover = useState(false);
@@ -37,7 +40,11 @@ class ChatTile extends HookConsumerWidget {
                 color: memo.isBookmark ? Colors.deepPurple : Colors.grey,
               ),
             ),
-            Text(memo.content),
+            Text(
+              memo.isBookmark ? text : memo.content,
+              // maxLines: memo.isBookmark ? 1 : null,
+              // overflow: memo.isBookmark ? TextOverflow.ellipsis : null,
+            ),
           ],
         ),
       ),
