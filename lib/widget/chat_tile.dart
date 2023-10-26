@@ -32,7 +32,9 @@ class ChatTile extends HookConsumerWidget {
           onHover.value = true;
         },
         child: Container(
-          color: onHover.value ? Colors.grey.shade200 : Colors.white,
+          color: onHover.value
+              ? Theme.of(context).hoverColor
+              : Theme.of(context).colorScheme.background,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -41,8 +43,8 @@ class ChatTile extends HookConsumerWidget {
                   onTapBookmark.call(memo);
                 },
                 icon: Icon(
-                  Icons.bookmark,
-                  color: memo.isBookmark ? Colors.deepPurple : Colors.grey,
+                  memo.isBookmark ? Icons.bookmark : Icons.bookmark_border,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
               Text(

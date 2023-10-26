@@ -5,8 +5,8 @@ import 'package:quick_flutter/model/memo.dart';
 import 'package:quick_flutter/screen/sidebar_screen/controller.dart';
 import 'package:quick_flutter/store/bookmark_store.dart';
 import 'package:quick_flutter/store/memo_store.dart';
+import 'package:quick_flutter/widget/chat_text_field.dart';
 import 'package:quick_flutter/widget/chat_tile.dart';
-import 'package:quick_flutter/widget/multi_keyboard_shortcuts.dart';
 
 class MemoScreen extends HookConsumerWidget {
   const MemoScreen({super.key});
@@ -47,41 +47,12 @@ class MemoScreen extends HookConsumerWidget {
                   ),
                 ),
               ),
-              MultiKeyBoardShortcuts(
-                onCommandEnter: () {
-                  if (!focus.hasFocus) {
-                    return;
-                  }
+              ChatTextField(
+                onSubmit: () {
                   addMessage(ref, textController);
                 },
-                onEsc: () {
-                  if (!focus.hasFocus) {
-                    return;
-                  }
-                  focus.unfocus();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          keyboardType: TextInputType.multiline,
-                          maxLines: null,
-                          controller: textController,
-                          focusNode: focus,
-                          autofocus: true,
-                        ),
-                      ),
-                      SubmitButton(
-                          text: "add memo",
-                          onTap: () {
-                            addMessage(ref, textController);
-                          }),
-                    ],
-                  ),
-                ),
+                controller: textController,
+                focus: focus,
               ),
             ],
           ),
@@ -139,11 +110,11 @@ class _BookmarkList extends HookConsumerWidget {
 
     return Container(
       padding: const EdgeInsets.all(8.0),
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.background,
         border: Border(
           bottom: BorderSide(
-            color: Colors.grey,
+            color: Theme.of(context).colorScheme.outline,
             width: 0.5,
           ),
         ),
@@ -163,24 +134,6 @@ class _BookmarkList extends HookConsumerWidget {
         },
         itemCount: bookmarks.length,
       ),
-    );
-  }
-}
-
-class SubmitButton extends StatelessWidget {
-  const SubmitButton({super.key, required this.text, required this.onTap});
-
-  final String text;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return OutlinedButton(
-      onPressed: onTap,
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(Colors.deepPurple),
-      ),
-      child: Text(text, style: const TextStyle(color: Colors.white)),
     );
   }
 }

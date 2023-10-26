@@ -5,6 +5,7 @@ import 'package:quick_flutter/firebase_options.dart';
 import 'package:quick_flutter/screen/memo/screen.dart';
 import 'package:quick_flutter/screen/sidebar_screen/controller.dart';
 import 'package:quick_flutter/screen/sidebar_screen/sidebar_screen.dart';
+import 'package:quick_flutter/systems/color.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,7 +40,7 @@ class MyApp extends ConsumerWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: AppColor.seed),
         useMaterial3: true,
       ),
       home: Row(
