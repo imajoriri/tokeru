@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/firebase_options.dart';
 import 'package:quick_flutter/screen/memo_screen.dart';
+import 'package:quick_flutter/screen/sidebar_screen/sidebar_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,7 +41,13 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MemoScreen(),
+      // home: const MemoScreen(),
+      home: const Row(
+        children: [
+          Flexible(child: MemoScreen()),
+          Flexible(child: SidebarScreen()),
+        ],
+      ),
     );
   }
 }

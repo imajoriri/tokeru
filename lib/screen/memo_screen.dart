@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/model/memo.dart';
 import 'package:quick_flutter/repository/memo_repository.dart';
+import 'package:quick_flutter/screen/sidebar_screen/controller.dart';
 import 'package:quick_flutter/widget/chat_tile.dart';
 import 'package:quick_flutter/widget/multi_keyboard_shortcuts.dart';
 
@@ -135,7 +136,15 @@ class _AllMemoList extends HookConsumerWidget {
       shrinkWrap: true,
       reverse: true,
       itemBuilder: (context, index) {
-        return ChatTile(memo: memos[index], onTapBookmark: onTapBookmark);
+        return ChatTile(
+          memo: memos[index],
+          onTapBookmark: onTapBookmark,
+          onTap: () {
+            ref
+                .read(sidebarScreenControllerProvider.notifier)
+                .open(memo: memos[index]);
+          },
+        );
       },
       itemCount: memos.length,
     );
@@ -167,7 +176,15 @@ class _BookmarkList extends HookConsumerWidget {
       child: ListView.builder(
         shrinkWrap: true,
         itemBuilder: (context, index) {
-          return ChatTile(memo: bookmarks[index], onTapBookmark: onTapBookmark);
+          return ChatTile(
+            memo: bookmarks[index],
+            onTapBookmark: onTapBookmark,
+            onTap: () {
+              ref
+                  .read(sidebarScreenControllerProvider.notifier)
+                  .open(memo: bookmarks[index]);
+            },
+          );
         },
         itemCount: bookmarks.length,
       ),
