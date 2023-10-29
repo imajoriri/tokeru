@@ -46,8 +46,10 @@ class MyApp extends ConsumerWidget {
       home: Row(
         children: [
           const Flexible(child: MemoScreen()),
-          if (ref.watch(sidebarScreenControllerProvider).isShow)
+          if (ref.watch(sidebarScreenControllerProvider).isShow) ...[
+            const VerticalDivider(width: 1),
             const Flexible(child: SidebarScreen()),
+          ]
         ],
       ),
     );

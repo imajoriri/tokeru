@@ -37,6 +37,7 @@ class ChatTextField extends HookConsumerWidget {
         ),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 8),
+      margin: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
       child: MultiKeyBoardShortcuts(
         onCommandEnter: () {
           if (!focus.hasFocus) {
@@ -59,6 +60,8 @@ class ChatTextField extends HookConsumerWidget {
                 decoration: const InputDecoration(
                   border: InputBorder.none,
                 ),
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
               ),
             ),
             FilledButton(
@@ -66,6 +69,8 @@ class ChatTextField extends HookConsumerWidget {
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(8)),
                 ),
+                padding: EdgeInsets.zero,
+                alignment: Alignment.center,
               ),
               onPressed: controller.text.isEmpty
                   ? null
