@@ -40,14 +40,18 @@ class MyApp extends ConsumerWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: AppColor.seed),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: AppColor.seed,
+          outline: AppColor.outline,
+          outlineVariant: AppColor.outlineVariant,
+          shadow: AppColor.shadow,
+        ),
         useMaterial3: true,
       ),
       home: Row(
         children: [
           const Flexible(child: MemoScreen()),
           if (ref.watch(sidebarScreenControllerProvider).isShow) ...[
-            const VerticalDivider(width: 1),
             const Flexible(child: SidebarScreen()),
           ]
         ],

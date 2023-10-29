@@ -18,6 +18,7 @@ class ChatTextField extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final canSubmit = useState(false);
+    final hasFocus = useState(false);
     useEffect(() {
       listener() {
         canSubmit.value = controller.text.isNotEmpty;
@@ -29,12 +30,35 @@ class ChatTextField extends HookConsumerWidget {
       };
     }, [controller.text]);
 
+    useEffect(() {
+      listener() {
+        hasFocus.value = focus.hasFocus;
+      }
+
+      focus.addListener(listener);
+      return () {
+        focus.removeListener(listener);
+      };
+    }, [focus.hasFocus]);
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
+        color: Theme.of(context).colorScheme.surface,
         border: Border.all(
-          color: Theme.of(context).colorScheme.outline,
+          color: hasFocus.value
+              ? Theme.of(context).colorScheme.outlineVariant
+              : Theme.of(context).colorScheme.outline,
         ),
+        boxShadow: [
+          if (hasFocus.value)
+            BoxShadow(
+              color: Theme.of(context).colorScheme.shadow,
+              spreadRadius: 0,
+              blurRadius: 2,
+              offset: const Offset(0, 0),
+            ),
+        ],
       ),
       padding: const EdgeInsets.symmetric(horizontal: 8),
       margin: const EdgeInsets.only(left: 8, right: 8, bottom: 8),

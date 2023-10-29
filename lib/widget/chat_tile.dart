@@ -39,7 +39,6 @@ class ChatTile extends HookConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CircleAvatar(
-                // TODO: 正しい色に変える
                 backgroundColor: Theme.of(context).hoverColor,
                 child: IconButton(
                   onPressed: () {
