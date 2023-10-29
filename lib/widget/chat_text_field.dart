@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:quick_flutter/widget/markdown_text_field.dart';
 import 'package:quick_flutter/widget/multi_keyboard_shortcuts.dart';
 
 class ChatTextField extends HookConsumerWidget {
@@ -78,14 +79,10 @@ class ChatTextField extends HookConsumerWidget {
         child: Row(
           children: [
             Expanded(
-              child: TextField(
-                focusNode: focus,
+              child: MarkdownTextField(
+                onSubmit: onSubmit,
                 controller: controller,
-                decoration: const InputDecoration(
-                  border: InputBorder.none,
-                ),
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
+                focus: focus,
               ),
             ),
             FilledButton(
