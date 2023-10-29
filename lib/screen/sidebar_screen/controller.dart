@@ -29,6 +29,12 @@ class SidebarScreenController extends _$SidebarScreenController {
     );
   }
 
+  void close() {
+    state = state.copyWith(
+      isShow: false,
+    );
+  }
+
   void update({required String content}) {
     ref.read(updateMemoContentProvider(
       UpdateMemoParams(

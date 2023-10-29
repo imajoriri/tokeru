@@ -116,6 +116,7 @@ class _BookmarkList extends HookConsumerWidget {
         itemBuilder: (context, index) {
           return ChatTile(
             memo: bookmarks[index],
+            maxLines: 1,
             onTapBookmark: onTapBookmark,
             onTap: () {
               ref

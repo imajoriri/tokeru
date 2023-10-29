@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/screen/sidebar_screen/controller.dart';
+import 'package:quick_flutter/widget/app_icon_button.dart';
 
 class SidebarScreen extends HookConsumerWidget {
   const SidebarScreen({super.key});
@@ -43,16 +44,46 @@ class SidebarScreen extends HookConsumerWidget {
     );
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: TextField(
-          controller: textController,
-          maxLines: null,
-          expands: true,
-          decoration: const InputDecoration(
-            border: InputBorder.none,
+      body: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.background,
+              border: Border(
+                bottom: BorderSide(
+                  color: Theme.of(context).colorScheme.outline,
+                  width: 0.5,
+                ),
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                AppIconButton(
+                    onPressed: () {
+                      ref
+                          .read(sidebarScreenControllerProvider.notifier)
+                          .close();
+                    },
+                    icon: Icons.close),
+              ],
+            ),
           ),
-        ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                controller: textController,
+                maxLines: null,
+                expands: true,
+                decoration: const InputDecoration(
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
