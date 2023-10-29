@@ -43,10 +43,16 @@ class SidebarScreen extends HookConsumerWidget {
     );
 
     return Scaffold(
-      body: TextField(
-        controller: textController,
-        maxLines: null,
-        expands: true,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: TextField(
+          controller: textController,
+          maxLines: null,
+          expands: true,
+          decoration: const InputDecoration(
+            border: InputBorder.none,
+          ),
+        ),
       ),
     );
   }

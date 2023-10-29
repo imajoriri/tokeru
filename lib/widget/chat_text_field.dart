@@ -79,6 +79,7 @@ class ChatTextField extends HookConsumerWidget {
                     },
               child: const Icon(
                 Icons.send,
+                color: Colors.white,
               ),
             ),
           ],
