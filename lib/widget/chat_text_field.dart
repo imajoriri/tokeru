@@ -46,17 +46,17 @@ class ChatTextField extends HookConsumerWidget {
         borderRadius: BorderRadius.circular(8),
         color: Theme.of(context).colorScheme.surface,
         border: Border.all(
-          color: hasFocus.value
-              ? Theme.of(context).colorScheme.outlineVariant
-              : Theme.of(context).colorScheme.outline,
-        ),
+            color: hasFocus.value
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.outline.withOpacity(0.5),
+            width: 0.5),
         boxShadow: [
           if (hasFocus.value)
             BoxShadow(
-              color: Theme.of(context).colorScheme.shadow,
+              color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
               spreadRadius: 0,
-              blurRadius: 2,
-              offset: const Offset(0, 0),
+              blurRadius: 1,
+              offset: const Offset(0, 1),
             ),
         ],
       ),

@@ -36,7 +36,9 @@ class ChatTile extends HookConsumerWidget {
               : Theme.of(context).colorScheme.surface,
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: maxLines == 1
+                ? CrossAxisAlignment.center
+                : CrossAxisAlignment.start,
             children: [
               CircleAvatar(
                 backgroundColor: Theme.of(context).hoverColor,

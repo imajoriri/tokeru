@@ -114,21 +114,41 @@ class _BookmarkList extends HookConsumerWidget {
           ),
         ],
       ),
-      child: ListView.builder(
-        shrinkWrap: true,
-        itemBuilder: (context, index) {
-          return ChatTile(
-            memo: bookmarks[index],
-            maxLines: 1,
-            onTapBookmark: onTapBookmark,
-            onTap: () {
-              ref
-                  .read(sidebarScreenControllerProvider.notifier)
-                  .open(memo: bookmarks[index]);
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.bookmark,
+                  color: Theme.of(context).colorScheme.primary,
+                  size: 12,
+                ),
+                const SizedBox(width: 4),
+                Text("bookmarks",
+                    style: Theme.of(context).textTheme.titleSmall!),
+              ],
+            ),
+          ),
+          ListView.builder(
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              return ChatTile(
+                memo: bookmarks[index],
+                maxLines: 1,
+                onTapBookmark: onTapBookmark,
+                onTap: () {
+                  ref
+                      .read(sidebarScreenControllerProvider.notifier)
+                      .open(memo: bookmarks[index]);
+                },
+              );
             },
-          );
-        },
-        itemCount: bookmarks.length,
+            itemCount: bookmarks.length,
+          ),
+        ],
       ),
     );
   }
