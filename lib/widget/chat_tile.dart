@@ -15,9 +15,6 @@ class ChatTile extends HookConsumerWidget {
     required this.onTap,
   }) : super(key: key);
 
-  // 改行がある場合は1行目を3点リーダー付きで返す
-  String get text => '${memo.content.split('\n').first}...';
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final onHover = useState(false);
@@ -35,20 +32,29 @@ class ChatTile extends HookConsumerWidget {
           color: onHover.value
               ? Theme.of(context).hoverColor
               : Theme.of(context).colorScheme.background,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              IconButton(
-                onPressed: () {
-                  onTapBookmark.call(memo);
-                },
-                icon: Icon(
-                  memo.isBookmark ? Icons.bookmark : Icons.bookmark_border,
-                  color: Theme.of(context).colorScheme.primary,
+              CircleAvatar(
+                // TODO: 正しい色に変える
+                backgroundColor: Theme.of(context).hoverColor,
+                child: IconButton(
+                  onPressed: () {
+                    onTapBookmark.call(memo);
+                  },
+                  icon: Icon(
+                    memo.isBookmark ? Icons.bookmark : Icons.bookmark_border,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
               ),
-              Text(
-                memo.isBookmark ? text : memo.content,
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  memo.content,
+                  maxLines: memo.isBookmark ? 1 : null,
+                ),
               ),
             ],
           ),

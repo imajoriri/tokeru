@@ -33,33 +33,26 @@ class MemoScreen extends HookConsumerWidget {
     final focus = useFocusNode();
 
     return Scaffold(
-      body: Stack(
+      body: Column(
         children: [
-          Column(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: _AllMemoList(
-                    onTapBookmark: (memo) {
-                      toggleBookmark(ref: ref, memo: memo);
-                    },
-                  ),
-                ),
-              ),
-              ChatTextField(
-                onSubmit: () {
-                  addMessage(ref, textController);
-                },
-                controller: textController,
-                focus: focus,
-              ),
-            ],
-          ),
           _BookmarkList(
             onTapBookmark: (memo) {
               toggleBookmark(ref: ref, memo: memo);
             },
+          ),
+          Expanded(
+            child: _AllMemoList(
+              onTapBookmark: (memo) {
+                toggleBookmark(ref: ref, memo: memo);
+              },
+            ),
+          ),
+          ChatTextField(
+            onSubmit: () {
+              addMessage(ref, textController);
+            },
+            controller: textController,
+            focus: focus,
           ),
         ],
       ),
@@ -109,7 +102,6 @@ class _BookmarkList extends HookConsumerWidget {
     final bookmarks = provider.valueOrNull ?? [];
 
     return Container(
-      padding: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.background,
         border: Border(
