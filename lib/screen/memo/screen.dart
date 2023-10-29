@@ -102,14 +102,17 @@ class _BookmarkList extends HookConsumerWidget {
     final bookmarks = provider.valueOrNull ?? [];
 
     return Container(
+      margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.background,
-        border: Border(
-          bottom: BorderSide(
-            color: Theme.of(context).colorScheme.outline,
-            width: 0.5,
+        boxShadow: [
+          BoxShadow(
+            color: Theme.of(context).colorScheme.shadow,
+            spreadRadius: 0,
+            blurRadius: 2,
+            offset: const Offset(0, 0),
           ),
-        ),
+        ],
       ),
       child: ListView.builder(
         shrinkWrap: true,
