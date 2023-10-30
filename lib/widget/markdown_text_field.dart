@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -79,39 +80,70 @@ class MarkdownTextField extends HookConsumerWidget {
   }
 }
 
+class MarkdownMatch {
+  final String text;
+  final TextStyle style;
+  final String? replaceTextKey;
+  final String? replaceText;
+
+  MarkdownMatch({
+    required this.text,
+    required this.style,
+    this.replaceTextKey,
+    this.replaceText,
+  });
+}
+
 // TODO: 解析する
 class MarkdownTextEditingController extends TextEditingController {
-  final Map<String, TextStyle> map;
-  final Pattern pattern;
+  final List<MarkdownMatch> matches = [
+    // # タイトル1
+    MarkdownMatch(
+      text: r"(?:^|\n)#\s.+",
+      style: const TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 22,
+      ),
+    ),
+    // ## タイトル2
+    MarkdownMatch(
+      text: r"(?:^|\n)##\s.+",
+      style: const TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 18,
+      ),
+    ),
+    // ### タイトル3
+    MarkdownMatch(
+      text: r"(?:^|\n)###\s.+",
+      style: const TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 14,
+      ),
+    ),
+    // 取り消し線
+    MarkdownMatch(
+      text: "~(.*?)~",
+      style: const TextStyle(
+        decoration: TextDecoration.lineThrough,
+      ),
+    ),
+    // bold
+    MarkdownMatch(
+      text: r"\*(.*?)\*",
+      style: const TextStyle(
+        fontWeight: FontWeight.bold,
+      ),
+      replaceTextKey: "*",
+      replaceText: " ",
+    ),
+  ];
 
-  MarkdownTextEditingController(
-      {this.map = const {
-        // r"@.\w+": TextStyle(
-        //   color: Colors.blue,
-        // ),
-        // # タイトル1
-        r"#.\w+": TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 22,
-        ),
-        // イタリック
-        r'_(.*?)\_': TextStyle(
-          fontStyle: FontStyle.italic,
-        ),
-        // 取り消し線
-        '~(.*?)~': TextStyle(
-          decoration: TextDecoration.lineThrough,
-        ),
-        // bold
-        r'\*(.*?)\*': TextStyle(
-          fontWeight: FontWeight.bold,
-        ),
-      }})
-      : pattern = RegExp(
-            map.keys.map((key) {
-              return key;
-            }).join('|'),
-            multiLine: true);
+  Pattern get pattern => RegExp(
+      matches.map((match) {
+        return match.text;
+      }).join('|'),
+      multiLine: true);
 
   @override
   set text(String newText) {
@@ -126,42 +158,40 @@ class MarkdownTextEditingController extends TextEditingController {
   TextSpan buildTextSpan(
       {required BuildContext context, TextStyle? style, bool? withComposing}) {
     final List<InlineSpan> children = [];
-    String? patternMatched;
-    String? formatText;
-    TextStyle? myStyle;
-    print(pattern);
     text.splitMapJoin(
       pattern,
+      // マッチした文字列の回数呼ばれる
       onMatch: (Match match) {
-        myStyle = map[map.keys.firstWhere(
-          (e) {
-            bool ret = false;
-            RegExp(e).allMatches(text).forEach((element) {
-              if (element.group(0) == match[0]) {
-                patternMatched = e;
-                ret = true;
-              }
-            });
-            return ret;
-          },
-        )];
-
-        if (patternMatched == r"_(.*?)\_") {
-          formatText = match[0]!.replaceAll("_", " ");
-        } else if (patternMatched == r'\*(.*?)\*') {
-          formatText = match[0]!.replaceAll("*", " ");
-        } else if (patternMatched == "~(.*?)~") {
-          formatText = match[0]!.replaceAll("~", " ");
-        } else if (patternMatched == r'```(.*?)```') {
-          formatText = match[0]!.replaceAll("```", "   ");
-        } else {
-          formatText = match[0];
+        final markdownMatch = matches.firstWhereOrNull(
+          (e) => RegExp(e.text)
+              .allMatches(text)
+              .any((element) => element.group(0) == match[0]),
+        );
+        if (markdownMatch == null) {
+          children.add(TextSpan(
+            text: match[0],
+          ));
+          return "";
+        }
+        if (markdownMatch.replaceTextKey == null ||
+            markdownMatch.replaceText == null) {
+          children.add(TextSpan(
+            text: match[0],
+            style: style!.merge(markdownMatch.style),
+          ));
+          return "";
         }
 
-        children.add(TextSpan(
-          text: formatText,
-          style: style!.merge(myStyle),
-        ));
+        if (markdownMatch.replaceTextKey != null &&
+            markdownMatch.replaceText != null) {
+          children.add(TextSpan(
+            text: match[0]!.replaceAll(
+                markdownMatch.replaceTextKey!, markdownMatch.replaceText!),
+            style: style!.merge(markdownMatch.style),
+          ));
+          return "";
+        }
+
         return "";
       },
       onNonMatch: (String text) {
