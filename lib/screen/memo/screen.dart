@@ -7,6 +7,7 @@ import 'package:quick_flutter/store/bookmark_store.dart';
 import 'package:quick_flutter/store/memo_store.dart';
 import 'package:quick_flutter/widget/chat_text_field.dart';
 import 'package:quick_flutter/widget/chat_tile.dart';
+import 'package:quick_flutter/widget/markdown_text_field.dart';
 
 class MemoScreen extends HookConsumerWidget {
   const MemoScreen({super.key});
@@ -29,8 +30,15 @@ class MemoScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final textController = useTextEditingController();
+    final textController = MarkdownTextEditingController();
     final focus = useFocusNode();
+
+    // 画面を破棄する時にtextControllerもdisposeする
+    useEffect(() {
+      return () {
+        textController.dispose();
+      };
+    }, []);
 
     return Scaffold(
       body: Column(

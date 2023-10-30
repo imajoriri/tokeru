@@ -13,7 +13,7 @@ class ChatTextField extends HookConsumerWidget {
   }) : super(key: key);
 
   final Function() onSubmit;
-  final TextEditingController controller;
+  final MarkdownTextEditingController controller;
   final FocusNode focus;
 
   @override
