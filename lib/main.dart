@@ -13,7 +13,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  // initializeDateFormatting('ja_JP', null);
   runApp(
     const ProviderScope(
       child: MyApp(),

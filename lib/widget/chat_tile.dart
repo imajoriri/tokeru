@@ -21,8 +21,15 @@ class ChatTile extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final onHover = useState(false);
+
+    final bookmarkColor = memo.isBookmark
+        ? Theme.of(context).colorScheme.primary
+        : Theme.of(context).colorScheme.onSurfaceVariant;
     return GestureDetector(
-      // onTap: onTap,
+      onLongPress: onTap,
+      onDoubleTap: () {
+        onTapBookmark.call(memo);
+      },
       child: MouseRegion(
         onExit: (pointer) {
           onHover.value = false;
@@ -36,21 +43,16 @@ class ChatTile extends HookConsumerWidget {
               : Theme.of(context).colorScheme.surface,
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Row(
-            crossAxisAlignment: maxLines == 1
-                ? CrossAxisAlignment.center
-                : CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CircleAvatar(
-                backgroundColor: Theme.of(context).hoverColor,
-                child: IconButton(
-                  onPressed: () {
-                    onTapBookmark.call(memo);
-                  },
-                  iconSize: 20,
-                  icon: Icon(
-                    memo.isBookmark ? Icons.bookmark : Icons.bookmark_border,
-                    // size: 20,
-                    color: Theme.of(context).colorScheme.primary,
+              SizedBox(
+                width: 28,
+                child: CircleAvatar(
+                  backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+                  child: Icon(
+                    Icons.person,
+                    size: 20,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
                 ),
               ),
@@ -69,7 +71,8 @@ class ChatTile extends HookConsumerWidget {
                                     color: Theme.of(context)
                                         .colorScheme
                                         .onSurfaceVariant)),
-                        if (onHover.value) ...[
+                        // bookmark
+                        if (onHover.value || memo.isBookmark) ...[
                           const SizedBox(width: 8),
                           MouseRegion(
                             cursor: SystemMouseCursors.click,
@@ -77,16 +80,26 @@ class ChatTile extends HookConsumerWidget {
                               onTap: () {
                                 onTapBookmark.call(memo);
                               },
-                              child: Text("bookmark",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelSmall!
-                                      .copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurfaceVariant)),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.bookmark,
+                                    size: 12,
+                                    color: bookmarkColor,
+                                  ),
+                                  const SizedBox(width: 2),
+                                  Text("bookmark",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelSmall!
+                                          .copyWith(color: bookmarkColor)),
+                                ],
+                              ),
                             ),
                           ),
+                        ],
+                        // sidebar
+                        if (onHover.value) ...[
                           const SizedBox(width: 8),
                           MouseRegion(
                             cursor: SystemMouseCursors.click,
@@ -94,14 +107,26 @@ class ChatTile extends HookConsumerWidget {
                               onTap: () {
                                 onTap.call();
                               },
-                              child: Text("sidebar",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelSmall!
-                                      .copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurfaceVariant)),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.view_sidebar_sharp,
+                                    size: 12,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
+                                  const SizedBox(width: 2),
+                                  Text("sidebar",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelSmall!
+                                          .copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurfaceVariant)),
+                                ],
+                              ),
                             ),
                           ),
                         ],
