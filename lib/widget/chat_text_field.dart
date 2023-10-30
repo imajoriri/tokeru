@@ -77,6 +77,7 @@ class ChatTextField extends HookConsumerWidget {
           controller.clear();
         },
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Expanded(
               child: MarkdownTextField(
@@ -85,22 +86,25 @@ class ChatTextField extends HookConsumerWidget {
                 focus: focus,
               ),
             ),
-            FilledButton(
-              style: TextButton.styleFrom(
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(8)),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: FilledButton(
+                style: TextButton.styleFrom(
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                  ),
+                  padding: EdgeInsets.zero,
+                  alignment: Alignment.center,
                 ),
-                padding: EdgeInsets.zero,
-                alignment: Alignment.center,
-              ),
-              onPressed: controller.text.isEmpty
-                  ? null
-                  : () {
-                      onSubmit();
-                    },
-              child: const Icon(
-                Icons.send,
-                color: Colors.white,
+                onPressed: controller.text.isEmpty
+                    ? null
+                    : () {
+                        onSubmit();
+                      },
+                child: const Icon(
+                  Icons.send,
+                  color: Colors.white,
+                ),
               ),
             ),
           ],
