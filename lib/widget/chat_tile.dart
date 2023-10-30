@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/model/memo.dart';
+import 'package:quick_flutter/systems/context_extension.dart';
 
 class ChatTile extends HookConsumerWidget {
   final Memo memo;
@@ -21,9 +22,8 @@ class ChatTile extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final onHover = useState(false);
     return GestureDetector(
-      onTap: onTap,
+      // onTap: onTap,
       child: MouseRegion(
-        cursor: SystemMouseCursors.click,
         onExit: (pointer) {
           onHover.value = false;
         },
@@ -46,17 +46,72 @@ class ChatTile extends HookConsumerWidget {
                   onPressed: () {
                     onTapBookmark.call(memo);
                   },
+                  iconSize: 20,
                   icon: Icon(
                     memo.isBookmark ? Icons.bookmark : Icons.bookmark_border,
+                    // size: 20,
                     color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: Text(
-                  memo.content,
-                  maxLines: maxLines,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(context.dateFormat.format(memo.createdAt),
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelSmall!
+                                .copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant)),
+                        if (onHover.value) ...[
+                          const SizedBox(width: 8),
+                          MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: GestureDetector(
+                              onTap: () {
+                                onTapBookmark.call(memo);
+                              },
+                              child: Text("bookmark",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelSmall!
+                                      .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurfaceVariant)),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: GestureDetector(
+                              onTap: () {
+                                onTap.call();
+                              },
+                              child: Text("sidebar",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelSmall!
+                                      .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSurfaceVariant)),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                    Text(
+                      memo.content,
+                      maxLines: maxLines,
+                    ),
+                  ],
                 ),
               ),
             ],

@@ -43,6 +43,9 @@ dependencies:
   freezed_annotation: ^2.4.1
   json_annotation: ^4.8.1
   flutter_markdown: ^0.6.18
+  intl: ^0.18.1
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +70,7 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  generate: true
 
   # To add assets to your application, add an assets section, like this:
   # assets:

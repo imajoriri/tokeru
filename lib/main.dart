@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/firebase_options.dart';
 import 'package:quick_flutter/screen/memo/screen.dart';
@@ -12,6 +13,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  // initializeDateFormatting('ja_JP', null);
   runApp(
     const ProviderScope(
       child: MyApp(),
@@ -48,6 +50,8 @@ class MyApp extends ConsumerWidget {
         ),
         useMaterial3: true,
       ),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       home: Row(
         children: [
           const Flexible(child: MemoScreen()),
