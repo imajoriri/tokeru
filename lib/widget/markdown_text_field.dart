@@ -5,15 +5,17 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class MarkdownTextField extends HookConsumerWidget {
   const MarkdownTextField({
-    required this.onSubmit,
     required this.controller,
     required this.focus,
+    this.maxLines,
+    this.expands = false,
     Key? key,
   }) : super(key: key);
 
-  final Function() onSubmit;
-  final MarkdownTextEditingController controller;
+  final TextEditingController controller;
   final FocusNode focus;
+  final int? maxLines;
+  final bool expands;
 
   void listControl(String key) {
     final text = controller.text;
@@ -67,7 +69,8 @@ class MarkdownTextField extends HookConsumerWidget {
         border: InputBorder.none,
       ),
       keyboardType: TextInputType.multiline,
-      maxLines: null,
+      maxLines: maxLines,
+      expands: expands,
       onChanged: (value) {
         final text = controller.text;
         // 入力された文字数が増え、かつ改行された場合
@@ -94,7 +97,6 @@ class MarkdownMatch {
   });
 }
 
-// TODO: 解析する
 class MarkdownTextEditingController extends TextEditingController {
   final List<MarkdownMatch> matches = [
     // # タイトル1

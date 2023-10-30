@@ -5,6 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/screen/sidebar_screen/controller.dart';
 import 'package:quick_flutter/widget/app_icon_button.dart';
+import 'package:quick_flutter/widget/markdown_text_field.dart';
 
 class SidebarScreen extends HookConsumerWidget {
   const SidebarScreen({super.key});
@@ -13,23 +14,32 @@ class SidebarScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final textController = useTextEditingController();
     final state = ref.watch(sidebarScreenControllerProvider);
+
+    final textController = MarkdownTextEditingController();
+    final focus = useFocusNode();
 
     useEffect(() {
       textController.text = state.memo?.content ?? '';
       return null;
     }, [state.memo]);
 
-    final debounce = useState<Timer?>(null);
+    // 画面を破棄する時にtextControllerもdisposeする
+    useEffect(() {
+      return () {
+        textController.dispose();
+      };
+    }, []);
+
+    Timer? debounce;
     useEffect(
       () {
         textController.addListener(() {
-          if (debounce.value?.isActive ?? false) {
-            debounce.value?.cancel();
+          if (debounce?.isActive ?? false) {
+            debounce?.cancel();
           }
 
-          debounce.value = Timer(debounceDuration, () {
+          debounce = Timer(debounceDuration, () {
             ref
                 .read(sidebarScreenControllerProvider.notifier)
                 .update(content: textController.text);
@@ -37,7 +47,7 @@ class SidebarScreen extends HookConsumerWidget {
         });
 
         return () {
-          debounce.value?.cancel();
+          debounce?.cancel();
         };
       },
       [textController],
@@ -86,13 +96,9 @@ class SidebarScreen extends HookConsumerWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: TextField(
+                child: MarkdownTextField(
                   controller: textController,
-                  maxLines: null,
-                  expands: true,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                  ),
+                  focus: focus,
                 ),
               ),
             ),

@@ -81,7 +81,6 @@ class ChatTextField extends HookConsumerWidget {
           children: [
             Expanded(
               child: MarkdownTextField(
-                onSubmit: onSubmit,
                 controller: controller,
                 focus: focus,
               ),
