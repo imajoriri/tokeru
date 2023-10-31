@@ -83,70 +83,7 @@ class MarkdownTextField extends HookConsumerWidget {
   }
 }
 
-class MarkdownMatch {
-  final String text;
-  final TextStyle style;
-  final String? replaceTextKey;
-  final String? replaceText;
-
-  MarkdownMatch({
-    required this.text,
-    required this.style,
-    this.replaceTextKey,
-    this.replaceText,
-  });
-}
-
 class MarkdownTextEditingController extends TextEditingController {
-  final List<MarkdownMatch> matches = [
-    // # タイトル1
-    MarkdownMatch(
-      text: r"(?:^|\n)#\s.+",
-      style: const TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 22,
-      ),
-    ),
-    // ## タイトル2
-    MarkdownMatch(
-      text: r"(?:^|\n)##\s.+",
-      style: const TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 18,
-      ),
-    ),
-    // ### タイトル3
-    MarkdownMatch(
-      text: r"(?:^|\n)###\s.+",
-      style: const TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 14,
-      ),
-    ),
-    // 取り消し線
-    MarkdownMatch(
-      text: "~(.*?)~",
-      style: const TextStyle(
-        decoration: TextDecoration.lineThrough,
-      ),
-    ),
-    // bold
-    MarkdownMatch(
-      text: r"\*(.*?)\*",
-      style: const TextStyle(
-        fontWeight: FontWeight.bold,
-      ),
-      replaceTextKey: "*",
-      replaceText: " ",
-    ),
-  ];
-
-  Pattern get pattern => RegExp(
-      matches.map((match) {
-        return match.text;
-      }).join('|'),
-      multiLine: true);
-
   @override
   set text(String newText) {
     value = value.copyWith(
@@ -159,7 +96,6 @@ class MarkdownTextEditingController extends TextEditingController {
   @override
   TextSpan buildTextSpan(
       {required BuildContext context, TextStyle? style, bool? withComposing}) {
-    return MarkdownTextSpan(
-        text: text, style: style, pattern: pattern, matches: matches);
+    return MarkdownTextSpan(text: text, style: style);
   }
 }

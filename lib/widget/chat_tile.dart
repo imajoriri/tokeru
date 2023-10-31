@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/model/memo.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
+import 'package:quick_flutter/widget/markdown_text_span.dart';
 
 class ChatTile extends HookConsumerWidget {
   final Memo memo;
@@ -132,10 +133,11 @@ class ChatTile extends HookConsumerWidget {
                         ],
                       ],
                     ),
-                    Text(
-                      memo.content,
-                      maxLines: maxLines,
-                    ),
+                    RichText(
+                        maxLines: maxLines,
+                        text: MarkdownTextSpan(
+                            text: memo.content,
+                            style: Theme.of(context).textTheme.bodyMedium)),
                   ],
                 ),
               ),
