@@ -22,10 +22,15 @@ class MemoScreen extends HookConsumerWidget {
     ref.invalidate(memosProvider);
   }
 
-  void addMessage(WidgetRef ref, TextEditingController textController) async {
-    await ref.read(addMemoProvider(textController.text));
+  void addMessage(
+      {required WidgetRef ref,
+      required TextEditingController textController,
+      required bool isBookmark}) async {
+    await ref.read(addMemoProvider(
+      AddMemoParams(content: textController.text, isBookmark: isBookmark),
+    ));
     ref.invalidate(memosProvider);
-    textController.clear();
+    ref.invalidate(bookmarkProvider);
   }
 
   @override
@@ -56,8 +61,11 @@ class MemoScreen extends HookConsumerWidget {
             ),
           ),
           ChatTextField(
-            onSubmit: () {
-              addMessage(ref, textController);
+            onSubmit: (bool isBookmark) {
+              addMessage(
+                  ref: ref,
+                  textController: textController,
+                  isBookmark: isBookmark);
             },
             controller: textController,
             focus: focus,

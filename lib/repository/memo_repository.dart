@@ -8,13 +8,13 @@ class MemoRepository {
   MemoRepository({required this.ref});
   final Ref ref;
 
-  Future<void> add(String content) async {
+  Future<void> add({required String content, bool isBookmark = false}) async {
     // 追加する処理
     final firestore = ref.read(firestoreProvider);
     await firestore.collection("memos").add({
       "content": content,
       "createdAt": DateTime.now(),
-      "isBookmark": false,
+      "isBookmark": isBookmark,
     });
   }
 

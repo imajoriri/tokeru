@@ -12,7 +12,7 @@ class ChatTextField extends HookConsumerWidget {
     Key? key,
   }) : super(key: key);
 
-  final Function() onSubmit;
+  final Function(bool isBookmark) onSubmit;
   final MarkdownTextEditingController controller;
   final FocusNode focus;
 
@@ -20,6 +20,8 @@ class ChatTextField extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final canSubmit = useState(false);
     final hasFocus = useState(false);
+    // ブックマークとして投稿するかどうか
+    final isBookmark = useState(false);
     useEffect(() {
       listener() {
         canSubmit.value = controller.text.isNotEmpty;
@@ -41,6 +43,13 @@ class ChatTextField extends HookConsumerWidget {
         focus.removeListener(listener);
       };
     }, [focus.hasFocus]);
+
+    // ignore: no_leading_underscores_for_local_identifiers
+    _onSubmit() {
+      onSubmit(isBookmark.value);
+      isBookmark.value = false;
+      controller.clear();
+    }
 
     return Container(
       decoration: BoxDecoration(
@@ -68,7 +77,7 @@ class ChatTextField extends HookConsumerWidget {
           if (!focus.hasFocus) {
             return;
           }
-          onSubmit();
+          _onSubmit();
         },
         onEsc: () {
           if (!focus.hasFocus) {
@@ -76,34 +85,61 @@ class ChatTextField extends HookConsumerWidget {
           }
           controller.clear();
         },
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
+        child: Column(
           children: [
-            Expanded(
-              child: MarkdownTextField(
-                controller: controller,
-                focus: focus,
-              ),
+            MarkdownTextField(
+              controller: controller,
+              focus: focus,
             ),
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
-              child: FilledButton(
-                style: TextButton.styleFrom(
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
+              child: Row(
+                children: [
+                  // ドラフトボタン
+                  const Spacer(),
+                  // ブックマークとして投稿するボタン
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(6)),
+                      ),
+                      padding: EdgeInsets.zero,
+                      alignment: Alignment.center,
+                      minimumSize: const Size(48, 32),
+                    ),
+                    onPressed: () {
+                      isBookmark.value = !isBookmark.value;
+                    },
+                    child: Icon(
+                      Icons.bookmark,
+                      size: 16,
+                      color: isBookmark.value
+                          ? Theme.of(context).colorScheme.primary
+                          : Colors.grey,
+                    ),
                   ),
-                  padding: EdgeInsets.zero,
-                  alignment: Alignment.center,
-                ),
-                onPressed: controller.text.isEmpty
-                    ? null
-                    : () {
-                        onSubmit();
-                      },
-                child: const Icon(
-                  Icons.send,
-                  color: Colors.white,
-                ),
+                  const SizedBox(width: 8),
+                  FilledButton(
+                    style: TextButton.styleFrom(
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(6)),
+                      ),
+                      padding: EdgeInsets.zero,
+                      alignment: Alignment.center,
+                      minimumSize: const Size(48, 32),
+                    ),
+                    onPressed: canSubmit.value
+                        ? () {
+                            _onSubmit();
+                          }
+                        : null,
+                    child: const Icon(
+                      Icons.send,
+                      size: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

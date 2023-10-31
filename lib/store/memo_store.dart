@@ -2,9 +2,20 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/model/memo.dart';
 import 'package:quick_flutter/repository/memo_repository.dart';
 
-final addMemoProvider =
-    Provider.autoDispose.family<Future<void>, String>((ref, content) async {
-  ref.watch(memoRepositoryProvider).add(content);
+class AddMemoParams {
+  AddMemoParams({
+    required this.content,
+    required this.isBookmark,
+  });
+  final String content;
+  final bool isBookmark;
+}
+
+final addMemoProvider = Provider.autoDispose
+    .family<Future<void>, AddMemoParams>((ref, param) async {
+  ref
+      .watch(memoRepositoryProvider)
+      .add(content: param.content, isBookmark: param.isBookmark);
   return;
 });
 
