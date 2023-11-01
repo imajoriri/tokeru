@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:quick_flutter/systems/context_extension.dart';
 import 'package:quick_flutter/widget/markdown_text_field.dart';
 import 'package:quick_flutter/widget/multi_keyboard_shortcuts.dart';
 
@@ -22,9 +23,17 @@ class ChatTextField extends HookConsumerWidget {
     final hasFocus = useState(false);
     // ブックマークとして投稿するかどうか
     final isBookmark = useState(false);
+
     useEffect(() {
       listener() {
         canSubmit.value = controller.text.isNotEmpty;
+
+        // タイトルから始まる場合はブックマークとして投稿する
+        if (controller.text.startsWith('# ')) {
+          isBookmark.value = true;
+        } else {
+          isBookmark.value = false;
+        }
       }
 
       controller.addListener(listener);
@@ -56,21 +65,19 @@ class ChatTextField extends HookConsumerWidget {
         borderRadius: BorderRadius.circular(8),
         color: Theme.of(context).colorScheme.surface,
         border: Border.all(
-            color: hasFocus.value
-                ? Theme.of(context).colorScheme.outlineVariant
-                : Theme.of(context).colorScheme.outline,
-            width: 1.0),
+          color: context.colorScheme.outline,
+          width: 1.0,
+        ),
         boxShadow: [
           if (hasFocus.value)
             BoxShadow(
-              color: Colors.black.withOpacity(0.2),
+              color: context.colorScheme.shadow,
               spreadRadius: 0,
               blurRadius: 1,
               offset: const Offset(0, 1),
             ),
         ],
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 8),
       margin: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
       child: MultiKeyBoardShortcuts(
         onCommandEnter: () {
@@ -86,57 +93,51 @@ class ChatTextField extends HookConsumerWidget {
           controller.clear();
         },
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            MarkdownTextField(
-              controller: controller,
-              focus: focus,
+            // draft
+            Container(
+              padding: const EdgeInsets.all(8),
+              color: context.colorScheme.primaryContainer,
+              width: double.infinity,
+              child: Text(
+                "hogehogeこれはドラフト",
+                style: context.textTheme.bodyMedium!
+                    .copyWith(color: context.colorScheme.onPrimaryContainer),
+              ),
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: MarkdownTextField(
+                controller: controller,
+                focus: focus,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0, left: 8, right: 8),
               child: Row(
                 children: [
-                  // ドラフトボタン
+                  // TODO: ドラフトボタン
                   const Spacer(),
                   // ブックマークとして投稿するボタン
                   TextButton(
-                    style: TextButton.styleFrom(
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(6)),
-                      ),
-                      padding: EdgeInsets.zero,
-                      alignment: Alignment.center,
-                      minimumSize: const Size(48, 32),
-                    ),
                     onPressed: () {
                       isBookmark.value = !isBookmark.value;
                     },
                     child: Icon(
-                      Icons.bookmark,
-                      size: 16,
-                      color: isBookmark.value
-                          ? Theme.of(context).colorScheme.primary
-                          : Colors.grey,
+                      isBookmark.value ? Icons.bookmark : Icons.bookmark_border,
                     ),
                   ),
                   const SizedBox(width: 8),
                   FilledButton(
-                    style: TextButton.styleFrom(
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(6)),
-                      ),
-                      padding: EdgeInsets.zero,
-                      alignment: Alignment.center,
-                      minimumSize: const Size(48, 32),
-                    ),
                     onPressed: canSubmit.value
                         ? () {
                             _onSubmit();
                           }
                         : null,
-                    child: const Icon(
+                    child: Icon(
                       Icons.send,
-                      size: 16,
-                      color: Colors.white,
+                      color: context.colorScheme.onPrimary,
                     ),
                   ),
                 ],

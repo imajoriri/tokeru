@@ -47,6 +47,22 @@ class MyApp extends ConsumerWidget {
           outlineVariant: AppColor.outlineVariant,
           shadow: AppColor.shadow,
         ),
+        filledButtonTheme: FilledButtonThemeData(
+          style: TextButton.styleFrom(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(6)),
+            ),
+          ),
+        ),
+        iconButtonTheme: IconButtonThemeData(
+          style: TextButton.styleFrom(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+            ),
+            padding: EdgeInsets.zero,
+            alignment: Alignment.center,
+          ),
+        ),
         useMaterial3: true,
       ),
       localizationsDelegates: AppLocalizations.localizationsDelegates,

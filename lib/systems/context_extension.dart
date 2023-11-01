@@ -5,4 +5,12 @@ extension BuildContextEx on BuildContext {
   DateTimeFormat get dateFormat {
     return DateTimeFormat();
   }
+
+  ColorScheme get colorScheme {
+    return Theme.of(this).colorScheme;
+  }
+
+  TextTheme get textTheme {
+    return Theme.of(this).textTheme;
+  }
 }

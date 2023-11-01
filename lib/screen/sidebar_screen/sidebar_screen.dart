@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/screen/sidebar_screen/controller.dart';
-import 'package:quick_flutter/widget/app_icon_button.dart';
 import 'package:quick_flutter/widget/markdown_text_field.dart';
 
 class SidebarScreen extends HookConsumerWidget {
@@ -83,13 +82,16 @@ class SidebarScreen extends HookConsumerWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  AppIconButton(
-                      onPressed: () {
-                        ref
-                            .read(sidebarScreenControllerProvider.notifier)
-                            .close();
-                      },
-                      icon: Icons.close),
+                  IconButton(
+                    onPressed: () {
+                      ref
+                          .read(sidebarScreenControllerProvider.notifier)
+                          .close();
+                    },
+                    icon: const Icon(
+                      Icons.close,
+                    ),
+                  ),
                 ],
               ),
             ),
