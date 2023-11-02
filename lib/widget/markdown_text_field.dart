@@ -72,7 +72,7 @@ class MarkdownTextField extends HookConsumerWidget {
           hintStyle: Theme.of(context)
               .textTheme
               .bodyLarge!
-              .copyWith(color: Colors.grey)),
+              .copyWith(color: Theme.of(context).hintColor)),
       keyboardType: TextInputType.multiline,
       maxLines: maxLines,
       expands: expands,
