@@ -27,11 +27,12 @@ class ChatTile extends HookConsumerWidget {
         ? Theme.of(context).colorScheme.primary
         : Theme.of(context).colorScheme.onSurfaceVariant;
     return GestureDetector(
-      onLongPress: onTap,
+      onTap: onTap,
       onDoubleTap: () {
         onTapBookmark.call(memo);
       },
       child: MouseRegion(
+        cursor: SystemMouseCursors.click,
         onExit: (pointer) {
           onHover.value = false;
         },
@@ -94,38 +95,6 @@ class ChatTile extends HookConsumerWidget {
                                           .textTheme
                                           .labelSmall!
                                           .copyWith(color: bookmarkColor)),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                        // sidebar
-                        if (onHover.value) ...[
-                          const SizedBox(width: 8),
-                          MouseRegion(
-                            cursor: SystemMouseCursors.click,
-                            child: GestureDetector(
-                              onTap: () {
-                                onTap.call();
-                              },
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.view_sidebar_sharp,
-                                    size: 12,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant,
-                                  ),
-                                  const SizedBox(width: 2),
-                                  Text("sidebar",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelSmall!
-                                          .copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onSurfaceVariant)),
                                 ],
                               ),
                             ),
