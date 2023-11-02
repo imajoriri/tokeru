@@ -21,6 +21,7 @@ class SidebarScreen extends HookConsumerWidget {
 
     useEffect(() {
       textController.text = state.memo?.content ?? '';
+      focus.requestFocus();
       return null;
     }, [state.memo]);
 

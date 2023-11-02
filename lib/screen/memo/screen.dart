@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/model/memo.dart';
 import 'package:quick_flutter/screen/sidebar_screen/controller.dart';
 import 'package:quick_flutter/store/bookmark_store.dart';
+import 'package:quick_flutter/store/focus_store.dart';
 import 'package:quick_flutter/store/memo_store.dart';
 import 'package:quick_flutter/widget/chat_text_field.dart';
 import 'package:quick_flutter/widget/chat_tile.dart';
@@ -36,7 +37,6 @@ class MemoScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textController = MarkdownTextEditingController();
-    final focus = useFocusNode();
 
     // 画面を破棄する時にtextControllerもdisposeする
     useEffect(() {
@@ -68,7 +68,7 @@ class MemoScreen extends HookConsumerWidget {
                   isBookmark: isBookmark);
             },
             controller: textController,
-            focus: focus,
+            focus: ref.watch(focusNodeProvider(FocusNodeType.chat)),
           ),
         ],
       ),

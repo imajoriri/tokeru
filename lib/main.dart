@@ -1,12 +1,15 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/firebase_options.dart';
 import 'package:quick_flutter/screen/memo/screen.dart';
 import 'package:quick_flutter/screen/sidebar_screen/controller.dart';
 import 'package:quick_flutter/screen/sidebar_screen/sidebar_screen.dart';
+import 'package:quick_flutter/store/focus_store.dart';
 import 'package:quick_flutter/systems/color.dart';
+import 'package:quick_flutter/widget/shortcut_intent.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,7 +36,7 @@ void panel() async {
   );
 }
 
-class MyApp extends ConsumerWidget {
+class MyApp extends HookConsumerWidget {
   const MyApp({super.key});
 
   @override
@@ -67,13 +70,47 @@ class MyApp extends ConsumerWidget {
       ),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: Row(
-        children: [
-          const Flexible(child: MemoScreen()),
-          if (ref.watch(sidebarScreenControllerProvider).isShow) ...[
-            const Flexible(child: SidebarScreen()),
-          ]
-        ],
+      home: Shortcuts(
+        shortcuts: <LogicalKeySet, Intent>{
+          LogicalKeySet(
+            LogicalKeyboardKey.meta,
+            LogicalKeyboardKey.keyN,
+          ): CommandNIntent(),
+          LogicalKeySet(
+            LogicalKeyboardKey.meta,
+            LogicalKeyboardKey.enter,
+          ): CommandEnterIntent(),
+          LogicalKeySet(
+            LogicalKeyboardKey.escape,
+          ): EscIntent(),
+        },
+        child: Actions(
+          actions: <Type, Action<Intent>>{
+            CommandNIntent: CallbackAction(
+              onInvoke: (intent) {
+                ref.watch(focusNodeProvider(FocusNodeType.chat)).requestFocus();
+                return null;
+              },
+            ),
+          },
+          child: GestureDetector(
+            onTap: () {
+              ref.watch(focusNodeProvider(FocusNodeType.main)).requestFocus();
+            },
+            child: Focus(
+              autofocus: true,
+              focusNode: ref.watch(focusNodeProvider(FocusNodeType.main)),
+              child: Row(
+                children: [
+                  const Flexible(child: MemoScreen()),
+                  if (ref.watch(sidebarScreenControllerProvider).isShow) ...[
+                    const Flexible(child: SidebarScreen()),
+                  ]
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

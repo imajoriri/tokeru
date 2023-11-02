@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:quick_flutter/store/focus_store.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
 import 'package:quick_flutter/widget/markdown_text_editing_controller.dart';
 import 'package:quick_flutter/widget/markdown_text_field.dart';
@@ -94,7 +95,8 @@ class ChatTextField extends HookConsumerWidget {
           if (!focus.hasFocus) {
             return;
           }
-          controller.clear();
+          focus.unfocus();
+          ref.watch(focusNodeProvider(FocusNodeType.main)).requestFocus();
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

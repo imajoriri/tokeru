@@ -7,7 +7,7 @@ part of 'controller.dart';
 // **************************************************************************
 
 String _$sidebarScreenControllerHash() =>
-    r'a55c11aff00771b97aded304c5a7841ecc8c0cfc';
+    r'4edc452c10bb743c2f28f2ec49082c7d112b11b2';
 
 /// See also [SidebarScreenController].
 @ProviderFor(SidebarScreenController)

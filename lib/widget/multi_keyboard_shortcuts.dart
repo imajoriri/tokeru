@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
-class CommandEnterIntent extends Intent {}
-
-class EscIntent extends Intent {}
+import 'package:quick_flutter/widget/shortcut_intent.dart';
 
 class MultiKeyBoardShortcuts extends StatelessWidget {
   const MultiKeyBoardShortcuts({
@@ -19,33 +15,22 @@ class MultiKeyBoardShortcuts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Shortcuts(
-      shortcuts: <LogicalKeySet, Intent>{
-        LogicalKeySet(
-          LogicalKeyboardKey.meta,
-          LogicalKeyboardKey.enter,
-        ): CommandEnterIntent(),
-        LogicalKeySet(
-          LogicalKeyboardKey.escape,
-        ): EscIntent(),
+    return Actions(
+      actions: <Type, Action<Intent>>{
+        CommandEnterIntent: CallbackAction(
+          onInvoke: (intent) {
+            onCommandEnter();
+            return null;
+          },
+        ),
+        EscIntent: CallbackAction(
+          onInvoke: (intent) {
+            onEsc();
+            return null;
+          },
+        ),
       },
-      child: Actions(
-        actions: <Type, Action<Intent>>{
-          CommandEnterIntent: CallbackAction(
-            onInvoke: (intent) {
-              onCommandEnter();
-              return null;
-            },
-          ),
-          EscIntent: CallbackAction(
-            onInvoke: (intent) {
-              onEsc();
-              return null;
-            },
-          ),
-        },
-        child: child,
-      ),
+      child: child,
     );
   }
 }
