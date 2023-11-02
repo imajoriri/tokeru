@@ -24,13 +24,15 @@ class ChatTextField extends HookConsumerWidget {
     final hasFocus = useState(false);
     // ブックマークとして投稿するかどうか
     final isBookmark = useState(false);
+    // 明示的にブックマークをOFFにして投稿するかどうか
+    final isBookmarkOff = useState(false);
 
     useEffect(() {
       listener() {
         canSubmit.value = controller.text.isNotEmpty;
 
         // タイトルから始まる場合はブックマークとして投稿する
-        if (controller.text.startsWith('# ')) {
+        if (controller.text.startsWith('# ') && !isBookmarkOff.value) {
           isBookmark.value = true;
         } else {
           isBookmark.value = false;
@@ -59,6 +61,7 @@ class ChatTextField extends HookConsumerWidget {
       onSubmit(isBookmark.value);
       isBookmark.value = false;
       controller.clear();
+      isBookmarkOff.value = false;
     }
 
     return Container(
@@ -97,16 +100,16 @@ class ChatTextField extends HookConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // draft
-            Container(
-              padding: const EdgeInsets.all(8),
-              color: context.colorScheme.primaryContainer,
-              width: double.infinity,
-              child: Text(
-                "hogehogeこれはドラフト",
-                style: context.textTheme.bodyMedium!
-                    .copyWith(color: context.colorScheme.onPrimaryContainer),
-              ),
-            ),
+            // Container(
+            //   padding: const EdgeInsets.all(8),
+            //   color: context.colorScheme.primaryContainer,
+            //   width: double.infinity,
+            //   child: Text(
+            //     "hogehogeこれはドラフト",
+            //     style: context.textTheme.bodyMedium!
+            //         .copyWith(color: context.colorScheme.onPrimaryContainer),
+            //   ),
+            // ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: MarkdownTextField(
@@ -124,6 +127,9 @@ class ChatTextField extends HookConsumerWidget {
                   TextButton(
                     onPressed: () {
                       isBookmark.value = !isBookmark.value;
+                      if (!isBookmark.value) {
+                        isBookmarkOff.value = true;
+                      }
                     },
                     child: Icon(
                       isBookmark.value ? Icons.bookmark : Icons.bookmark_border,
