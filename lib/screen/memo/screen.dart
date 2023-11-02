@@ -7,7 +7,7 @@ import 'package:quick_flutter/store/bookmark_store.dart';
 import 'package:quick_flutter/store/memo_store.dart';
 import 'package:quick_flutter/widget/chat_text_field.dart';
 import 'package:quick_flutter/widget/chat_tile.dart';
-import 'package:quick_flutter/widget/markdown_text_field.dart';
+import 'package:quick_flutter/widget/markdown_text_editing_controller.dart';
 
 class MemoScreen extends HookConsumerWidget {
   const MemoScreen({super.key});

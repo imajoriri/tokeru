@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/screen/sidebar_screen/controller.dart';
+import 'package:quick_flutter/widget/markdown_text_editing_controller.dart';
 import 'package:quick_flutter/widget/markdown_text_field.dart';
 
 class SidebarScreen extends HookConsumerWidget {
@@ -15,7 +16,7 @@ class SidebarScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(sidebarScreenControllerProvider);
 
-    final textController = MarkdownTextEditingController();
+    final textController = useMarkdownTextEditingController();
     final focus = useFocusNode();
 
     useEffect(() {
