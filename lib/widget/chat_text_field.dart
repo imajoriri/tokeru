@@ -117,6 +117,9 @@ class ChatTextField extends HookConsumerWidget {
               child: MarkdownTextField(
                 controller: controller,
                 focus: focus,
+                hintText: hasFocus.value
+                    ? 'write a note'
+                    : 'Press Command + N to focus',
               ),
             ),
             Padding(

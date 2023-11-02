@@ -8,6 +8,7 @@ class MarkdownTextField extends HookConsumerWidget {
     required this.focus,
     this.maxLines,
     this.expands = false,
+    this.hintText,
     Key? key,
   }) : super(key: key);
 
@@ -15,6 +16,7 @@ class MarkdownTextField extends HookConsumerWidget {
   final FocusNode focus;
   final int? maxLines;
   final bool expands;
+  final String? hintText;
 
   void listControl(String key) {
     final text = controller.text;
@@ -64,9 +66,13 @@ class MarkdownTextField extends HookConsumerWidget {
     return TextField(
       focusNode: focus,
       controller: controller,
-      decoration: const InputDecoration(
-        border: InputBorder.none,
-      ),
+      decoration: InputDecoration(
+          border: InputBorder.none,
+          hintText: hintText,
+          hintStyle: Theme.of(context)
+              .textTheme
+              .bodyLarge!
+              .copyWith(color: Colors.grey)),
       keyboardType: TextInputType.multiline,
       maxLines: maxLines,
       expands: expands,
