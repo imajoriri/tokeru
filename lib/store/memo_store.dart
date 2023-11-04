@@ -20,7 +20,14 @@ final addMemoProvider = Provider.autoDispose
 });
 
 final memosProvider = FutureProvider.autoDispose<List<Memo>>((ref) {
-  return ref.watch(memoRepositoryProvider).getAll();
+  // 今日の0時の時間を取得
+  final now = DateTime.now();
+  DateTime startAt = DateTime(now.year, now.month, now.day);
+  DateTime endAt = DateTime(now.year, now.month, now.day, 23, 59, 59);
+
+  return ref
+      .watch(memoRepositoryProvider)
+      .getAll(startAt: startAt, endAt: endAt, descending: true);
 });
 
 class UpdateMemoParams {

@@ -30,11 +30,17 @@ class MemoRepository {
     await firestore.collection("memos").doc(id).update(data);
   }
 
-  Future<List<Memo>> getAll() async {
+  Future<List<Memo>> getAll({
+    bool descending = true,
+    DateTime? startAt,
+    DateTime? endAt,
+  }) async {
     final firestore = ref.read(firestoreProvider);
     final response = await firestore
         .collection("memos")
-        .orderBy('createdAt', descending: true)
+        .orderBy('createdAt', descending: descending)
+        .where('createdAt', isGreaterThanOrEqualTo: startAt)
+        .where('createdAt', isLessThanOrEqualTo: endAt)
         .get();
     return (response.docs.map((doc) {
       return Memo(
