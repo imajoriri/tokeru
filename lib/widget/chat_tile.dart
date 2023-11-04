@@ -102,11 +102,23 @@ class ChatTile extends HookConsumerWidget {
                         ],
                       ],
                     ),
-                    RichText(
+                    if (!memo.isBookmark)
+                      RichText(
                         maxLines: maxLines,
                         text: MarkdownTextSpan(
-                            text: memo.content,
-                            style: Theme.of(context).textTheme.bodyMedium)),
+                          text: memo.content,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      )
+                    else
+                      Text(
+                        memo.content,
+                        maxLines: maxLines,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
                   ],
                 ),
               ),
