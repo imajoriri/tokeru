@@ -2,12 +2,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/firebase_options.dart';
 import 'package:quick_flutter/screen/memo/screen.dart';
 import 'package:quick_flutter/screen/sidebar_screen/controller.dart';
 import 'package:quick_flutter/screen/sidebar_screen/sidebar_screen.dart';
 import 'package:quick_flutter/store/focus_store.dart';
+import 'package:quick_flutter/store/memo_store.dart';
 import 'package:quick_flutter/systems/color.dart';
 import 'package:quick_flutter/widget/shortcut_intent.dart';
 
@@ -31,7 +33,8 @@ void panel() async {
   );
   runApp(
     const ProviderScope(
-      child: MyApp(),
+      // child: MyApp(),
+      child: SizedBox(),
     ),
   );
 }
@@ -39,8 +42,25 @@ void panel() async {
 class MyApp extends HookConsumerWidget {
   const MyApp({super.key});
 
+  /// メモの一覧を0時にリセット
+  void updateMemos(WidgetRef ref) {
+    DateTime now = DateTime.now();
+    // 次の日の0時1分を計算
+    DateTime initialDelay = DateTime(now.year, now.month, now.day + 1, 0, 1);
+    Duration delay = initialDelay.difference(now);
+
+    Future.delayed(delay).then((_) {
+      ref.invalidate(memosProvider);
+      updateMemos(ref);
+    });
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    useEffect(() {
+      updateMemos(ref);
+      return null;
+    }, []);
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
