@@ -86,7 +86,7 @@ class ChatTextField extends HookConsumerWidget {
       margin: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
       child: MultiKeyBoardShortcuts(
         onCommandEnter: () {
-          if (!focus.hasFocus) {
+          if (!focus.hasFocus || !canSubmit.value) {
             return;
           }
           _onSubmit();
