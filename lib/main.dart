@@ -33,8 +33,7 @@ void panel() async {
   );
   runApp(
     const ProviderScope(
-      // child: MyApp(),
-      child: SizedBox(),
+      child: MyApp(),
     ),
   );
 }
