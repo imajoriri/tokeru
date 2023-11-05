@@ -8,6 +8,7 @@ import 'package:quick_flutter/store/focus_store.dart';
 import 'package:quick_flutter/store/memo_store.dart';
 import 'package:quick_flutter/widget/chat_text_field.dart';
 import 'package:quick_flutter/widget/chat_tile.dart';
+import 'package:quick_flutter/widget/custome_expansion_tile.dart';
 import 'package:quick_flutter/widget/markdown_text_editing_controller.dart';
 
 class MemoScreen extends HookConsumerWidget {
@@ -130,39 +131,41 @@ class _BookmarkList extends HookConsumerWidget {
           ),
         ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.bookmark,
-                  color: Theme.of(context).colorScheme.primary,
-                  size: 12,
-                ),
-                const SizedBox(width: 4),
-                Text("bookmarks",
-                    style: Theme.of(context).textTheme.titleSmall!),
-              ],
+      child: CustomExpansionTile(
+        isHoverOpen: true,
+        title: Row(
+          children: [
+            Icon(
+              Icons.bookmark,
+              color: Theme.of(context).colorScheme.primary,
+              size: 12,
             ),
-          ),
-          ListView.builder(
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              return ChatTile(
-                memo: bookmarks[index],
-                maxLines: 1,
-                onTapBookmark: onTapBookmark,
-                onTap: () {
-                  ref
-                      .read(sidebarScreenControllerProvider.notifier)
-                      .open(memo: bookmarks[index]);
-                },
-              );
-            },
-            itemCount: bookmarks.length,
+            const SizedBox(width: 4),
+            Text("bookmarks (${bookmarks.length})",
+                style: Theme.of(context).textTheme.titleSmall!),
+          ],
+        ),
+        children: [
+          ConstrainedBox(
+            // 画面の半分のサイズをmaxHeightにする
+            constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height / 2),
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return ChatTile(
+                  memo: bookmarks[index],
+                  maxLines: 1,
+                  onTapBookmark: onTapBookmark,
+                  onTap: () {
+                    ref
+                        .read(sidebarScreenControllerProvider.notifier)
+                        .open(memo: bookmarks[index]);
+                  },
+                );
+              },
+              itemCount: bookmarks.length,
+            ),
           ),
         ],
       ),
