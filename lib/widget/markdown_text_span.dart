@@ -1,17 +1,28 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
+/// replaceTextやbeforeWidgetSpanを指定して、トータル同じテキストの量にする
 class MarkdownMatch {
   final String text;
-  final TextStyle style;
-  final String? replaceTextKey;
-  final String? replaceText;
+  final TextStyle? style;
+  final MarkdownReplaceText? replaceText;
+  final InlineSpan? beforeWidgetSpan;
 
   MarkdownMatch({
     required this.text,
-    required this.style,
-    this.replaceTextKey,
+    this.style,
     this.replaceText,
+    this.beforeWidgetSpan,
+  });
+}
+
+class MarkdownReplaceText {
+  final String beforeText;
+  final String afterText;
+
+  MarkdownReplaceText({
+    required this.beforeText,
+    required this.afterText,
   });
 }
 
@@ -53,8 +64,25 @@ final List<MarkdownMatch> matches = [
     style: const TextStyle(
       fontWeight: FontWeight.bold,
     ),
-    replaceTextKey: "*",
-    replaceText: " ",
+    replaceText: MarkdownReplaceText(
+      beforeText: "*",
+      afterText: " ",
+    ),
+  ),
+  // list
+  MarkdownMatch(
+    text: r"(?:^|\n)-\s.*",
+    replaceText: MarkdownReplaceText(
+      beforeText: "- ",
+      afterText: " ",
+    ),
+    beforeWidgetSpan: const WidgetSpan(
+      alignment: PlaceholderAlignment.middle,
+      child: Padding(
+        padding: EdgeInsets.only(left: 4, right: 4),
+        child: Icon(Icons.brightness_1, size: 8),
+      ),
+    ),
   ),
 ];
 
@@ -79,6 +107,7 @@ class MarkdownTextSpan extends TextSpan {
           }).join('|'),
           multiLine: true);
       final List<InlineSpan> children = [];
+
       text.splitMapJoin(
         pattern,
         // マッチした文字列の回数呼ばれる
@@ -88,30 +117,44 @@ class MarkdownTextSpan extends TextSpan {
                 .allMatches(text)
                 .any((element) => element.group(0) == match[0]),
           );
+
           if (markdownMatch == null) {
             children.add(TextSpan(
               text: match[0],
             ));
             return "";
           }
-          if (markdownMatch.replaceTextKey == null ||
-              markdownMatch.replaceText == null) {
+
+          final newText = markdownMatch.replaceText == null
+              ? match[0]!
+              : match[0]!.replaceAll(markdownMatch.replaceText!.beforeText,
+                  markdownMatch.replaceText!.afterText);
+
+          if (markdownMatch.beforeWidgetSpan == null) {
             children.add(TextSpan(
-              text: match[0],
+              text: newText,
               style: style?.merge(markdownMatch.style),
             ));
             return "";
           }
 
-          if (markdownMatch.replaceTextKey != null &&
-              markdownMatch.replaceText != null) {
-            children.add(TextSpan(
-              text: match[0]!.replaceAll(
-                  markdownMatch.replaceTextKey!, markdownMatch.replaceText!),
-              style: style?.merge(markdownMatch.style),
-            ));
-            return "";
-          }
+          final isFirstLine = !match[0]!.startsWith('\n');
+          children.add(TextSpan(
+            children: [
+              if (!isFirstLine) const TextSpan(text: '\n'),
+              if (markdownMatch.beforeWidgetSpan != null)
+                markdownMatch.beforeWidgetSpan!,
+              if (isFirstLine)
+                TextSpan(
+                    children: _buildChildren(
+                        newText, style?.merge(markdownMatch.style), matches))
+              else
+                // widgetSpanの前に改行を入れた分、1文字目の改行を削除
+                TextSpan(
+                    children: _buildChildren(newText.substring(1),
+                        style?.merge(markdownMatch.style), matches)),
+            ],
+          ));
 
           return "";
         },
