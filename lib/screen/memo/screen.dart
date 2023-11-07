@@ -3,7 +3,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/model/memo.dart';
 import 'package:quick_flutter/screen/sidebar_screen/controller.dart';
-import 'package:quick_flutter/store/bookmark_store.dart';
 import 'package:quick_flutter/store/focus_store.dart';
 import 'package:quick_flutter/store/memo_store.dart';
 import 'package:quick_flutter/widget/chat_text_field.dart';
@@ -16,23 +15,19 @@ class MemoScreen extends HookConsumerWidget {
 
   void toggleBookmark({required WidgetRef ref, required Memo memo}) async {
     if (memo.isBookmark) {
-      await ref.read(removeBookmarkProvider(memo.id));
+      await ref.read(memoStoreProvider.notifier).removeBookmark(memo);
     } else {
-      await ref.read(addBookmarkProvider(memo.id));
+      await ref.read(memoStoreProvider.notifier).addBookmark(memo);
     }
-    ref.invalidate(bookmarkProvider);
-    ref.invalidate(memosProvider);
   }
 
   void addMessage(
       {required WidgetRef ref,
       required TextEditingController textController,
       required bool isBookmark}) async {
-    await ref.read(addMemoProvider(
-      AddMemoParams(content: textController.text, isBookmark: isBookmark),
-    ));
-    ref.invalidate(memosProvider);
-    ref.invalidate(bookmarkProvider);
+    await ref
+        .read(memoStoreProvider.notifier)
+        .addMemo(content: textController.text, isBookmark: isBookmark);
   }
 
   @override
@@ -82,11 +77,11 @@ class _AllMemoList extends HookConsumerWidget {
   final void Function(Memo memo) onTapBookmark;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider = ref.watch(memosProvider);
+    final provider = ref.watch(memoStoreProvider);
     if (provider.hasError) {
       return Text(provider.error.toString());
     }
-    final memos = provider.valueOrNull ?? [];
+    final memos = provider.valueOrNull?.memos ?? [];
 
     return ListView.builder(
       shrinkWrap: true,
@@ -101,14 +96,9 @@ class _AllMemoList extends HookConsumerWidget {
                 .open(memo: memos[index]);
           },
           onChanged: (value) {
-            ref.read(updateMemoContentProvider(
-              UpdateMemoParams(
-                id: memos[index].id,
-                content: value,
-              ),
-            ));
-            ref.invalidate(memosProvider);
-            ref.invalidate(bookmarkProvider);
+            ref
+                .read(memoStoreProvider.notifier)
+                .updateMemo(id: memos[index].id, content: value);
           },
         );
       },
@@ -122,11 +112,11 @@ class _BookmarkList extends HookConsumerWidget {
   final void Function(Memo memo) onTapBookmark;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider = ref.watch(bookmarkProvider);
+    final provider = ref.watch(memoStoreProvider);
     if (provider.hasError) {
       return Text(provider.error.toString());
     }
-    final bookmarks = provider.valueOrNull ?? [];
+    final bookmarks = provider.valueOrNull?.bookmarks ?? [];
 
     return Container(
       margin: const EdgeInsets.only(bottom: 8),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/screen/sidebar_screen/controller.dart';
+import 'package:quick_flutter/store/memo_store.dart';
 import 'package:quick_flutter/widget/markdown_text_editing_controller.dart';
 import 'package:quick_flutter/widget/markdown_text_field.dart';
 
@@ -18,9 +19,12 @@ class SidebarScreen extends HookConsumerWidget {
 
     final textController = useMarkdownTextEditingController();
     final focus = useFocusNode();
+    // 最初の更新(開いてるメモを変更した時)を検知
+    final didFirstUpdateMemo = useState(false);
 
     useEffect(() {
       textController.text = state.memo?.content ?? '';
+      didFirstUpdateMemo.value = false;
       focus.requestFocus();
       return null;
     }, [state.memo]);
@@ -36,14 +40,19 @@ class SidebarScreen extends HookConsumerWidget {
     useEffect(
       () {
         textController.addListener(() {
+          if (didFirstUpdateMemo.value == false) {
+            didFirstUpdateMemo.value = true;
+            return;
+          }
           if (debounce?.isActive ?? false) {
             debounce?.cancel();
           }
 
           debounce = Timer(debounceDuration, () {
-            ref
-                .read(sidebarScreenControllerProvider.notifier)
-                .update(content: textController.text);
+            ref.read(memoStoreProvider.notifier).updateMemo(
+                  id: ref.read(sidebarScreenControllerProvider).memo!.id,
+                  content: textController.text,
+                );
           });
         });
 

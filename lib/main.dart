@@ -49,7 +49,7 @@ class MyApp extends HookConsumerWidget {
     Duration delay = initialDelay.difference(now);
 
     Future.delayed(delay).then((_) {
-      ref.invalidate(memosProvider);
+      ref.invalidate(memoStoreProvider);
       updateMemos(ref);
     });
   }
