@@ -35,8 +35,8 @@ class MarkdownTextField extends HookConsumerWidget {
       lines.removeAt(currentLineIndex);
       controller.text = lines.join('\n');
       controller.selection = TextSelection(
-        baseOffset: baseOffset + key.length,
-        extentOffset: baseOffset + key.length,
+        baseOffset: baseOffset - key.length - 1,
+        extentOffset: baseOffset - key.length - 1,
       );
       return true;
     }

@@ -66,7 +66,7 @@ final List<MarkdownMatch> matches = [
     ),
     replaceText: MarkdownReplaceText(
       beforeText: "*",
-      afterText: " ",
+      afterText: "",
     ),
   ),
   // checklist
@@ -74,7 +74,8 @@ final List<MarkdownMatch> matches = [
     text: r"(?:^|\n)-\s\[(x|X| )\]\s.*",
     replaceText: MarkdownReplaceText(
       beforeText: "- [ ] ",
-      afterText: "     ",
+      afterText: "",
+      // afterText: "\u{200C}\u{200C}\u{200C}\u{200C}\u{200C}",
     ),
     beforeWidgetSpan: const WidgetSpan(
       alignment: PlaceholderAlignment.middle,
@@ -103,7 +104,7 @@ final List<MarkdownMatch> matches = [
     text: r"(?:^|\n)\*\s.*",
     replaceText: MarkdownReplaceText(
       beforeText: "* ",
-      afterText: " ",
+      afterText: "",
     ),
     beforeWidgetSpan: const WidgetSpan(
       alignment: PlaceholderAlignment.middle,
