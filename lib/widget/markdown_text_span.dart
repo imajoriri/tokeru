@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 /// replaceTextやbeforeWidgetSpanを指定して、トータル同じテキストの量にする
@@ -7,12 +8,14 @@ class MarkdownMatch {
   final TextStyle? style;
   final MarkdownReplaceText? replaceText;
   final InlineSpan? beforeWidgetSpan;
+  final String Function(String oldValue)? onTap;
 
   MarkdownMatch({
     required this.text,
     this.style,
     this.replaceText,
     this.beforeWidgetSpan,
+    this.onTap,
   });
 }
 
@@ -71,17 +74,37 @@ final List<MarkdownMatch> matches = [
   ),
   // checklist
   MarkdownMatch(
-    text: r"(?:^|\n)-\s\[(x|X| )\]\s.*",
+    text: r"(?:^|\n)-\s\[( )\]\s.*",
     replaceText: MarkdownReplaceText(
       beforeText: "- [ ] ",
       afterText: "",
       // afterText: "\u{200C}\u{200C}\u{200C}\u{200C}\u{200C}",
     ),
+    onTap: (value) {
+      return value.replaceAll("- [ ] ", "- [x] ");
+    },
     beforeWidgetSpan: const WidgetSpan(
       alignment: PlaceholderAlignment.middle,
       child: Padding(
         padding: EdgeInsets.only(left: 4, right: 4),
         child: Icon(Icons.check_box_outline_blank, size: 16),
+      ),
+    ),
+  ),
+  MarkdownMatch(
+    text: r"(?:^|\n)-\s\[(x|X|)\]\s.*",
+    replaceText: MarkdownReplaceText(
+      beforeText: "- [x] ",
+      afterText: "",
+    ),
+    onTap: (value) {
+      return value.replaceAll("- [x] ", "- [ ] ");
+    },
+    beforeWidgetSpan: const WidgetSpan(
+      alignment: PlaceholderAlignment.middle,
+      child: Padding(
+        padding: EdgeInsets.only(left: 4, right: 4),
+        child: Icon(Icons.check_box, size: 16),
       ),
     ),
   ),
@@ -121,14 +144,17 @@ class MarkdownTextSpan extends TextSpan {
     super.style,
     super.recognizer,
     required String text,
+    this.onChanged,
   }) : super(
-          children: _buildChildren(text, style, matches),
+          children: _buildChildren(text, style, matches, onChanged),
         );
+  final Function(String value)? onChanged;
 
   static List<InlineSpan> _buildChildren(
     String text,
     TextStyle? style,
     List<MarkdownMatch> matches,
+    Function(String value)? onChanged,
   ) {
     {
       final pattern = RegExp(
@@ -137,6 +163,14 @@ class MarkdownTextSpan extends TextSpan {
           }).join('|'),
           multiLine: true);
       final List<InlineSpan> children = [];
+
+      onTap(MarkdownMatch markdownMatch, Match match) {
+        final newValue = markdownMatch.onTap?.call(match[0]!);
+        // マッチしている部分をnewValueに置き換える
+        if (newValue == null) return;
+        final res = text.replaceRange(match.start, match.end, newValue);
+        onChanged?.call(res);
+      }
 
       text.splitMapJoin(
         pattern,
@@ -170,21 +204,33 @@ class MarkdownTextSpan extends TextSpan {
 
           final isFirstLine = !match[0]!.startsWith('\n');
           children.add(TextSpan(
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                onTap.call(markdownMatch, match);
+              },
             children: [
               if (!isFirstLine) const TextSpan(text: '\n'),
               if (markdownMatch.beforeWidgetSpan != null)
                 markdownMatch.beforeWidgetSpan!,
               if (isFirstLine)
                 TextSpan(
-                    text: newText, style: style?.merge(markdownMatch.style))
-              // TextSpan(
-              //     children: _buildChildren(
-              //         newText, style?.merge(markdownMatch.style), matches))
+                  text: newText,
+                  style: style?.merge(markdownMatch.style),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      onTap.call(markdownMatch, match);
+                    },
+                )
               else
                 // widgetSpanの前に改行を入れた分、1文字目の改行を削除
                 TextSpan(
-                    children: _buildChildren(newText.substring(1),
-                        style?.merge(markdownMatch.style), matches)),
+                  text: newText.substring(1),
+                  style: style?.merge(markdownMatch.style),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      onTap.call(markdownMatch, match);
+                    },
+                ),
             ],
           ));
 

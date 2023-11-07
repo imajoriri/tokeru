@@ -10,6 +10,7 @@ class ChatTile extends HookConsumerWidget {
   final Function(Memo) onTapBookmark;
   final Function() onTap;
   final int? maxLines;
+  final Function(String value)? onChanged;
 
   const ChatTile({
     Key? key,
@@ -17,6 +18,7 @@ class ChatTile extends HookConsumerWidget {
     required this.onTapBookmark,
     required this.onTap,
     this.maxLines,
+    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -32,7 +34,7 @@ class ChatTile extends HookConsumerWidget {
         onTapBookmark.call(memo);
       },
       child: MouseRegion(
-        cursor: SystemMouseCursors.click,
+        // cursor: SystemMouseCursors.click,
         onExit: (pointer) {
           onHover.value = false;
         },
@@ -108,6 +110,9 @@ class ChatTile extends HookConsumerWidget {
                         text: MarkdownTextSpan(
                           text: memo.content,
                           style: Theme.of(context).textTheme.bodyMedium,
+                          onChanged: (value) {
+                            onChanged?.call(value);
+                          },
                         ),
                       )
                     else

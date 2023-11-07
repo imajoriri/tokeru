@@ -100,6 +100,16 @@ class _AllMemoList extends HookConsumerWidget {
                 .read(sidebarScreenControllerProvider.notifier)
                 .open(memo: memos[index]);
           },
+          onChanged: (value) {
+            ref.read(updateMemoContentProvider(
+              UpdateMemoParams(
+                id: memos[index].id,
+                content: value,
+              ),
+            ));
+            ref.invalidate(memosProvider);
+            ref.invalidate(bookmarkProvider);
+          },
         );
       },
       itemCount: memos.length,
