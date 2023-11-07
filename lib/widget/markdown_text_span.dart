@@ -84,6 +84,20 @@ final List<MarkdownMatch> matches = [
       ),
     ),
   ),
+  MarkdownMatch(
+    text: r"(?:^|\n)\*\s.*",
+    replaceText: MarkdownReplaceText(
+      beforeText: "* ",
+      afterText: " ",
+    ),
+    beforeWidgetSpan: const WidgetSpan(
+      alignment: PlaceholderAlignment.middle,
+      child: Padding(
+        padding: EdgeInsets.only(left: 4, right: 4),
+        child: Icon(Icons.brightness_1, size: 8),
+      ),
+    ),
+  ),
 ];
 
 class MarkdownTextSpan extends TextSpan {
