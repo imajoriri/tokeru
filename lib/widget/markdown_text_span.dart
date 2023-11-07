@@ -69,12 +69,27 @@ final List<MarkdownMatch> matches = [
       afterText: " ",
     ),
   ),
+  // checklist
+  MarkdownMatch(
+    text: r"(?:^|\n)-\s\[(x|X| )\]\s.*",
+    replaceText: MarkdownReplaceText(
+      beforeText: "- [ ] ",
+      afterText: "     ",
+    ),
+    beforeWidgetSpan: const WidgetSpan(
+      alignment: PlaceholderAlignment.middle,
+      child: Padding(
+        padding: EdgeInsets.only(left: 4, right: 4),
+        child: Icon(Icons.check_box_outline_blank, size: 16),
+      ),
+    ),
+  ),
   // list
   MarkdownMatch(
     text: r"(?:^|\n)-\s.*",
     replaceText: MarkdownReplaceText(
       beforeText: "- ",
-      afterText: " ",
+      afterText: "",
     ),
     beforeWidgetSpan: const WidgetSpan(
       alignment: PlaceholderAlignment.middle,
@@ -160,8 +175,10 @@ class MarkdownTextSpan extends TextSpan {
                 markdownMatch.beforeWidgetSpan!,
               if (isFirstLine)
                 TextSpan(
-                    children: _buildChildren(
-                        newText, style?.merge(markdownMatch.style), matches))
+                    text: newText, style: style?.merge(markdownMatch.style))
+              // TextSpan(
+              //     children: _buildChildren(
+              //         newText, style?.merge(markdownMatch.style), matches))
               else
                 // widgetSpanの前に改行を入れた分、1文字目の改行を削除
                 TextSpan(

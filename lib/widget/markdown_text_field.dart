@@ -18,7 +18,7 @@ class MarkdownTextField extends HookConsumerWidget {
   final bool expands;
   final String? hintText;
 
-  void listControl(String key) {
+  bool listControl(String key) {
     final text = controller.text;
     final lines = text.split('\n');
     final baseOffset = controller.selection.baseOffset;
@@ -35,10 +35,10 @@ class MarkdownTextField extends HookConsumerWidget {
       lines.removeAt(currentLineIndex);
       controller.text = lines.join('\n');
       controller.selection = TextSelection(
-        baseOffset: baseOffset - 3,
-        extentOffset: baseOffset - 3,
+        baseOffset: baseOffset + key.length,
+        extentOffset: baseOffset + key.length,
       );
-      return;
+      return true;
     }
 
     // 1つ前の行がリストの時かつ、空白のテキストではない場合
@@ -47,16 +47,20 @@ class MarkdownTextField extends HookConsumerWidget {
       lines[currentLineIndex] = '$key${lines[currentLineIndex]}';
       controller.text = lines.join('\n');
       controller.selection = TextSelection(
-        baseOffset: baseOffset + 2,
-        extentOffset: baseOffset + 2,
+        baseOffset: baseOffset + key.length,
+        extentOffset: baseOffset + key.length,
+        isDirectional: true,
       );
-      return;
+      return true;
     }
+    return false;
   }
 
   void onTapEnter() {
-    listControl('- ');
-    listControl('* ');
+    if (listControl('- [ ] ')) return;
+    if (listControl('- [x] ')) return;
+    if (listControl('- ')) return;
+    if (listControl('* ')) return;
   }
 
   @override
