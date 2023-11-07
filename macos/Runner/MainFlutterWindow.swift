@@ -7,10 +7,11 @@ import Firebase
 class MainFlutterWindow: NSWindow {
   let hotKey = HotKey(key: .r, modifiers: [.command, .option])
   var newEntryPanel: FloatingPanel!
+  var panelFlutterViewController: FlutterViewController!
+  var channel: FlutterMethodChannel!
   lazy var flutterEngine = FlutterEngine(name: "my flutter engine", project: nil)
   
   override func awakeFromNib() {
-//    FirebaseApp.configure()
     let flutterViewController = FlutterViewController()
     let windowFrame = self.frame
     self.contentViewController = flutterViewController
@@ -40,21 +41,24 @@ class MainFlutterWindow: NSWindow {
     // Shows the panel and makes it active
     newEntryPanel.orderFront(nil)
     newEntryPanel.makeKey()
+    
+    channel.invokeMethod("openPanel", arguments: nil)
   }
   
   func createFloatingPanel() {
     // 変える場合はここ参照 https://stackoverflow.com/questions/77222222/flutterengine-runwithentrypoint-screenaentrypoint-still-looks-for-main-i
     flutterEngine.run(withEntrypoint: "panel");
-    let flutterViewController = FlutterViewController(engine: flutterEngine, nibName: nil, bundle: nil)
+    panelFlutterViewController = FlutterViewController(engine: flutterEngine, nibName: nil, bundle: nil)
+    channel = FlutterMethodChannel(
+      name: "net.cbtdev.sample/method",
+      binaryMessenger: panelFlutterViewController.engine.binaryMessenger)
     
-    // Create the window and set the content view.
     newEntryPanel = FloatingPanel(contentRect: NSRect(x: 0, y: 0, width: 1200, height: 600), backing: .buffered, defer: false)
     
     newEntryPanel.title = "Floating Panel Title"
-//    newEntryPanel.contentView = NSHostingView(rootView: contentView)
-    newEntryPanel.contentView = flutterViewController.view
-    newEntryPanel.contentViewController = flutterViewController
-    RegisterGeneratedPlugins(registry: flutterViewController)
+    newEntryPanel.contentView = panelFlutterViewController.view
+    newEntryPanel.contentViewController = panelFlutterViewController
+    RegisterGeneratedPlugins(registry: panelFlutterViewController)
   }
 }
 

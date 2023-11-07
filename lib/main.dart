@@ -56,6 +56,18 @@ class MyApp extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    const channel = MethodChannel("net.cbtdev.sample/method");
+    // 受信
+    channel.setMethodCallHandler((MethodCall call) async {
+      print(call.method);
+      switch (call.method) {
+        case 'hello':
+          break;
+        default:
+          break;
+      }
+      return;
+    });
     useEffect(() {
       updateMemos(ref);
       return null;
