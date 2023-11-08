@@ -18,6 +18,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   runApp(
     const ProviderScope(
       child: MyApp(),
@@ -31,6 +32,7 @@ void panel() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   runApp(
     const ProviderScope(
       child: MyApp(),
@@ -38,8 +40,16 @@ void panel() async {
   );
 }
 
-class MyApp extends HookConsumerWidget {
+class MyApp extends StatefulHookConsumerWidget {
   const MyApp({super.key});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends ConsumerState<MyApp> {
+  // const _MyAppState({super.key});
 
   /// メモの一覧を0時にリセット
   void updateMemos(WidgetRef ref) {
@@ -55,23 +65,46 @@ class MyApp extends HookConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
+    final shortcuts = <LogicalKeySet, Intent>{
+      LogicalKeySet(
+        LogicalKeyboardKey.metaLeft,
+        LogicalKeyboardKey.keyN,
+      ): CommandNIntent(),
+      LogicalKeySet(
+        LogicalKeyboardKey.metaRight,
+        LogicalKeyboardKey.keyN,
+      ): CommandNIntent(),
+      LogicalKeySet(
+        LogicalKeyboardKey.metaLeft,
+        LogicalKeyboardKey.enter,
+      ): CommandEnterIntent(),
+      LogicalKeySet(
+        LogicalKeyboardKey.metaRight,
+        LogicalKeyboardKey.enter,
+      ): CommandEnterIntent(),
+      LogicalKeySet(
+        LogicalKeyboardKey.escape,
+      ): EscIntent(),
+    };
+    final pressedLogicalKeys = [];
     const channel = MethodChannel("net.cbtdev.sample/method");
-    // 受信
     channel.setMethodCallHandler((MethodCall call) async {
-      print(call.method);
       switch (call.method) {
-        case 'hello':
+        case 'openPanel':
+          pressedLogicalKeys.removeWhere((e) => true);
           break;
         default:
           break;
       }
       return;
     });
+
     useEffect(() {
       updateMemos(ref);
       return null;
     }, []);
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -101,44 +134,63 @@ class MyApp extends HookConsumerWidget {
       ),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: Shortcuts(
-        shortcuts: <LogicalKeySet, Intent>{
-          LogicalKeySet(
-            LogicalKeyboardKey.meta,
-            LogicalKeyboardKey.keyN,
-          ): CommandNIntent(),
-          LogicalKeySet(
-            LogicalKeyboardKey.meta,
-            LogicalKeyboardKey.enter,
-          ): CommandEnterIntent(),
-          LogicalKeySet(
-            LogicalKeyboardKey.escape,
-          ): EscIntent(),
-        },
-        child: Actions(
-          actions: <Type, Action<Intent>>{
-            CommandNIntent: CallbackAction(
-              onInvoke: (intent) {
-                ref.watch(focusNodeProvider(FocusNodeType.chat)).requestFocus();
-                return null;
-              },
-            ),
-          },
-          child: GestureDetector(
-            onTap: () {
-              ref.watch(focusNodeProvider(FocusNodeType.main)).requestFocus();
+      home: Actions(
+        actions: <Type, Action<Intent>>{
+          CommandNIntent: CallbackAction(
+            onInvoke: (intent) {
+              ref.watch(focusNodeProvider(FocusNodeType.chat)).requestFocus();
+              return null;
             },
-            child: Focus(
-              autofocus: true,
-              focusNode: ref.watch(focusNodeProvider(FocusNodeType.main)),
-              child: Row(
-                children: [
-                  const Flexible(child: MemoScreen()),
-                  if (ref.watch(sidebarScreenControllerProvider).isShow) ...[
-                    const Flexible(child: SidebarScreen()),
-                  ]
-                ],
-              ),
+          ),
+        },
+        child: GestureDetector(
+          onTap: () {
+            ref.watch(focusNodeProvider(FocusNodeType.main)).requestFocus();
+          },
+          child: Focus(
+            autofocus: true,
+            focusNode: ref.watch(focusNodeProvider(FocusNodeType.main)),
+            onKeyEvent: (node, event) {
+              if (event is KeyDownEvent) {
+                pressedLogicalKeys.add(event.logicalKey);
+              } else if (event is KeyUpEvent) {
+                pressedLogicalKeys.remove(event.logicalKey);
+              }
+              // shortcutsの中から該当するものを探す
+              for (final shortcut in shortcuts.entries) {
+                if (shortcut.key.keys.every((key) {
+                  return pressedLogicalKeys.contains(key);
+                })) {
+                  final primaryContext = WidgetsBinding
+                      .instance.focusManager.primaryFocus!.context!;
+                  final action = Actions.maybeFind<Intent>(
+                    WidgetsBinding.instance.focusManager.primaryFocus!.context!,
+                    intent: shortcut.value,
+                  );
+                  if (action == null) {
+                    return KeyEventResult.ignored;
+                  }
+                  final (bool enabled, Object? _) =
+                      Actions.of(primaryContext).invokeActionIfEnabled(
+                    action,
+                    shortcut.value,
+                    primaryContext,
+                  );
+                  if (enabled) {
+                    return KeyEventResult.handled;
+                  }
+                }
+              }
+
+              return KeyEventResult.ignored;
+            },
+            child: Row(
+              children: [
+                const Flexible(child: MemoScreen()),
+                if (ref.watch(sidebarScreenControllerProvider).isShow) ...[
+                  const Flexible(child: SidebarScreen()),
+                ]
+              ],
             ),
           ),
         ),

@@ -53,6 +53,7 @@ class MainFlutterWindow: NSWindow {
       name: "net.cbtdev.sample/method",
       binaryMessenger: panelFlutterViewController.engine.binaryMessenger)
     
+    
     newEntryPanel = FloatingPanel(contentRect: NSRect(x: 0, y: 0, width: 1200, height: 600), backing: .buffered, defer: false)
     
     newEntryPanel.title = "Floating Panel Title"
