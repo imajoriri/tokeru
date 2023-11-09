@@ -6,6 +6,7 @@ part 'focus_store.g.dart';
 enum FocusNodeType {
   main,
   chat,
+  sidebarChat,
 }
 
 @riverpod

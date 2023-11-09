@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CommandNIntent extends Intent {}
+class FocusChatTextFieldIntent extends Intent {}
 
 class CommandEnterIntent extends Intent {}
 

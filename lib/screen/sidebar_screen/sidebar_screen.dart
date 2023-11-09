@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/screen/sidebar_screen/controller.dart';
+import 'package:quick_flutter/store/focus_store.dart';
 import 'package:quick_flutter/store/memo_store.dart';
 import 'package:quick_flutter/widget/markdown_text_editing_controller.dart';
 import 'package:quick_flutter/widget/markdown_text_field.dart';
@@ -18,14 +19,14 @@ class SidebarScreen extends HookConsumerWidget {
     final state = ref.watch(sidebarScreenControllerProvider);
 
     final textController = useMarkdownTextEditingController();
-    final focus = useFocusNode();
+    // final focus = useFocusNode();
     // 最初の更新(開いてるメモを変更した時)を検知
     final didFirstUpdateMemo = useState(false);
 
     useEffect(() {
       textController.text = state.memo?.content ?? '';
       didFirstUpdateMemo.value = false;
-      focus.requestFocus();
+      ref.watch(focusNodeProvider(FocusNodeType.sidebarChat)).requestFocus();
       return null;
     }, [state.memo]);
 
@@ -111,7 +112,8 @@ class SidebarScreen extends HookConsumerWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: MarkdownTextField(
                   controller: textController,
-                  focus: focus,
+                  focus:
+                      ref.watch(focusNodeProvider(FocusNodeType.sidebarChat)),
                 ),
               ),
             ),

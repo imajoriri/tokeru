@@ -49,7 +49,29 @@ class MyApp extends StatefulHookConsumerWidget {
 }
 
 class _MyAppState extends ConsumerState<MyApp> {
-  // const _MyAppState({super.key});
+  final List<LogicalKeyboardKey> pressedLogicalKeys = [];
+
+  final shortcuts = <LogicalKeySet, Intent>{
+    LogicalKeySet(
+      LogicalKeyboardKey.metaLeft,
+      LogicalKeyboardKey.keyN,
+    ): FocusChatTextFieldIntent(),
+    LogicalKeySet(
+      LogicalKeyboardKey.metaRight,
+      LogicalKeyboardKey.keyN,
+    ): FocusChatTextFieldIntent(),
+    LogicalKeySet(
+      LogicalKeyboardKey.metaLeft,
+      LogicalKeyboardKey.enter,
+    ): CommandEnterIntent(),
+    LogicalKeySet(
+      LogicalKeyboardKey.metaRight,
+      LogicalKeyboardKey.enter,
+    ): CommandEnterIntent(),
+    LogicalKeySet(
+      LogicalKeyboardKey.escape,
+    ): EscIntent(),
+  };
 
   /// メモの一覧を0時にリセット
   void updateMemos(WidgetRef ref) {
@@ -64,46 +86,47 @@ class _MyAppState extends ConsumerState<MyApp> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final shortcuts = <LogicalKeySet, Intent>{
-      LogicalKeySet(
-        LogicalKeyboardKey.metaLeft,
-        LogicalKeyboardKey.keyN,
-      ): CommandNIntent(),
-      LogicalKeySet(
-        LogicalKeyboardKey.metaRight,
-        LogicalKeyboardKey.keyN,
-      ): CommandNIntent(),
-      LogicalKeySet(
-        LogicalKeyboardKey.metaLeft,
-        LogicalKeyboardKey.enter,
-      ): CommandEnterIntent(),
-      LogicalKeySet(
-        LogicalKeyboardKey.metaRight,
-        LogicalKeyboardKey.enter,
-      ): CommandEnterIntent(),
-      LogicalKeySet(
-        LogicalKeyboardKey.escape,
-      ): EscIntent(),
-    };
-    final pressedLogicalKeys = [];
+  void setMethodCallHandler() {
     const channel = MethodChannel("net.cbtdev.sample/method");
     channel.setMethodCallHandler((MethodCall call) async {
       switch (call.method) {
         case 'openPanel':
           pressedLogicalKeys.removeWhere((e) => true);
+
+          // sidebarにフォーカスがなければchatにフォーカスを移す
+          if (ref
+              .watch(focusNodeProvider(FocusNodeType.sidebarChat))
+              .hasFocus) {
+            break;
+          }
+          final primaryContext =
+              WidgetsBinding.instance.focusManager.primaryFocus!.context!;
+          final action = Actions.maybeFind<Intent>(
+            WidgetsBinding.instance.focusManager.primaryFocus!.context!,
+            intent: FocusChatTextFieldIntent(),
+          );
+          if (action != null) {
+            Actions.of(primaryContext).invokeActionIfEnabled(
+              action,
+              FocusChatTextFieldIntent(),
+              primaryContext,
+            );
+          }
           break;
         default:
           break;
       }
-      return;
     });
+  }
 
+  @override
+  Widget build(BuildContext context) {
     useEffect(() {
       updateMemos(ref);
       return null;
     }, []);
+
+    setMethodCallHandler();
 
     return MaterialApp(
       title: 'Flutter Demo',
@@ -136,7 +159,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       supportedLocales: AppLocalizations.supportedLocales,
       home: Actions(
         actions: <Type, Action<Intent>>{
-          CommandNIntent: CallbackAction(
+          FocusChatTextFieldIntent: CallbackAction(
             onInvoke: (intent) {
               ref.watch(focusNodeProvider(FocusNodeType.chat)).requestFocus();
               return null;
