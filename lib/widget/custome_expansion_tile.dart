@@ -338,10 +338,14 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
 
     return MouseRegion(
       onExit: (pointer) {
-        _handleTap();
+        if (widget.isHoverOpen) {
+          _handleTap();
+        }
       },
       onEnter: (event) {
-        _handleTap();
+        if (widget.isHoverOpen) {
+          _handleTap();
+        }
       },
       child: AnimatedBuilder(
         animation: _controller.view,

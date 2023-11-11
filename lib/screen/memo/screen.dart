@@ -132,7 +132,7 @@ class _BookmarkList extends HookConsumerWidget {
         ],
       ),
       child: CustomExpansionTile(
-        isHoverOpen: true,
+        isHoverOpen: false,
         title: Row(
           children: [
             Icon(
@@ -150,21 +150,36 @@ class _BookmarkList extends HookConsumerWidget {
             // 画面の半分のサイズをmaxHeightにする
             constraints: BoxConstraints(
                 maxHeight: MediaQuery.of(context).size.height / 2),
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                return ChatTile(
-                  memo: bookmarks[index],
-                  maxLines: 1,
-                  onTapBookmark: onTapBookmark,
-                  onTap: () {
-                    ref
-                        .read(sidebarScreenControllerProvider.notifier)
-                        .open(memo: bookmarks[index]);
+            child: CustomScrollView(
+              slivers: [
+                SliverReorderableList(
+                  itemBuilder: (context, index) {
+                    return ReorderableDragStartListener(
+                      index: index,
+                      key: Key(bookmarks[index].id),
+                      child: ChatTile(
+                        memo: bookmarks[index],
+                        maxLines: 1,
+                        onTapBookmark: onTapBookmark,
+                        onTap: () {
+                          ref
+                              .read(sidebarScreenControllerProvider.notifier)
+                              .open(memo: bookmarks[index]);
+                        },
+                      ),
+                    );
                   },
-                );
-              },
-              itemCount: bookmarks.length,
+                  itemCount: bookmarks.length,
+                  onReorder: (oldIndex, newIndex) {
+                    if (oldIndex < newIndex) {
+                      newIndex -= 1;
+                    }
+                    ref
+                        .watch(memoStoreProvider.notifier)
+                        .updateBookmarkOrder(oldIndex, newIndex);
+                  },
+                ),
+              ],
             ),
           ),
         ],

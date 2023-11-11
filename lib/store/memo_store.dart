@@ -103,4 +103,15 @@ class MemoStore extends _$MemoStore {
       ],
     ));
   }
+
+  Future<void> updateBookmarkOrder(int oldIndex, int newIndex) async {
+    final bookmarks = <Memo>[...state.valueOrNull?.bookmarks ?? []];
+    final memo = bookmarks[oldIndex];
+    bookmarks.removeAt(oldIndex);
+    bookmarks.insert(newIndex, memo);
+    // await ref.read(memoRepositoryProvider).updateBookmarkOrder(bookmarks);
+    state = AsyncValue.data(state.value!.copyWith(
+      bookmarks: bookmarks,
+    ));
+  }
 }
