@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class MarkdownTextEditingController extends TextEditingController {
+  MarkdownTextEditingController({String? text}) : super(text: text);
   @override
   set text(String newText) {
     value = value.copyWith(

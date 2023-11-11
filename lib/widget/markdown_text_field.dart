@@ -5,18 +5,20 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class MarkdownTextField extends HookConsumerWidget {
   const MarkdownTextField({
     required this.controller,
-    required this.focus,
+    this.focus,
     this.maxLines,
     this.expands = false,
     this.hintText,
+    this.onChanged,
     Key? key,
   }) : super(key: key);
 
   final TextEditingController controller;
-  final FocusNode focus;
+  final FocusNode? focus;
   final int? maxLines;
   final bool expands;
   final String? hintText;
+  final Function(String value)? onChanged;
 
   bool listControl(String key) {
     final text = controller.text;
@@ -87,6 +89,7 @@ class MarkdownTextField extends HookConsumerWidget {
           onTapEnter();
         }
         previousText.value = controller.text;
+        onChanged?.call(value);
       },
     );
   }

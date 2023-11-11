@@ -1,11 +1,13 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/model/memo.dart';
+import 'package:quick_flutter/screen/memo/chat_draft_text_field.dart';
+import 'package:quick_flutter/screen/memo/chat_main_text_field.dart';
+import 'package:quick_flutter/screen/memo/controller.dart';
 import 'package:quick_flutter/screen/sidebar_screen/controller.dart';
-import 'package:quick_flutter/store/focus_store.dart';
 import 'package:quick_flutter/store/memo_store.dart';
-import 'package:quick_flutter/widget/chat_text_field.dart';
+import 'package:quick_flutter/systems/context_extension.dart';
 import 'package:quick_flutter/widget/chat_tile.dart';
 import 'package:quick_flutter/widget/custome_expansion_tile.dart';
 import 'package:quick_flutter/widget/markdown_text_editing_controller.dart';
@@ -21,26 +23,10 @@ class MemoScreen extends HookConsumerWidget {
     }
   }
 
-  void addMessage(
-      {required WidgetRef ref,
-      required TextEditingController textController,
-      required bool isBookmark}) async {
-    await ref
-        .read(memoStoreProvider.notifier)
-        .addMemo(content: textController.text, isBookmark: isBookmark);
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final textController = MarkdownTextEditingController();
-
-    // 画面を破棄する時にtextControllerもdisposeする
-    useEffect(() {
-      return () {
-        textController.dispose();
-      };
-    }, []);
-
+    final drafts =
+        ref.watch(chatScreenControllerProvider).valueOrNull?.drafts ?? [];
     return Scaffold(
       body: Column(
         children: [
@@ -56,15 +42,40 @@ class MemoScreen extends HookConsumerWidget {
               },
             ),
           ),
-          ChatTextField(
-            onSubmit: (bool isBookmark) {
-              addMessage(
-                  ref: ref,
-                  textController: textController,
-                  isBookmark: isBookmark);
-            },
-            controller: textController,
-            focus: ref.watch(focusNodeProvider(FocusNodeType.chat)),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: Theme.of(context).colorScheme.surface,
+              border: Border.all(
+                color: context.colorScheme.outline,
+                width: 1.0,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: context.colorScheme.shadow,
+                  spreadRadius: 0,
+                  blurRadius: 1,
+                  offset: const Offset(0, 1),
+                ),
+              ],
+            ),
+            margin: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // draft
+                ...drafts.mapIndexed((index, e) {
+                  final controller = useMarkdownTextEditingController(text: e);
+                  return ChatDraftTextField(
+                    controller: controller,
+                    index: index,
+                  );
+                }),
+
+                // main
+                const ChatMainTextField(),
+              ],
+            ),
           ),
         ],
       ),
