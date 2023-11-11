@@ -124,8 +124,6 @@ class _FixedBookmarkList extends HookConsumerWidget {
     final bookmarks = provider.valueOrNull?.bookmarks ?? [];
 
     return Container(
-      constraints:
-          BoxConstraints(maxHeight: MediaQuery.of(context).size.height / 2),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         boxShadow: [
@@ -155,26 +153,30 @@ class _FixedBookmarkList extends HookConsumerWidget {
               ],
             ),
           ),
-          ListView.builder(
-            shrinkWrap: true,
-            reverse: true,
-            itemBuilder: (context, index) {
-              return ChatTile(
-                memo: bookmarks[index],
-                onTapBookmark: onTapBookmark,
-                onTap: () {
-                  ref
-                      .read(sidebarScreenControllerProvider.notifier)
-                      .open(memo: bookmarks[index]);
-                },
-                onChanged: (value) {
-                  ref
-                      .read(memoStoreProvider.notifier)
-                      .updateMemo(id: bookmarks[index].id, content: value);
-                },
-              );
-            },
-            itemCount: bookmarks.length,
+          Container(
+            constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height / 2),
+            child: ListView.builder(
+              shrinkWrap: true,
+              reverse: true,
+              itemBuilder: (context, index) {
+                return ChatTile(
+                  memo: bookmarks[index],
+                  onTapBookmark: onTapBookmark,
+                  onTap: () {
+                    ref
+                        .read(sidebarScreenControllerProvider.notifier)
+                        .open(memo: bookmarks[index]);
+                  },
+                  onChanged: (value) {
+                    ref
+                        .read(memoStoreProvider.notifier)
+                        .updateMemo(id: bookmarks[index].id, content: value);
+                  },
+                );
+              },
+              itemCount: bookmarks.length,
+            ),
           ),
         ],
       ),
