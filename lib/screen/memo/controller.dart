@@ -20,6 +20,7 @@ class ChatScreenController extends _$ChatScreenController {
   }
 
   void addDraft(String text) {
+    if (text.isEmpty) return;
     state = AsyncValue.data(
       state.valueOrNull!.copyWith(
         drafts: [
