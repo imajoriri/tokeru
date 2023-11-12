@@ -11,12 +11,14 @@ class ChatTile extends HookConsumerWidget {
   final Function() onTap;
   final int? maxLines;
   final Function(String value)? onChanged;
+  final Color? color;
 
   const ChatTile({
     Key? key,
     required this.memo,
     required this.onTapBookmark,
     required this.onTap,
+    this.color,
     this.maxLines,
     this.onChanged,
   }) : super(key: key);
@@ -44,7 +46,7 @@ class ChatTile extends HookConsumerWidget {
         child: Container(
           color: onHover.value
               ? Theme.of(context).hoverColor
-              : Theme.of(context).colorScheme.surface,
+              : color ?? Theme.of(context).colorScheme.surface,
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,9 +122,6 @@ class ChatTile extends HookConsumerWidget {
                         memo.content,
                         maxLines: maxLines,
                         overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
                       ),
                   ],
                 ),

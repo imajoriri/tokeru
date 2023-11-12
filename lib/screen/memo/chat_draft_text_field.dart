@@ -88,12 +88,15 @@ class ChatDraftTextField extends HookConsumerWidget {
               ),
             ),
             const SizedBox(width: 8),
-            TextButton(
-              onPressed: () {
-                onSubmit.call(ref);
-              },
-              child: const Icon(
-                Icons.send,
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: TextButton(
+                onPressed: () {
+                  onSubmit.call(ref);
+                },
+                child: const Icon(
+                  Icons.send,
+                ),
               ),
             ),
           ],

@@ -86,17 +86,27 @@ class MemoStore extends _$MemoStore {
 
   Future<void> addBookmark(Memo memo) async {
     await ref.read(memoRepositoryProvider).addBookmark(memo.id);
+    final copiedMemo = memo.copyWith(isBookmark: true);
     state = AsyncValue.data(state.value!.copyWith(
+      memos: [
+        for (final m in state.valueOrNull?.memos ?? [])
+          if (m.id == memo.id) copiedMemo else m,
+      ],
       bookmarks: [
         ...state.valueOrNull?.bookmarks ?? [],
-        memo,
+        copiedMemo,
       ],
     ));
   }
 
   Future<void> removeBookmark(Memo memo) async {
     await ref.read(memoRepositoryProvider).removeBookmark(memo.id);
+    final copiedMemo = memo.copyWith(isBookmark: false);
     state = AsyncValue.data(state.value!.copyWith(
+      memos: [
+        for (final m in state.valueOrNull?.memos ?? [])
+          if (m.id == memo.id) copiedMemo else m,
+      ],
       bookmarks: [
         for (final bookmark in state.valueOrNull?.bookmarks ?? [])
           if (bookmark.id != memo.id) bookmark,
