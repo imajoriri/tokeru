@@ -1,11 +1,13 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/model/memo.dart';
+import 'package:quick_flutter/screen/memo/chat_draft_text_field.dart';
+import 'package:quick_flutter/screen/memo/chat_main_text_field.dart';
 import 'package:quick_flutter/screen/sidebar_screen/controller.dart';
-import 'package:quick_flutter/store/focus_store.dart';
+import 'package:quick_flutter/store/draft_store.dart';
 import 'package:quick_flutter/store/memo_store.dart';
-import 'package:quick_flutter/widget/chat_text_field.dart';
+import 'package:quick_flutter/systems/context_extension.dart';
 import 'package:quick_flutter/widget/chat_tile.dart';
 import 'package:quick_flutter/widget/custome_expansion_tile.dart';
 import 'package:quick_flutter/widget/markdown_text_editing_controller.dart';
@@ -21,26 +23,9 @@ class MemoScreen extends HookConsumerWidget {
     }
   }
 
-  void addMessage(
-      {required WidgetRef ref,
-      required TextEditingController textController,
-      required bool isBookmark}) async {
-    await ref
-        .read(memoStoreProvider.notifier)
-        .addMemo(content: textController.text, isBookmark: isBookmark);
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final textController = MarkdownTextEditingController();
-
-    // 画面を破棄する時にtextControllerもdisposeする
-    useEffect(() {
-      return () {
-        textController.dispose();
-      };
-    }, []);
-
+    final drafts = ref.watch(draftStoreProvider).valueOrNull ?? [];
     return Scaffold(
       body: Column(
         children: [
@@ -56,15 +41,47 @@ class MemoScreen extends HookConsumerWidget {
               },
             ),
           ),
-          ChatTextField(
-            onSubmit: (bool isBookmark) {
-              addMessage(
-                  ref: ref,
-                  textController: textController,
-                  isBookmark: isBookmark);
-            },
-            controller: textController,
-            focus: ref.watch(focusNodeProvider(FocusNodeType.chat)),
+          // _FixedBookmarkList(
+          //   onTapBookmark: (memo) {
+          //     toggleBookmark(ref: ref, memo: memo);
+          //   },
+          // ),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: Theme.of(context).colorScheme.surface,
+              border: Border.all(
+                color: context.colorScheme.outline,
+                width: 1.0,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: context.colorScheme.shadow,
+                  spreadRadius: 0,
+                  blurRadius: 1,
+                  offset: const Offset(0, 1),
+                ),
+              ],
+            ),
+            margin: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // draft
+                ...drafts.mapIndexed((index, e) {
+                  final controller =
+                      useMarkdownTextEditingController(text: e.content);
+                  return ChatDraftTextField(
+                    controller: controller,
+                    index: index,
+                    draftId: e.id,
+                  );
+                }),
+
+                // main
+                const ChatMainTextField(),
+              ],
+            ),
           ),
         ],
       ),
@@ -103,6 +120,78 @@ class _AllMemoList extends HookConsumerWidget {
         );
       },
       itemCount: memos.length,
+    );
+  }
+}
+
+class _FixedBookmarkList extends HookConsumerWidget {
+  const _FixedBookmarkList({required this.onTapBookmark});
+  final void Function(Memo memo) onTapBookmark;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final provider = ref.watch(memoStoreProvider);
+    if (provider.hasError) {
+      return Text(provider.error.toString());
+    }
+    final bookmarks = provider.valueOrNull?.bookmarks ?? [];
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        boxShadow: [
+          BoxShadow(
+            color: Theme.of(context).colorScheme.shadow,
+            spreadRadius: 0,
+            blurRadius: 2,
+            offset: const Offset(0, 0),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.bookmark,
+                  color: Theme.of(context).colorScheme.primary,
+                  size: 12,
+                ),
+                const SizedBox(width: 4),
+                Text("bookmarks (${bookmarks.length})",
+                    style: Theme.of(context).textTheme.titleSmall!),
+              ],
+            ),
+          ),
+          Container(
+            constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height / 2),
+            child: ListView.builder(
+              shrinkWrap: true,
+              reverse: true,
+              itemBuilder: (context, index) {
+                return ChatTile(
+                  memo: bookmarks[index],
+                  onTapBookmark: onTapBookmark,
+                  onTap: () {
+                    ref
+                        .read(sidebarScreenControllerProvider.notifier)
+                        .open(memo: bookmarks[index]);
+                  },
+                  onChanged: (value) {
+                    ref
+                        .read(memoStoreProvider.notifier)
+                        .updateMemo(id: bookmarks[index].id, content: value);
+                  },
+                );
+              },
+              itemCount: bookmarks.length,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
