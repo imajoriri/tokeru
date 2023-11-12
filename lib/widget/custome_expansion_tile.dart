@@ -330,6 +330,7 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
           child: Column(
             crossAxisAlignment:
                 widget.expandedCrossAxisAlignment ?? CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: widget.children,
           ),
         ),

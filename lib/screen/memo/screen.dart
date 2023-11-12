@@ -234,44 +234,57 @@ class _BookmarkList extends HookConsumerWidget {
                 style: Theme.of(context).textTheme.titleSmall!),
           ],
         ),
-        children: [
-          ConstrainedBox(
-            // 画面の半分のサイズをmaxHeightにする
-            constraints: BoxConstraints(
-                maxHeight: MediaQuery.of(context).size.height / 2),
-            child: CustomScrollView(
-              slivers: [
-                SliverReorderableList(
-                  itemBuilder: (context, index) {
-                    return ReorderableDragStartListener(
-                      index: index,
-                      key: Key(bookmarks[index].id),
-                      child: ChatTile(
-                        memo: bookmarks[index],
-                        maxLines: 1,
-                        onTapBookmark: onTapBookmark,
-                        onTap: () {
-                          ref
-                              .read(sidebarScreenControllerProvider.notifier)
-                              .open(memo: bookmarks[index]);
-                        },
-                      ),
-                    );
-                  },
-                  itemCount: bookmarks.length,
-                  onReorder: (oldIndex, newIndex) {
-                    if (oldIndex < newIndex) {
-                      newIndex -= 1;
-                    }
-                    ref
-                        .watch(memoStoreProvider.notifier)
-                        .updateBookmarkOrder(oldIndex, newIndex);
-                  },
-                ),
-              ],
-            ),
-          ),
-        ],
+        children: List.generate(bookmarks.length, (index) {
+          return ChatTile(
+            memo: bookmarks[index],
+            maxLines: 1,
+            onTapBookmark: onTapBookmark,
+            onTap: () {
+              ref
+                  .read(sidebarScreenControllerProvider.notifier)
+                  .open(memo: bookmarks[index]);
+            },
+          );
+        }),
+        // children: [
+        //   Container(
+        //     // 画面の半分のサイズをmaxHeightにする
+        //     constraints: BoxConstraints(
+        //         maxHeight: MediaQuery.of(context).size.height / 2),
+        //     // height: 300,
+        //     child: CustomScrollView(
+        //       slivers: [
+        //         SliverReorderableList(
+        //           itemBuilder: (context, index) {
+        //             return ReorderableDragStartListener(
+        //               index: index,
+        //               key: Key(bookmarks[index].id),
+        //               child: ChatTile(
+        //                 memo: bookmarks[index],
+        //                 maxLines: 1,
+        //                 onTapBookmark: onTapBookmark,
+        //                 onTap: () {
+        //                   ref
+        //                       .read(sidebarScreenControllerProvider.notifier)
+        //                       .open(memo: bookmarks[index]);
+        //                 },
+        //               ),
+        //             );
+        //           },
+        //           itemCount: bookmarks.length,
+        //           onReorder: (oldIndex, newIndex) {
+        //             if (oldIndex < newIndex) {
+        //               newIndex -= 1;
+        //             }
+        //             ref
+        //                 .watch(memoStoreProvider.notifier)
+        //                 .updateBookmarkOrder(oldIndex, newIndex);
+        //           },
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ],
       ),
     );
   }
