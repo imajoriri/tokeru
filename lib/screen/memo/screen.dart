@@ -44,11 +44,11 @@ class MemoScreen extends HookConsumerWidget {
     return Scaffold(
       body: Column(
         children: [
-          // _BookmarkList(
-          //   onTapBookmark: (memo) {
-          //     toggleBookmark(ref: ref, memo: memo);
-          //   },
-          // ),
+          _BookmarkList(
+            onTapBookmark: (memo) {
+              toggleBookmark(ref: ref, memo: memo);
+            },
+          ),
           Expanded(
             child: _AllMemoList(
               onTapBookmark: (memo) {
@@ -56,11 +56,11 @@ class MemoScreen extends HookConsumerWidget {
               },
             ),
           ),
-          _FixedBookmarkList(
-            onTapBookmark: (memo) {
-              toggleBookmark(ref: ref, memo: memo);
-            },
-          ),
+          // _FixedBookmarkList(
+          //   onTapBookmark: (memo) {
+          //     toggleBookmark(ref: ref, memo: memo);
+          //   },
+          // ),
           ChatTextField(
             onSubmit: (bool isBookmark) {
               addMessage(

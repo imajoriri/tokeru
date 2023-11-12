@@ -122,9 +122,6 @@ class ChatTile extends HookConsumerWidget {
                         memo.content,
                         maxLines: maxLines,
                         overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
                       ),
                   ],
                 ),
