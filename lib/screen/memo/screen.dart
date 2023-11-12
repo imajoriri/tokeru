@@ -4,8 +4,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/model/memo.dart';
 import 'package:quick_flutter/screen/memo/chat_draft_text_field.dart';
 import 'package:quick_flutter/screen/memo/chat_main_text_field.dart';
-import 'package:quick_flutter/screen/memo/controller.dart';
 import 'package:quick_flutter/screen/sidebar_screen/controller.dart';
+import 'package:quick_flutter/store/draft_store.dart';
 import 'package:quick_flutter/store/memo_store.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
 import 'package:quick_flutter/widget/chat_tile.dart';
@@ -25,8 +25,7 @@ class MemoScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final drafts =
-        ref.watch(chatScreenControllerProvider).valueOrNull?.drafts ?? [];
+    final drafts = ref.watch(draftStoreProvider).valueOrNull ?? [];
     return Scaffold(
       body: Column(
         children: [
@@ -70,10 +69,12 @@ class MemoScreen extends HookConsumerWidget {
               children: [
                 // draft
                 ...drafts.mapIndexed((index, e) {
-                  final controller = useMarkdownTextEditingController(text: e);
+                  final controller =
+                      useMarkdownTextEditingController(text: e.content);
                   return ChatDraftTextField(
                     controller: controller,
                     index: index,
+                    draftId: e.id,
                   );
                 }),
 

@@ -19,7 +19,6 @@ class SidebarScreen extends HookConsumerWidget {
     final state = ref.watch(sidebarScreenControllerProvider);
 
     final textController = useMarkdownTextEditingController();
-    // final focus = useFocusNode();
     // 最初の更新(開いてるメモを変更した時)を検知
     final didFirstUpdateMemo = useState(false);
 
