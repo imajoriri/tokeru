@@ -28,9 +28,7 @@ class DraftStore extends _$DraftStore {
     final draftId = state.valueOrNull?[index].id;
     await ref.read(draftRepositoryProvider).delete(id: draftId!);
     final drafts = <Draft>[...state.valueOrNull ?? []];
-    print(drafts[index].content);
     drafts.removeAt(index);
-    print(drafts.map((e) => e.content));
     state = AsyncValue.data(drafts);
   }
 
