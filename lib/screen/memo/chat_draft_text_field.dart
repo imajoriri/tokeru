@@ -7,12 +7,13 @@ import 'package:quick_flutter/store/draft_store.dart';
 import 'package:quick_flutter/store/focus_store.dart';
 import 'package:quick_flutter/store/memo_store.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
+import 'package:quick_flutter/widget/markdown_text_editing_controller.dart';
 import 'package:quick_flutter/widget/markdown_text_field.dart';
 import 'package:quick_flutter/widget/multi_keyboard_shortcuts.dart';
 
 class ChatDraftTextField extends HookConsumerWidget {
   const ChatDraftTextField({
-    required this.controller,
+    required this.defaultValue,
     required this.index,
     required this.draftId,
     Key? key,
@@ -20,11 +21,14 @@ class ChatDraftTextField extends HookConsumerWidget {
 
   static const debounceDuration = Duration(milliseconds: 1000);
 
-  final TextEditingController controller;
+  final String defaultValue;
   final int index;
   final String draftId;
 
-  Future<void> onSubmit(WidgetRef ref) async {
+  Future<void> onSubmit(
+    WidgetRef ref,
+    TextEditingController controller,
+  ) async {
     await ref
         .read(memoStoreProvider.notifier)
         .addMemo(content: controller.text, isBookmark: false);
@@ -36,6 +40,7 @@ class ChatDraftTextField extends HookConsumerWidget {
     final canSubmit = useState(false);
     final hasFocus = useState(false);
     final focus = useFocusNode();
+    final controller = useMarkdownTextEditingController(text: defaultValue);
 
     useEffect(() {
       listener() {
@@ -87,7 +92,7 @@ class ChatDraftTextField extends HookConsumerWidget {
         if (!focus.hasFocus || !canSubmit.value) {
           return;
         }
-        onSubmit(ref);
+        onSubmit(ref, controller);
       },
       onEsc: () {
         if (!focus.hasFocus) {
@@ -122,7 +127,7 @@ class ChatDraftTextField extends HookConsumerWidget {
               padding: const EdgeInsets.only(bottom: 8.0),
               child: TextButton(
                 onPressed: () {
-                  onSubmit.call(ref);
+                  onSubmit.call(ref, controller);
                 },
                 child: const Icon(
                   Icons.send,

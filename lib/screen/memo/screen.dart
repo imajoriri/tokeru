@@ -10,7 +10,6 @@ import 'package:quick_flutter/store/memo_store.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
 import 'package:quick_flutter/widget/chat_tile.dart';
 import 'package:quick_flutter/widget/custome_expansion_tile.dart';
-import 'package:quick_flutter/widget/markdown_text_editing_controller.dart';
 
 class MemoScreen extends HookConsumerWidget {
   const MemoScreen({super.key});
@@ -69,10 +68,9 @@ class MemoScreen extends HookConsumerWidget {
               children: [
                 // draft
                 ...drafts.mapIndexed((index, e) {
-                  final controller =
-                      useMarkdownTextEditingController(text: e.content);
                   return ChatDraftTextField(
-                    controller: controller,
+                    key: ValueKey(e.id),
+                    defaultValue: e.content,
                     index: index,
                     draftId: e.id,
                   );
