@@ -12,7 +12,10 @@ import 'package:quick_flutter/widget/multi_keyboard_shortcuts.dart';
 class ChatMainTextField extends HookConsumerWidget {
   const ChatMainTextField({
     Key? key,
+    this.onChanged,
   }) : super(key: key);
+
+  final Function(String value)? onChanged;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,6 +30,7 @@ class ChatMainTextField extends HookConsumerWidget {
       listener() {
         canSubmit.value = controller.text.isNotEmpty;
         canCreateDraft.value = controller.text.isNotEmpty;
+        onChanged?.call(controller.text);
       }
 
       controller.addListener(listener);

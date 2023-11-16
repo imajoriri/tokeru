@@ -49,12 +49,15 @@ class MainFlutterWindow: NSWindow {
     // 変える場合はここ参照 https://stackoverflow.com/questions/77222222/flutterengine-runwithentrypoint-screenaentrypoint-still-looks-for-main-i
     flutterEngine.run(withEntrypoint: "panel");
     panelFlutterViewController = FlutterViewController(engine: flutterEngine, nibName: nil, bundle: nil)
+    panelFlutterViewController.backgroundColor = .clear
     channel = FlutterMethodChannel(
       name: "net.cbtdev.sample/method",
       binaryMessenger: panelFlutterViewController.engine.binaryMessenger)
     
     
     newEntryPanel = FloatingPanel(contentRect: NSRect(x: 0, y: 0, width: 1200, height: 600), backing: .buffered, defer: false)
+    newEntryPanel.isOpaque = false
+    newEntryPanel.backgroundColor = .clear
     
     newEntryPanel.title = "Floating Panel Title"
     newEntryPanel.contentView = panelFlutterViewController.view
@@ -67,7 +70,7 @@ class FloatingPanel: NSPanel {
   init(contentRect: NSRect, backing: NSWindow.BackingStoreType, defer flag: Bool) {
     
     // Not sure if .titled does affect anything here. Kept it because I think it might help with accessibility but I did not test that.
-    super.init(contentRect: contentRect, styleMask: [.nonactivatingPanel, .titled, .resizable, .closable, .fullSizeContentView], backing: backing, defer: flag)
+    super.init(contentRect: contentRect, styleMask: [.nonactivatingPanel, .titled, .miniaturizable, .closable, .fullSizeContentView], backing: backing, defer: flag)
     
     // Set this if you want the panel to remember its size/position
     //        self.setFrameAutosaveName("a unique name")

@@ -5,6 +5,8 @@ PODS:
     - firebase_core
     - FlutterMacOS
     - nanopb (< 2.30910.0, >= 2.30908.0)
+  - desktop_window (0.0.1):
+    - FlutterMacOS
   - Firebase/CoreOnly (10.15.0):
     - FirebaseCore (= 10.15.0)
   - Firebase/Firestore (10.15.0):
@@ -42,6 +44,7 @@ PODS:
 
 DEPENDENCIES:
   - cloud_firestore (from `Flutter/ephemeral/.symlinks/plugins/cloud_firestore/macos`)
+  - desktop_window (from `Flutter/ephemeral/.symlinks/plugins/desktop_window/macos`)
   - firebase_core (from `Flutter/ephemeral/.symlinks/plugins/firebase_core/macos`)
   - FirebaseFirestore (from `https://github.com/invertase/firestore-ios-sdk-frameworks.git`, tag `10.15.0`)
   - FlutterMacOS (from `Flutter/ephemeral`)
@@ -58,6 +61,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   cloud_firestore:
     :path: Flutter/ephemeral/.symlinks/plugins/cloud_firestore/macos
+  desktop_window:
+    :path: Flutter/ephemeral/.symlinks/plugins/desktop_window/macos
   firebase_core:
     :path: Flutter/ephemeral/.symlinks/plugins/firebase_core/macos
   FirebaseFirestore:
@@ -73,6 +78,7 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   cloud_firestore: 3b75bedf96c1fb6962110d14d0dfef10ba2c5faa
+  desktop_window: fb7c4f12c1129f947ac482296b6f14059d57a3c3
   Firebase: 66043bd4579e5b73811f96829c694c7af8d67435
   firebase_core: 3d8c7ecf2bfe5c96034ee3d8f3e6194fbac34797
   FirebaseCore: 2cec518b43635f96afe7ac3a9c513e47558abd2e

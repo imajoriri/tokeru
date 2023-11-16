@@ -62,7 +62,7 @@ class MemoScreen extends HookConsumerWidget {
                 }),
 
                 // main
-                const ChatMainTextField(),
+                ChatMainTextField(),
               ],
             ),
           ),

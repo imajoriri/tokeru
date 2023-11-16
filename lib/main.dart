@@ -46,7 +46,7 @@ class NSPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return ProviderScope(
       child: AppMaterialApp(
-        home: const TextFieldScreen(),
+        home: TextFieldScreen(),
       ),
     );
   }
