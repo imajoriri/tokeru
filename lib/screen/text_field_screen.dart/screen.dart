@@ -1,25 +1,13 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quick_flutter/model/memo.dart';
 import 'package:quick_flutter/screen/memo/chat_draft_text_field.dart';
 import 'package:quick_flutter/screen/memo/chat_main_text_field.dart';
-import 'package:quick_flutter/screen/sidebar_screen/controller.dart';
 import 'package:quick_flutter/store/draft_store.dart';
-import 'package:quick_flutter/store/memo_store.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
-import 'package:quick_flutter/widget/chat_tile.dart';
 
-class MemoScreen extends HookConsumerWidget {
-  const MemoScreen({super.key});
-
-  void toggleBookmark({required WidgetRef ref, required Memo memo}) async {
-    if (memo.isBookmark) {
-      await ref.read(memoStoreProvider.notifier).removeBookmark(memo);
-    } else {
-      await ref.read(memoStoreProvider.notifier).addBookmark(memo);
-    }
-  }
+class TextFieldScreen extends HookConsumerWidget {
+  const TextFieldScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,9 +15,6 @@ class MemoScreen extends HookConsumerWidget {
     return Scaffold(
       body: Column(
         children: [
-          Expanded(
-            child: _AllMemoList(),
-          ),
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
@@ -68,38 +53,6 @@ class MemoScreen extends HookConsumerWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _AllMemoList extends HookConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final provider = ref.watch(memoStoreProvider);
-    if (provider.hasError) {
-      return Text(provider.error.toString());
-    }
-    final memos = provider.valueOrNull?.memos ?? [];
-
-    return ListView.builder(
-      shrinkWrap: true,
-      reverse: true,
-      itemBuilder: (context, index) {
-        return ChatTile(
-          memo: memos[index],
-          onTap: () {
-            ref
-                .read(sidebarScreenControllerProvider.notifier)
-                .open(memo: memos[index]);
-          },
-          onChanged: (value) {
-            ref
-                .read(memoStoreProvider.notifier)
-                .updateMemo(id: memos[index].id, content: value);
-          },
-        );
-      },
-      itemCount: memos.length,
     );
   }
 }

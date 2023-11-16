@@ -20,10 +20,6 @@ class ChatMainTextField extends HookConsumerWidget {
     final focus = ref.watch(focusNodeProvider(FocusNodeType.chat));
     final canSubmit = useState(false);
     final hasFocus = useState(false);
-    // ブックマークとして投稿するかどうか
-    final isBookmark = useState(false);
-    // 明示的にブックマークをOFFにして投稿するかどうか
-    final isBookmarkOff = useState(false);
 
     final canCreateDraft = useState(false);
 
@@ -31,13 +27,6 @@ class ChatMainTextField extends HookConsumerWidget {
       listener() {
         canSubmit.value = controller.text.isNotEmpty;
         canCreateDraft.value = controller.text.isNotEmpty;
-
-        // タイトルから始まる場合はブックマークとして投稿する
-        if (controller.text.startsWith('# ') && !isBookmarkOff.value) {
-          isBookmark.value = true;
-        } else {
-          isBookmark.value = false;
-        }
       }
 
       controller.addListener(listener);
@@ -61,10 +50,8 @@ class ChatMainTextField extends HookConsumerWidget {
     _onSubmit() {
       ref
           .read(memoStoreProvider.notifier)
-          .addMemo(content: controller.text, isBookmark: isBookmark.value);
-      isBookmark.value = false;
+          .addMemo(content: controller.text, isBookmark: false);
       controller.clear();
-      isBookmarkOff.value = false;
     }
 
     return MultiKeyBoardShortcuts(
@@ -108,19 +95,6 @@ class ChatMainTextField extends HookConsumerWidget {
                   child: const Text('convert to draft(Cmd + N)'),
                 ),
                 const Spacer(),
-                // ブックマークとして投稿するボタン
-                TextButton(
-                  onPressed: () {
-                    isBookmark.value = !isBookmark.value;
-                    if (!isBookmark.value) {
-                      isBookmarkOff.value = true;
-                    }
-                  },
-                  child: Icon(
-                    isBookmark.value ? Icons.bookmark : Icons.bookmark_border,
-                  ),
-                ),
-                const SizedBox(width: 8),
                 FilledButton(
                   onPressed: canSubmit.value
                       ? () {

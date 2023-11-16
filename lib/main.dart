@@ -6,6 +6,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/firebase_options.dart';
 import 'package:quick_flutter/screen/memo/screen.dart';
+import 'package:quick_flutter/screen/text_field_screen.dart/screen.dart';
 import 'package:quick_flutter/store/focus_store.dart';
 import 'package:quick_flutter/store/memo_store.dart';
 import 'package:quick_flutter/systems/color.dart';
@@ -33,9 +34,22 @@ void panel() async {
 
   runApp(
     const ProviderScope(
-      child: MyApp(),
+      child: NSPanel(),
     ),
   );
+}
+
+class NSPanel extends StatelessWidget {
+  const NSPanel({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ProviderScope(
+      child: AppMaterialApp(
+        home: const TextFieldScreen(),
+      ),
+    );
+  }
 }
 
 class MyApp extends StatefulHookConsumerWidget {
@@ -126,35 +140,7 @@ class _MyAppState extends ConsumerState<MyApp> {
 
     setMethodCallHandler();
 
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: AppColor.seed,
-          outline: AppColor.outline,
-          outlineVariant: AppColor.outlineVariant,
-          shadow: AppColor.shadow,
-        ),
-        filledButtonTheme: FilledButtonThemeData(
-          style: TextButton.styleFrom(
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(6)),
-            ),
-          ),
-        ),
-        iconButtonTheme: IconButtonThemeData(
-          style: TextButton.styleFrom(
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
-            ),
-            padding: EdgeInsets.zero,
-            alignment: Alignment.center,
-          ),
-        ),
-        useMaterial3: true,
-      ),
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
+    return AppMaterialApp(
       home: Actions(
         actions: <Type, Action<Intent>>{
           FocusChatTextFieldIntent: CallbackAction(
@@ -215,4 +201,42 @@ class _MyAppState extends ConsumerState<MyApp> {
       ),
     );
   }
+}
+
+class AppMaterialApp extends MaterialApp {
+  AppMaterialApp({
+    Key? key,
+    required Widget home,
+  }) : super(
+          key: key,
+          home: home,
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: AppColor.seed,
+              outline: AppColor.outline,
+              outlineVariant: AppColor.outlineVariant,
+              shadow: AppColor.shadow,
+            ),
+            filledButtonTheme: FilledButtonThemeData(
+              style: TextButton.styleFrom(
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(6)),
+                ),
+              ),
+            ),
+            iconButtonTheme: IconButtonThemeData(
+              style: TextButton.styleFrom(
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                ),
+                padding: EdgeInsets.zero,
+                alignment: Alignment.center,
+              ),
+            ),
+            useMaterial3: true,
+          ),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+        );
 }
