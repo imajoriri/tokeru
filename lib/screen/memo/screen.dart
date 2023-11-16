@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quick_flutter/model/memo.dart';
 import 'package:quick_flutter/screen/memo/chat_draft_text_field.dart';
 import 'package:quick_flutter/screen/memo/chat_main_text_field.dart';
 import 'package:quick_flutter/screen/sidebar_screen/controller.dart';
@@ -12,14 +11,6 @@ import 'package:quick_flutter/widget/chat_tile.dart';
 
 class MemoScreen extends HookConsumerWidget {
   const MemoScreen({super.key});
-
-  void toggleBookmark({required WidgetRef ref, required Memo memo}) async {
-    if (memo.isBookmark) {
-      await ref.read(memoStoreProvider.notifier).removeBookmark(memo);
-    } else {
-      await ref.read(memoStoreProvider.notifier).addBookmark(memo);
-    }
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -52,17 +43,37 @@ class MemoScreen extends HookConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // draft
-                ...drafts.mapIndexed((index, e) {
+                ...drafts.mapIndexed((index, draft) {
                   return ChatDraftTextField(
-                    key: ValueKey(e.id),
-                    defaultValue: e.content,
-                    index: index,
-                    draftId: e.id,
+                    key: ValueKey(draft.id),
+                    defaultValue: draft.content,
+                    draftId: draft.id,
+                    onDebounceChanged: (value) {
+                      ref.read(draftStoreProvider.notifier).updateDraft(
+                            id: draft.id,
+                            content: value,
+                          );
+                    },
+                    onSubmit: (value) async {
+                      await ref
+                          .read(memoStoreProvider.notifier)
+                          .addMemo(content: value, isBookmark: false);
+                      ref.read(draftStoreProvider.notifier).removeDraft(index);
+                    },
                   );
                 }),
 
                 // main
-                ChatMainTextField(),
+                ChatMainTextField(
+                  onAddDraft: (value) async {
+                    await ref.read(draftStoreProvider.notifier).addDraft(value);
+                  },
+                  onSubmit: (value) async {
+                    ref
+                        .read(memoStoreProvider.notifier)
+                        .addMemo(content: value, isBookmark: false);
+                  },
+                ),
               ],
             ),
           ),

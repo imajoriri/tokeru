@@ -38,6 +38,7 @@ class MemoStore extends _$MemoStore {
     final res = await ref
         .read(memoRepositoryProvider)
         .add(content: content, isBookmark: isBookmark);
+    if (state.valueOrNull == null) return;
     state = AsyncValue.data(state.value!.copyWith(
       memos: [
         res,
@@ -62,7 +63,7 @@ class MemoStore extends _$MemoStore {
         );
     state = AsyncValue.data(state.value!.copyWith(
       memos: [
-        for (final memo in state.valueOrNull?.memos ?? [])
+        for (final Memo memo in state.valueOrNull?.memos ?? [])
           if (memo.id == id)
             memo.copyWith(
               content: content ?? memo.content,

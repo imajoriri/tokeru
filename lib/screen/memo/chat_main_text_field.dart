@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quick_flutter/store/draft_store.dart';
 import 'package:quick_flutter/store/focus_store.dart';
-import 'package:quick_flutter/store/memo_store.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
 import 'package:quick_flutter/widget/markdown_text_editing_controller.dart';
 import 'package:quick_flutter/widget/markdown_text_field.dart';
@@ -13,9 +11,13 @@ class ChatMainTextField extends HookConsumerWidget {
   const ChatMainTextField({
     Key? key,
     this.onChanged,
+    this.onAddDraft,
+    this.onSubmit,
   }) : super(key: key);
 
   final Function(String value)? onChanged;
+  final Function(String value)? onAddDraft;
+  final Future Function(String value)? onSubmit;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -51,10 +53,8 @@ class ChatMainTextField extends HookConsumerWidget {
     }, [focus.hasFocus]);
 
     // ignore: no_leading_underscores_for_local_identifiers
-    _onSubmit() {
-      ref
-          .read(memoStoreProvider.notifier)
-          .addMemo(content: controller.text, isBookmark: false);
+    _onSubmit() async {
+      await onSubmit?.call(controller.text);
       controller.clear();
     }
 
@@ -89,9 +89,8 @@ class ChatMainTextField extends HookConsumerWidget {
                 TextButton(
                   onPressed: canCreateDraft.value
                       ? () {
-                          ref
-                              .read(draftStoreProvider.notifier)
-                              .addDraft(controller.text);
+                          onAddDraft?.call(controller.text);
+
                           controller.clear();
                           focus.requestFocus();
                         }
