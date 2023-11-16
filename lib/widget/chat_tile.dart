@@ -7,7 +7,6 @@ import 'package:quick_flutter/widget/markdown_text_span.dart';
 
 class ChatTile extends HookConsumerWidget {
   final Memo memo;
-  final Function(Memo) onTapBookmark;
   final Function() onTap;
   final int? maxLines;
   final Function(String value)? onChanged;
@@ -16,7 +15,6 @@ class ChatTile extends HookConsumerWidget {
   const ChatTile({
     Key? key,
     required this.memo,
-    required this.onTapBookmark,
     required this.onTap,
     this.color,
     this.maxLines,
@@ -27,16 +25,9 @@ class ChatTile extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final onHover = useState(false);
 
-    final bookmarkColor = memo.isBookmark
-        ? Theme.of(context).colorScheme.primary
-        : Theme.of(context).colorScheme.onSurfaceVariant;
     return GestureDetector(
       onTap: onTap,
-      onDoubleTap: () {
-        onTapBookmark.call(memo);
-      },
       child: MouseRegion(
-        // cursor: SystemMouseCursors.click,
         onExit: (pointer) {
           onHover.value = false;
         },
@@ -51,17 +42,17 @@ class ChatTile extends HookConsumerWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                width: 28,
-                child: CircleAvatar(
-                  backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
-                  child: Icon(
-                    Icons.person,
-                    size: 20,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                ),
-              ),
+              // SizedBox(
+              //   width: 28,
+              //   child: CircleAvatar(
+              //     backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+              //     child: Icon(
+              //       Icons.person,
+              //       size: 20,
+              //       color: Theme.of(context).colorScheme.onSurfaceVariant,
+              //     ),
+              //   ),
+              // ),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -77,52 +68,18 @@ class ChatTile extends HookConsumerWidget {
                                     color: Theme.of(context)
                                         .colorScheme
                                         .onSurfaceVariant)),
-                        // bookmark
-                        if (onHover.value || memo.isBookmark) ...[
-                          const SizedBox(width: 8),
-                          MouseRegion(
-                            cursor: SystemMouseCursors.click,
-                            child: GestureDetector(
-                              onTap: () {
-                                onTapBookmark.call(memo);
-                              },
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.bookmark,
-                                    size: 12,
-                                    color: bookmarkColor,
-                                  ),
-                                  const SizedBox(width: 2),
-                                  Text("bookmark",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .labelSmall!
-                                          .copyWith(color: bookmarkColor)),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
                       ],
                     ),
-                    if (!memo.isBookmark)
-                      RichText(
-                        maxLines: maxLines,
-                        text: MarkdownTextSpan(
-                          text: memo.content,
-                          style: Theme.of(context).textTheme.bodyMedium,
-                          onChanged: (value) {
-                            onChanged?.call(value);
-                          },
-                        ),
-                      )
-                    else
-                      Text(
-                        memo.content,
-                        maxLines: maxLines,
-                        overflow: TextOverflow.ellipsis,
+                    SelectableText.rich(
+                      maxLines: maxLines,
+                      MarkdownTextSpan(
+                        text: memo.content,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        onChanged: (value) {
+                          onChanged?.call(value);
+                        },
                       ),
+                    ),
                   ],
                 ),
               ),

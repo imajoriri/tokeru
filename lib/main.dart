@@ -6,8 +6,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/firebase_options.dart';
 import 'package:quick_flutter/screen/memo/screen.dart';
-import 'package:quick_flutter/screen/sidebar_screen/controller.dart';
-import 'package:quick_flutter/screen/sidebar_screen/sidebar_screen.dart';
 import 'package:quick_flutter/store/focus_store.dart';
 import 'package:quick_flutter/store/memo_store.dart';
 import 'package:quick_flutter/systems/color.dart';
@@ -207,12 +205,9 @@ class _MyAppState extends ConsumerState<MyApp> {
 
               return KeyEventResult.ignored;
             },
-            child: Row(
+            child: const Row(
               children: [
-                const Flexible(child: MemoScreen()),
-                if (ref.watch(sidebarScreenControllerProvider).isShow) ...[
-                  const Flexible(child: SidebarScreen()),
-                ]
+                Flexible(child: MemoScreen()),
               ],
             ),
           ),
