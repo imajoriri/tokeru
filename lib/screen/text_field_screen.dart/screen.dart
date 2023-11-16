@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:collection/collection.dart';
 import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +22,7 @@ class TextFieldScreen extends HookConsumerWidget {
     if (size != null) {
       final height = size.height;
       DesktopWindow.setWindowSize(
-          Size(MediaQuery.of(context).size.width, height + 10));
+          Size(MediaQuery.of(context).size.width, height + 50));
     }
   }
 
@@ -29,9 +31,11 @@ class TextFieldScreen extends HookConsumerWidget {
     final drafts = ref.watch(draftStoreProvider).valueOrNull ?? [];
 
     useEffect(() {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        ref.watch(memoStoreProvider);
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await ref.watch(draftStoreProvider.future);
         updateWindowSize(context);
+        // memoStoreProviderのaddMemoでstateがないと言われるのであらかじめ読んでおく
+        ref.watch(memoStoreProvider);
       });
       return null;
     }, []);
@@ -84,7 +88,6 @@ class TextFieldScreen extends HookConsumerWidget {
                         await ref
                             .read(draftStoreProvider.notifier)
                             .removeDraft(index);
-                        // ignore: use_build_context_synchronously
                         updateWindowSize(context);
                       },
                     );
@@ -99,13 +102,13 @@ class TextFieldScreen extends HookConsumerWidget {
                       await ref
                           .read(draftStoreProvider.notifier)
                           .addDraft(value);
-                      // ignore: use_build_context_synchronously
                       updateWindowSize(context);
                     },
                     onSubmit: (value) async {
-                      ref
+                      await ref
                           .read(memoStoreProvider.notifier)
                           .addMemo(content: value, isBookmark: false);
+                      updateWindowSize(context);
                     },
                   ),
                 ],

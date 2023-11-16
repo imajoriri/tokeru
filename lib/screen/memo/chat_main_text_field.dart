@@ -54,8 +54,8 @@ class ChatMainTextField extends HookConsumerWidget {
 
     // ignore: no_leading_underscores_for_local_identifiers
     _onSubmit() async {
-      await onSubmit?.call(controller.text);
       controller.clear();
+      await onSubmit?.call(controller.text);
     }
 
     return MultiKeyBoardShortcuts(
