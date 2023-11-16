@@ -5,7 +5,6 @@ import 'package:quick_flutter/store/focus_store.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
 import 'package:quick_flutter/widget/markdown_text_editing_controller.dart';
 import 'package:quick_flutter/widget/markdown_text_field.dart';
-import 'package:quick_flutter/widget/multi_keyboard_shortcuts.dart';
 
 class ChatMainTextField extends HookConsumerWidget {
   const ChatMainTextField({
@@ -58,62 +57,47 @@ class ChatMainTextField extends HookConsumerWidget {
       await onSubmit?.call(controller.text);
     }
 
-    return MultiKeyBoardShortcuts(
-      onCommandEnter: () {
-        if (!focus.hasFocus || !canSubmit.value) {
-          return;
-        }
-        _onSubmit();
-      },
-      onEsc: () {
-        if (!focus.hasFocus) {
-          return;
-        }
-        focus.unfocus();
-        ref.watch(focusNodeProvider(FocusNodeType.main)).requestFocus();
-      },
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: MarkdownTextField(
-              controller: controller,
-              focus: focus,
-              hintText: 'write a note',
-            ),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: MarkdownTextField(
+            controller: controller,
+            focus: focus,
+            hintText: 'write a note',
           ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8.0, left: 8, right: 8),
-            child: Row(
-              children: [
-                TextButton(
-                  onPressed: canCreateDraft.value
-                      ? () {
-                          onAddDraft?.call(controller.text);
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8.0, left: 8, right: 8),
+          child: Row(
+            children: [
+              TextButton(
+                onPressed: canCreateDraft.value
+                    ? () {
+                        onAddDraft?.call(controller.text);
 
-                          controller.clear();
-                          focus.requestFocus();
-                        }
-                      : null,
-                  child: const Text('convert to draft(Cmd + N)'),
+                        controller.clear();
+                        focus.requestFocus();
+                      }
+                    : null,
+                child: const Text('convert to draft(Cmd + N)'),
+              ),
+              const Spacer(),
+              FilledButton(
+                onPressed: canSubmit.value
+                    ? () {
+                        _onSubmit();
+                      }
+                    : null,
+                child: Icon(
+                  Icons.send,
+                  color: context.colorScheme.onPrimary,
                 ),
-                const Spacer(),
-                FilledButton(
-                  onPressed: canSubmit.value
-                      ? () {
-                          _onSubmit();
-                        }
-                      : null,
-                  child: Icon(
-                    Icons.send,
-                    color: context.colorScheme.onPrimary,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

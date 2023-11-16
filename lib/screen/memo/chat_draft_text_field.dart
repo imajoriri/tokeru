@@ -3,11 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quick_flutter/store/focus_store.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
 import 'package:quick_flutter/widget/markdown_text_editing_controller.dart';
 import 'package:quick_flutter/widget/markdown_text_field.dart';
-import 'package:quick_flutter/widget/multi_keyboard_shortcuts.dart';
 
 class ChatDraftTextField extends HookConsumerWidget {
   const ChatDraftTextField({
@@ -78,55 +76,40 @@ class ChatDraftTextField extends HookConsumerWidget {
       [controller],
     );
 
-    return MultiKeyBoardShortcuts(
-      onCommandEnter: () {
-        if (!focus.hasFocus || !canSubmit.value) {
-          return;
-        }
-        onSubmit?.call(controller.text);
-      },
-      onEsc: () {
-        if (!focus.hasFocus) {
-          return;
-        }
-        focus.unfocus();
-        ref.watch(focusNodeProvider(FocusNodeType.main)).requestFocus();
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        // 下線部にborder
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: context.colorScheme.outline,
-              width: 0.5,
-            ),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      // 下線部にborder
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: context.colorScheme.outline,
+            width: 0.5,
           ),
         ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Expanded(
-              child: MarkdownTextField(
-                controller: controller,
-                focus: focus,
-                hintText: '',
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Expanded(
+            child: MarkdownTextField(
+              controller: controller,
+              focus: focus,
+              hintText: '',
+            ),
+          ),
+          const SizedBox(width: 8),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: TextButton(
+              onPressed: () {
+                onSubmit?.call(controller.text);
+              },
+              child: const Icon(
+                Icons.send,
               ),
             ),
-            const SizedBox(width: 8),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: TextButton(
-                onPressed: () {
-                  onSubmit?.call(controller.text);
-                },
-                child: const Icon(
-                  Icons.send,
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
