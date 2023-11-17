@@ -18,7 +18,6 @@ class MemoScreen extends HookConsumerWidget {
     final controllers = drafts
         .map((d) => useMarkdownTextEditingController(text: d.content))
         .toList();
-    final focuses = drafts.map((d) => FocusNode()).toList();
 
     return Scaffold(
       body: Column(
@@ -49,13 +48,11 @@ class MemoScreen extends HookConsumerWidget {
               children: [
                 // draft
                 ...controllers.mapIndexed((index, c) {
-                  if (!focuses[index].hasFocus) {
+                  if (drafts[index].content != c.text) {
                     c.text = drafts[index].content;
                   }
                   return ChatDraftTextField(
-                    // key: ValueKey(drafts[index].id),
                     textController: c,
-                    focusNode: focuses[index],
                     defaultValue: c.text,
                     onDebounceChanged: (value) {
                       ref.read(draftControllerProvider.notifier).updateDraft(

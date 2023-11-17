@@ -45,7 +45,6 @@ class TextFieldScreen extends HookConsumerWidget {
     final controllers = drafts
         .map((d) => useMarkdownTextEditingController(text: d.content))
         .toList();
-    final focuses = drafts.map((d) => FocusNode()).toList();
 
     // useEffect(() {
     //   WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -85,12 +84,11 @@ class TextFieldScreen extends HookConsumerWidget {
                 children: [
                   // draft
                   ...controllers.mapIndexed((index, c) {
-                    if (!focuses[index].hasFocus) {
+                    if (drafts[index].content != c.text) {
                       c.text = drafts[index].content;
                     }
                     return ChatDraftTextField(
                       textController: c,
-                      focusNode: focuses[index],
                       defaultValue: c.text,
                       onDebounceChanged: (value) {
                         ref.read(draftControllerProvider.notifier).updateDraft(
