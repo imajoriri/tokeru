@@ -7,7 +7,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/firebase_options.dart';
 import 'package:quick_flutter/screen/memo/screen.dart';
 import 'package:quick_flutter/screen/text_field_screen.dart/screen.dart';
-import 'package:quick_flutter/store/focus_store.dart';
 import 'package:quick_flutter/store/memo_store.dart';
 import 'package:quick_flutter/systems/color.dart';
 import 'package:quick_flutter/widget/shortcut_intent.dart';
@@ -143,57 +142,49 @@ class _MyAppState extends ConsumerState<MyApp> {
         actions: <Type, Action<Intent>>{
           FocusChatTextFieldIntent: CallbackAction(
             onInvoke: (intent) {
-              ref.watch(focusNodeProvider(FocusNodeType.chat)).requestFocus();
               return null;
             },
           ),
         },
-        child: GestureDetector(
-          onTap: () {
-            ref.watch(focusNodeProvider(FocusNodeType.main)).requestFocus();
-          },
-          child: Focus(
-            autofocus: true,
-            focusNode: ref.watch(focusNodeProvider(FocusNodeType.main)),
-            onKeyEvent: (node, event) {
-              if (event is KeyDownEvent) {
-                pressedLogicalKeys.add(event.logicalKey);
-              } else if (event is KeyUpEvent) {
-                pressedLogicalKeys.remove(event.logicalKey);
-              }
-              // shortcutsの中から該当するものを探す
-              for (final shortcut in shortcuts.entries) {
-                if (shortcut.key.keys.every((key) {
-                  return pressedLogicalKeys.contains(key);
-                })) {
-                  final primaryContext = WidgetsBinding
-                      .instance.focusManager.primaryFocus!.context!;
-                  final action = Actions.maybeFind<Intent>(
-                    WidgetsBinding.instance.focusManager.primaryFocus!.context!,
-                    intent: shortcut.value,
-                  );
-                  if (action == null) {
-                    return KeyEventResult.ignored;
-                  }
-                  final (bool enabled, Object? _) =
-                      Actions.of(primaryContext).invokeActionIfEnabled(
-                    action,
-                    shortcut.value,
-                    primaryContext,
-                  );
-                  if (enabled) {
-                    return KeyEventResult.handled;
-                  }
+        child: Focus(
+          onKeyEvent: (node, event) {
+            if (event is KeyDownEvent) {
+              pressedLogicalKeys.add(event.logicalKey);
+            } else if (event is KeyUpEvent) {
+              pressedLogicalKeys.remove(event.logicalKey);
+            }
+            // shortcutsの中から該当するものを探す
+            for (final shortcut in shortcuts.entries) {
+              if (shortcut.key.keys.every((key) {
+                return pressedLogicalKeys.contains(key);
+              })) {
+                final primaryContext =
+                    WidgetsBinding.instance.focusManager.primaryFocus!.context!;
+                final action = Actions.maybeFind<Intent>(
+                  WidgetsBinding.instance.focusManager.primaryFocus!.context!,
+                  intent: shortcut.value,
+                );
+                if (action == null) {
+                  return KeyEventResult.ignored;
+                }
+                final (bool enabled, Object? _) =
+                    Actions.of(primaryContext).invokeActionIfEnabled(
+                  action,
+                  shortcut.value,
+                  primaryContext,
+                );
+                if (enabled) {
+                  return KeyEventResult.handled;
                 }
               }
+            }
 
-              return KeyEventResult.ignored;
-            },
-            child: const Row(
-              children: [
-                Flexible(child: MemoScreen()),
-              ],
-            ),
+            return KeyEventResult.ignored;
+          },
+          child: const Row(
+            children: [
+              Flexible(child: MemoScreen()),
+            ],
           ),
         ),
       ),

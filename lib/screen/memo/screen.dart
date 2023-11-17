@@ -3,18 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/screen/memo/chat_draft_text_field.dart';
 import 'package:quick_flutter/screen/memo/chat_main_text_field.dart';
-import 'package:quick_flutter/screen/sidebar_screen/controller.dart';
 import 'package:quick_flutter/store/draft_store.dart';
 import 'package:quick_flutter/store/memo_store.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
 import 'package:quick_flutter/widget/chat_tile.dart';
+import 'package:quick_flutter/widget/markdown_text_editing_controller.dart';
 
 class MemoScreen extends HookConsumerWidget {
   const MemoScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final drafts = ref.watch(draftStoreProvider).valueOrNull ?? [];
+    final drafts = ref.watch(draftStreamStore).value ?? [];
+    final controllers = drafts
+        .map((d) => useMarkdownTextEditingController(text: d.content))
+        .toList();
+    final focuses = drafts.map((d) => FocusNode()).toList();
+
     return Scaffold(
       body: Column(
         children: [
@@ -43,14 +48,18 @@ class MemoScreen extends HookConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // draft
-                ...drafts.mapIndexed((index, draft) {
+                ...controllers.mapIndexed((index, c) {
+                  if (!focuses[index].hasFocus) {
+                    c.text = drafts[index].content;
+                  }
                   return ChatDraftTextField(
-                    key: ValueKey(draft.id),
-                    defaultValue: draft.content,
-                    draftId: draft.id,
+                    // key: ValueKey(drafts[index].id),
+                    textController: c,
+                    focusNode: focuses[index],
+                    defaultValue: c.text,
                     onDebounceChanged: (value) {
-                      ref.read(draftStoreProvider.notifier).updateDraft(
-                            id: draft.id,
+                      ref.read(draftControllerProvider.notifier).updateDraft(
+                            id: drafts[index].id,
                             content: value,
                           );
                     },
@@ -58,7 +67,9 @@ class MemoScreen extends HookConsumerWidget {
                       await ref
                           .read(memoStoreProvider.notifier)
                           .addMemo(content: value, isBookmark: false);
-                      ref.read(draftStoreProvider.notifier).removeDraft(index);
+                      ref
+                          .read(draftControllerProvider.notifier)
+                          .removeDraft(drafts[index].id);
                     },
                   );
                 }),
@@ -66,7 +77,9 @@ class MemoScreen extends HookConsumerWidget {
                 // main
                 ChatMainTextField(
                   onAddDraft: (value) async {
-                    await ref.read(draftStoreProvider.notifier).addDraft(value);
+                    await ref
+                        .read(draftControllerProvider.notifier)
+                        .addDraft(value);
                   },
                   onSubmit: (value) async {
                     ref
@@ -98,11 +111,7 @@ class _AllMemoList extends HookConsumerWidget {
       itemBuilder: (context, index) {
         return ChatTile(
           memo: memos[index],
-          onTap: () {
-            ref
-                .read(sidebarScreenControllerProvider.notifier)
-                .open(memo: memos[index]);
-          },
+          onTap: () {},
           onChanged: (value) {
             ref
                 .read(memoStoreProvider.notifier)

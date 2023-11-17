@@ -10,13 +10,16 @@ import 'package:quick_flutter/widget/markdown_text_field.dart';
 class ChatDraftTextField extends HookConsumerWidget {
   const ChatDraftTextField({
     required this.defaultValue,
-    required this.draftId,
     this.onSubmit,
     this.onChanged,
     this.onDebounceChanged,
+    this.textController,
+    this.focusNode,
     Key? key,
   }) : super(key: key);
 
+  final TextEditingController? textController;
+  final FocusNode? focusNode;
   final Function(String value)? onSubmit;
   final Function(String value)? onChanged;
   final Function(String value)? onDebounceChanged;
@@ -24,14 +27,14 @@ class ChatDraftTextField extends HookConsumerWidget {
   static const debounceDuration = Duration(milliseconds: 1000);
 
   final String defaultValue;
-  final String draftId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final canSubmit = useState(false);
     final hasFocus = useState(false);
-    final focus = useFocusNode();
-    final controller = useMarkdownTextEditingController(text: defaultValue);
+    final focus = focusNode ?? useFocusNode();
+    final controller =
+        textController ?? useMarkdownTextEditingController(text: defaultValue);
 
     useEffect(() {
       listener() {

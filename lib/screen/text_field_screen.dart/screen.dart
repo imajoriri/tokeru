@@ -4,13 +4,13 @@ import 'package:collection/collection.dart';
 import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/screen/memo/chat_draft_text_field.dart';
 import 'package:quick_flutter/screen/memo/chat_main_text_field.dart';
 import 'package:quick_flutter/store/draft_store.dart';
 import 'package:quick_flutter/store/memo_store.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
+import 'package:quick_flutter/widget/markdown_text_editing_controller.dart';
 
 class TextFieldScreen extends HookConsumerWidget {
   TextFieldScreen({super.key});
@@ -41,17 +41,21 @@ class TextFieldScreen extends HookConsumerWidget {
       }
     });
 
-    final drafts = ref.watch(draftStoreProvider).valueOrNull ?? [];
+    final drafts = ref.watch(draftStreamStore).value ?? [];
+    final controllers = drafts
+        .map((d) => useMarkdownTextEditingController(text: d.content))
+        .toList();
+    final focuses = drafts.map((d) => FocusNode()).toList();
 
-    useEffect(() {
-      WidgetsBinding.instance.addPostFrameCallback((_) async {
-        await ref.watch(draftStoreProvider.future);
-        // updateWindowSize(context);
-        // memoStoreProviderのaddMemoでstateがないと言われるのであらかじめ読んでおく
-        ref.watch(memoStoreProvider);
-      });
-      return null;
-    }, []);
+    // useEffect(() {
+    //   WidgetsBinding.instance.addPostFrameCallback((_) async {
+    //     // await ref.watch(draftStoreProvider.future);
+    //     // updateWindowSize(context);
+    //     // memoStoreProviderのaddMemoでstateがないと言われるのであらかじめ読んでおく
+    //     ref.watch(memoStoreProvider);
+    //   });
+    //   return null;
+    // }, []);
     return Material(
       // color: Colors.transparent,
       child: SingleChildScrollView(
@@ -80,17 +84,17 @@ class TextFieldScreen extends HookConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // draft
-                  ...drafts.mapIndexed((index, draft) {
+                  ...controllers.mapIndexed((index, c) {
+                    if (!focuses[index].hasFocus) {
+                      c.text = drafts[index].content;
+                    }
                     return ChatDraftTextField(
-                      key: ValueKey(draft.id),
-                      defaultValue: draft.content,
-                      draftId: draft.id,
-                      onChanged: (value) {
-                        updateWindowSize(context);
-                      },
+                      textController: c,
+                      focusNode: focuses[index],
+                      defaultValue: c.text,
                       onDebounceChanged: (value) {
-                        ref.read(draftStoreProvider.notifier).updateDraft(
-                              id: draft.id,
+                        ref.read(draftControllerProvider.notifier).updateDraft(
+                              id: drafts[index].id,
                               content: value,
                             );
                       },
@@ -98,10 +102,9 @@ class TextFieldScreen extends HookConsumerWidget {
                         await ref
                             .read(memoStoreProvider.notifier)
                             .addMemo(content: value, isBookmark: false);
-                        await ref
-                            .read(draftStoreProvider.notifier)
-                            .removeDraft(index);
-                        updateWindowSize(context);
+                        ref
+                            .read(draftControllerProvider.notifier)
+                            .removeDraft(drafts[index].id);
                       },
                     );
                   }),
@@ -113,7 +116,7 @@ class TextFieldScreen extends HookConsumerWidget {
                     },
                     onAddDraft: (value) async {
                       await ref
-                          .read(draftStoreProvider.notifier)
+                          .read(draftControllerProvider.notifier)
                           .addDraft(value);
                       updateWindowSize(context);
                     },

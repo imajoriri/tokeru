@@ -6,20 +6,21 @@ part of 'draft_store.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$draftStoreHash() => r'155f2b20be9695a91cb7af8157ce7ff2e34908a6';
+String _$draftControllerHash() => r'9d309c738b129e0a8b31f78a53b599a05961a8d8';
 
-/// See also [DraftStore].
-@ProviderFor(DraftStore)
-final draftStoreProvider =
-    AutoDisposeAsyncNotifierProvider<DraftStore, List<Draft>>.internal(
-  DraftStore.new,
-  name: r'draftStoreProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$draftStoreHash,
+/// See also [DraftController].
+@ProviderFor(DraftController)
+final draftControllerProvider =
+    AutoDisposeNotifierProvider<DraftController, void>.internal(
+  DraftController.new,
+  name: r'draftControllerProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$draftControllerHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$DraftStore = AutoDisposeAsyncNotifier<List<Draft>>;
+typedef _$DraftController = AutoDisposeNotifier<void>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

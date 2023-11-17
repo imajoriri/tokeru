@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quick_flutter/store/focus_store.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
 import 'package:quick_flutter/widget/markdown_text_editing_controller.dart';
 import 'package:quick_flutter/widget/markdown_text_field.dart';
@@ -21,7 +20,7 @@ class ChatMainTextField extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = useMarkdownTextEditingController();
-    final focus = ref.watch(focusNodeProvider(FocusNodeType.chat));
+    final focus = useFocusNode();
     final canSubmit = useState(false);
     final hasFocus = useState(false);
 
@@ -53,8 +52,9 @@ class ChatMainTextField extends HookConsumerWidget {
 
     // ignore: no_leading_underscores_for_local_identifiers
     _onSubmit() async {
+      final value = controller.text;
       controller.clear();
-      await onSubmit?.call(controller.text);
+      await onSubmit?.call(value);
     }
 
     return Column(
