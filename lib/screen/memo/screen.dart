@@ -1,11 +1,11 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quick_flutter/screen/memo/chat_draft_text_field.dart';
-import 'package:quick_flutter/screen/memo/chat_main_text_field.dart';
 import 'package:quick_flutter/store/draft_store.dart';
 import 'package:quick_flutter/store/memo_store.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
+import 'package:quick_flutter/widget/chat_draft_text_field.dart';
+import 'package:quick_flutter/widget/chat_main_text_field.dart';
 import 'package:quick_flutter/widget/chat_tile.dart';
 import 'package:quick_flutter/widget/markdown_text_editing_controller.dart';
 
