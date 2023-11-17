@@ -3,6 +3,7 @@
 import 'package:collection/collection.dart';
 import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/screen/memo/chat_draft_text_field.dart';
@@ -21,6 +22,7 @@ class TextFieldScreen extends HookConsumerWidget {
     final size = box?.size;
     if (size != null) {
       final height = size.height;
+      // これ他おそらくmainを変えてしまっている
       DesktopWindow.setWindowSize(
           Size(MediaQuery.of(context).size.width, height + 50));
     }
@@ -28,12 +30,23 @@ class TextFieldScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    const channel = MethodChannel("net.cbtdev.sample/method");
+    channel.setMethodCallHandler((MethodCall call) async {
+      switch (call.method) {
+        case 'openPanel':
+          updateWindowSize(context);
+          break;
+        default:
+          break;
+      }
+    });
+
     final drafts = ref.watch(draftStoreProvider).valueOrNull ?? [];
 
     useEffect(() {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         await ref.watch(draftStoreProvider.future);
-        updateWindowSize(context);
+        // updateWindowSize(context);
         // memoStoreProviderのaddMemoでstateがないと言われるのであらかじめ読んでおく
         ref.watch(memoStoreProvider);
       });

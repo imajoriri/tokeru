@@ -98,38 +98,38 @@ class _MyAppState extends ConsumerState<MyApp> {
     });
   }
 
-  void setMethodCallHandler() {
-    const channel = MethodChannel("net.cbtdev.sample/method");
-    channel.setMethodCallHandler((MethodCall call) async {
-      switch (call.method) {
-        case 'openPanel':
-          pressedLogicalKeys.removeWhere((e) => true);
+  // void setMethodCallHandler() {
+  //   const channel = MethodChannel("net.cbtdev.sample/method");
+  //   channel.setMethodCallHandler((MethodCall call) async {
+  //     switch (call.method) {
+  //       case 'openPanel':
+  //         pressedLogicalKeys.removeWhere((e) => true);
 
-          // sidebarにフォーカスがなければchatにフォーカスを移す
-          if (ref
-              .watch(focusNodeProvider(FocusNodeType.sidebarChat))
-              .hasFocus) {
-            break;
-          }
-          final primaryContext =
-              WidgetsBinding.instance.focusManager.primaryFocus!.context!;
-          final action = Actions.maybeFind<Intent>(
-            WidgetsBinding.instance.focusManager.primaryFocus!.context!,
-            intent: FocusChatTextFieldIntent(),
-          );
-          if (action != null) {
-            Actions.of(primaryContext).invokeActionIfEnabled(
-              action,
-              FocusChatTextFieldIntent(),
-              primaryContext,
-            );
-          }
-          break;
-        default:
-          break;
-      }
-    });
-  }
+  //         // sidebarにフォーカスがなければchatにフォーカスを移す
+  //         if (ref
+  //             .watch(focusNodeProvider(FocusNodeType.sidebarChat))
+  //             .hasFocus) {
+  //           break;
+  //         }
+  //         final primaryContext =
+  //             WidgetsBinding.instance.focusManager.primaryFocus!.context!;
+  //         final action = Actions.maybeFind<Intent>(
+  //           WidgetsBinding.instance.focusManager.primaryFocus!.context!,
+  //           intent: FocusChatTextFieldIntent(),
+  //         );
+  //         if (action != null) {
+  //           Actions.of(primaryContext).invokeActionIfEnabled(
+  //             action,
+  //             FocusChatTextFieldIntent(),
+  //             primaryContext,
+  //           );
+  //         }
+  //         break;
+  //       default:
+  //         break;
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -137,8 +137,6 @@ class _MyAppState extends ConsumerState<MyApp> {
       updateMemos(ref);
       return null;
     }, []);
-
-    setMethodCallHandler();
 
     return AppMaterialApp(
       home: Actions(
