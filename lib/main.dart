@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/firebase_options.dart';
+import 'package:quick_flutter/screen/main_memo/screen.dart';
 import 'package:quick_flutter/screen/memo/screen.dart';
 import 'package:quick_flutter/screen/text_field_screen.dart/screen.dart';
 import 'package:quick_flutter/store/memo_store.dart';
@@ -19,7 +20,7 @@ void main() async {
 
   runApp(
     const ProviderScope(
-      child: MyApp(),
+      child: MyApp2(),
     ),
   );
 }
@@ -36,6 +37,19 @@ void panel() async {
       child: NSPanel(),
     ),
   );
+}
+
+class MyApp2 extends StatelessWidget {
+  const MyApp2({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ProviderScope(
+      child: AppMaterialApp(
+        home: const MainMemoScreen(),
+      ),
+    );
+  }
 }
 
 class NSPanel extends StatelessWidget {
