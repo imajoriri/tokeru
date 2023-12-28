@@ -76,27 +76,27 @@ class MyApp extends StatefulHookConsumerWidget {
 class _MyAppState extends ConsumerState<MyApp> {
   final List<LogicalKeyboardKey> pressedLogicalKeys = [];
 
-  final shortcuts = <LogicalKeySet, Intent>{
-    LogicalKeySet(
-      LogicalKeyboardKey.metaLeft,
-      LogicalKeyboardKey.keyN,
-    ): FocusChatTextFieldIntent(),
-    LogicalKeySet(
-      LogicalKeyboardKey.metaRight,
-      LogicalKeyboardKey.keyN,
-    ): FocusChatTextFieldIntent(),
-    LogicalKeySet(
-      LogicalKeyboardKey.metaLeft,
-      LogicalKeyboardKey.enter,
-    ): CommandEnterIntent(),
-    LogicalKeySet(
-      LogicalKeyboardKey.metaRight,
-      LogicalKeyboardKey.enter,
-    ): CommandEnterIntent(),
-    LogicalKeySet(
-      LogicalKeyboardKey.escape,
-    ): EscIntent(),
-  };
+  // final shortcuts = <LogicalKeySet, Intent>{
+  //   LogicalKeySet(
+  //     LogicalKeyboardKey.metaLeft,
+  //     LogicalKeyboardKey.keyN,
+  //   ): FocusChatTextFieldIntent(),
+  //   LogicalKeySet(
+  //     LogicalKeyboardKey.metaRight,
+  //     LogicalKeyboardKey.keyN,
+  //   ): FocusChatTextFieldIntent(),
+  //   LogicalKeySet(
+  //     LogicalKeyboardKey.metaLeft,
+  //     LogicalKeyboardKey.enter,
+  //   ): CommandEnterIntent(),
+  //   LogicalKeySet(
+  //     LogicalKeyboardKey.metaRight,
+  //     LogicalKeyboardKey.enter,
+  //   ): CommandEnterIntent(),
+  //   LogicalKeySet(
+  //     LogicalKeyboardKey.escape,
+  //   ): EscIntent(),
+  // };
 
   /// メモの一覧を0時にリセット
   void updateMemos(WidgetRef ref) {
@@ -161,40 +161,40 @@ class _MyAppState extends ConsumerState<MyApp> {
           ),
         },
         child: Focus(
-          onKeyEvent: (node, event) {
-            if (event is KeyDownEvent) {
-              pressedLogicalKeys.add(event.logicalKey);
-            } else if (event is KeyUpEvent) {
-              pressedLogicalKeys.remove(event.logicalKey);
-            }
-            // shortcutsの中から該当するものを探す
-            for (final shortcut in shortcuts.entries) {
-              if (shortcut.key.keys.every((key) {
-                return pressedLogicalKeys.contains(key);
-              })) {
-                final primaryContext =
-                    WidgetsBinding.instance.focusManager.primaryFocus!.context!;
-                final action = Actions.maybeFind<Intent>(
-                  WidgetsBinding.instance.focusManager.primaryFocus!.context!,
-                  intent: shortcut.value,
-                );
-                if (action == null) {
-                  return KeyEventResult.ignored;
-                }
-                final (bool enabled, Object? _) =
-                    Actions.of(primaryContext).invokeActionIfEnabled(
-                  action,
-                  shortcut.value,
-                  primaryContext,
-                );
-                if (enabled) {
-                  return KeyEventResult.handled;
-                }
-              }
-            }
+          // onKeyEvent: (node, event) {
+          //   if (event is KeyDownEvent) {
+          //     pressedLogicalKeys.add(event.logicalKey);
+          //   } else if (event is KeyUpEvent) {
+          //     pressedLogicalKeys.remove(event.logicalKey);
+          //   }
+          //   // shortcutsの中から該当するものを探す
+          //   for (final shortcut in shortcuts.entries) {
+          //     if (shortcut.key.keys.every((key) {
+          //       return pressedLogicalKeys.contains(key);
+          //     })) {
+          //       final primaryContext =
+          //           WidgetsBinding.instance.focusManager.primaryFocus!.context!;
+          //       final action = Actions.maybeFind<Intent>(
+          //         WidgetsBinding.instance.focusManager.primaryFocus!.context!,
+          //         intent: shortcut.value,
+          //       );
+          //       if (action == null) {
+          //         return KeyEventResult.ignored;
+          //       }
+          //       final (bool enabled, Object? _) =
+          //           Actions.of(primaryContext).invokeActionIfEnabled(
+          //         action,
+          //         shortcut.value,
+          //         primaryContext,
+          //       );
+          //       if (enabled) {
+          //         return KeyEventResult.handled;
+          //       }
+          //     }
+          //   }
 
-            return KeyEventResult.ignored;
-          },
+          //   return KeyEventResult.ignored;
+          // },
           child: const Row(
             children: [
               Flexible(child: MemoScreen()),
