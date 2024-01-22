@@ -1,15 +1,10 @@
-// ignore_for_file: use_build_context_synchronously
-
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quick_flutter/store/draft_store.dart';
-import 'package:quick_flutter/store/memo_store.dart';
+import 'package:quick_flutter/controller/method_channel.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
-import 'package:quick_flutter/widget/chat_draft_text_field.dart';
-import 'package:quick_flutter/widget/chat_main_text_field.dart';
 import 'package:quick_flutter/widget/markdown_text_editing_controller.dart';
+import 'package:quick_flutter/widget/markdown_text_field.dart';
 
 class TextFieldScreen extends HookConsumerWidget {
   TextFieldScreen({super.key});
@@ -18,86 +13,53 @@ class TextFieldScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    const channel = MethodChannel("net.cbtdev.sample/method");
-    channel.setMethodCallHandler((MethodCall call) async {
-      switch (call.method) {
-        case 'openPanel':
-          break;
-        default:
-          break;
-      }
-    });
-
-    final drafts = ref.watch(draftStreamStore).value ?? [];
-    final controllers = drafts
-        .map((d) => useMarkdownTextEditingController(text: d.content))
-        .toList();
-
+    final channel = ref.watch(methodChannelProvider);
+    final alwaysFloating = useState(true);
     return Material(
-      // color: Colors.transparent,
-      child: SingleChildScrollView(
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            color: Theme.of(context).colorScheme.surface,
-            border: Border.all(
-              color: context.colorScheme.outline,
-              width: 1.0,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 20.0, left: 4, right: 4),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                    onPressed: () {
+                      channel.invokeMethod(AppMethodChannel.windowToLeft.name);
+                    },
+                    icon: const Icon(Icons.arrow_circle_left_outlined)),
+                IconButton(
+                  onPressed: () {
+                    alwaysFloating.value = !alwaysFloating.value;
+                    if (alwaysFloating.value) {
+                      channel
+                          .invokeMethod(AppMethodChannel.alwaysFloatingOn.name);
+                    } else {
+                      channel.invokeMethod(
+                          AppMethodChannel.alwaysFloatingOff.name);
+                    }
+                  },
+                  icon: Icon(alwaysFloating.value
+                      ? Icons.bookmark
+                      : Icons.bookmark_outline),
+                  color: alwaysFloating.value
+                      ? context.colorScheme.primary
+                      : context.colorScheme.secondary,
+                ),
+                IconButton(
+                    onPressed: () {
+                      channel.invokeMethod(AppMethodChannel.windowToRight.name);
+                    },
+                    icon: const Icon(Icons.arrow_circle_right_outlined)),
+              ],
             ),
-            boxShadow: [
-              BoxShadow(
-                color: context.colorScheme.shadow,
-                spreadRadius: 0,
-                blurRadius: 1,
-                offset: const Offset(0, 1),
+            Expanded(
+              child: MarkdownTextField(
+                controller: useMarkdownTextEditingController(),
+                maxLines: null,
               ),
-            ],
-          ),
-          child: Column(
-            key: globalKey,
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              // draft
-              ...controllers.mapIndexed((index, c) {
-                if (drafts[index].content != c.text) {
-                  c.text = drafts[index].content;
-                }
-                return ChatDraftTextField(
-                  textController: c,
-                  defaultValue: c.text,
-                  onDebounceChanged: (value) {
-                    ref.read(draftControllerProvider.notifier).updateDraft(
-                          id: drafts[index].id,
-                          content: value,
-                        );
-                  },
-                  onSubmit: (value) async {
-                    await ref
-                        .read(memoStoreProvider.notifier)
-                        .addMemo(content: value, isBookmark: false);
-                    ref
-                        .read(draftControllerProvider.notifier)
-                        .removeDraft(drafts[index].id);
-                  },
-                );
-              }),
-
-              // main
-              ChatMainTextField(
-                onAddDraft: (value) async {
-                  await ref
-                      .read(draftControllerProvider.notifier)
-                      .addDraft(value);
-                },
-                onSubmit: (value) async {
-                  await ref
-                      .read(memoStoreProvider.notifier)
-                      .addMemo(content: value, isBookmark: false);
-                },
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
