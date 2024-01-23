@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quick_flutter/controller/method_channel.dart';
+import 'package:quick_flutter/provider/memo/memo_provider.dart';
+import 'package:quick_flutter/provider/method_channel/method_channel_provider.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
 import 'package:quick_flutter/widget/markdown_text_editing_controller.dart';
 import 'package:quick_flutter/widget/markdown_text_field.dart';
@@ -15,6 +16,13 @@ class TextFieldScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final channel = ref.watch(methodChannelProvider);
     final alwaysFloating = useState(true);
+
+    final controller = useMarkdownTextEditingController();
+
+    ref.listen(memoProvider, (previous, next) {
+      controller.text = next.valueOrNull ?? "";
+    });
+
     return Material(
       child: Padding(
         padding: const EdgeInsets.only(top: 20.0, left: 4, right: 4),
@@ -55,8 +63,11 @@ class TextFieldScreen extends HookConsumerWidget {
             ),
             Expanded(
               child: MarkdownTextField(
-                controller: useMarkdownTextEditingController(),
+                controller: controller,
                 maxLines: null,
+                onChanged: (value) {
+                  ref.read(memoProvider.notifier).updateContent(value);
+                },
               ),
             ),
           ],
