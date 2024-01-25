@@ -29,11 +29,12 @@ class Memo extends _$Memo {
     _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
       final firestore = ref.read(firestoreProvider);
       // 仮としてuseridを指定
-      await firestore.collection("memo").doc("userid").update({
+      await firestore.collection("memo").doc("userid").set({
         "content": content,
       });
 
-      state = AsyncValue.data(content);
+      // ここで更新してしまうと、listenが発火してTextEditingControllerの内容が上書きされてしまう
+      // state = AsyncValue.data(content);
     });
   }
 }

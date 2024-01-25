@@ -36,6 +36,7 @@ class DefaultFirebaseOptions {
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.macOS:
+        return macosProd;
         return flavorEnv == Flavor.prod.name ? macosProd : macosDev;
       case TargetPlatform.windows:
         throw UnsupportedError(
