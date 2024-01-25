@@ -62,6 +62,7 @@ class TextFieldScreen extends HookConsumerWidget {
               ],
             ),
             Expanded(
+              flex: 1,
               child: MarkdownTextField(
                 controller: controller,
                 maxLines: null,
@@ -70,8 +71,65 @@ class TextFieldScreen extends HookConsumerWidget {
                 },
               ),
             ),
+            const Divider(),
+            Expanded(
+              flex: 1,
+              child: _ChatField(),
+            ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _ChatField extends HookConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final textList = useState<List<String>>([]);
+    final textController = useTextEditingController();
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              shrinkWrap: true,
+              reverse: true,
+              itemBuilder: (context, index) {
+                return SelectableText(textList.value[index]);
+              },
+              itemCount: textList.value.length,
+            ),
+          ),
+
+          // textfield
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: textController,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'メッセージを入力',
+                  ),
+                  maxLines: null,
+                ),
+              ),
+              const SizedBox(width: 4),
+              IconButton(
+                onPressed: () {
+                  textList.value = [
+                    textController.text,
+                    ...textList.value,
+                  ];
+                  textController.clear();
+                },
+                icon: const Icon(Icons.send),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
