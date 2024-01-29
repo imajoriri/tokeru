@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/provider/memo/memo_provider.dart';
@@ -88,48 +89,61 @@ class _ChatField extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final textList = useState<List<String>>([]);
     final textController = useTextEditingController();
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              shrinkWrap: true,
-              reverse: true,
-              itemBuilder: (context, index) {
-                return SelectableText(textList.value[index]);
-              },
-              itemCount: textList.value.length,
-            ),
-          ),
 
-          // textfield
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: textController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'メッセージを入力',
-                  ),
-                  maxLines: null,
-                ),
-              ),
-              const SizedBox(width: 4),
-              IconButton(
-                onPressed: () {
-                  textList.value = [
-                    textController.text,
-                    ...textList.value,
-                  ];
-                  textController.clear();
+    void send() {
+      textList.value = [
+        textController.text,
+        ...textList.value,
+      ];
+      textController.clear();
+    }
+
+    return CallbackShortcuts(
+      bindings: {
+        LogicalKeySet(LogicalKeyboardKey.enter, LogicalKeyboardKey.meta): () {
+          send();
+        }
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                reverse: true,
+                itemBuilder: (context, index) {
+                  return SelectableText(textList.value[index]);
                 },
-                icon: const Icon(Icons.send),
+                itemCount: textList.value.length,
               ),
-            ],
-          ),
-        ],
+            ),
+
+            // textfield
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: textController,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'メッセージを入力',
+                    ),
+                    maxLines: null,
+                  ),
+                ),
+                const SizedBox(width: 4),
+                IconButton(
+                  onPressed: () {
+                    send();
+                  },
+                  icon: const Icon(Icons.send),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
