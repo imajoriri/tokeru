@@ -124,9 +124,11 @@ class _ChatField extends HookConsumerWidget {
                               shape: BoxShape.circle,
                             ),
                             margin: const EdgeInsets.only(top: 8, right: 12)),
-                        SelectableText(
-                          textList.value[index],
-                          style: context.textTheme.bodyLarge,
+                        Expanded(
+                          child: SelectableText(
+                            textList.value[index],
+                            style: context.textTheme.bodyLarge,
+                          ),
                         ),
                       ],
                     ),
