@@ -110,29 +110,7 @@ class _ChatField extends HookConsumerWidget {
                 shrinkWrap: true,
                 reverse: true,
                 itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 4),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // グレーの丸ぽち
-                        Container(
-                            width: 8,
-                            height: 8,
-                            decoration: const BoxDecoration(
-                              color: Colors.grey,
-                              shape: BoxShape.circle,
-                            ),
-                            margin: const EdgeInsets.only(top: 8, right: 12)),
-                        Expanded(
-                          child: SelectableText(
-                            textList.value[index],
-                            style: context.textTheme.bodyLarge,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
+                  return _ChatTile(text: textList.value[index]);
                 },
                 itemCount: textList.value.length,
               ),
@@ -162,6 +140,51 @@ class _ChatField extends HookConsumerWidget {
                   icon: const Icon(Icons.send),
                 ),
               ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ChatTile extends HookConsumerWidget {
+  const _ChatTile({
+    required this.text,
+  });
+  final String text;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final onHover = useState(false);
+    return MouseRegion(
+      onExit: (pointer) {
+        onHover.value = false;
+      },
+      onEnter: (event) {
+        onHover.value = true;
+      },
+      child: Container(
+        color: onHover.value
+            ? Theme.of(context).hoverColor
+            : Theme.of(context).colorScheme.surface,
+        padding: const EdgeInsets.only(top: 4, bottom: 4),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // グレーの丸ぽち
+            Container(
+                width: 8,
+                height: 8,
+                decoration: const BoxDecoration(
+                  color: Colors.grey,
+                  shape: BoxShape.circle,
+                ),
+                margin: const EdgeInsets.only(top: 10, right: 12)),
+            Expanded(
+              child: SelectableText(
+                text,
+                style: context.textTheme.bodyLarge,
+              ),
             ),
           ],
         ),
