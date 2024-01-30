@@ -85,7 +85,7 @@ class _ChatField extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textList = useState<List<String>>([]);
-    final textController = useTextEditingController();
+    final textController = useMarkdownTextEditingController();
 
     void send() {
       textList.value = [
@@ -121,7 +121,7 @@ class _ChatField extends HookConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Expanded(
-                  child: TextField(
+                  child: MarkdownTextField(
                     controller: textController,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
