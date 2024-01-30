@@ -62,15 +62,12 @@ class TextFieldScreen extends HookConsumerWidget {
                     icon: const Icon(Icons.arrow_circle_right_outlined)),
               ],
             ),
-            Expanded(
-              flex: 1,
-              child: MarkdownTextField(
-                controller: controller,
-                maxLines: null,
-                onChanged: (value) {
-                  ref.read(memoProvider.notifier).updateContent(value);
-                },
-              ),
+            MarkdownTextField(
+              controller: controller,
+              maxLines: null,
+              onChanged: (value) {
+                ref.read(memoProvider.notifier).updateContent(value);
+              },
             ),
             const Divider(),
             Expanded(
