@@ -110,7 +110,24 @@ class _ChatField extends HookConsumerWidget {
                 shrinkWrap: true,
                 reverse: true,
                 itemBuilder: (context, index) {
-                  return SelectableText(textList.value[index]);
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // グレーの丸ぽち
+                        Container(
+                            width: 8,
+                            height: 8,
+                            decoration: const BoxDecoration(
+                              color: Colors.grey,
+                              shape: BoxShape.circle,
+                            ),
+                            margin: const EdgeInsets.only(top: 8, right: 12)),
+                        SelectableText(textList.value[index]),
+                      ],
+                    ),
+                  );
                 },
                 itemCount: textList.value.length,
               ),
