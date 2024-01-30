@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:quick_flutter/systems/context_extension.dart';
 
 class MarkdownTextField extends HookConsumerWidget {
   const MarkdownTextField({
@@ -74,6 +75,7 @@ class MarkdownTextField extends HookConsumerWidget {
     return TextField(
       focusNode: focus,
       controller: controller,
+      style: context.textTheme.bodyLarge,
       decoration: decoration ??
           InputDecoration(
             border: InputBorder.none,

@@ -124,7 +124,10 @@ class _ChatField extends HookConsumerWidget {
                               shape: BoxShape.circle,
                             ),
                             margin: const EdgeInsets.only(top: 8, right: 12)),
-                        SelectableText(textList.value[index]),
+                        SelectableText(
+                          textList.value[index],
+                          style: context.textTheme.bodyLarge,
+                        ),
                       ],
                     ),
                   );
@@ -132,6 +135,7 @@ class _ChatField extends HookConsumerWidget {
                 itemCount: textList.value.length,
               ),
             ),
+            const SizedBox(height: 4),
 
             // textfield
             Row(
@@ -142,6 +146,7 @@ class _ChatField extends HookConsumerWidget {
                     controller: textController,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
+                      contentPadding: EdgeInsets.all(8),
                       hintText: 'メッセージを入力',
                     ),
                     maxLines: null,
