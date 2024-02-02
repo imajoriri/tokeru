@@ -10,31 +10,31 @@ class MainFlutterWindow: NSWindow {
   var panelFlutterViewController: FlutterViewController!
   var channel: FlutterMethodChannel!
   lazy var flutterEngine = FlutterEngine(name: "my flutter engine", project: nil)
-  
+
   override func awakeFromNib() {
     let flutterViewController = FlutterViewController()
     let windowFrame = self.frame
     self.contentViewController = flutterViewController
     self.setFrame(windowFrame, display: true)
-    
+
     RegisterGeneratedPlugins(registry: flutterViewController)
-    
+
     // NSApplicationの起動完了通知を購読
     NotificationCenter.default.addObserver(self, selector: #selector(appDidFinishLaunching), name: NSApplication.didFinishLaunchingNotification, object: nil)
-    
+
     super.awakeFromNib()
   }
-  
+
   @objc func appDidFinishLaunching(notification: Notification) {
     hotKey.keyDownHandler = {
       // 開いてたら閉じて、閉じてたら開く
-      if(self.newEntryPanel.isVisible) {
+      if self.newEntryPanel.isVisible {
         self.newEntryPanel.close()
       } else {
         self.open()
       }
     }
-    
+
     createFloatingPanel()
     NotificationCenter.default.removeObserver(self, name: NSApplication.didFinishLaunchingNotification, object: nil)
   }
@@ -48,14 +48,14 @@ class MainFlutterWindow: NSWindow {
   // NSPanelを作成
   func createFloatingPanel() {
     // 変える場合はここ参照 https://stackoverflow.com/questions/77222222/flutterengine-runwithentrypoint-screenaentrypoint-still-looks-for-main-i
-    flutterEngine.run(withEntrypoint: "panel");
+    flutterEngine.run(withEntrypoint: "panel")
     panelFlutterViewController = FlutterViewController(engine: flutterEngine, nibName: nil, bundle: nil)
     panelFlutterViewController.backgroundColor = .clear
 
-    channel = FlutterMethodChannel(name: "quick.flutter/panel", binaryMessenger: panelFlutterViewController.engine.binaryMessenger);
+    channel = FlutterMethodChannel(name: "quick.flutter/panel", binaryMessenger: panelFlutterViewController.engine.binaryMessenger)
 
     newEntryPanel = FloatingPanel(contentRect: NSRect(x: 0, y: 0, width: 400, height: 600), backing: .buffered, defer: false, channel: channel)
-    
+
     newEntryPanel.title = "Floating Panel Title"
     newEntryPanel.contentView = panelFlutterViewController.view
     newEntryPanel.contentViewController = panelFlutterViewController
@@ -137,9 +137,9 @@ class FloatingPanel: NSPanel {
 
   init(contentRect: NSRect, backing: NSWindow.BackingStoreType, defer flag: Bool, channel: FlutterMethodChannel) {
     self.channel = channel
-    
+
     super.init(contentRect: contentRect,
-               styleMask: [.nonactivatingPanel,.titled, .miniaturizable, .closable, .fullSizeContentView, .resizable],
+               styleMask: [.nonactivatingPanel, .titled, .miniaturizable, .closable, .fullSizeContentView, .resizable],
                backing: backing,
                defer: flag)
     self.level = .floating
@@ -156,7 +156,7 @@ class FloatingPanel: NSPanel {
 
     setupNotification()
   }
-  
+
   // `canBecomeKey` and `canBecomeMain` are required so that text inputs inside the panel can receive focus
   override var canBecomeKey: Bool {
     return true
@@ -165,16 +165,12 @@ class FloatingPanel: NSPanel {
   override var canBecomeMain: Bool {
     return true
   }
-  
+
   override func resignMain() {
-    if(!alwaysFloating) {
+    if !alwaysFloating {
       close()
     }
     super.resignMain()
-  }
-
-  override func close() {
-    super.close()
   }
 
   private func setupNotification() {
