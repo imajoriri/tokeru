@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:quick_flutter/controller/window_status/window_status_controller.dart';
 import 'package:quick_flutter/provider/memo/memo_provider.dart';
 import 'package:quick_flutter/provider/method_channel/method_channel_provider.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
@@ -16,6 +17,25 @@ class TextFieldScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final channel = ref.watch(methodChannelProvider);
+
+    channel.setMethodCallHandler((call) async {
+      return switch (call.method) {
+        'active' => {
+            ref.read(windowStatusControllerProvider.notifier).setActive(),
+            ref.read(methodChannelProvider).invokeMethod(
+                AppMethodChannel.setFrameSize.name,
+                {"width": 400, "height": 700}),
+          },
+        'inactive' => {
+            ref.read(windowStatusControllerProvider.notifier).setInactive(),
+            ref.read(methodChannelProvider).invokeMethod(
+                AppMethodChannel.setFrameSize.name,
+                {"width": 400, "height": 200}),
+          },
+        String() => null,
+      };
+    });
+
     final alwaysFloating = useState(true);
 
     final controller = useMarkdownTextEditingController();
@@ -62,18 +82,23 @@ class TextFieldScreen extends HookConsumerWidget {
                     icon: const Icon(Icons.arrow_circle_right_outlined)),
               ],
             ),
-            MarkdownTextField(
-              controller: controller,
-              maxLines: null,
-              onChanged: (value) {
-                ref.read(memoProvider.notifier).updateContent(value);
-              },
-            ),
-            const Divider(),
             Expanded(
-              flex: 1,
-              child: _ChatField(),
+              child: MarkdownTextField(
+                controller: controller,
+                maxLines: null,
+                onChanged: (value) {
+                  ref.read(memoProvider.notifier).updateContent(value);
+                },
+              ),
             ),
+            // if (ref.watch(windowStatusControllerProvider) ==
+            //     WindowStatus.active) ...[
+            //   const Divider(),
+            //   Expanded(
+            //     flex: 1,
+            //     child: _ChatField(),
+            //   ),
+            // ],
           ],
         ),
       ),

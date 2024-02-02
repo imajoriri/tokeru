@@ -13,5 +13,8 @@ enum AppMethodChannel {
   windowToRight,
 
   alwaysFloatingOn,
-  alwaysFloatingOff;
+  alwaysFloatingOff,
+
+  setFrameSize,
+  ;
 }

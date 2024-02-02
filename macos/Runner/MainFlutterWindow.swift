@@ -52,25 +52,44 @@ class MainFlutterWindow: NSWindow {
     panelFlutterViewController = FlutterViewController(engine: flutterEngine, nibName: nil, bundle: nil)
     panelFlutterViewController.backgroundColor = .clear
 
-    newEntryPanel = FloatingPanel(contentRect: NSRect(x: 0, y: 0, width: 400, height: 600), backing: .buffered, defer: false)
+    channel = FlutterMethodChannel(name: "quick.flutter/panel", binaryMessenger: panelFlutterViewController.engine.binaryMessenger);
+
+    newEntryPanel = FloatingPanel(contentRect: NSRect(x: 0, y: 0, width: 400, height: 600), backing: .buffered, defer: false, channel: channel)
     
     newEntryPanel.title = "Floating Panel Title"
     newEntryPanel.contentView = panelFlutterViewController.view
     newEntryPanel.contentViewController = panelFlutterViewController
     RegisterGeneratedPlugins(registry: panelFlutterViewController)
 
+    setHandler()
+  }
+
+  func setHandler() {
     // Flutter側でのイベントを受け取る
-    channel = FlutterMethodChannel(name: "quick.flutter/panel", binaryMessenger: panelFlutterViewController.engine.binaryMessenger);
     channel.setMethodCallHandler { (call, result) in
       let windowWidth = self.newEntryPanel.frame.width
       let windowHeight = self.newEntryPanel.frame.height
       let windowPositionY = self.newEntryPanel.frame.origin.y
+      let windowPositionX = self.newEntryPanel.frame.origin.x
 
       // window移動のアニメーションのduration
       let windowAnimationDuration = 0.4
       let easeOutExpo = CAMediaTimingFunction(controlPoints: 0.19, 1.0, 0.22, 1.0)
 
       switch call.method {
+      case "setFrameSize":
+        if let args = call.arguments as? [String: Any],
+           let width = args["width"] as? Int,
+           let height = args["height"] as? Int {
+          // NSPointは左下を基準とするため、Frameサイズ変更時に上を固定するためにwindowHeight - CGFloat(height)を足している
+          let frame = NSRect(origin: NSPoint(x: windowPositionX, y: windowPositionY + (windowHeight - CGFloat(height))),
+                             size: NSSize(width: width, height: height)
+          )
+          self.newEntryPanel.animator().setFrame(frame, display: true, animate: true)
+        } else {
+          print(FlutterError(code: "INVALID_ARGUMENT", message: "Width or height is not provided", details: nil))
+        }
+        return
       case "alwaysFloatingOn":
         self.newEntryPanel.alwaysFloating = true
         return
@@ -91,7 +110,7 @@ class MainFlutterWindow: NSWindow {
 
         return
       case "windowToRight":
-        // 現在ん高さのまま右へ移動
+        // 現在の高さのまま右へ移動
         if let screen = NSScreen.main?.visibleFrame {
           let newTopLeftPoint = NSPoint(x: screen.maxX - windowWidth, y: windowPositionY)
           let frame = NSRect(origin: newTopLeftPoint, size: NSSize(width: windowWidth, height: windowHeight))
@@ -112,12 +131,17 @@ class MainFlutterWindow: NSWindow {
 }
 
 class FloatingPanel: NSPanel {
+  var channel: FlutterMethodChannel
   /// 外部タップで閉じれるかどうか
   var alwaysFloating: Bool = true
 
-  init(contentRect: NSRect, backing: NSWindow.BackingStoreType, defer flag: Bool) {
+  init(contentRect: NSRect, backing: NSWindow.BackingStoreType, defer flag: Bool, channel: FlutterMethodChannel) {
+    self.channel = channel
     
-    super.init(contentRect: contentRect, styleMask: [.nonactivatingPanel, .titled, .miniaturizable, .closable, .fullSizeContentView, .resizable], backing: backing, defer: flag)
+    super.init(contentRect: contentRect,
+               styleMask: [.nonactivatingPanel,.titled, .miniaturizable, .closable, .fullSizeContentView, .resizable],
+               backing: backing,
+               defer: flag)
     self.level = .floating
     self.isFloatingPanel = true
     self.hidesOnDeactivate = false
@@ -129,6 +153,8 @@ class FloatingPanel: NSPanel {
 
     self.titleVisibility = .hidden
     self.titlebarAppearsTransparent = true
+
+    setupNotification()
   }
   
   // `canBecomeKey` and `canBecomeMain` are required so that text inputs inside the panel can receive focus
@@ -149,5 +175,24 @@ class FloatingPanel: NSPanel {
 
   override func close() {
     super.close()
+  }
+
+  private func setupNotification() {
+    NotificationCenter.default.addObserver(self, selector: #selector(handleDidBecomeKeyNotification(_:)), name: NSWindow.didBecomeKeyNotification, object: self)
+    NotificationCenter.default.addObserver(self, selector: #selector(handleDidResignKeyNotification(_:)), name: NSWindow.didResignKeyNotification, object: self)
+  }
+
+  // ウィンドウがキーウィンドウになった時の処理を行う
+  @objc private func handleDidBecomeKeyNotification(_ notification: Notification) {
+    channel.invokeMethod("active", arguments: nil)
+  }
+
+  // ウィンドウが非アクティブになった時の処理
+  @objc private func handleDidResignKeyNotification(_ notification: Notification) {
+    channel.invokeMethod("inactive", arguments: nil)
+  }
+
+  deinit {
+    NotificationCenter.default.removeObserver(self)
   }
 }
