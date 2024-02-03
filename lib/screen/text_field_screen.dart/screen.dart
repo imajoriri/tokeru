@@ -31,7 +31,7 @@ class TextFieldScreen extends HookConsumerWidget {
             focusNode.unfocus(),
             ref.read(windowStatusControllerProvider.notifier).setInactive(),
           },
-        String() => null,
+        _ => null,
       };
     });
 
