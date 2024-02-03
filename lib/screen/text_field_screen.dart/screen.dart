@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/controller/window_status/window_status_controller.dart';
+import 'package:quick_flutter/model/window_status/window_status.dart';
 import 'package:quick_flutter/provider/memo/memo_provider.dart';
 import 'package:quick_flutter/provider/method_channel/method_channel_provider.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
@@ -16,21 +17,19 @@ class TextFieldScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final focusNode = useFocusNode();
+    final hasFocus = useState(focusNode.hasFocus);
     final channel = ref.watch(methodChannelProvider);
 
     channel.setMethodCallHandler((call) async {
       return switch (call.method) {
         'active' => {
+            focusNode.requestFocus(),
             ref.read(windowStatusControllerProvider.notifier).setActive(),
-            ref.read(methodChannelProvider).invokeMethod(
-                AppMethodChannel.setFrameSize.name,
-                {"width": 400, "height": 700}),
           },
         'inactive' => {
+            focusNode.unfocus(),
             ref.read(windowStatusControllerProvider.notifier).setInactive(),
-            ref.read(methodChannelProvider).invokeMethod(
-                AppMethodChannel.setFrameSize.name,
-                {"width": 400, "height": 200}),
           },
         String() => null,
       };
@@ -39,6 +38,19 @@ class TextFieldScreen extends HookConsumerWidget {
     final alwaysFloating = useState(true);
 
     final controller = useMarkdownTextEditingController();
+
+    focusNode.addListener(() {
+      hasFocus.value = focusNode.hasFocus;
+      if (focusNode.hasFocus) {
+        ref
+            .read(methodChannelProvider)
+            .invokeMethod(AppMethodChannel.setFrameSize.name, {"height": 700});
+      } else {
+        ref
+            .read(methodChannelProvider)
+            .invokeMethod(AppMethodChannel.setFrameSize.name, {"height": 70});
+      }
+    });
 
     ref.listen(memoProvider, (previous, next) {
       controller.text = next.valueOrNull ?? "";
@@ -49,42 +61,46 @@ class TextFieldScreen extends HookConsumerWidget {
         padding: const EdgeInsets.only(top: 20.0, left: 4, right: 4),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
+            if (hasFocus.value)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        channel
+                            .invokeMethod(AppMethodChannel.windowToLeft.name);
+                      },
+                      icon: const Icon(Icons.arrow_circle_left_outlined)),
+                  IconButton(
                     onPressed: () {
-                      channel.invokeMethod(AppMethodChannel.windowToLeft.name);
+                      alwaysFloating.value = !alwaysFloating.value;
+                      if (alwaysFloating.value) {
+                        channel.invokeMethod(
+                            AppMethodChannel.alwaysFloatingOn.name);
+                      } else {
+                        channel.invokeMethod(
+                            AppMethodChannel.alwaysFloatingOff.name);
+                      }
                     },
-                    icon: const Icon(Icons.arrow_circle_left_outlined)),
-                IconButton(
-                  onPressed: () {
-                    alwaysFloating.value = !alwaysFloating.value;
-                    if (alwaysFloating.value) {
-                      channel
-                          .invokeMethod(AppMethodChannel.alwaysFloatingOn.name);
-                    } else {
-                      channel.invokeMethod(
-                          AppMethodChannel.alwaysFloatingOff.name);
-                    }
-                  },
-                  icon: Icon(alwaysFloating.value
-                      ? Icons.bookmark
-                      : Icons.bookmark_outline),
-                  color: alwaysFloating.value
-                      ? context.colorScheme.primary
-                      : context.colorScheme.secondary,
-                ),
-                IconButton(
-                    onPressed: () {
-                      channel.invokeMethod(AppMethodChannel.windowToRight.name);
-                    },
-                    icon: const Icon(Icons.arrow_circle_right_outlined)),
-              ],
-            ),
+                    icon: Icon(alwaysFloating.value
+                        ? Icons.bookmark
+                        : Icons.bookmark_outline),
+                    color: alwaysFloating.value
+                        ? context.colorScheme.primary
+                        : context.colorScheme.secondary,
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        channel
+                            .invokeMethod(AppMethodChannel.windowToRight.name);
+                      },
+                      icon: const Icon(Icons.arrow_circle_right_outlined)),
+                ],
+              ),
             Expanded(
               child: MarkdownTextField(
                 controller: controller,
+                focus: focusNode,
                 maxLines: null,
                 onChanged: (value) {
                   ref.read(memoProvider.notifier).updateContent(value);

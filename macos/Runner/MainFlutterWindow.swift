@@ -78,9 +78,9 @@ class MainFlutterWindow: NSWindow {
 
       switch call.method {
       case "setFrameSize":
-        if let args = call.arguments as? [String: Any],
-           let width = args["width"] as? Int,
-           let height = args["height"] as? Int {
+        if let args = call.arguments as? [String: Any] {
+          let width = (args["width"] as? Int) ?? Int(windowWidth)
+          let height = (args["height"] as? Int) ?? Int(windowHeight)
           // NSPointは左下を基準とするため、Frameサイズ変更時に上を固定するためにwindowHeight - CGFloat(height)を足している
           let frame = NSRect(origin: NSPoint(x: windowPositionX, y: windowPositionY + (windowHeight - CGFloat(height))),
                              size: NSSize(width: width, height: height)
