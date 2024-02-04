@@ -33,8 +33,7 @@ class Memo extends _$Memo {
         "content": content,
       });
 
-      // ここで更新してしまうと、listenが発火してTextEditingControllerの内容が上書きされてしまう
-      // state = AsyncValue.data(content);
+      state = AsyncValue.data(content);
     });
   }
 }
