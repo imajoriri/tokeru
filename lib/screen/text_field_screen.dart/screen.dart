@@ -26,9 +26,7 @@ class BookmarkController extends _$BookmarkController {
 }
 
 class TextFieldScreen extends HookConsumerWidget {
-  TextFieldScreen({super.key});
-
-  final globalKey = GlobalKey();
+  const TextFieldScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
