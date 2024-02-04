@@ -13,7 +13,7 @@ part 'screen.g.dart';
 
 enum _WindowSizeMode { small, large }
 
-@riverpod
+@Riverpod(keepAlive: true)
 class BookmarkController extends _$BookmarkController {
   @override
   bool build() {
@@ -34,7 +34,7 @@ class TextFieldScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final channel = ref.watch(methodChannelProvider);
     final windowSizeMode = useState<_WindowSizeMode>(_WindowSizeMode.large);
-    final bookmark = useState(true);
+    final bookmark = ref.watch(bookmarkControllerProvider);
 
     HotKey.create(
       definition: HotKeyDefinition(
@@ -65,12 +65,12 @@ class TextFieldScreen extends HookConsumerWidget {
     channel.setMethodCallHandler((call) async {
       final _ = switch (call.method) {
         'active' => {
-            if (bookmark.value) ...{
+            if (bookmark) ...{
               windowSizeMode.value = _WindowSizeMode.large,
             },
           },
         'inactive' => {
-            if (bookmark.value) ...{
+            if (bookmark) ...{
               windowSizeMode.value = _WindowSizeMode.small,
             },
           },
@@ -154,9 +154,6 @@ class _LargeWindow extends HookConsumerWidget {
               configurations: QuillEditorConfigurations(
                 controller: controller,
                 readOnly: false,
-                sharedConfigurations: const QuillSharedConfigurations(
-                  locale: Locale('de'),
-                ),
                 expands: true,
               ),
             ),
