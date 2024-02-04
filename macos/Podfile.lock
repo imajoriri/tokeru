@@ -7,6 +7,8 @@ PODS:
     - nanopb (< 2.30910.0, >= 2.30908.0)
   - desktop_window (0.0.1):
     - FlutterMacOS
+  - device_info_plus (0.0.1):
+    - FlutterMacOS
   - Firebase/CoreOnly (10.15.0):
     - FirebaseCore (= 10.15.0)
   - Firebase/Firestore (10.15.0):
@@ -35,19 +37,29 @@ PODS:
   - GoogleUtilities/Logger (7.12.0):
     - GoogleUtilities/Environment
   - "GoogleUtilities/NSData+zlib (7.12.0)"
+  - irondash_engine_context (0.0.1):
+    - FlutterMacOS
   - nanopb (2.30909.1):
     - nanopb/decode (= 2.30909.1)
     - nanopb/encode (= 2.30909.1)
   - nanopb/decode (2.30909.1)
   - nanopb/encode (2.30909.1)
   - PromisesObjC (2.3.1)
+  - super_native_extensions (0.0.1):
+    - FlutterMacOS
+  - url_launcher_macos (0.0.1):
+    - FlutterMacOS
 
 DEPENDENCIES:
   - cloud_firestore (from `Flutter/ephemeral/.symlinks/plugins/cloud_firestore/macos`)
   - desktop_window (from `Flutter/ephemeral/.symlinks/plugins/desktop_window/macos`)
+  - device_info_plus (from `Flutter/ephemeral/.symlinks/plugins/device_info_plus/macos`)
   - firebase_core (from `Flutter/ephemeral/.symlinks/plugins/firebase_core/macos`)
   - FirebaseFirestore (from `https://github.com/invertase/firestore-ios-sdk-frameworks.git`, tag `10.15.0`)
   - FlutterMacOS (from `Flutter/ephemeral`)
+  - irondash_engine_context (from `Flutter/ephemeral/.symlinks/plugins/irondash_engine_context/macos`)
+  - super_native_extensions (from `Flutter/ephemeral/.symlinks/plugins/super_native_extensions/macos`)
+  - url_launcher_macos (from `Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos`)
 
 SPEC REPOS:
   trunk:
@@ -63,6 +75,8 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/cloud_firestore/macos
   desktop_window:
     :path: Flutter/ephemeral/.symlinks/plugins/desktop_window/macos
+  device_info_plus:
+    :path: Flutter/ephemeral/.symlinks/plugins/device_info_plus/macos
   firebase_core:
     :path: Flutter/ephemeral/.symlinks/plugins/firebase_core/macos
   FirebaseFirestore:
@@ -70,6 +84,12 @@ EXTERNAL SOURCES:
     :tag: 10.15.0
   FlutterMacOS:
     :path: Flutter/ephemeral
+  irondash_engine_context:
+    :path: Flutter/ephemeral/.symlinks/plugins/irondash_engine_context/macos
+  super_native_extensions:
+    :path: Flutter/ephemeral/.symlinks/plugins/super_native_extensions/macos
+  url_launcher_macos:
+    :path: Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos
 
 CHECKOUT OPTIONS:
   FirebaseFirestore:
@@ -79,6 +99,7 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   cloud_firestore: 3b75bedf96c1fb6962110d14d0dfef10ba2c5faa
   desktop_window: fb7c4f12c1129f947ac482296b6f14059d57a3c3
+  device_info_plus: 5401765fde0b8d062a2f8eb65510fb17e77cf07f
   Firebase: 66043bd4579e5b73811f96829c694c7af8d67435
   firebase_core: 3d8c7ecf2bfe5c96034ee3d8f3e6194fbac34797
   FirebaseCore: 2cec518b43635f96afe7ac3a9c513e47558abd2e
@@ -86,8 +107,11 @@ SPEC CHECKSUMS:
   FirebaseFirestore: 58d92e3cc19fd1c93e279d466aaf148ce6dbf635
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
   GoogleUtilities: 0759d1a57ebb953965c2dfe0ba4c82e95ccc2e34
+  irondash_engine_context: da62996ee25616d2f01bbeb85dc115d813359478
   nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
+  super_native_extensions: 85efee3a7495b46b04befcfc86ed12069264ebf3
+  url_launcher_macos: d2691c7dd33ed713bf3544850a623080ec693d95
 
 PODFILE CHECKSUM: b2bbe52630f0c1d140f58af209cd225508681baf
 

@@ -16,5 +16,7 @@ enum AppMethodChannel {
   alwaysFloatingOff,
 
   setFrameSize,
+
+  openOrClosePanel,
   ;
 }

@@ -5,7 +5,7 @@ import SwiftUI
 import Firebase
 
 class MainFlutterWindow: NSWindow {
-  let hotKey = HotKey(key: .comma, modifiers: [.command, .shift])
+//  let hotKey = HotKey(key: .comma, modifiers: [.command, .shift])
   var newEntryPanel: FloatingPanel!
   var panelFlutterViewController: FlutterViewController!
   var channel: FlutterMethodChannel!
@@ -26,14 +26,14 @@ class MainFlutterWindow: NSWindow {
   }
 
   @objc func appDidFinishLaunching(notification: Notification) {
-    hotKey.keyDownHandler = {
-      // 開いてたら閉じて、閉じてたら開く
-      if self.newEntryPanel.isVisible {
-        self.newEntryPanel.close()
-      } else {
-        self.open()
-      }
-    }
+//    hotKey.keyDownHandler = {
+//      // 開いてたら閉じて、閉じてたら開く
+//      if self.newEntryPanel.isVisible {
+//        self.newEntryPanel.close()
+//      } else {
+//        self.open()
+//      }
+//    }
 
     createFloatingPanel()
     NotificationCenter.default.removeObserver(self, name: NSApplication.didFinishLaunchingNotification, object: nil)
@@ -77,6 +77,13 @@ class MainFlutterWindow: NSWindow {
       let easeOutExpo = CAMediaTimingFunction(controlPoints: 0.19, 1.0, 0.22, 1.0)
 
       switch call.method {
+      case "openOrClosePanel":
+        // 開いてたら閉じて、閉じてたら開く
+        if self.newEntryPanel.isVisible {
+          self.newEntryPanel.close()
+        } else {
+          self.open()
+        }
       case "setFrameSize":
         if let args = call.arguments as? [String: Any] {
           let width = (args["width"] as? Int) ?? Int(windowWidth)

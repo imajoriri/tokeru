@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/provider/memo/memo_provider.dart';
 import 'package:quick_flutter/provider/method_channel/method_channel_provider.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
-import 'package:quick_flutter/widget/markdown_text_editing_controller.dart';
-import 'package:quick_flutter/widget/markdown_text_field.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:super_hot_key/super_hot_key.dart';
 
 part 'screen.g.dart';
 
@@ -34,6 +35,18 @@ class TextFieldScreen extends HookConsumerWidget {
     final channel = ref.watch(methodChannelProvider);
     final windowSizeMode = useState<_WindowSizeMode>(_WindowSizeMode.large);
     final bookmark = useState(true);
+
+    HotKey.create(
+      definition: HotKeyDefinition(
+        key: PhysicalKeyboardKey.comma,
+        shift: true,
+        meta: true,
+      ),
+      onPressed: () {
+        final channel = ref.read(methodChannelProvider);
+        channel.invokeMethod(AppMethodChannel.openOrClosePanel.name);
+      },
+    );
 
     useEffect(() {
       final _ = switch (windowSizeMode.value) {
@@ -92,12 +105,19 @@ class _LargeWindow extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final channel = ref.watch(methodChannelProvider);
-    final controller = useMarkdownTextEditingController();
+    final controller = QuillController.basic();
     final focusNode = useFocusNode();
 
     final bookmark = ref.watch(bookmarkControllerProvider);
-    ref.watch(memoProvider.future).then((value) {
-      controller.text = value;
+    ref.read(memoProvider.future).then((value) {
+      controller.replaceText(0, 0, value, null);
+    });
+
+    controller.document.changes.listen((data) {
+      // TODO:　保存時にplain text以外で保存する
+      ref
+          .read(memoProvider.notifier)
+          .updateContent(controller.document.toPlainText());
     });
 
     return Padding(
@@ -129,13 +149,16 @@ class _LargeWindow extends HookConsumerWidget {
             ],
           ),
           Expanded(
-            child: MarkdownTextField(
-              controller: controller,
-              focus: focusNode,
-              maxLines: null,
-              onChanged: (value) {
-                ref.read(memoProvider.notifier).updateContent(value);
-              },
+            child: QuillEditor.basic(
+              focusNode: focusNode,
+              configurations: QuillEditorConfigurations(
+                controller: controller,
+                readOnly: false,
+                sharedConfigurations: const QuillSharedConfigurations(
+                  locale: Locale('de'),
+                ),
+                expands: true,
+              ),
             ),
           ),
         ],

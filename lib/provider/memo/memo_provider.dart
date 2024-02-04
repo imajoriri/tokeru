@@ -5,13 +5,14 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'memo_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class Memo extends _$Memo {
   Timer? _debounceTimer;
 
   @override
   FutureOr<String> build() async {
     ref.onDispose(() {
+      print("buildbuld");
       _debounceTimer?.cancel();
     });
 
@@ -26,6 +27,7 @@ class Memo extends _$Memo {
     if (_debounceTimer?.isActive ?? false) {
       _debounceTimer?.cancel();
     }
+
     _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
       final firestore = ref.read(firestoreProvider);
       // 仮としてuseridを指定
@@ -33,7 +35,7 @@ class Memo extends _$Memo {
         "content": content,
       });
 
-      state = AsyncValue.data(content);
+      // state = AsyncValue.data(content);
     });
   }
 }
