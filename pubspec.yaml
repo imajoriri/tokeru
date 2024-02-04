@@ -25,7 +25,6 @@ dependencies:
   intl: ^0.18.1
   desktop_window: ^0.4.0
   flutter_quill: ^9.2.10
-  quill_html_converter: ^9.2.10
   super_hot_key: ^0.8.4
   flutter_localizations:
     sdk: flutter

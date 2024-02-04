@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -6,7 +8,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/provider/memo/memo_provider.dart';
 import 'package:quick_flutter/provider/method_channel/method_channel_provider.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
-import 'package:quill_html_converter/quill_html_converter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:super_hot_key/super_hot_key.dart';
 
@@ -107,14 +108,40 @@ class _LargeWindow extends HookConsumerWidget {
     final focusNode = useFocusNode();
 
     final bookmark = ref.watch(bookmarkControllerProvider);
-    ref.read(memoProvider.future).then((html) {
-      controller.setContents(Document.fromHtml(html));
+
+    ref.read(memoProvider.future).then((value) {
+      final json = jsonDecode(value);
+      if (json is List) {
+        controller.document = Document.fromJson(json);
+      }
 
       // この外でlistenすると、setContentsの後に変更があった場合に反応しない
       controller.document.changes.listen((data) {
+        var text = controller.document.toPlainText();
+        // "[] "パターンを検出して、チェックリストアイテムに置換
+        if (text.contains("[] ")) {
+          var index = text.indexOf("[] ");
+          // チェックリストアイテムに置換
+          controller.replaceText(
+            index,
+            4,
+            '',
+            TextSelection(
+              baseOffset: index,
+              extentOffset: index + 4,
+              affinity: TextAffinity.downstream,
+              isDirectional: false,
+            ),
+          );
+
+          controller.skipRequestKeyboard = true;
+          controller.formatText(index, 0, Attribute.unchecked);
+        }
+
+        // 更新
         ref
             .read(memoProvider.notifier)
-            .updateHTML(controller.document.toDelta().toHtml());
+            .updateContent(jsonEncode(controller.document.toDelta().toJson()));
       });
     });
 

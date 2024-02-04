@@ -18,24 +18,24 @@ class Memo extends _$Memo {
     final firestore = ref.read(firestoreProvider);
     // 仮としてuseridを指定
     final result = await firestore.collection("memo").doc("userid").get();
-    final content = result.data()?["html"] as String?;
+    final content = result.data()?["deltaJson"] as String?;
     return content ?? "";
   }
 
-  Future<void> updateHTML(String html) async {
+  Future<void> updateContent(String deltaJson) async {
     if (_debounceTimer?.isActive ?? false) {
       _debounceTimer?.cancel();
     }
+    print(deltaJson);
 
     _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
       final firestore = ref.read(firestoreProvider);
       // 仮としてuseridを指定
-      print(html);
       await firestore.collection("memo").doc("userid").set({
-        "html": html,
+        "deltaJson": deltaJson,
       });
 
-      state = AsyncValue.data(html);
+      state = AsyncValue.data(deltaJson);
     });
   }
 }
