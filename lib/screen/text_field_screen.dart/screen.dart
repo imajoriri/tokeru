@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/provider/memo/memo_provider.dart';
 import 'package:quick_flutter/provider/method_channel/method_channel_provider.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
+import 'package:quill_html_converter/quill_html_converter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:super_hot_key/super_hot_key.dart';
 
@@ -106,15 +107,15 @@ class _LargeWindow extends HookConsumerWidget {
     final focusNode = useFocusNode();
 
     final bookmark = ref.watch(bookmarkControllerProvider);
-    ref.read(memoProvider.future).then((value) {
-      controller.replaceText(0, 0, value, null);
-    });
+    ref.read(memoProvider.future).then((html) {
+      controller.setContents(Document.fromHtml(html));
 
-    controller.document.changes.listen((data) {
-      // TODO:　保存時にplain text以外で保存する
-      ref
-          .read(memoProvider.notifier)
-          .updateContent(controller.document.toPlainText());
+      // この外でlistenすると、setContentsの後に変更があった場合に反応しない
+      controller.document.changes.listen((data) {
+        ref
+            .read(memoProvider.notifier)
+            .updateHTML(controller.document.toDelta().toHtml());
+      });
     });
 
     return Padding(

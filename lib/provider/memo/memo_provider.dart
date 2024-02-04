@@ -18,11 +18,11 @@ class Memo extends _$Memo {
     final firestore = ref.read(firestoreProvider);
     // 仮としてuseridを指定
     final result = await firestore.collection("memo").doc("userid").get();
-    final content = result.data()?["content"] as String?;
+    final content = result.data()?["html"] as String?;
     return content ?? "";
   }
 
-  Future<void> updateContent(String content) async {
+  Future<void> updateHTML(String html) async {
     if (_debounceTimer?.isActive ?? false) {
       _debounceTimer?.cancel();
     }
@@ -30,11 +30,12 @@ class Memo extends _$Memo {
     _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
       final firestore = ref.read(firestoreProvider);
       // 仮としてuseridを指定
+      print(html);
       await firestore.collection("memo").doc("userid").set({
-        "content": content,
+        "html": html,
       });
 
-      state = AsyncValue.data(content);
+      state = AsyncValue.data(html);
     });
   }
 }
