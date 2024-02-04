@@ -12,7 +12,6 @@ class Memo extends _$Memo {
   @override
   FutureOr<String> build() async {
     ref.onDispose(() {
-      print("buildbuld");
       _debounceTimer?.cancel();
     });
 
@@ -35,7 +34,7 @@ class Memo extends _$Memo {
         "content": content,
       });
 
-      // state = AsyncValue.data(content);
+      state = AsyncValue.data(content);
     });
   }
 }
