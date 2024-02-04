@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quick_flutter/controller/window_status/window_status_controller.dart';
-import 'package:quick_flutter/model/window_status/window_status.dart';
 import 'package:quick_flutter/provider/memo/memo_provider.dart';
 import 'package:quick_flutter/provider/method_channel/method_channel_provider.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
 import 'package:quick_flutter/widget/markdown_text_editing_controller.dart';
 import 'package:quick_flutter/widget/markdown_text_field.dart';
+
+enum _WindowSizeMode { small, large }
 
 class TextFieldScreen extends HookConsumerWidget {
   TextFieldScreen({super.key});
@@ -18,38 +18,43 @@ class TextFieldScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final focusNode = useFocusNode();
-    final hasFocus = useState(focusNode.hasFocus);
     final channel = ref.watch(methodChannelProvider);
+    final windowSizeMode = useState<_WindowSizeMode>(_WindowSizeMode.large);
+    final bookmark = useState(true);
+    final controller = useMarkdownTextEditingController();
+
+    useEffect(() {
+      final _ = switch (windowSizeMode.value) {
+        _WindowSizeMode.small => {
+            ref.read(methodChannelProvider).invokeMethod(
+                AppMethodChannel.setFrameSize.name, {"height": 100}),
+          },
+        _WindowSizeMode.large => {
+            ref.read(methodChannelProvider).invokeMethod(
+                AppMethodChannel.setFrameSize.name, {"height": 700}),
+          },
+      };
+      return null;
+    }, [windowSizeMode.value]);
 
     channel.setMethodCallHandler((call) async {
       return switch (call.method) {
         'active' => {
-            focusNode.requestFocus(),
-            ref.read(windowStatusControllerProvider.notifier).setActive(),
+            if (bookmark.value) ...{
+              windowSizeMode.value = _WindowSizeMode.large,
+            },
+            // focusNode.requestFocus(),
+            // ref.read(windowStatusControllerProvider.notifier).setActive(),
           },
         'inactive' => {
-            focusNode.unfocus(),
-            ref.read(windowStatusControllerProvider.notifier).setInactive(),
+            if (bookmark.value) ...{
+              windowSizeMode.value = _WindowSizeMode.small,
+              focusNode.unfocus(),
+            },
+            // ref.read(windowStatusControllerProvider.notifier).setInactive(),
           },
         _ => null,
       };
-    });
-
-    final alwaysFloating = useState(true);
-
-    final controller = useMarkdownTextEditingController();
-
-    focusNode.addListener(() {
-      hasFocus.value = focusNode.hasFocus;
-      if (focusNode.hasFocus) {
-        ref
-            .read(methodChannelProvider)
-            .invokeMethod(AppMethodChannel.setFrameSize.name, {"height": 700});
-      } else {
-        ref
-            .read(methodChannelProvider)
-            .invokeMethod(AppMethodChannel.setFrameSize.name, {"height": 70});
-      }
     });
 
     ref.listen(memoProvider, (previous, next) {
@@ -61,42 +66,31 @@ class TextFieldScreen extends HookConsumerWidget {
         padding: const EdgeInsets.only(top: 20.0, left: 4, right: 4),
         child: Column(
           children: [
-            if (hasFocus.value)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        channel
-                            .invokeMethod(AppMethodChannel.windowToLeft.name);
-                      },
-                      icon: const Icon(Icons.arrow_circle_left_outlined)),
-                  IconButton(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
                     onPressed: () {
-                      alwaysFloating.value = !alwaysFloating.value;
-                      if (alwaysFloating.value) {
-                        channel.invokeMethod(
-                            AppMethodChannel.alwaysFloatingOn.name);
-                      } else {
-                        channel.invokeMethod(
-                            AppMethodChannel.alwaysFloatingOff.name);
-                      }
+                      channel.invokeMethod(AppMethodChannel.windowToLeft.name);
                     },
-                    icon: Icon(alwaysFloating.value
-                        ? Icons.bookmark
-                        : Icons.bookmark_outline),
-                    color: alwaysFloating.value
-                        ? context.colorScheme.primary
-                        : context.colorScheme.secondary,
-                  ),
-                  IconButton(
-                      onPressed: () {
-                        channel
-                            .invokeMethod(AppMethodChannel.windowToRight.name);
-                      },
-                      icon: const Icon(Icons.arrow_circle_right_outlined)),
-                ],
-              ),
+                    icon: const Icon(Icons.arrow_circle_left_outlined)),
+                IconButton(
+                  onPressed: () {
+                    bookmark.value = !bookmark.value;
+                  },
+                  icon: Icon(
+                      bookmark.value ? Icons.bookmark : Icons.bookmark_outline),
+                  color: bookmark.value
+                      ? context.colorScheme.primary
+                      : context.colorScheme.secondary,
+                ),
+                IconButton(
+                    onPressed: () {
+                      channel.invokeMethod(AppMethodChannel.windowToRight.name);
+                    },
+                    icon: const Icon(Icons.arrow_circle_right_outlined)),
+              ],
+            ),
             Expanded(
               child: MarkdownTextField(
                 controller: controller,
