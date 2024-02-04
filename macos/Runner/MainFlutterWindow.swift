@@ -5,7 +5,6 @@ import SwiftUI
 import Firebase
 
 class MainFlutterWindow: NSWindow {
-//  let hotKey = HotKey(key: .comma, modifiers: [.command, .shift])
   var newEntryPanel: FloatingPanel!
   var panelFlutterViewController: FlutterViewController!
   var channel: FlutterMethodChannel!
@@ -26,15 +25,6 @@ class MainFlutterWindow: NSWindow {
   }
 
   @objc func appDidFinishLaunching(notification: Notification) {
-//    hotKey.keyDownHandler = {
-//      // 開いてたら閉じて、閉じてたら開く
-//      if self.newEntryPanel.isVisible {
-//        self.newEntryPanel.close()
-//      } else {
-//        self.open()
-//      }
-//    }
-
     createFloatingPanel()
     NotificationCenter.default.removeObserver(self, name: NSApplication.didFinishLaunchingNotification, object: nil)
   }
