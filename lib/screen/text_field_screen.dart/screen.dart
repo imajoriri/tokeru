@@ -61,19 +61,18 @@ class TextFieldScreen extends HookConsumerWidget {
     }, [windowSizeMode.value]);
 
     channel.setMethodCallHandler((call) async {
-      final _ = switch (call.method) {
-        'active' => {
-            if (bookmark) ...{
-              windowSizeMode.value = _WindowSizeMode.large,
-            },
-          },
-        'inactive' => {
-            if (bookmark) ...{
-              windowSizeMode.value = _WindowSizeMode.small,
-            },
-          },
-        _ => null,
-      };
+      switch (call.method) {
+        case 'active':
+          if (bookmark) {
+            windowSizeMode.value = _WindowSizeMode.large;
+          }
+          break;
+        case 'inactive':
+          if (bookmark) {
+            windowSizeMode.value = _WindowSizeMode.small;
+          }
+          break;
+      }
       return null;
     });
 
