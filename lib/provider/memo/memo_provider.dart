@@ -26,7 +26,6 @@ class Memo extends _$Memo {
     if (_debounceTimer?.isActive ?? false) {
       _debounceTimer?.cancel();
     }
-    print(deltaJson);
 
     _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
       final firestore = ref.read(firestoreProvider);
