@@ -111,7 +111,7 @@ class _LargeWindow extends HookConsumerWidget {
 
     ref.read(memoProvider.future).then((value) {
       final json = jsonDecode(value);
-      if (json is List) {
+      if (json is List && json.isNotEmpty) {
         controller.document = Document.fromJson(json);
       }
 
