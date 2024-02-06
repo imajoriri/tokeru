@@ -17,7 +17,7 @@ class TodoRepository {
     final firestore = ref.read(firestoreProvider);
     final response = await firestore
         .collection("todos")
-        // .orderBy('createdAt', descending: true)
+        .where('isDone', isEqualTo: false)
         .get();
     return (response.docs.map((doc) {
       return Todo(

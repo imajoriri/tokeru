@@ -14,19 +14,19 @@ class TodoController extends _$TodoController {
       final tmp = [...state.value!];
       tmp.insert(index, todo);
       state = AsyncData(tmp);
-    } on Exception catch (e) {
-      print(e);
+    } on Exception catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
     }
   }
 
-  void addIndent(Todo todo) {
+  Future<void> addIndent(Todo todo) async {
     try {
       todoRepository.update(
         id: todo.id,
         indentLevel: todo.indentLevel + 1,
       );
-    } on Exception catch (e) {
-      print(e);
+    } on Exception catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
     }
     final tmp = [...state.value!];
     final index = tmp.indexWhere((element) => element.id == todo.id);
@@ -34,14 +34,14 @@ class TodoController extends _$TodoController {
     state = AsyncData(tmp);
   }
 
-  void minusIndent(Todo todo) {
+  Future<void> minusIndent(Todo todo) async {
     try {
       todoRepository.update(
         id: todo.id,
         indentLevel: todo.indentLevel - 1,
       );
-    } on Exception catch (e) {
-      print(e);
+    } on Exception catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
     }
     final tmp = [...state.value!];
     final index = tmp.indexWhere((element) => element.id == todo.id);
@@ -49,28 +49,27 @@ class TodoController extends _$TodoController {
     state = AsyncData(tmp);
   }
 
-  void delete(Todo todo) {
+  Future<void> delete(Todo todo) async {
     try {
       todoRepository.delete(todo.id);
-    } on Exception catch (e) {
-      print(e);
+    } on Exception catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
     }
     final tmp = [...state.value!];
     tmp.removeWhere((element) => element.id == todo.id);
     state = AsyncData(tmp);
   }
 
-  void updateTodo(int index, Todo todo) {
+  Future<void> updateTodo(int index, Todo todo) async {
     try {
-      // TODO: debounce
       todoRepository.update(
         id: todo.id,
         title: todo.title,
         isDone: todo.isDone,
         indentLevel: todo.indentLevel,
       );
-    } on Exception catch (e) {
-      print(e);
+    } on Exception catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
     }
     final tmp = [...state.value!];
     tmp[index] = todo;
@@ -104,11 +103,12 @@ class TodoList extends HookConsumerWidget {
                     todos[index].copyWith(title: value),
                   );
             },
-            onChecked: (value) {
-              ref.read(todoControllerProvider.notifier).updateTodo(
+            onChecked: (value) async {
+              await ref.read(todoControllerProvider.notifier).updateTodo(
                     index,
                     todos[index].copyWith(isDone: value ?? false),
                   );
+              ref.invalidate(todoControllerProvider);
             },
             onAdd: () async {
               await ref.read(todoControllerProvider.notifier).add(index + 1);
