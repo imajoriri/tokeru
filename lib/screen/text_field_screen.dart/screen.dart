@@ -1,17 +1,21 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:quick_flutter/model/todo/todo.dart';
 import 'package:quick_flutter/provider/memo/memo_provider.dart';
 import 'package:quick_flutter/provider/method_channel/method_channel_provider.dart';
+import 'package:quick_flutter/repository/todo/todo_repository.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:super_hot_key/super_hot_key.dart';
 
 part 'screen.g.dart';
+part 'todo_list.dart';
 
 enum _WindowSizeMode { small, large }
 
@@ -173,6 +177,8 @@ class _LargeWindow extends HookConsumerWidget {
                   icon: const Icon(Icons.arrow_circle_right_outlined)),
             ],
           ),
+          const TodoList(),
+          const Divider(),
           Expanded(
             child: QuillEditor.basic(
               focusNode: focusNode,
