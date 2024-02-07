@@ -178,14 +178,15 @@ class _LargeWindow extends HookConsumerWidget {
             ],
           ),
           const TodoList(),
+          const Spacer(),
           const Divider(),
-          Expanded(
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12.0, left: 8, right: 8),
             child: QuillEditor.basic(
               focusNode: focusNode,
               configurations: QuillEditorConfigurations(
                 controller: controller,
                 readOnly: false,
-                expands: true,
               ),
             ),
           ),
