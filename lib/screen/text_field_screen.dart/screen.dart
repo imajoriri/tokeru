@@ -23,7 +23,7 @@ enum _WindowSizeMode { small, large }
 class BookmarkController extends _$BookmarkController {
   @override
   bool build() {
-    return true;
+    return false;
   }
 
   void toggle() {

@@ -7,7 +7,7 @@ part of 'screen.dart';
 // **************************************************************************
 
 String _$bookmarkControllerHash() =>
-    r'03ce89f2a876574cc0f1caa78e22e85620eb3cee';
+    r'8057b39d0205bc4dbbe9c442ee54c67322059ce3';
 
 /// See also [BookmarkController].
 @ProviderFor(BookmarkController)
@@ -23,7 +23,7 @@ final bookmarkControllerProvider =
 );
 
 typedef _$BookmarkController = Notifier<bool>;
-String _$todoControllerHash() => r'e115144038eba7ab95a09b1b55694de1b825a28d';
+String _$todoControllerHash() => r'7a82b3e574c74b10474eed333d3ae892394f87c0';
 
 /// See also [TodoController].
 @ProviderFor(TodoController)

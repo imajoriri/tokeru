@@ -5,7 +5,10 @@ class TodoController extends _$TodoController {
   TodoRepository get todoRepository => ref.read(todoRepositoryProvider);
   @override
   FutureOr<List<Todo>> build() async {
-    return todoRepository.fetchTodos();
+    final todos = await todoRepository.fetchTodos();
+    // index順に並び替える
+    todos.sort((a, b) => a.index.compareTo(b.index));
+    return todos;
   }
 
   Future<void> add(int index) async {
@@ -75,6 +78,30 @@ class TodoController extends _$TodoController {
     tmp[index] = todo;
     state = AsyncData(tmp);
   }
+
+  Future<void> reorder(int oldIndex, int newIndex) async {
+    final tmp = [...state.value!];
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+    final item = tmp.removeAt(oldIndex);
+    tmp.insert(newIndex, item);
+    state = AsyncData(tmp);
+
+    // indexを更新する
+    await ref.read(todoRepositoryProvider).updateOrder(tmp);
+  }
+
+  /// 現在のListの順番をindexとして更新する。
+  /// 新規作成後や削除後に並び替えをリセットするために使用する
+  Future<void> updateCurrentOrder() async {
+    final tmp = state.value!;
+    for (var i = 0; i < tmp.length; i++) {
+      tmp[i] = tmp[i].copyWith(index: i);
+    }
+    state = AsyncData(tmp);
+    await ref.read(todoRepositoryProvider).updateOrder(tmp);
+  }
 }
 
 class TodoList extends HookConsumerWidget {
@@ -91,50 +118,52 @@ class TodoList extends HookConsumerWidget {
         child: const Text("追加"),
       );
     }
-    return Column(
-      children: [
-        ...List.generate(todos.length, (index) {
-          return TodoListItem(
-            key: ValueKey(todos[index].id),
-            todo: todos[index],
-            onChanged: (value) {
-              ref.read(todoControllerProvider.notifier).updateTodo(
-                    index,
-                    todos[index].copyWith(title: value),
-                  );
-            },
-            onChecked: (value) async {
-              await ref.read(todoControllerProvider.notifier).updateTodo(
-                    index,
-                    todos[index].copyWith(isDone: value ?? false),
-                  );
-              ref.invalidate(todoControllerProvider);
-            },
-            onAdd: () async {
-              await ref.read(todoControllerProvider.notifier).add(index + 1);
-              // rebuild後にnextFocusする
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                FocusScope.of(context).nextFocus();
-              });
-            },
-            onAddIndent: () {
-              ref.read(todoControllerProvider.notifier).addIndent(todos[index]);
-            },
-            onMinusIndent: () {
-              ref
-                  .read(todoControllerProvider.notifier)
-                  .minusIndent(todos[index]);
-            },
-            onDelete: () {
-              // 最後の１つの場合、previousFoucsすると他のFocusに移動しちゃうため
-              if (todos.length != 1) {
-                FocusScope.of(context).previousFocus();
-              }
-              ref.read(todoControllerProvider.notifier).delete(todos[index]);
-            },
-          );
-        }),
-      ],
+    return ReorderableListView.builder(
+      shrinkWrap: true,
+      itemCount: todos.length,
+      onReorder: (oldIndex, newIndex) {
+        ref.read(todoControllerProvider.notifier).reorder(oldIndex, newIndex);
+      },
+      itemBuilder: (context, index) {
+        return TodoListItem(
+          key: ValueKey(todos[index].id),
+          todo: todos[index],
+          onChanged: (value) {
+            ref.read(todoControllerProvider.notifier).updateTodo(
+                  index,
+                  todos[index].copyWith(title: value),
+                );
+          },
+          onChecked: (value) async {
+            await ref.read(todoControllerProvider.notifier).updateTodo(
+                  index,
+                  todos[index].copyWith(isDone: value ?? false),
+                );
+            ref.invalidate(todoControllerProvider);
+          },
+          onAdd: () async {
+            await ref.read(todoControllerProvider.notifier).add(index + 1);
+            ref.read(todoControllerProvider.notifier).updateCurrentOrder();
+            // rebuild後にnextFocusする
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              FocusScope.of(context).nextFocus();
+            });
+          },
+          onAddIndent: () {
+            ref.read(todoControllerProvider.notifier).addIndent(todos[index]);
+          },
+          onMinusIndent: () {
+            ref.read(todoControllerProvider.notifier).minusIndent(todos[index]);
+          },
+          onDelete: () {
+            // 最後の１つの場合、previousFoucsすると他のFocusに移動しちゃうため
+            if (todos.length != 1) {
+              FocusScope.of(context).previousFocus();
+            }
+            ref.read(todoControllerProvider.notifier).delete(todos[index]);
+          },
+        );
+      },
     );
   }
 }

@@ -20,6 +20,7 @@ mixin _$Todo {
   String get title => throw _privateConstructorUsedError;
   bool get isDone => throw _privateConstructorUsedError;
   int get indentLevel => throw _privateConstructorUsedError;
+  int get index => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -36,6 +37,7 @@ abstract class $TodoCopyWith<$Res> {
       String title,
       bool isDone,
       int indentLevel,
+      int index,
       DateTime createdAt});
 }
 
@@ -56,6 +58,7 @@ class _$TodoCopyWithImpl<$Res, $Val extends Todo>
     Object? title = null,
     Object? isDone = null,
     Object? indentLevel = null,
+    Object? index = null,
     Object? createdAt = null,
   }) {
     return _then(_value.copyWith(
@@ -74,6 +77,10 @@ class _$TodoCopyWithImpl<$Res, $Val extends Todo>
       indentLevel: null == indentLevel
           ? _value.indentLevel
           : indentLevel // ignore: cast_nullable_to_non_nullable
+              as int,
+      index: null == index
+          ? _value.index
+          : index // ignore: cast_nullable_to_non_nullable
               as int,
       createdAt: null == createdAt
           ? _value.createdAt
@@ -95,6 +102,7 @@ abstract class _$$TodoImplCopyWith<$Res> implements $TodoCopyWith<$Res> {
       String title,
       bool isDone,
       int indentLevel,
+      int index,
       DateTime createdAt});
 }
 
@@ -112,6 +120,7 @@ class __$$TodoImplCopyWithImpl<$Res>
     Object? title = null,
     Object? isDone = null,
     Object? indentLevel = null,
+    Object? index = null,
     Object? createdAt = null,
   }) {
     return _then(_$TodoImpl(
@@ -131,6 +140,10 @@ class __$$TodoImplCopyWithImpl<$Res>
           ? _value.indentLevel
           : indentLevel // ignore: cast_nullable_to_non_nullable
               as int,
+      index: null == index
+          ? _value.index
+          : index // ignore: cast_nullable_to_non_nullable
+              as int,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -147,6 +160,7 @@ class _$TodoImpl implements _Todo {
       required this.title,
       required this.isDone,
       required this.indentLevel,
+      required this.index,
       required this.createdAt});
 
   @override
@@ -158,11 +172,13 @@ class _$TodoImpl implements _Todo {
   @override
   final int indentLevel;
   @override
+  final int index;
+  @override
   final DateTime createdAt;
 
   @override
   String toString() {
-    return 'Todo(id: $id, title: $title, isDone: $isDone, indentLevel: $indentLevel, createdAt: $createdAt)';
+    return 'Todo(id: $id, title: $title, isDone: $isDone, indentLevel: $indentLevel, index: $index, createdAt: $createdAt)';
   }
 
   @override
@@ -175,13 +191,14 @@ class _$TodoImpl implements _Todo {
             (identical(other.isDone, isDone) || other.isDone == isDone) &&
             (identical(other.indentLevel, indentLevel) ||
                 other.indentLevel == indentLevel) &&
+            (identical(other.index, index) || other.index == index) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, title, isDone, indentLevel, createdAt);
+  int get hashCode => Object.hash(
+      runtimeType, id, title, isDone, indentLevel, index, createdAt);
 
   @JsonKey(ignore: true)
   @override
@@ -196,6 +213,7 @@ abstract class _Todo implements Todo {
       required final String title,
       required final bool isDone,
       required final int indentLevel,
+      required final int index,
       required final DateTime createdAt}) = _$TodoImpl;
 
   @override
@@ -206,6 +224,8 @@ abstract class _Todo implements Todo {
   bool get isDone;
   @override
   int get indentLevel;
+  @override
+  int get index;
   @override
   DateTime get createdAt;
   @override

@@ -9,6 +9,7 @@ class Todo with _$Todo {
     required String title,
     required bool isDone,
     required int indentLevel,
+    required int index,
     required DateTime createdAt,
   }) = _Todo;
 }
