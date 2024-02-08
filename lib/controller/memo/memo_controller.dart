@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:quick_flutter/repository/firebase/firebase_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'memo_provider.g.dart';
+part 'memo_controller.g.dart';
 
 @Riverpod(keepAlive: true)
-class Memo extends _$Memo {
+class MemoController extends _$MemoController {
   Timer? _debounceTimer;
 
   @override

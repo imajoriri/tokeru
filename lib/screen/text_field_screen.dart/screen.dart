@@ -6,9 +6,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:quick_flutter/controller/memo/memo_controller.dart';
 import 'package:quick_flutter/controller/user/user_controller.dart';
 import 'package:quick_flutter/model/todo/todo.dart';
-import 'package:quick_flutter/provider/memo/memo_provider.dart';
 import 'package:quick_flutter/provider/method_channel/method_channel_provider.dart';
 import 'package:quick_flutter/repository/todo/todo_repository.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
@@ -95,7 +95,7 @@ class TextFieldScreen extends HookConsumerWidget {
 class _SmallWindow extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final memo = ref.watch(memoProvider);
+    final memo = ref.watch(memoControllerProvider);
     // memoの最初の1行を取得
     final firstLine = memo.valueOrNull?.split("\n").first ?? "";
     return Padding(
@@ -114,7 +114,7 @@ class _LargeWindow extends HookConsumerWidget {
 
     final bookmark = ref.watch(bookmarkControllerProvider);
 
-    ref.read(memoProvider.future).then((value) {
+    ref.read(memoControllerProvider.future).then((value) {
       final json = jsonDecode(value);
       if (json is List && json.isNotEmpty) {
         controller.document = Document.fromJson(json);
@@ -145,7 +145,7 @@ class _LargeWindow extends HookConsumerWidget {
 
         // 更新
         ref
-            .read(memoProvider.notifier)
+            .read(memoControllerProvider.notifier)
             .updateContent(jsonEncode(controller.document.toDelta().toJson()));
       });
     });
