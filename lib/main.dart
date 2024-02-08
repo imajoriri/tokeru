@@ -4,7 +4,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:quick_flutter/firebase_options.dart';
-import 'package:quick_flutter/screen/main_memo/screen.dart';
 import 'package:quick_flutter/screen/text_field_screen.dart/screen.dart';
 import 'package:quick_flutter/systems/color.dart';
 
@@ -18,7 +17,7 @@ void main() async {
     ProviderScope(
       observers: [_AppObserver()],
       child: AppMaterialApp(
-        home: const MainMemoScreen(),
+        home: Container(),
       ),
     ),
   );
