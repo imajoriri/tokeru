@@ -23,7 +23,7 @@ final bookmarkControllerProvider =
 );
 
 typedef _$BookmarkController = Notifier<bool>;
-String _$todoControllerHash() => r'f4ddca19a246d84601fc0904c1825e952b8ada30';
+String _$todoControllerHash() => r'd090b5086d366414907969411d89ad2a5bf145d3';
 
 /// See also [TodoController].
 @ProviderFor(TodoController)

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:quick_flutter/systems/firebase_provider.dart';
+import 'package:quick_flutter/repository/firebase/firebase_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'memo_provider.g.dart';

@@ -1,6 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/model/todo/todo.dart';
-import 'package:quick_flutter/systems/firebase_provider.dart';
+import 'package:quick_flutter/repository/firebase/firebase_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'todo_repository.g.dart';
@@ -13,10 +13,10 @@ class TodoRepository {
   TodoRepository({required this.ref});
   final Ref ref;
 
-  Future<List<Todo>> fetchTodos() async {
-    final firestore = ref.read(firestoreProvider);
-    final response = await firestore
-        .collection("todos")
+  Future<List<Todo>> fetchTodos({required String userId}) async {
+    final response = await ref
+        .read(userDocumentProvider(userId))
+        .collection('todos')
         .where('isDone', isEqualTo: false)
         .get();
     return (response.docs.map((doc) {
@@ -33,14 +33,15 @@ class TodoRepository {
 
   /// Todoを追加し、idを返す
   Future<Todo> add({
+    required String userId,
     String title = '',
     bool isDone = false,
     int indentLevel = 0,
     int index = 0,
   }) async {
-    final firestore = ref.read(firestoreProvider);
     final createdAt = DateTime.now();
-    final res = await firestore.collection("todos").add({
+    final res =
+        await ref.read(userDocumentProvider(userId)).collection("todos").add({
       'title': title,
       'isDone': isDone,
       'indentLevel': indentLevel,
@@ -58,14 +59,18 @@ class TodoRepository {
   }
 
   Future<void> update({
+    required String userId,
     required String id,
     String? title,
     bool? isDone,
     int? indentLevel,
     int? index,
   }) async {
-    final firestore = ref.read(firestoreProvider);
-    await firestore.collection("todos").doc(id).update({
+    await ref
+        .read(userDocumentProvider(userId))
+        .collection("todos")
+        .doc(id)
+        .update({
       if (title != null) 'title': title,
       if (isDone != null) 'isDone': isDone,
       if (indentLevel != null) 'indentLevel': indentLevel,
@@ -73,20 +78,29 @@ class TodoRepository {
     });
   }
 
-  Future<void> delete(String id) async {
-    final firestore = ref.read(firestoreProvider);
-    await firestore.collection("todos").doc(id).delete();
+  Future<void> delete({required String userId, required String id}) async {
+    await ref
+        .read(userDocumentProvider(userId))
+        .collection("todos")
+        .doc(id)
+        .delete();
   }
 
   /// 並び順を更新する
-  Future<void> updateOrder(List<Todo> todos) async {
+  Future<void> updateOrder(
+      {required String userId, required List<Todo> todos}) async {
     final firestore = ref.read(firestoreProvider);
     final batch = firestore.batch();
 
     for (final todo in todos) {
-      batch.update(firestore.collection("todos").doc(todo.id), {
-        'index': todo.index,
-      });
+      batch.update(
+          ref
+              .read(userDocumentProvider(userId))
+              .collection("todos")
+              .doc(todo.id),
+          {
+            'index': todo.index,
+          });
     }
     await batch.commit();
   }
