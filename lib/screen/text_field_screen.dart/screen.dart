@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -8,9 +7,8 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/controller/memo/memo_controller.dart';
 import 'package:quick_flutter/controller/method_channel/method_channel_controller.dart';
-import 'package:quick_flutter/controller/user/user_controller.dart';
+import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/model/todo/todo.dart';
-import 'package:quick_flutter/repository/todo/todo_repository.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:super_hot_key/super_hot_key.dart';
