@@ -5,15 +5,23 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'todo_repository.g.dart';
 
+/// [Todo]を扱うRepository
 @riverpod
-TodoRepository todoRepository(TodoRepositoryRef ref) =>
-    TodoRepository(ref: ref);
+TodoRepository todoRepository(TodoRepositoryRef ref, String userId) =>
+    TodoRepository(ref: ref, userId: userId);
 
 class TodoRepository {
-  TodoRepository({required this.ref});
+  TodoRepository({
+    required this.ref,
+    required this.userId,
+  });
   final Ref ref;
+  final String userId;
 
-  Future<List<Todo>> fetchTodos({required String userId}) async {
+  /// Todoを取得する
+  ///
+  /// isDoneがfalseのTodoを取得する
+  Future<List<Todo>> fetchTodos() async {
     final response = await ref
         .read(userDocumentProvider(userId))
         .collection('todos')
@@ -33,7 +41,6 @@ class TodoRepository {
 
   /// Todoを追加し、idを返す
   Future<Todo> add({
-    required String userId,
     String title = '',
     bool isDone = false,
     int indentLevel = 0,
@@ -58,8 +65,8 @@ class TodoRepository {
     );
   }
 
+  /// Todoを更新する
   Future<void> update({
-    required String userId,
     required String id,
     String? title,
     bool? isDone,
@@ -78,7 +85,8 @@ class TodoRepository {
     });
   }
 
-  Future<void> delete({required String userId, required String id}) async {
+  /// Todoを削除する
+  Future<void> delete({required String id}) async {
     await ref
         .read(userDocumentProvider(userId))
         .collection("todos")
@@ -87,8 +95,9 @@ class TodoRepository {
   }
 
   /// 並び順を更新する
-  Future<void> updateOrder(
-      {required String userId, required List<Todo> todos}) async {
+  ///
+  /// [todos]の順番で 'index' を一気に更新する
+  Future<void> updateOrder({required List<Todo> todos}) async {
     final firestore = ref.read(firestoreProvider);
     final batch = firestore.batch();
 

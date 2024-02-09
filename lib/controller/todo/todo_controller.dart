@@ -6,17 +6,20 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'todo_controller.g.dart';
 
+/// ウィンドウがミニモードになったとき等でも状態を保持するためにkeepAliveをtrueにする
 @Riverpod(keepAlive: true)
 class TodoController extends _$TodoController {
-  TodoRepository get todoRepository => ref.read(todoRepositoryProvider);
+  TodoRepository? todoRepository;
+
   @override
   FutureOr<List<Todo>> build() async {
     final user = ref.watch(userControllerProvider);
     if (user.valueOrNull == null) {
       return [];
     }
+    todoRepository = ref.read(todoRepositoryProvider(user.value!.id));
 
-    final todos = await todoRepository.fetchTodos(userId: user.value!.id);
+    final todos = await todoRepository!.fetchTodos();
     // index順に並び替える
     todos.sort((a, b) => a.index.compareTo(b.index));
     return todos;
@@ -24,13 +27,8 @@ class TodoController extends _$TodoController {
 
   /// Todoを追加する
   Future<void> add(int index) async {
-    final user = ref.watch(userControllerProvider);
-    if (user.valueOrNull == null) {
-      return;
-    }
     try {
-      final todo =
-          await todoRepository.add(userId: user.valueOrNull!.id, index: index);
+      final todo = await todoRepository!.add(index: index);
       final tmp = [...state.value!];
       tmp.insert(index, todo);
       state = AsyncData(tmp);
@@ -41,13 +39,8 @@ class TodoController extends _$TodoController {
 
   /// インデントを追加する
   Future<void> addIndent(Todo todo) async {
-    final user = ref.watch(userControllerProvider);
-    if (user.valueOrNull == null) {
-      return;
-    }
     try {
-      todoRepository.update(
-        userId: user.valueOrNull!.id,
+      todoRepository!.update(
         id: todo.id,
         indentLevel: todo.indentLevel + 1,
       );
@@ -62,13 +55,8 @@ class TodoController extends _$TodoController {
 
   /// インデントを削除する
   Future<void> minusIndent(Todo todo) async {
-    final user = ref.watch(userControllerProvider);
-    if (user.valueOrNull == null) {
-      return;
-    }
     try {
-      todoRepository.update(
-        userId: user.valueOrNull!.id,
+      todoRepository!.update(
         id: todo.id,
         indentLevel: todo.indentLevel - 1,
       );
@@ -83,12 +71,8 @@ class TodoController extends _$TodoController {
 
   /// Todoを削除する
   Future<void> delete(Todo todo) async {
-    final user = ref.watch(userControllerProvider);
-    if (user.valueOrNull == null) {
-      return;
-    }
     try {
-      todoRepository.delete(userId: user.valueOrNull!.id, id: todo.id);
+      todoRepository!.delete(id: todo.id);
     } on Exception catch (e, s) {
       await FirebaseCrashlytics.instance.recordError(e, s);
     }
@@ -99,13 +83,8 @@ class TodoController extends _$TodoController {
 
   /// Todoを更新する
   Future<void> updateTodo(int index, Todo todo) async {
-    final user = ref.watch(userControllerProvider);
-    if (user.valueOrNull == null) {
-      return;
-    }
     try {
-      todoRepository.update(
-        userId: user.valueOrNull!.id,
+      todoRepository!.update(
         id: todo.id,
         title: todo.title,
         isDone: todo.isDone,
@@ -129,15 +108,8 @@ class TodoController extends _$TodoController {
     tmp.insert(newIndex, item);
     state = AsyncData(tmp);
 
-    final user = ref.watch(userControllerProvider);
-    if (user.valueOrNull == null) {
-      return;
-    }
-
     // indexを更新する
-    await ref
-        .read(todoRepositoryProvider)
-        .updateOrder(userId: user.value!.id, todos: tmp);
+    await todoRepository!.updateOrder(todos: tmp);
   }
 
   /// 現在のListの順番をindexとして更新する。
@@ -149,12 +121,6 @@ class TodoController extends _$TodoController {
     }
     state = AsyncData(tmp);
 
-    final user = ref.watch(userControllerProvider);
-    if (user.valueOrNull == null) {
-      return;
-    }
-    await ref
-        .read(todoRepositoryProvider)
-        .updateOrder(userId: user.value!.id, todos: tmp);
+    await todoRepository!.updateOrder(todos: tmp);
   }
 }
