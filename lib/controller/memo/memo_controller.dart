@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/controller/user/user_controller.dart';
 import 'package:quick_flutter/model/memo/memo.dart';
 import 'package:quick_flutter/repository/memo/memo_repository.dart';
