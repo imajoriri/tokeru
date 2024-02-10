@@ -213,18 +213,21 @@ class TodoListItem extends HookConsumerWidget {
                 }
                 return KeyEventResult.ignored;
               },
-              child: TextField(
-                controller: controller,
-                focusNode: focusNode,
-                onSubmitted: (value) {
-                  // フォーカスが外れてしまうため、意図的にフォーカスを戻す
-                  focusNode.requestFocus();
-                  onAdd?.call();
-                },
-                decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.all(4),
-                  hintText: 'メッセージを入力',
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 4),
+                child: TextField(
+                  controller: controller,
+                  focusNode: focusNode,
+                  onSubmitted: (value) {
+                    // フォーカスが外れてしまうため、意図的にフォーカスを戻す
+                    focusNode.requestFocus();
+                    onAdd?.call();
+                  },
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.all(4),
+                    hintText: 'メッセージを入力',
+                  ),
                 ),
               ),
             ),
