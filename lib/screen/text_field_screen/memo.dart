@@ -32,13 +32,14 @@ class _MemoScreen extends HookConsumerWidget {
     final memoAsyncValue = ref.watch(memoControllerProvider);
     final focusNode = useFocusNode();
     final setInitialMemo = useState(false);
-    return memoAsyncValue.when(
-      data: (memo) {
-        final controller = QuillController.basic();
-        controller.changes.listen((event) {
-          onUpdateDocument(controller, ref);
-        });
+    final controller = QuillController.basic();
+    controller.changes.listen((event) {
+      onUpdateDocument(controller, ref);
+    });
 
+    return memoAsyncValue.when(
+      skipLoadingOnReload: true,
+      data: (memo) {
         // 初回だけ初期値をセットする
         if (!setInitialMemo.value) {
           final document = Document.fromJson(jsonDecode(memo.deltaJson));
