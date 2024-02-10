@@ -31,7 +31,6 @@ class _MemoScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final memoAsyncValue = ref.watch(memoControllerProvider);
     final focusNode = useFocusNode();
-    final setInitialMemo = useState(false);
     final controller = QuillController.basic();
     controller.changes.listen((event) {
       onUpdateDocument(controller, ref);
@@ -39,17 +38,13 @@ class _MemoScreen extends HookConsumerWidget {
 
     return memoAsyncValue.when(
       data: (memo) {
-        // 初回だけ初期値をセットする
-        if (!setInitialMemo.value) {
-          setInitialMemo.value = true;
-          if (memo.deltaJson.isNotEmpty) {
-            final document = Document.fromJson(jsonDecode(memo.deltaJson));
-            // documentを更新するとlistenが解除されるので再度listenする
-            document.changes.listen((data) {
-              onUpdateDocument(controller, ref);
-            });
-            controller.document = document;
-          }
+        if (memo.deltaJson.isNotEmpty) {
+          final document = Document.fromJson(jsonDecode(memo.deltaJson));
+          // documentを更新するとlistenが解除されるので再度listenする
+          document.changes.listen((data) {
+            onUpdateDocument(controller, ref);
+          });
+          controller.document = document;
         }
         return Padding(
           padding: const EdgeInsets.only(bottom: 12.0, left: 8, right: 8),
