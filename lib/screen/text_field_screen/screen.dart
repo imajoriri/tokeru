@@ -67,9 +67,6 @@ class TextFieldScreen extends HookConsumerWidget {
 
     channel.setMethodCallHandler((call) async {
       switch (call.method) {
-        case 'active':
-          if (bookmark) {}
-          break;
         case 'inactive':
           if (!bookmark) {
             ref.read(windowSizeModeControllerProvider.notifier).toSmall();
