@@ -15,6 +15,7 @@ import 'package:super_hot_key/super_hot_key.dart';
 
 part 'screen.g.dart';
 part 'todo_list.dart';
+part 'memo.dart';
 
 enum _WindowSizeMode { small, large }
 
@@ -93,12 +94,9 @@ class TextFieldScreen extends HookConsumerWidget {
 class _SmallWindow extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final memo = ref.watch(memoControllerProvider);
-    // memoの最初の1行を取得
-    final firstLine = memo.valueOrNull?.split("\n").first ?? "";
-    return Padding(
-      padding: const EdgeInsets.only(top: 30),
-      child: Text(firstLine),
+    return const Padding(
+      padding: EdgeInsets.only(top: 30),
+      child: Text("sample text"),
     );
   }
 }
@@ -107,46 +105,7 @@ class _LargeWindow extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final channel = ref.watch(methodChannelProvider);
-    final controller = QuillController.basic();
-    final focusNode = useFocusNode();
-
     final bookmark = ref.watch(bookmarkControllerProvider);
-
-    ref.read(memoControllerProvider.future).then((value) {
-      final json = jsonDecode(value);
-      if (json is List && json.isNotEmpty) {
-        controller.document = Document.fromJson(json);
-      }
-
-      // この外でlistenすると、setContentsの後に変更があった場合に反応しない
-      controller.document.changes.listen((data) {
-        var text = controller.document.toPlainText();
-        // "[] "パターンを検出して、チェックリストアイテムに置換
-        if (text.contains("[] ")) {
-          var index = text.indexOf("[] ");
-          // チェックリストアイテムに置換
-          controller.replaceText(
-            index,
-            4,
-            '',
-            TextSelection(
-              baseOffset: index,
-              extentOffset: index + 4,
-              affinity: TextAffinity.downstream,
-              isDirectional: false,
-            ),
-          );
-
-          controller.skipRequestKeyboard = true;
-          controller.formatText(index, 0, Attribute.unchecked);
-        }
-
-        // 更新
-        ref
-            .read(memoControllerProvider.notifier)
-            .updateContent(jsonEncode(controller.document.toDelta().toJson()));
-      });
-    });
 
     return Padding(
       padding: const EdgeInsets.only(top: 20.0, left: 4, right: 4),
@@ -179,16 +138,7 @@ class _LargeWindow extends HookConsumerWidget {
           const TodoList(),
           const Spacer(),
           const Divider(),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 12.0, left: 8, right: 8),
-            child: QuillEditor.basic(
-              focusNode: focusNode,
-              configurations: QuillEditorConfigurations(
-                controller: controller,
-                readOnly: false,
-              ),
-            ),
-          ),
+          _MemoScreen(),
         ],
       ),
     );

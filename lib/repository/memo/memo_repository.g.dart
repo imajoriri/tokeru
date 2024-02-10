@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'todo_repository.dart';
+part of 'memo_repository.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$todoRepositoryHash() => r'0f950a6256915bdea0447bfcb02a661ab5c403b3';
+String _$memoRepositoryHash() => r'ee6a10fb83558b2a4123c2a65bebabb70a75c263';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,35 +29,27 @@ class _SystemHash {
   }
 }
 
-/// [Todo]を扱うRepository
-///
-/// Copied from [todoRepository].
-@ProviderFor(todoRepository)
-const todoRepositoryProvider = TodoRepositoryFamily();
+/// See also [memoRepository].
+@ProviderFor(memoRepository)
+const memoRepositoryProvider = MemoRepositoryFamily();
 
-/// [Todo]を扱うRepository
-///
-/// Copied from [todoRepository].
-class TodoRepositoryFamily extends Family<TodoRepository> {
-  /// [Todo]を扱うRepository
-  ///
-  /// Copied from [todoRepository].
-  const TodoRepositoryFamily();
+/// See also [memoRepository].
+class MemoRepositoryFamily extends Family<MemoRepository> {
+  /// See also [memoRepository].
+  const MemoRepositoryFamily();
 
-  /// [Todo]を扱うRepository
-  ///
-  /// Copied from [todoRepository].
-  TodoRepositoryProvider call(
+  /// See also [memoRepository].
+  MemoRepositoryProvider call(
     String userId,
   ) {
-    return TodoRepositoryProvider(
+    return MemoRepositoryProvider(
       userId,
     );
   }
 
   @override
-  TodoRepositoryProvider getProviderOverride(
-    covariant TodoRepositoryProvider provider,
+  MemoRepositoryProvider getProviderOverride(
+    covariant MemoRepositoryProvider provider,
   ) {
     return call(
       provider.userId,
@@ -76,36 +68,32 @@ class TodoRepositoryFamily extends Family<TodoRepository> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'todoRepositoryProvider';
+  String? get name => r'memoRepositoryProvider';
 }
 
-/// [Todo]を扱うRepository
-///
-/// Copied from [todoRepository].
-class TodoRepositoryProvider extends AutoDisposeProvider<TodoRepository> {
-  /// [Todo]を扱うRepository
-  ///
-  /// Copied from [todoRepository].
-  TodoRepositoryProvider(
+/// See also [memoRepository].
+class MemoRepositoryProvider extends AutoDisposeProvider<MemoRepository> {
+  /// See also [memoRepository].
+  MemoRepositoryProvider(
     String userId,
   ) : this._internal(
-          (ref) => todoRepository(
-            ref as TodoRepositoryRef,
+          (ref) => memoRepository(
+            ref as MemoRepositoryRef,
             userId,
           ),
-          from: todoRepositoryProvider,
-          name: r'todoRepositoryProvider',
+          from: memoRepositoryProvider,
+          name: r'memoRepositoryProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$todoRepositoryHash,
-          dependencies: TodoRepositoryFamily._dependencies,
+                  : _$memoRepositoryHash,
+          dependencies: MemoRepositoryFamily._dependencies,
           allTransitiveDependencies:
-              TodoRepositoryFamily._allTransitiveDependencies,
+              MemoRepositoryFamily._allTransitiveDependencies,
           userId: userId,
         );
 
-  TodoRepositoryProvider._internal(
+  MemoRepositoryProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -119,12 +107,12 @@ class TodoRepositoryProvider extends AutoDisposeProvider<TodoRepository> {
 
   @override
   Override overrideWith(
-    TodoRepository Function(TodoRepositoryRef provider) create,
+    MemoRepository Function(MemoRepositoryRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
-      override: TodoRepositoryProvider._internal(
-        (ref) => create(ref as TodoRepositoryRef),
+      override: MemoRepositoryProvider._internal(
+        (ref) => create(ref as MemoRepositoryRef),
         from: from,
         name: null,
         dependencies: null,
@@ -136,13 +124,13 @@ class TodoRepositoryProvider extends AutoDisposeProvider<TodoRepository> {
   }
 
   @override
-  AutoDisposeProviderElement<TodoRepository> createElement() {
-    return _TodoRepositoryProviderElement(this);
+  AutoDisposeProviderElement<MemoRepository> createElement() {
+    return _MemoRepositoryProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is TodoRepositoryProvider && other.userId == userId;
+    return other is MemoRepositoryProvider && other.userId == userId;
   }
 
   @override
@@ -154,17 +142,17 @@ class TodoRepositoryProvider extends AutoDisposeProvider<TodoRepository> {
   }
 }
 
-mixin TodoRepositoryRef on AutoDisposeProviderRef<TodoRepository> {
+mixin MemoRepositoryRef on AutoDisposeProviderRef<MemoRepository> {
   /// The parameter `userId` of this provider.
   String get userId;
 }
 
-class _TodoRepositoryProviderElement
-    extends AutoDisposeProviderElement<TodoRepository> with TodoRepositoryRef {
-  _TodoRepositoryProviderElement(super.provider);
+class _MemoRepositoryProviderElement
+    extends AutoDisposeProviderElement<MemoRepository> with MemoRepositoryRef {
+  _MemoRepositoryProviderElement(super.provider);
 
   @override
-  String get userId => (origin as TodoRepositoryProvider).userId;
+  String get userId => (origin as MemoRepositoryProvider).userId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

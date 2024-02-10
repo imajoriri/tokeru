@@ -6,9 +6,11 @@ part of 'todo_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$todoControllerHash() => r'c3c166f9c5295d6a076c9dfdc56d882666b962a5';
+String _$todoControllerHash() => r'e485f835c20777861534ba1ce602527e7f1f51a4';
 
-/// See also [TodoController].
+/// ウィンドウがミニモードになったとき等でも状態を保持するためにkeepAliveをtrueにする
+///
+/// Copied from [TodoController].
 @ProviderFor(TodoController)
 final todoControllerProvider =
     AsyncNotifierProvider<TodoController, List<Todo>>.internal(
