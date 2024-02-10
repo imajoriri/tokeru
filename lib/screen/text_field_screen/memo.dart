@@ -38,7 +38,6 @@ class _MemoScreen extends HookConsumerWidget {
     });
 
     return memoAsyncValue.when(
-      skipLoadingOnReload: true,
       data: (memo) {
         // 初回だけ初期値をセットする
         if (!setInitialMemo.value) {
