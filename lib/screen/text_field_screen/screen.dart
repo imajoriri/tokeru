@@ -9,6 +9,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/controller/memo/memo_controller.dart';
 import 'package:quick_flutter/controller/method_channel/method_channel_controller.dart';
 import 'package:quick_flutter/controller/todo/todo_controller.dart';
+import 'package:quick_flutter/controller/window_size_mode/window_size_mode_controller.dart';
 import 'package:quick_flutter/model/todo/todo.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -17,8 +18,6 @@ import 'package:super_hot_key/super_hot_key.dart';
 part 'screen.g.dart';
 part 'todo_list.dart';
 part 'memo.dart';
-
-enum _WindowSizeMode { small, large }
 
 @Riverpod(keepAlive: true)
 class BookmarkController extends _$BookmarkController {
@@ -38,7 +37,7 @@ class TextFieldScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final channel = ref.watch(methodChannelProvider);
-    final windowSizeMode = useState<_WindowSizeMode>(_WindowSizeMode.large);
+    final windowSizeMode = ref.watch(windowSizeModeControllerProvider);
     final bookmark = ref.watch(bookmarkControllerProvider);
 
     HotKey.create(
@@ -53,30 +52,27 @@ class TextFieldScreen extends HookConsumerWidget {
       },
     );
 
-    useEffect(() {
-      final _ = switch (windowSizeMode.value) {
-        _WindowSizeMode.small => {
+    ref.listen(windowSizeModeControllerProvider, (previous, next) {
+      final _ = switch (next) {
+        WindowSizeMode.small => {
             ref.read(methodChannelProvider).invokeMethod(
                 AppMethodChannel.setFrameSize.name, {"height": 100}),
           },
-        _WindowSizeMode.large => {
+        WindowSizeMode.large => {
             ref.read(methodChannelProvider).invokeMethod(
                 AppMethodChannel.setFrameSize.name, {"height": 700}),
           },
       };
-      return null;
-    }, [windowSizeMode.value]);
+    });
 
     channel.setMethodCallHandler((call) async {
       switch (call.method) {
         case 'active':
-          if (bookmark) {
-            windowSizeMode.value = _WindowSizeMode.large;
-          }
+          if (bookmark) {}
           break;
         case 'inactive':
-          if (bookmark) {
-            windowSizeMode.value = _WindowSizeMode.small;
+          if (!bookmark) {
+            ref.read(windowSizeModeControllerProvider.notifier).toSmall();
           }
           break;
       }
@@ -84,9 +80,9 @@ class TextFieldScreen extends HookConsumerWidget {
     });
 
     return Material(
-      child: switch (windowSizeMode.value) {
-        _WindowSizeMode.small => _SmallWindow(),
-        _WindowSizeMode.large => _LargeWindow(),
+      child: switch (windowSizeMode) {
+        WindowSizeMode.small => _SmallWindow(),
+        WindowSizeMode.large => _LargeWindow(),
       },
     );
   }
@@ -95,9 +91,40 @@ class TextFieldScreen extends HookConsumerWidget {
 class _SmallWindow extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const Padding(
-      padding: EdgeInsets.only(top: 30),
-      child: Text("sample text"),
+    final asyncValue = ref.watch(todoControllerProvider);
+    return Column(
+      children: [
+        asyncValue.when(
+          data: (todos) {
+            if (todos.isEmpty) {
+              return ElevatedButton(
+                onPressed: () {
+                  ref.read(todoControllerProvider.notifier).add(0);
+                },
+                child: const Text("追加"),
+              );
+            }
+            final todo = todos[0];
+            return TodoListItem(
+              todo: todo,
+              onChanged: (value) {
+                ref.read(todoControllerProvider.notifier).updateTodo(
+                      0,
+                      todo.copyWith(title: value),
+                    );
+              },
+            );
+          },
+          error: (e, s) => const SizedBox(),
+          loading: () => const SizedBox(),
+        ),
+        IconButton(
+          onPressed: () {
+            ref.read(windowSizeModeControllerProvider.notifier).toLarge();
+          },
+          icon: const Icon(Icons.keyboard_arrow_down),
+        )
+      ],
     );
   }
 }

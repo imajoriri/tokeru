@@ -96,47 +96,47 @@ class TodoListItem extends HookConsumerWidget {
   const TodoListItem({
     super.key,
     required this.todo,
-    required this.onChecked,
-    required this.onChanged,
-    required this.onAdd,
-    required this.onAddIndent,
-    required this.onMinusIndent,
-    required this.onNextTodo,
-    required this.onPreviousTodo,
-    required this.onDelete,
+    this.onChecked,
+    this.onChanged,
+    this.onAdd,
+    this.onAddIndent,
+    this.onMinusIndent,
+    this.onNextTodo,
+    this.onPreviousTodo,
+    this.onDelete,
   });
 
   final Todo todo;
 
   /// チェックされた時
-  final void Function(bool?) onChecked;
+  final void Function(bool?)? onChecked;
 
   /// checkboxの状態が変更されたときに呼ばれる
   ///
   /// [debounceDuration]の時間が経過するまで呼ばれない
-  final void Function(String) onChanged;
+  final void Function(String)? onChanged;
 
   /// 追加ボタンが押されたときに呼ばれる
-  final void Function() onAdd;
+  final void Function()? onAdd;
 
   /// インデント追加
-  final void Function() onAddIndent;
+  final void Function()? onAddIndent;
 
   /// インデント削除
-  final void Function() onMinusIndent;
+  final void Function()? onMinusIndent;
 
   /// Todo削除
-  final void Function() onDelete;
+  final void Function()? onDelete;
 
   /// 次のTodoへ移動する
   ///
   /// [LogicalKeyboardKey.arrowDown]が押されたときに呼ばれる
-  final void Function() onNextTodo;
+  final void Function()? onNextTodo;
 
   /// 前のTodoへ移動する
   ///
   /// [LogicalKeyboardKey.arrowUp]が押されたときに呼ばれる
-  final void Function() onPreviousTodo;
+  final void Function()? onPreviousTodo;
 
   /// debouce用のDuration
   static const debounceDuration = Duration(milliseconds: 1000);
@@ -155,7 +155,7 @@ class TodoListItem extends HookConsumerWidget {
           }
 
           debounce = Timer(debounceDuration, () {
-            onChanged.call(controller.text);
+            onChanged?.call(controller.text);
           });
         });
 
@@ -186,15 +186,15 @@ class TodoListItem extends HookConsumerWidget {
                 }
                 if (event is RawKeyDownEvent) {
                   if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-                    onNextTodo();
+                    onNextTodo?.call();
                     return KeyEventResult.handled;
                   }
                   if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-                    onPreviousTodo();
+                    onPreviousTodo?.call();
                     return KeyEventResult.handled;
                   }
                   if (event.logicalKey == LogicalKeyboardKey.tab) {
-                    onAddIndent();
+                    onAddIndent?.call();
                     return KeyEventResult.handled;
                   }
                   // バックスペースキー & カーソルが先頭の場合
@@ -203,11 +203,11 @@ class TodoListItem extends HookConsumerWidget {
                       controller.selection.extentOffset == 0) {
                     // indentが0の場合は削除する
                     if (todo.indentLevel == 0) {
-                      onDelete();
+                      onDelete?.call();
                       return KeyEventResult.handled;
                     }
                     // indentが1以上の場合はインデントをマイナスする
-                    onMinusIndent();
+                    onMinusIndent?.call();
                     return KeyEventResult.handled;
                   }
                 }
@@ -219,7 +219,7 @@ class TodoListItem extends HookConsumerWidget {
                 onSubmitted: (value) {
                   // フォーカスが外れてしまうため、意図的にフォーカスを戻す
                   focusNode.requestFocus();
-                  onAdd();
+                  onAdd?.call();
                 },
                 decoration: const InputDecoration(
                   border: InputBorder.none,
