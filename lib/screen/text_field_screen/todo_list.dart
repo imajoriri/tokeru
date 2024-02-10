@@ -99,6 +99,8 @@ class TodoListItem extends HookConsumerWidget {
   final void Function(bool?) onChecked;
 
   /// checkboxの状態が変更されたときに呼ばれる
+  ///
+  /// [debounceDuration]の時間が経過するまで呼ばれない
   final void Function(String) onChanged;
 
   /// 追加ボタンが押されたときに呼ばれる
@@ -113,10 +115,33 @@ class TodoListItem extends HookConsumerWidget {
   /// Todo削除
   final void Function() onDelete;
 
+  /// debouce用のDuration
+  static const debounceDuration = Duration(milliseconds: 1000);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = useTextEditingController(text: todo.title);
     final focusNode = useFocusNode();
+
+    Timer? debounce;
+    useEffect(
+      () {
+        controller.addListener(() {
+          if (debounce?.isActive ?? false) {
+            debounce?.cancel();
+          }
+
+          debounce = Timer(debounceDuration, () {
+            onChanged.call(controller.text);
+          });
+        });
+
+        return () {
+          debounce?.cancel();
+        };
+      },
+      [controller],
+    );
     return Padding(
       padding: EdgeInsets.only(left: 20 * todo.indentLevel.toDouble()),
       child: Row(
@@ -167,7 +192,6 @@ class TodoListItem extends HookConsumerWidget {
               },
               child: TextField(
                 controller: controller,
-                onChanged: onChanged,
                 focusNode: focusNode,
                 onSubmitted: (value) {
                   // フォーカスが外れてしまうため、意図的にフォーカスを戻す
