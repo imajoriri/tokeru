@@ -82,9 +82,11 @@ class TodoController extends _$TodoController {
   }
 
   /// Todoを更新する
+  ///
+  /// [isDone]を更新する場合は[updateIsDone]を使用してください。
   Future<void> updateTodo(int index, Todo todo) async {
     try {
-      todoRepository!.update(
+      await todoRepository!.update(
         id: todo.id,
         title: todo.title,
         isDone: todo.isDone,
@@ -96,6 +98,22 @@ class TodoController extends _$TodoController {
     final tmp = [...state.value!];
     tmp[index] = todo;
     state = AsyncData(tmp);
+  }
+
+  /// TodoのisDoneをtrueに更新する
+  Future<void> updateIsDone(Todo todo) async {
+    final index = state.value!.indexWhere((element) => element.id == todo.id);
+    final tmp = [...state.value!];
+    tmp.removeAt(index);
+    state = AsyncData(tmp);
+    try {
+      await todoRepository!.update(
+        id: todo.id,
+        isDone: true,
+      );
+    } on Exception catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+    }
   }
 
   /// [oldIndex]の[Todo]を[newIndex]に移動する

@@ -142,12 +142,18 @@ class _SmallWindow extends HookConsumerWidget {
             }
             final todo = todos[0];
             return TodoListItem(
+              key: ValueKey(todo.id),
               todo: todo,
               onChanged: (value) {
                 ref.read(todoControllerProvider.notifier).updateTodo(
                       0,
                       todo.copyWith(title: value),
                     );
+              },
+              onChecked: (value) async {
+                await ref
+                    .read(todoControllerProvider.notifier)
+                    .updateIsDone(todo);
               },
             );
           },
