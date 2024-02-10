@@ -63,6 +63,16 @@ class TodoList extends HookConsumerWidget {
                       .read(todoControllerProvider.notifier)
                       .minusIndent(todos[index]);
                 },
+                onNextTodo: () {
+                  if (index + 1 < todos.length) {
+                    FocusScope.of(context).nextFocus();
+                  }
+                },
+                onPreviousTodo: () {
+                  if (index != 0) {
+                    FocusScope.of(context).previousFocus();
+                  }
+                },
                 onDelete: () {
                   // 最後の１つの場合、previousFoucsすると他のFocusに移動しちゃうため
                   if (todos.length != 1) {
@@ -90,6 +100,8 @@ class TodoListItem extends HookConsumerWidget {
     required this.onAdd,
     required this.onAddIndent,
     required this.onMinusIndent,
+    required this.onNextTodo,
+    required this.onPreviousTodo,
     required this.onDelete,
   });
 
@@ -114,6 +126,16 @@ class TodoListItem extends HookConsumerWidget {
 
   /// Todo削除
   final void Function() onDelete;
+
+  /// 次のTodoへ移動する
+  ///
+  /// [LogicalKeyboardKey.arrowDown]が押されたときに呼ばれる
+  final void Function() onNextTodo;
+
+  /// 前のTodoへ移動する
+  ///
+  /// [LogicalKeyboardKey.arrowUp]が押されたときに呼ばれる
+  final void Function() onPreviousTodo;
 
   /// debouce用のDuration
   static const debounceDuration = Duration(milliseconds: 1000);
@@ -163,11 +185,11 @@ class TodoListItem extends HookConsumerWidget {
                 }
                 if (event is RawKeyDownEvent) {
                   if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-                    FocusScope.of(context).nextFocus();
+                    onNextTodo();
                     return KeyEventResult.handled;
                   }
                   if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-                    FocusScope.of(context).previousFocus();
+                    onPreviousTodo();
                     return KeyEventResult.handled;
                   }
                   if (event.logicalKey == LogicalKeyboardKey.tab) {
