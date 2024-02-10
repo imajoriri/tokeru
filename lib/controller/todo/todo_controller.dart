@@ -109,7 +109,7 @@ class TodoController extends _$TodoController {
     state = AsyncData(tmp);
 
     // indexを更新する
-    await todoRepository!.updateOrder(todos: tmp);
+    await updateCurrentOrder();
   }
 
   /// 現在のListの順番をindexとして更新する。
