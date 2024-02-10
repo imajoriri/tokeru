@@ -41,13 +41,15 @@ class _MemoScreen extends HookConsumerWidget {
       data: (memo) {
         // 初回だけ初期値をセットする
         if (!setInitialMemo.value) {
-          final document = Document.fromJson(jsonDecode(memo.deltaJson));
-          // documentを更新するとlistenが解除されるので再度listenする
-          document.changes.listen((data) {
-            onUpdateDocument(controller, ref);
-          });
-          controller.document = document;
           setInitialMemo.value = true;
+          if (memo.deltaJson.isNotEmpty) {
+            final document = Document.fromJson(jsonDecode(memo.deltaJson));
+            // documentを更新するとlistenが解除されるので再度listenする
+            document.changes.listen((data) {
+              onUpdateDocument(controller, ref);
+            });
+            controller.document = document;
+          }
         }
         return Padding(
           padding: const EdgeInsets.only(bottom: 12.0, left: 8, right: 8),
