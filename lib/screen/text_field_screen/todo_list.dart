@@ -17,6 +17,7 @@ class TodoList extends HookConsumerWidget {
             );
           }
           return ReorderableListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount: todos.length,
             onReorder: (oldIndex, newIndex) {
