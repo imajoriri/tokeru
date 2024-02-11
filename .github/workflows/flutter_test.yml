@@ -8,20 +8,21 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: "Checkout"
-        uses: actions/checkout@v4
+      - uses: ./.github/actions/install_flutter_dependencies
+      # - name: "Checkout"
+      #   uses: actions/checkout@v4
 
-      - name: "Read flutter version from fvm config"
-        id: flutter_info
-        run: |
-          FLUTTER_VERSION=$(jq -r '.flutterSdkVersion' ./.fvm/fvm_config.json)
-          echo "FLUTTER_VERSION=$FLUTTER_VERSION" >> $GITHUB_ENV
-        shell: bash
+      # - name: "Read flutter version from fvm config"
+      #   id: flutter_info
+      #   run: |
+      #     FLUTTER_VERSION=$(jq -r '.flutterSdkVersion' ./.fvm/fvm_config.json)
+      #     echo "FLUTTER_VERSION=$FLUTTER_VERSION" >> $GITHUB_ENV
+      #   shell: bash
 
-      - name: "Setup Flutter"
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
-          cache: true
+      # - name: "Setup Flutter"
+      #   uses: subosito/flutter-action@v2
+      #   with:
+      #     flutter-version: ${{ env.FLUTTER_VERSION }}
+      #     cache: true
       - name: "Run tests"
         run: flutter test
