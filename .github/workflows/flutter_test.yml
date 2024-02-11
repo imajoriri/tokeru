@@ -19,15 +19,14 @@ jobs:
         shell: bash
 
       # - uses: kuhnroyal/flutter-fvm-config-action@v2
-      # id: fvm-configo-action
-      - name: "echo flutter version"
-        run: echo "flutter version is $FLUTTER_VERSION"
+      # id: fvm-config-action
 
       - name: "Setup Flutter"
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "$FLUTTER_VERSION"
-          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          # channel: ${{ env.FLUTTER_CHANNEL }}
+          channel: "hoge"
           cache: true
       - name: "Run tests"
         run: flutter test
