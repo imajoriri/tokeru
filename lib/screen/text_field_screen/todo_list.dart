@@ -143,9 +143,6 @@ class TodoListItem extends HookConsumerWidget {
     final controller = useTextEditingController(text: todo.title);
     final focusNode = useFocusNode();
 
-    /// [Focus]の[onKey]でイベントを発生させた場合、[onChanged]を呼びたくないためのフラグ
-    bool isOnKey = false;
-
     Timer? debounce;
     useEffect(
       () {
@@ -155,10 +152,6 @@ class TodoListItem extends HookConsumerWidget {
           }
 
           debounce = Timer(debounceDuration, () {
-            if (isOnKey) {
-              isOnKey = false;
-              return;
-            }
             onChanged?.call(controller.text);
           });
         });
@@ -198,7 +191,6 @@ class TodoListItem extends HookConsumerWidget {
                     return KeyEventResult.handled;
                   }
                   if (event.logicalKey == LogicalKeyboardKey.tab) {
-                    isOnKey = true;
                     onAddIndent?.call();
                     return KeyEventResult.handled;
                   }
