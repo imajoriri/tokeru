@@ -8,24 +8,22 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: 'Read flutter version from .tool-versions'
+      - name: "Read flutter version from .tool-versions"
         id: flutter_info
         run: |
           flutter_info=$(grep 'flutter' .tool-versions)
           echo "version=$(echo ${flutter_info} | sed -r 's/^flutter ([a-z0-9\.\+\-]+)\-(stable|beta|dev)$/\1/')" >> $GITHUB_OUTPUT
           echo "channel=$(echo ${flutter_info} | sed -r 's/^flutter ([a-z0-9\.\+\-]+)\-(stable|beta|dev)$/\2/')" >> $GITHUB_OUTPUT
-         shell: bash
+        shell: bash
 
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: "Setup Flutter"
+        uses: subosito/flutter-action@v2
         with:
-        flutter-version: ${{ steps.flutter_info.outputs.version }}
-        channel: ${{ steps.flutter_info.outputs.channel }}
-        cache: true
-
-      - run: |
-          echo "Installed flutter to $(flutter --version)"
-          echo "Flutter channel is $(flutter channel)"
-          flutter pub get
-
-      - run: flutter test
+          flutter-version: ${{ steps.flutter_info.outputs.version }}
+          channel: ${{ steps.flutter_info.outputs.channel }}
+          cache: true
+      - name: "Run tests"
+        run: flutter test
