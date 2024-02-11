@@ -30,17 +30,14 @@ class TodoList extends HookConsumerWidget {
                 key: ValueKey(todos[index].id),
                 todo: todos[index],
                 onChanged: (value) {
-                  ref.read(todoControllerProvider.notifier).updateTodo(
-                        index,
-                        todos[index].copyWith(title: value),
-                      );
+                  ref
+                      .read(todoControllerProvider.notifier)
+                      .updateTodoTitle(index: index, title: value);
                 },
                 onChecked: (value) async {
-                  await ref.read(todoControllerProvider.notifier).updateTodo(
-                        index,
-                        todos[index].copyWith(isDone: value ?? false),
-                      );
-                  ref.invalidate(todoControllerProvider);
+                  await ref
+                      .read(todoControllerProvider.notifier)
+                      .updateIsDone(index);
                 },
                 onAdd: () async {
                   await ref
