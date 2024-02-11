@@ -30,10 +30,9 @@ class TodoList extends HookConsumerWidget {
                 key: ValueKey(todos[index].id),
                 todo: todos[index],
                 onChanged: (value) {
-                  ref.read(todoControllerProvider.notifier).updateTodo(
-                        index,
-                        todos[index].copyWith(title: value),
-                      );
+                  ref
+                      .read(todoControllerProvider.notifier)
+                      .updateTodoTitle(index: index, title: value);
                 },
                 onChecked: (value) async {
                   await ref
@@ -144,6 +143,9 @@ class TodoListItem extends HookConsumerWidget {
     final controller = useTextEditingController(text: todo.title);
     final focusNode = useFocusNode();
 
+    /// [Focus]の[onKey]でイベントを発生させた場合、[onChanged]を呼びたくないためのフラグ
+    bool isOnKey = false;
+
     Timer? debounce;
     useEffect(
       () {
@@ -153,6 +155,10 @@ class TodoListItem extends HookConsumerWidget {
           }
 
           debounce = Timer(debounceDuration, () {
+            if (isOnKey) {
+              isOnKey = false;
+              return;
+            }
             onChanged?.call(controller.text);
           });
         });
@@ -192,6 +198,7 @@ class TodoListItem extends HookConsumerWidget {
                     return KeyEventResult.handled;
                   }
                   if (event.logicalKey == LogicalKeyboardKey.tab) {
+                    isOnKey = true;
                     onAddIndent?.call();
                     return KeyEventResult.handled;
                   }

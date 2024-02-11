@@ -145,10 +145,9 @@ class _SmallWindow extends HookConsumerWidget {
               key: ValueKey(todo.id),
               todo: todo,
               onChanged: (value) {
-                ref.read(todoControllerProvider.notifier).updateTodo(
-                      0,
-                      todo.copyWith(title: value),
-                    );
+                ref
+                    .read(todoControllerProvider.notifier)
+                    .updateTodoTitle(index: 0, title: value);
               },
               onChecked: (value) async {
                 await ref
