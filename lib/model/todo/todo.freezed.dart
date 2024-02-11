@@ -14,6 +14,10 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+Todo _$TodoFromJson(Map<String, dynamic> json) {
+  return _Todo.fromJson(json);
+}
+
 /// @nodoc
 mixin _$Todo {
   String get id => throw _privateConstructorUsedError;
@@ -21,8 +25,10 @@ mixin _$Todo {
   bool get isDone => throw _privateConstructorUsedError;
   int get indentLevel => throw _privateConstructorUsedError;
   int get index => throw _privateConstructorUsedError;
+  @TimestampConverter()
   DateTime get createdAt => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $TodoCopyWith<Todo> get copyWith => throw _privateConstructorUsedError;
 }
@@ -38,7 +44,7 @@ abstract class $TodoCopyWith<$Res> {
       bool isDone,
       int indentLevel,
       int index,
-      DateTime createdAt});
+      @TimestampConverter() DateTime createdAt});
 }
 
 /// @nodoc
@@ -103,7 +109,7 @@ abstract class _$$TodoImplCopyWith<$Res> implements $TodoCopyWith<$Res> {
       bool isDone,
       int indentLevel,
       int index,
-      DateTime createdAt});
+      @TimestampConverter() DateTime createdAt});
 }
 
 /// @nodoc
@@ -153,7 +159,7 @@ class __$$TodoImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$TodoImpl implements _Todo {
   const _$TodoImpl(
       {required this.id,
@@ -161,7 +167,10 @@ class _$TodoImpl implements _Todo {
       required this.isDone,
       required this.indentLevel,
       required this.index,
-      required this.createdAt});
+      @TimestampConverter() required this.createdAt});
+
+  factory _$TodoImpl.fromJson(Map<String, dynamic> json) =>
+      _$$TodoImplFromJson(json);
 
   @override
   final String id;
@@ -174,6 +183,7 @@ class _$TodoImpl implements _Todo {
   @override
   final int index;
   @override
+  @TimestampConverter()
   final DateTime createdAt;
 
   @override
@@ -196,6 +206,7 @@ class _$TodoImpl implements _Todo {
                 other.createdAt == createdAt));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType, id, title, isDone, indentLevel, index, createdAt);
@@ -205,6 +216,13 @@ class _$TodoImpl implements _Todo {
   @pragma('vm:prefer-inline')
   _$$TodoImplCopyWith<_$TodoImpl> get copyWith =>
       __$$TodoImplCopyWithImpl<_$TodoImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$TodoImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _Todo implements Todo {
@@ -214,7 +232,9 @@ abstract class _Todo implements Todo {
       required final bool isDone,
       required final int indentLevel,
       required final int index,
-      required final DateTime createdAt}) = _$TodoImpl;
+      @TimestampConverter() required final DateTime createdAt}) = _$TodoImpl;
+
+  factory _Todo.fromJson(Map<String, dynamic> json) = _$TodoImpl.fromJson;
 
   @override
   String get id;
@@ -227,6 +247,7 @@ abstract class _Todo implements Todo {
   @override
   int get index;
   @override
+  @TimestampConverter()
   DateTime get createdAt;
   @override
   @JsonKey(ignore: true)

@@ -28,14 +28,7 @@ class TodoRepository {
         .where('isDone', isEqualTo: false)
         .get();
     return (response.docs.map((doc) {
-      return Todo(
-        id: doc.id,
-        title: doc.data()['title'] ?? '',
-        isDone: doc.data()['isDone'] ?? false,
-        indentLevel: doc.data()['indentLevel'] ?? 0,
-        index: doc.data()['index'] ?? 0,
-        createdAt: doc.data()['createdAt'].toDate() ?? DateTime.now(),
-      );
+      return Todo.fromJson(doc.data()..['id'] = doc.id);
     }).toList());
   }
 

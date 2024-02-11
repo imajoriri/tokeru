@@ -7,9 +7,11 @@ part of 'window_size_mode_controller.dart';
 // **************************************************************************
 
 String _$windowSizeModeControllerHash() =>
-    r'aa378564328ecf460195ec8f33d1748496a2a691';
+    r'7d1eb3662aef8bc3e342ad08abbf7591942b642b';
 
-/// See also [WindowSizeModeController].
+/// [WindowSizeMode]を管理するController
+///
+/// Copied from [WindowSizeModeController].
 @ProviderFor(WindowSizeModeController)
 final windowSizeModeControllerProvider = AutoDisposeNotifierProvider<
     WindowSizeModeController, WindowSizeMode>.internal(
