@@ -8,9 +8,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
       - uses: ./.github/actions/install_flutter_dependencies
-      # - name: "Checkout"
-      #   uses: actions/checkout@v4
 
       # - name: "Read flutter version from fvm config"
       #   id: flutter_info
