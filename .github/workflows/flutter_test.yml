@@ -21,7 +21,7 @@ jobs:
       # - uses: kuhnroyal/flutter-fvm-config-action@v2
       # id: fvm-configo-action
       - name: "echo flutter version"
-        run: echo "flutter version is $FLUTTER_VERSION
+        run: echo "flutter version is $FLUTTER_VERSION"
 
       - name: "Setup Flutter"
         uses: subosito/flutter-action@v2
