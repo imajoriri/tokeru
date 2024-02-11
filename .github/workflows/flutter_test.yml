@@ -11,9 +11,6 @@ jobs:
       - name: "Read flutter version from fvm config"
         id: flutter_info
         run: |
-          flutter_info=$(grep 'flutter' .tool-versions)
-          echo "version=$(echo ${flutter_info} | sed -r 's/^flutter ([a-z0-9\.\+\-]+)\-(stable|beta|dev)$/\1/')" >> $GITHUB_OUTPUT
-          echo "channel=$(echo ${flutter_info} | sed -r 's/^flutter ([a-z0-9\.\+\-]+)\-(stable|beta|dev)$/\2/')" >> $GITHUB_OUTPUT
           FLUTTER_VERSION=$(jq -r '.flutterSdkVersion' ./path/to/flutter_version.json)
           echo "FLUTTER_VERSION=$FLUTTER_VERSION" >> $GITHUB_ENV
         shell: bash
