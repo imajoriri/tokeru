@@ -1,0 +1,17 @@
+name: flutter test
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - uses: ./.github/actions/install_flutter_dependencies
+
+      - name: "Run tests"
+        run: flutter test

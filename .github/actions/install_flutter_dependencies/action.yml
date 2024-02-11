@@ -1,0 +1,19 @@
+name: "Install Flutter Dependencies"
+
+description: "dependencies install step"
+
+runs:
+  using: "composite"
+  steps:
+    - name: "Read flutter version from fvm config"
+      id: flutter_info
+      run: |
+        FLUTTER_VERSION=$(jq -r '.flutterSdkVersion' ./.fvm/fvm_config.json)
+        echo "FLUTTER_VERSION=$FLUTTER_VERSION" >> $GITHUB_ENV
+      shell: bash
+
+    - name: "Setup Flutter"
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: ${{ env.FLUTTER_VERSION }}
+        cache: true
