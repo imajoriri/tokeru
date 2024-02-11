@@ -6,7 +6,7 @@ part of 'todo_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$todoControllerHash() => r'5e95e18f145660ad1c1f3f36313834927d10f222';
+String _$todoControllerHash() => r'6ccc98903c90e06391faa9d9a4e7f0d8222e366e';
 
 /// ウィンドウがミニモードになったとき等でも状態を保持するためにkeepAliveをtrueにする
 ///
