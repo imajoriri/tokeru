@@ -128,6 +128,7 @@ class _SmallWindow extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncValue = ref.watch(todoControllerProvider);
+    const index = 0;
     return Column(
       children: [
         asyncValue.when(
@@ -140,7 +141,7 @@ class _SmallWindow extends HookConsumerWidget {
                 child: const Text("追加"),
               );
             }
-            final todo = todos[0];
+            final todo = todos[index];
             return TodoListItem(
               key: ValueKey(todo.id),
               todo: todo,
@@ -152,7 +153,7 @@ class _SmallWindow extends HookConsumerWidget {
               onChecked: (value) async {
                 await ref
                     .read(todoControllerProvider.notifier)
-                    .updateIsDone(todo);
+                    .updateIsDone(index);
               },
             );
           },

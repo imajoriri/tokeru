@@ -84,13 +84,11 @@ class TodoController extends _$TodoController {
   /// Todoを更新する
   Future<void> updateTodoTitle(
       {required int index, required String title}) async {
-    final todo = state.value![index];
+    final todo = state.value![index].copyWith(title: title);
     try {
       await todoRepository!.update(
         id: todo.id,
         title: todo.title,
-        isDone: todo.isDone,
-        indentLevel: todo.indentLevel,
       );
     } on Exception catch (e, s) {
       await FirebaseCrashlytics.instance.recordError(e, s);
@@ -100,9 +98,9 @@ class TodoController extends _$TodoController {
     state = AsyncData(tmp);
   }
 
-  /// TodoのisDoneをtrueに更新する
-  Future<void> updateIsDone(Todo todo) async {
-    final index = state.value!.indexWhere((element) => element.id == todo.id);
+  /// TodoのisDoneをtrueに更新し、リストから削除する
+  Future<void> updateIsDone(int index, {bool isDone = true}) async {
+    final todo = state.value![index].copyWith(isDone: isDone);
     final tmp = [...state.value!];
     tmp.removeAt(index);
     state = AsyncData(tmp);
