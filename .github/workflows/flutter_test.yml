@@ -1,0 +1,23 @@
+name: flutter test
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+        flutter-version: ${{ steps.flutter_info.outputs.version }}
+        channel: ${{ steps.flutter_info.outputs.channel }}
+        cache: true
+
+      - run: |
+          echo "Installed flutter to $(flutter --version)"
+          echo "Flutter channel is $(flutter channel)"
+          flutter pub get
+
+      - run: flutter test
