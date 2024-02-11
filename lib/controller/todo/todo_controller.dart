@@ -81,7 +81,7 @@ class TodoController extends _$TodoController {
     state = AsyncData(tmp);
   }
 
-  /// Todoを更新する
+  /// [index]の[Todo.title]を更新する
   Future<void> updateTodoTitle(
       {required int index, required String title}) async {
     final todo = state.value![index].copyWith(title: title);
