@@ -601,18 +601,18 @@ packages:
     dependency: transitive
     description:
       name: irondash_engine_context
-      sha256: "294a0e21c4358ff17264e6b811c615b664cebb33b49ad2ddb54f8110e7714510"
+      sha256: "4f5e2629296430cce08cdff42e47cef07b8f74a64fdbdfb0525d147bc1a969a2"
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.1"
+    version: "0.5.2"
   irondash_message_channel:
     dependency: transitive
     description:
       name: irondash_message_channel
-      sha256: "131d64d97a3612bc3617aefc878f3e3a8e23e0ce18b3bba8e78cb1930befcec1"
+      sha256: dd581214215dca054bd9873209d690ec3609288c28774cb509dbd86b21180cf8
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.0"
+    version: "0.6.0"
   js:
     dependency: transitive
     description:
@@ -910,26 +910,26 @@ packages:
     dependency: "direct main"
     description:
       name: super_hot_key
-      sha256: "9b134564c26fa3a5ff74936dc26249617161b7f8402ac5ce71de05ef70abaaea"
+      sha256: "710a72bb99eaca79032a0d715aa8e8040d420b645a436b0805c9e2c355b0abbe"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.4"
+    version: "0.8.5"
   super_keyboard_layout:
     dependency: transitive
     description:
       name: super_keyboard_layout
-      sha256: "7f2c795734f2c6e50a64c20cea79476620d9f714b956aecd5d7f25292d26923f"
+      sha256: a7e54a31b3c5490498a20cd5620faee25c9ee1689d99ba4151b2991b37aaf917
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.4"
+    version: "0.8.5"
   super_native_extensions:
     dependency: transitive
     description:
       name: super_native_extensions
-      sha256: "4699f5b00320290475953c914f823a8b44e10ed8c1e38ce5c8e8426336d11c15"
+      sha256: f96db6b137a0b135e43034289bb55ca6447b65225076036e81f97ebb6381ffeb
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.4"
+    version: "0.8.5"
   term_glyph:
     dependency: transitive
     description:
