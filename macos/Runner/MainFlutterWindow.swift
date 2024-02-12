@@ -40,7 +40,6 @@ class MainFlutterWindow: NSWindow {
     // 変える場合はここ参照 https://stackoverflow.com/questions/77222222/flutterengine-runwithentrypoint-screenaentrypoint-still-looks-for-main-i
     flutterEngine.run(withEntrypoint: "panel")
     panelFlutterViewController = FlutterViewController(engine: flutterEngine, nibName: nil, bundle: nil)
-    panelFlutterViewController.backgroundColor = .clear
 
     channel = FlutterMethodChannel(name: "quick.flutter/panel", binaryMessenger: panelFlutterViewController.engine.binaryMessenger)
 
@@ -150,6 +149,14 @@ class FloatingPanel: NSPanel {
 
     self.titleVisibility = .hidden
     self.titlebarAppearsTransparent = true
+
+    self.collectionBehavior = [
+      .canJoinAllSpaces
+    ]
+
+    // 画面どこを持っても移動できるようにする
+    self.isMovable = true
+    self.isMovableByWindowBackground = true
 
     setupNotification()
   }
