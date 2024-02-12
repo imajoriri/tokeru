@@ -136,7 +136,7 @@ class TodoListItem extends HookConsumerWidget {
   final void Function()? onPreviousTodo;
 
   /// debouce用のDuration
-  static const debounceDuration = Duration(milliseconds: 1000);
+  static const debounceDuration = Duration(milliseconds: 400);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

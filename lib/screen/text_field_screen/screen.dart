@@ -56,7 +56,7 @@ class TextFieldScreen extends HookConsumerWidget {
       final _ = switch (next) {
         WindowSizeMode.small => {
             ref.read(methodChannelProvider).invokeMethod(
-                AppMethodChannel.setFrameSize.name, {"height": 100}),
+                AppMethodChannel.setFrameSize.name, {"height": 70}),
           },
         WindowSizeMode.large => {
             ref.read(methodChannelProvider).invokeMethod(
@@ -80,39 +80,6 @@ class TextFieldScreen extends HookConsumerWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                    onPressed: () {
-                      channel.invokeMethod(AppMethodChannel.windowToLeft.name);
-                    },
-                    icon: const Icon(Icons.arrow_circle_left_outlined)),
-                IconButton(
-                  onPressed: () {
-                    ref.read(bookmarkControllerProvider.notifier).toggle();
-                  },
-                  icon:
-                      Icon(bookmark ? Icons.bookmark : Icons.bookmark_outline),
-                  color: bookmark
-                      ? context.colorScheme.primary
-                      : context.colorScheme.secondary,
-                ),
-                IconButton(
-                  onPressed: () {
-                    ref
-                        .read(windowSizeModeControllerProvider.notifier)
-                        .toLarge();
-                  },
-                  icon: const Icon(Icons.keyboard_arrow_down),
-                ),
-                IconButton(
-                    onPressed: () {
-                      channel.invokeMethod(AppMethodChannel.windowToRight.name);
-                    },
-                    icon: const Icon(Icons.arrow_circle_right_outlined)),
-              ],
-            ),
             switch (windowSizeMode) {
               WindowSizeMode.small => _SmallWindow(),
               WindowSizeMode.large => _LargeWindow(),
@@ -129,38 +96,54 @@ class _SmallWindow extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncValue = ref.watch(todoControllerProvider);
     const index = 0;
-    return Column(
-      children: [
-        asyncValue.when(
-          data: (todos) {
-            if (todos.isEmpty) {
-              return ElevatedButton(
-                onPressed: () {
-                  ref.read(todoControllerProvider.notifier).add(0);
-                },
-                child: const Text("追加"),
-              );
-            }
-            final todo = todos[index];
-            return TodoListItem(
-              key: ValueKey(todo.id),
-              todo: todo,
-              onChanged: (value) {
-                ref
-                    .read(todoControllerProvider.notifier)
-                    .updateTodoTitle(index: 0, title: value);
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        ref.read(windowSizeModeControllerProvider.notifier).toLarge();
+      },
+      child: SizedBox(
+        width: double.infinity,
+        // mini windowの高さ
+        height: 70,
+        child: Column(
+          children: [
+            asyncValue.when(
+              data: (todos) {
+                if (todos.isEmpty) {
+                  return ElevatedButton(
+                    onPressed: () {
+                      ref.read(todoControllerProvider.notifier).add(0);
+                    },
+                    child: const Text("追加"),
+                  );
+                }
+                final todo = todos[index];
+                return Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Row(
+                    children: [
+                      Checkbox(
+                        value: todo.isDone,
+                        onChanged: (value) async {
+                          await ref
+                              .read(todoControllerProvider.notifier)
+                              .updateIsDone(index);
+                        },
+                        focusNode: useFocusNode(
+                          skipTraversal: true,
+                        ),
+                      ),
+                      Text(todo.title),
+                    ],
+                  ),
+                );
               },
-              onChecked: (value) async {
-                await ref
-                    .read(todoControllerProvider.notifier)
-                    .updateIsDone(index);
-              },
-            );
-          },
-          error: (e, s) => const SizedBox(),
-          loading: () => const SizedBox(),
+              error: (e, s) => const SizedBox(),
+              loading: () => const SizedBox(),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
@@ -168,10 +151,36 @@ class _SmallWindow extends HookConsumerWidget {
 class _LargeWindow extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final channel = ref.watch(methodChannelProvider);
+    final bookmark = ref.watch(bookmarkControllerProvider);
     return Padding(
-      padding: const EdgeInsets.only(top: 20.0, left: 4, right: 4),
+      padding: const EdgeInsets.only(top: 2.0, left: 4, right: 4),
       child: Column(
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                  onPressed: () {
+                    channel.invokeMethod(AppMethodChannel.windowToLeft.name);
+                  },
+                  icon: const Icon(Icons.arrow_circle_left_outlined)),
+              IconButton(
+                onPressed: () {
+                  ref.read(bookmarkControllerProvider.notifier).toggle();
+                },
+                icon: Icon(bookmark ? Icons.bookmark : Icons.bookmark_outline),
+                color: bookmark
+                    ? context.colorScheme.primary
+                    : context.colorScheme.secondary,
+              ),
+              IconButton(
+                  onPressed: () {
+                    channel.invokeMethod(AppMethodChannel.windowToRight.name);
+                  },
+                  icon: const Icon(Icons.arrow_circle_right_outlined)),
+            ],
+          ),
           const TodoList(),
           const Divider(),
           _MemoScreen(),
