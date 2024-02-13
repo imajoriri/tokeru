@@ -39,6 +39,7 @@ class MemoController extends _$MemoController {
     _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
       // NOTE: stateを更新してしまうと、再度buildが走ってしまうため、stateを更新しない
       memoRepository!.updateMemo(memo);
+      state = AsyncData(memo.copyWith(deltaJson: deltaJson));
     });
   }
 }
