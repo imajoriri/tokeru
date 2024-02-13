@@ -1,68 +1,38 @@
 part of 'screen.dart';
 
 class _MemoScreen extends HookConsumerWidget {
-  void onUpdateDocument(QuillController controller, WidgetRef ref) {
-    var text = controller.document.toPlainText();
-    // "[] "パターンを検出して、チェックリストアイテムに置換
-    if (text.contains("[] ")) {
-      var index = text.indexOf("[] ");
-      // チェックリストアイテムに置換
-      controller.replaceText(
-        index,
-        4,
-        '',
-        TextSelection(
-          baseOffset: index,
-          extentOffset: index + 4,
-          affinity: TextAffinity.downstream,
-          isDirectional: false,
-        ),
-      );
-
-      controller.skipRequestKeyboard = true;
-      controller.formatText(index, 0, Attribute.unchecked);
-    }
-    ref
-        .read(memoControllerProvider.notifier)
-        .updateDeltaJson(jsonEncode(controller.document.toDelta().toJson()));
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final memoAsyncValue = ref.watch(memoControllerProvider);
+    final memo = ref.watch(memoControllerProvider);
     final focusNode = useFocusNode();
-    final controller = QuillController.basic();
-    controller.changes.listen((event) {
-      onUpdateDocument(controller, ref);
+    final initValue = useState(false);
+    final controller =
+        useMarkdownTextEditingController(text: memo.valueOrNull?.deltaJson);
+
+    ref.listen(memoControllerProvider, (previous, next) {
+      // 初回のみmemoの値をセットする
+      if (next.hasValue && !initValue.value) {
+        final memo = next.valueOrNull!;
+        controller.text = memo.deltaJson;
+        initValue.value = true;
+      }
     });
 
-    return memoAsyncValue.when(
-      data: (memo) {
-        if (memo.deltaJson.isNotEmpty) {
-          final document = Document.fromJson(jsonDecode(memo.deltaJson));
-          // documentを更新するとlistenが解除されるので再度listenする
-          document.changes.listen((data) {
-            onUpdateDocument(controller, ref);
-          });
-          controller.document = document;
-        }
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 12.0, left: 8, right: 8),
-          child: QuillEditor.basic(
-            focusNode: focusNode,
-            configurations: QuillEditorConfigurations(
-              controller: controller,
-              readOnly: false,
-            ),
-          ),
-        );
-      },
-      error: (e, s) {
-        return const Center(
-          child: Text('エラーが発生しました'),
-        );
-      },
-      loading: () => const SizedBox(),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12.0, left: 8, right: 8),
+      child: MarkdownTextField(
+        focus: focusNode,
+        controller: controller,
+        decoration: const InputDecoration(
+          border: OutlineInputBorder(),
+          contentPadding: EdgeInsets.all(8),
+          hintText: 'メモを入力',
+        ),
+        maxLines: null,
+        onChanged: (text) {
+          ref.read(memoControllerProvider.notifier).updateDeltaJson(text);
+        },
+      ),
     );
   }
 }
