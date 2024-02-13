@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_quill/flutter_quill.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/controller/memo/memo_controller.dart';
 import 'package:quick_flutter/controller/method_channel/method_channel_controller.dart';
@@ -12,6 +10,8 @@ import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/window_size_mode/window_size_mode_controller.dart';
 import 'package:quick_flutter/model/todo/todo.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
+import 'package:quick_flutter/widget/markdown_text_editing_controller.dart';
+import 'package:quick_flutter/widget/markdown_text_field.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:super_hot_key/super_hot_key.dart';
 
@@ -182,9 +182,7 @@ class _LargeWindow extends HookConsumerWidget {
             ],
           ),
           const TodoList(),
-          const Divider(),
           _MemoScreen(),
-          const Divider(),
         ],
       ),
     );
