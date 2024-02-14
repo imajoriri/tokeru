@@ -7,6 +7,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'memo_controller.g.dart';
 
+/// Userに紐づく[Memo]を返すController
+///
+/// ユーザーがログインしていない場合は、[Memo]は空の状態で返す。
+/// []
 @Riverpod(keepAlive: true)
 class MemoController extends _$MemoController {
   Timer? _debounceTimer;
@@ -18,7 +22,7 @@ class MemoController extends _$MemoController {
       _debounceTimer?.cancel();
     });
     final user = ref.watch(userControllerProvider);
-    if (user.valueOrNull == null) {
+    if (user.hasError || user.valueOrNull == null) {
       return const Memo(deltaJson: "");
     }
     memoRepository = ref.read(memoRepositoryProvider(user.value!.id));

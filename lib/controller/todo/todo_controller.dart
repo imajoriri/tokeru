@@ -6,6 +6,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'todo_controller.g.dart';
 
+/// Userに紐づく[Todo]を返すController
+///
+/// ユーザーがログインしていない場合は、[Todo]は空の状態で返す。
 /// ウィンドウがミニモードになったとき等でも状態を保持するためにkeepAliveをtrueにする
 @Riverpod(keepAlive: true)
 class TodoController extends _$TodoController {
@@ -14,7 +17,7 @@ class TodoController extends _$TodoController {
   @override
   FutureOr<List<Todo>> build() async {
     final user = ref.watch(userControllerProvider);
-    if (user.valueOrNull == null) {
+    if (user.hasError || user.valueOrNull == null) {
       return [];
     }
     todoRepository = ref.read(todoRepositoryProvider(user.value!.id));
