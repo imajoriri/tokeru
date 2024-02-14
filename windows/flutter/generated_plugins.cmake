@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   cloud_firestore
   desktop_window
+  firebase_auth
   firebase_core
   irondash_engine_context
   super_native_extensions
