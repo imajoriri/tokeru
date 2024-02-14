@@ -16,9 +16,6 @@ dependencies:
   flutter_hooks: ^0.20.5
   riverpod_annotation: ^2.2.1
   riverpod_generator: ^2.3.11
-  firebase_core: ^2.25.4
-  firebase_crashlytics: ^3.4.13
-  cloud_firestore: ^4.15.4
   freezed_annotation: ^2.4.1
   json_annotation: ^4.8.1
   flutter_markdown: ^0.6.18
@@ -27,6 +24,12 @@ dependencies:
   desktop_window: ^0.4.0
   super_hot_key: ^0.8.5
   logger: ^2.0.2+1
+  # firebase
+  firebase_auth: ^4.17.4
+  firebase_core: ^2.25.4
+  firebase_crashlytics: ^3.4.13
+  cloud_firestore: ^4.15.4
+
   flutter_localizations:
     sdk: flutter
 
