@@ -10,7 +10,6 @@ part 'memo_controller.g.dart';
 /// Userに紐づく[Memo]を返すController
 ///
 /// ユーザーがログインしていない場合は、[Memo]は空の状態で返す。
-/// []
 @Riverpod(keepAlive: true)
 class MemoController extends _$MemoController {
   Timer? _debounceTimer;
