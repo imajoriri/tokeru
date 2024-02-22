@@ -6,9 +6,14 @@ part of 'user_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userControllerHash() => r'6ae090f90765f893e853ca4eb01554ba3f93a098';
+String _$userControllerHash() => r'a1b9ad0ea7282a8e4534ade45772622b237ea37b';
 
-/// See also [userController].
+/// ログインしているユーザーを取得する
+///
+/// Firebase authentication の匿名ログインを行い、ログインしているユーザーを取得します。
+/// ログインしていない場合は匿名ログインを行います。
+///
+/// Copied from [userController].
 @ProviderFor(userController)
 final userControllerProvider = FutureProvider<User>.internal(
   userController,
