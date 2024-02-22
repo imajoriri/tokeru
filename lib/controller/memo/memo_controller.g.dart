@@ -6,9 +6,13 @@ part of 'memo_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$memoControllerHash() => r'7d1a916d2f5bc9fe12b2ba015b0fb5e21f9000e0';
+String _$memoControllerHash() => r'65a8a71d1a74a62d80f4ce687d994a43e0432c13';
 
-/// See also [MemoController].
+/// Userに紐づく[Memo]を返すController
+///
+/// ユーザーがログインしていない場合は、[Memo]は空の状態で返す。
+///
+/// Copied from [MemoController].
 @ProviderFor(MemoController)
 final memoControllerProvider =
     AsyncNotifierProvider<MemoController, Memo>.internal(
