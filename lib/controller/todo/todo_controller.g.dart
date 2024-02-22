@@ -6,8 +6,11 @@ part of 'todo_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$todoControllerHash() => r'6ccc98903c90e06391faa9d9a4e7f0d8222e366e';
+String _$todoControllerHash() => r'c6e6cba497487dc356dba00222b42f0b2b71880a';
 
+/// Userに紐づく[Todo]を返すController
+///
+/// ユーザーがログインしていない場合は、[Todo]は空の状態で返す。
 /// ウィンドウがミニモードになったとき等でも状態を保持するためにkeepAliveをtrueにする
 ///
 /// Copied from [TodoController].
