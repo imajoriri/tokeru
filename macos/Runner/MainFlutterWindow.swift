@@ -24,11 +24,10 @@ class MainFlutterWindow: NSWindow {
     // 非アクティブになってもウィンドウが削除されない
     self.hidesOnDeactivate = false
 
-    // 左上のボタンを非表示にする
+    // 左上のボタンを操作
     self.standardWindowButton(.miniaturizeButton)?.isHidden = true
     self.standardWindowButton(.zoomButton)?.isHidden = true
-    // 削除ボタンは表示する
-    self.standardWindowButton(.closeButton)?.isHidden = false
+    self.standardWindowButton(.closeButton)?.isHidden = true
 
     // タイトルを非表示にする
     self.titleVisibility = .hidden
