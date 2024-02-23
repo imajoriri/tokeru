@@ -16,6 +16,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:super_hot_key/super_hot_key.dart';
 
 part 'screen.g.dart';
+part 'large_window.dart';
+part 'small_window.dart';
 part 'todo_list.dart';
 part 'memo.dart';
 
@@ -86,101 +88,6 @@ class TextFieldScreen extends HookConsumerWidget {
             },
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _SmallWindow extends HookConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final asyncValue = ref.watch(todoControllerProvider);
-    const index = 0;
-    final height = MediaQuery.of(context).size.height;
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () {
-        ref.read(windowSizeModeControllerProvider.notifier).toLarge();
-      },
-      child: Container(
-        width: double.infinity,
-        height: height,
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: asyncValue.when(
-          data: (todos) {
-            if (todos.isEmpty) {
-              return ElevatedButton(
-                onPressed: () {
-                  ref.read(todoControllerProvider.notifier).add(0);
-                },
-                child: const Text("追加"),
-              );
-            }
-            final todo = todos[index];
-            return Padding(
-              padding: const EdgeInsets.only(top: 0),
-              child: Row(
-                children: [
-                  Checkbox(
-                    value: todo.isDone,
-                    onChanged: (value) async {
-                      await ref
-                          .read(todoControllerProvider.notifier)
-                          .updateIsDone(index);
-                    },
-                    focusNode: useFocusNode(
-                      skipTraversal: true,
-                    ),
-                  ),
-                  Text(todo.title),
-                ],
-              ),
-            );
-          },
-          error: (e, s) => const SizedBox(),
-          loading: () => const SizedBox(),
-        ),
-      ),
-    );
-  }
-}
-
-class _LargeWindow extends HookConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final channel = ref.watch(methodChannelProvider);
-    final bookmark = ref.watch(bookmarkControllerProvider);
-    return Padding(
-      padding: const EdgeInsets.only(top: 2.0, left: 4, right: 4),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(
-                  onPressed: () {
-                    channel.invokeMethod(AppMethodChannel.windowToLeft.name);
-                  },
-                  icon: const Icon(Icons.arrow_circle_left_outlined)),
-              IconButton(
-                onPressed: () {
-                  ref.read(bookmarkControllerProvider.notifier).toggle();
-                },
-                icon: Icon(bookmark ? Icons.bookmark : Icons.bookmark_outline),
-                color: bookmark
-                    ? context.colorScheme.primary
-                    : context.colorScheme.secondary,
-              ),
-              IconButton(
-                  onPressed: () {
-                    channel.invokeMethod(AppMethodChannel.windowToRight.name);
-                  },
-                  icon: const Icon(Icons.arrow_circle_right_outlined)),
-            ],
-          ),
-          const TodoList(),
-          _MemoScreen(),
-        ],
       ),
     );
   }
