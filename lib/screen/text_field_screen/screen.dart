@@ -62,7 +62,7 @@ class TextFieldScreen extends HookConsumerWidget {
           },
         WindowSizeMode.large => {
             ref.read(methodChannelProvider).invokeMethod(
-                AppMethodChannel.setFrameSize.name, {"height": 700}),
+                AppMethodChannel.setFrameSize.name, {"height": 500}),
           },
       };
     });

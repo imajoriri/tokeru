@@ -65,28 +65,13 @@ class AppMaterialApp extends MaterialApp {
           key: key,
           home: home,
           title: 'Flutter Demo',
+          debugShowCheckedModeBanner: false,
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(
               seedColor: AppColor.seed,
               outline: AppColor.outline,
               outlineVariant: AppColor.outlineVariant,
               shadow: AppColor.shadow,
-            ),
-            filledButtonTheme: FilledButtonThemeData(
-              style: TextButton.styleFrom(
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(6)),
-                ),
-              ),
-            ),
-            iconButtonTheme: IconButtonThemeData(
-              style: TextButton.styleFrom(
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(8)),
-                ),
-                padding: EdgeInsets.zero,
-                alignment: Alignment.center,
-              ),
             ),
             useMaterial3: true,
           ),
