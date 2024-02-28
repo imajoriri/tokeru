@@ -163,7 +163,12 @@ class TodoListItem extends HookConsumerWidget {
       [controller],
     );
     return Padding(
-      padding: EdgeInsets.only(left: 20 * todo.indentLevel.toDouble()),
+      padding: EdgeInsets.only(
+        bottom: 4,
+        top: 4,
+        // indexに応じて左にpaddingを追加する
+        left: 20 * todo.indentLevel.toDouble(),
+      ),
       child: Row(
         children: [
           Checkbox(
@@ -210,21 +215,22 @@ class TodoListItem extends HookConsumerWidget {
                 }
                 return KeyEventResult.ignored;
               },
-              child: Container(
-                margin: const EdgeInsets.only(bottom: 4),
-                child: TextField(
-                  controller: controller,
-                  focusNode: focusNode,
-                  onSubmitted: (value) {
-                    // フォーカスが外れてしまうため、意図的にフォーカスを戻す
-                    focusNode.requestFocus();
-                    onAdd?.call();
-                  },
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(4),
-                    hintText: 'メッセージを入力',
+              child: TextField(
+                controller: controller,
+                focusNode: focusNode,
+                onSubmitted: (value) {
+                  // フォーカスが外れてしまうため、意図的にフォーカスを戻す
+                  focusNode.requestFocus();
+                  onAdd?.call();
+                },
+                decoration: const InputDecoration(
+                  border: InputBorder.none,
+                  // チェックボックスとの高さを調整するためのpadding
+                  contentPadding: EdgeInsets.only(
+                    bottom: 4,
                   ),
+                  hintText: 'write a todo...',
+                  isCollapsed: true,
                 ),
               ),
             ),
