@@ -158,10 +158,11 @@ class MarkdownTextSpan extends TextSpan {
   ) {
     {
       final pattern = RegExp(
-          matches.map((match) {
-            return match.text;
-          }).join('|'),
-          multiLine: true);
+        matches.map((match) {
+          return match.text;
+        }).join('|'),
+        multiLine: true,
+      );
       final List<InlineSpan> children = [];
 
       onTap(MarkdownMatch markdownMatch, Match match) {
@@ -183,56 +184,64 @@ class MarkdownTextSpan extends TextSpan {
           );
 
           if (markdownMatch == null) {
-            children.add(TextSpan(
-              text: match[0],
-            ));
+            children.add(
+              TextSpan(
+                text: match[0],
+              ),
+            );
             return "";
           }
 
           final newText = markdownMatch.replaceText == null
               ? match[0]!
-              : match[0]!.replaceAll(markdownMatch.replaceText!.beforeText,
-                  markdownMatch.replaceText!.afterText);
+              : match[0]!.replaceAll(
+                  markdownMatch.replaceText!.beforeText,
+                  markdownMatch.replaceText!.afterText,
+                );
 
           if (markdownMatch.beforeWidgetSpan == null) {
-            children.add(TextSpan(
-              text: newText,
-              style: style?.merge(markdownMatch.style),
-            ));
+            children.add(
+              TextSpan(
+                text: newText,
+                style: style?.merge(markdownMatch.style),
+              ),
+            );
             return "";
           }
 
           final isFirstLine = !match[0]!.startsWith('\n');
-          children.add(TextSpan(
-            recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                onTap.call(markdownMatch, match);
-              },
-            children: [
-              if (!isFirstLine) const TextSpan(text: '\n'),
-              if (markdownMatch.beforeWidgetSpan != null)
-                markdownMatch.beforeWidgetSpan!,
-              if (isFirstLine)
-                TextSpan(
-                  text: newText,
-                  style: style?.merge(markdownMatch.style),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      onTap.call(markdownMatch, match);
-                    },
-                )
-              else
-                // widgetSpanの前に改行を入れた分、1文字目の改行を削除
-                TextSpan(
-                  text: newText.substring(1),
-                  style: style?.merge(markdownMatch.style),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      onTap.call(markdownMatch, match);
-                    },
-                ),
-            ],
-          ));
+          children.add(
+            TextSpan(
+              recognizer: TapGestureRecognizer()
+                ..onTap = () {
+                  onTap.call(markdownMatch, match);
+                },
+              children: [
+                if (!isFirstLine) const TextSpan(text: '\n'),
+                if (markdownMatch.beforeWidgetSpan != null)
+                  markdownMatch.beforeWidgetSpan!,
+                if (isFirstLine)
+                  TextSpan(
+                    text: newText,
+                    style: style?.merge(markdownMatch.style),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        onTap.call(markdownMatch, match);
+                      },
+                  )
+                else
+                  // widgetSpanの前に改行を入れた分、1文字目の改行を削除
+                  TextSpan(
+                    text: newText.substring(1),
+                    style: style?.merge(markdownMatch.style),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        onTap.call(markdownMatch, match);
+                      },
+                  ),
+              ],
+            ),
+          );
 
           return "";
         },
