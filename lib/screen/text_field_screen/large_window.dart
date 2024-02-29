@@ -18,7 +18,8 @@ class _LargeWindow extends HookConsumerWidget {
                     IconButton(
                       onPressed: () {
                         channel.invokeMethod(
-                            AppMethodChannel.openOrClosePanel.name);
+                          AppMethodChannel.openOrClosePanel.name,
+                        );
                       },
                       icon: const Icon(Icons.close),
                     ),
@@ -36,28 +37,32 @@ class _LargeWindow extends HookConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     IconButton(
-                        onPressed: () {
-                          channel
-                              .invokeMethod(AppMethodChannel.windowToLeft.name);
-                        },
-                        icon: const Icon(Icons.arrow_circle_left_outlined)),
+                      onPressed: () {
+                        channel
+                            .invokeMethod(AppMethodChannel.windowToLeft.name);
+                      },
+                      icon: const Icon(Icons.arrow_circle_left_outlined),
+                    ),
                     IconButton(
                       onPressed: () {
                         ref.read(bookmarkControllerProvider.notifier).toggle();
                       },
                       tooltip: 'Window does not shrink when inactive',
                       icon: Icon(
-                          bookmark ? Icons.push_pin : Icons.push_pin_outlined),
+                        bookmark ? Icons.push_pin : Icons.push_pin_outlined,
+                      ),
                       color: bookmark
                           ? context.colorScheme.primary
                           : context.colorScheme.secondary,
                     ),
                     IconButton(
-                        onPressed: () {
-                          channel.invokeMethod(
-                              AppMethodChannel.windowToRight.name);
-                        },
-                        icon: const Icon(Icons.arrow_circle_right_outlined)),
+                      onPressed: () {
+                        channel.invokeMethod(
+                          AppMethodChannel.windowToRight.name,
+                        );
+                      },
+                      icon: const Icon(Icons.arrow_circle_right_outlined),
+                    ),
                   ],
                 ),
               ),
