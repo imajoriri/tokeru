@@ -85,8 +85,10 @@ class TodoController extends _$TodoController {
   }
 
   /// [index]の[Todo.title]を更新する
-  Future<void> updateTodoTitle(
-      {required int index, required String title}) async {
+  Future<void> updateTodoTitle({
+    required int index,
+    required String title,
+  }) async {
     final todo = state.value![index].copyWith(title: title);
     try {
       await todoRepository!.update(

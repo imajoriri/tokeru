@@ -7,85 +7,80 @@ class TodoList extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final todos = ref.watch(todoControllerProvider);
     return todos.when(
-        data: (todos) {
-          if (todos.isEmpty) {
-            return ElevatedButton(
-              onPressed: () {
-                ref.read(todoControllerProvider.notifier).add(0);
-              },
-              child: const Text("追加"),
-            );
-          }
-          return ReorderableListView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: todos.length,
-            onReorder: (oldIndex, newIndex) {
-              ref
-                  .read(todoControllerProvider.notifier)
-                  .reorder(oldIndex, newIndex);
+      data: (todos) {
+        if (todos.isEmpty) {
+          return ElevatedButton(
+            onPressed: () {
+              ref.read(todoControllerProvider.notifier).add(0);
             },
-            itemBuilder: (context, index) {
-              return TodoListItem(
-                key: ValueKey(todos[index].id),
-                todo: todos[index],
-                onChanged: (value) {
-                  ref
-                      .read(todoControllerProvider.notifier)
-                      .updateTodoTitle(index: index, title: value);
-                },
-                onChecked: (value) async {
-                  await ref
-                      .read(todoControllerProvider.notifier)
-                      .updateIsDone(index);
-                },
-                onAdd: () async {
-                  await ref
-                      .read(todoControllerProvider.notifier)
-                      .add(index + 1);
-                  ref
-                      .read(todoControllerProvider.notifier)
-                      .updateCurrentOrder();
-                  // rebuild後にnextFocusする
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    FocusScope.of(context).nextFocus();
-                  });
-                },
-                onAddIndent: () {
-                  ref
-                      .read(todoControllerProvider.notifier)
-                      .addIndent(todos[index]);
-                },
-                onMinusIndent: () {
-                  ref
-                      .read(todoControllerProvider.notifier)
-                      .minusIndent(todos[index]);
-                },
-                onNextTodo: () {
-                  if (index + 1 < todos.length) {
-                    FocusScope.of(context).nextFocus();
-                  }
-                },
-                onPreviousTodo: () {
-                  if (index != 0) {
-                    FocusScope.of(context).previousFocus();
-                  }
-                },
-                onDelete: () {
-                  // 最後の１つの場合、previousFoucsすると他のFocusに移動しちゃうため
-                  if (todos.length != 1) {
-                    FocusScope.of(context).previousFocus();
-                  }
-                  ref
-                      .read(todoControllerProvider.notifier)
-                      .delete(todos[index]);
-                },
-              );
-            },
+            child: const Text("追加"),
           );
-        },
-        error: (e, s) => const Text('happen somethings'),
-        loading: () => const CircularProgressIndicator());
+        }
+        return ReorderableListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: todos.length,
+          onReorder: (oldIndex, newIndex) {
+            ref
+                .read(todoControllerProvider.notifier)
+                .reorder(oldIndex, newIndex);
+          },
+          itemBuilder: (context, index) {
+            return TodoListItem(
+              key: ValueKey(todos[index].id),
+              todo: todos[index],
+              onChanged: (value) {
+                ref
+                    .read(todoControllerProvider.notifier)
+                    .updateTodoTitle(index: index, title: value);
+              },
+              onChecked: (value) async {
+                await ref
+                    .read(todoControllerProvider.notifier)
+                    .updateIsDone(index);
+              },
+              onAdd: () async {
+                await ref.read(todoControllerProvider.notifier).add(index + 1);
+                ref.read(todoControllerProvider.notifier).updateCurrentOrder();
+                // rebuild後にnextFocusする
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  FocusScope.of(context).nextFocus();
+                });
+              },
+              onAddIndent: () {
+                ref
+                    .read(todoControllerProvider.notifier)
+                    .addIndent(todos[index]);
+              },
+              onMinusIndent: () {
+                ref
+                    .read(todoControllerProvider.notifier)
+                    .minusIndent(todos[index]);
+              },
+              onNextTodo: () {
+                if (index + 1 < todos.length) {
+                  FocusScope.of(context).nextFocus();
+                }
+              },
+              onPreviousTodo: () {
+                if (index != 0) {
+                  FocusScope.of(context).previousFocus();
+                }
+              },
+              onDelete: () {
+                // 最後の１つの場合、previousFoucsすると他のFocusに移動しちゃうため
+                if (todos.length != 1) {
+                  FocusScope.of(context).previousFocus();
+                }
+                ref.read(todoControllerProvider.notifier).delete(todos[index]);
+              },
+            );
+          },
+        );
+      },
+      error: (e, s) => const Text('happen somethings'),
+      loading: () => const CircularProgressIndicator(),
+    );
   }
 }
 
