@@ -26,29 +26,35 @@ class ChatMainTextField extends HookConsumerWidget {
 
     final canCreateDraft = useState(false);
 
-    useEffect(() {
-      listener() {
-        canSubmit.value = controller.text.isNotEmpty;
-        canCreateDraft.value = controller.text.isNotEmpty;
-        onChanged?.call(controller.text);
-      }
+    useEffect(
+      () {
+        listener() {
+          canSubmit.value = controller.text.isNotEmpty;
+          canCreateDraft.value = controller.text.isNotEmpty;
+          onChanged?.call(controller.text);
+        }
 
-      controller.addListener(listener);
-      return () {
-        controller.removeListener(listener);
-      };
-    }, [controller.text]);
+        controller.addListener(listener);
+        return () {
+          controller.removeListener(listener);
+        };
+      },
+      [controller.text],
+    );
 
-    useEffect(() {
-      listener() {
-        hasFocus.value = focus.hasFocus;
-      }
+    useEffect(
+      () {
+        listener() {
+          hasFocus.value = focus.hasFocus;
+        }
 
-      focus.addListener(listener);
-      return () {
-        focus.removeListener(listener);
-      };
-    }, [focus.hasFocus]);
+        focus.addListener(listener);
+        return () {
+          focus.removeListener(listener);
+        };
+      },
+      [focus.hasFocus],
+    );
 
     // ignore: no_leading_underscores_for_local_identifiers
     _onSubmit() async {

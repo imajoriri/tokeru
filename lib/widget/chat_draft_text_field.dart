@@ -36,28 +36,34 @@ class ChatDraftTextField extends HookConsumerWidget {
     final controller =
         textController ?? useMarkdownTextEditingController(text: defaultValue);
 
-    useEffect(() {
-      listener() {
-        canSubmit.value = controller.text.isNotEmpty;
-        onChanged?.call(controller.text);
-      }
+    useEffect(
+      () {
+        listener() {
+          canSubmit.value = controller.text.isNotEmpty;
+          onChanged?.call(controller.text);
+        }
 
-      controller.addListener(listener);
-      return () {
-        controller.removeListener(listener);
-      };
-    }, [controller.text]);
+        controller.addListener(listener);
+        return () {
+          controller.removeListener(listener);
+        };
+      },
+      [controller.text],
+    );
 
-    useEffect(() {
-      listener() {
-        hasFocus.value = focus.hasFocus;
-      }
+    useEffect(
+      () {
+        listener() {
+          hasFocus.value = focus.hasFocus;
+        }
 
-      focus.addListener(listener);
-      return () {
-        focus.removeListener(listener);
-      };
-    }, [focus.hasFocus]);
+        focus.addListener(listener);
+        return () {
+          focus.removeListener(listener);
+        };
+      },
+      [focus.hasFocus],
+    );
 
     Timer? debounce;
     useEffect(
