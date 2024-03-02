@@ -23,7 +23,9 @@ jobs:
         run: flutter build macos --dart-define-from-file=dart_defines/prod.json
 
       - name: Zip the app
-        run: zip -r release.zip build/macos/Build/Products/Release
+        run: |
+          cp -r build/macos/Build/Products/Release/Tokeru.app Tokeru.app
+          zip -r release.zip Tokeru.app
 
       - name: Upload ZIP to Release
         uses: actions/upload-release-asset@v1
