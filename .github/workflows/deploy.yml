@@ -1,8 +1,6 @@
 name: Build and Release macOS App
 
 on:
-  pull_request:
-    types: [opened, synchronize]
   release:
     types: [created]
 
