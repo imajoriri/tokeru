@@ -1,3 +1,6 @@
 {
-  "flavor": "prod"
+  "flavor": "prod",
+  "appName": "Tokeru",
+  "bundleId": "com.example.quickFlutter.prod",
+  "appIdSuffix": "prod"
 }
