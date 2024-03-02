@@ -1,0 +1,32 @@
+name: Build and Release macOS App
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+#   release:
+#     types: [created]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - uses: ./.github/actions/install_flutter_dependencies
+
+      - name: Build macOS app
+        run: flutter build macos
+
+      - name: Zip the app
+        run: zip -r release.zip build/macos/Build/Products/Release
+
+      - name: Upload ZIP to Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./release.zip
+          asset_name: app-macos.zip
+          asset_content_type: application/zip
