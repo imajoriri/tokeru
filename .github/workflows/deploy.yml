@@ -3,8 +3,8 @@ name: Build and Release macOS App
 on:
   pull_request:
     types: [opened, synchronize]
-#   release:
-#     types: [created]
+  release:
+    types: [created]
 
 jobs:
   build:
@@ -13,10 +13,16 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
 
+      - name: "setup java"
+        uses: actions/setup-java@v3
+        with:
+          distribution: "zulu"
+          java-version: "12.x"
+
       - uses: ./.github/actions/install_flutter_dependencies
 
       - name: Build macOS app
-        run: flutter build macos
+        run: flutter build macos --dart-define-from-file=dart_defines/prod.json
 
       - name: Zip the app
         run: zip -r release.zip build/macos/Build/Products/Release
