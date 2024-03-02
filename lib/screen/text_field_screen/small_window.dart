@@ -18,11 +18,17 @@ class _SmallWindow extends HookConsumerWidget {
         child: asyncValue.when(
           data: (todos) {
             if (todos.isEmpty) {
-              return ElevatedButton(
-                onPressed: () {
-                  ref.read(todoControllerProvider.notifier).add(0);
-                },
-                child: const Text("追加"),
+              return SizedBox(
+                width: 100,
+                child: ElevatedButton(
+                  onPressed: () {
+                    ref.read(todoControllerProvider.notifier).add(0);
+                    ref
+                        .read(windowSizeModeControllerProvider.notifier)
+                        .toLarge();
+                  },
+                  child: const Text("追加"),
+                ),
               );
             }
             final todo = todos[index];
