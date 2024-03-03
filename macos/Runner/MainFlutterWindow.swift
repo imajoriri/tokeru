@@ -74,66 +74,102 @@ class MainFlutterWindow: NSWindow {
     NotificationCenter.default.removeObserver(self)
   }
 
+  var frameWidth: CGFloat {
+    return self.frame.width
+  }
+
+  var frameHeight: CGFloat {
+    return self.frame.height
+  }
+
+  var positionY: CGFloat {
+    return self.frame.origin.y
+  }
+
+  var positionX: CGFloat {
+    return self.frame.origin.x
+  }
+
+  /// window移動のアニメーションのduration
+  var windowAnimationDuration: Double {
+    return 0.4
+  }
+
+  /// window移動のアニメーション定義
+  var windowAnimation: CAMediaTimingFunction {
+    // easeOutExpo
+    return CAMediaTimingFunction(controlPoints: 0.19, 1.0, 0.22, 1.0);
+  }
+
   func setHandler(channel: FlutterMethodChannel) {
     // Flutter側でのイベントを受け取る
     channel.setMethodCallHandler { (call, result) in
-      let windowWidth = self.frame.width
-      let windowHeight = self.frame.height
-      let windowPositionY = self.frame.origin.y
-      let windowPositionX = self.frame.origin.x
-
-      // window移動のアニメーションのduration
-      let windowAnimationDuration = 0.4
-      let easeOutExpo = CAMediaTimingFunction(controlPoints: 0.19, 1.0, 0.22, 1.0)
-
       switch call.method {
       case "openOrClosePanel":
-        // 開いてたら閉じて、閉じてたら開く
-        if self.isVisible {
-          self.close()
-        } else {
-          self.makeKeyAndOrderFront(nil)
-        }
+        self.openOrCloseWindow()
+        return
       case "setFrameSize":
-        if let args = call.arguments as? [String: Any] {
-          let width = (args["width"] as? Int) ?? Int(windowWidth)
-          let height = (args["height"] as? Int) ?? Int(windowHeight)
-          // NSPointは左下を基準とするため、Frameサイズ変更時に上を固定するためにwindowHeight - CGFloat(height)を足している
-          let frame = NSRect(origin: NSPoint(x: windowPositionX, y: windowPositionY + (windowHeight - CGFloat(height))),
-                             size: NSSize(width: width, height: height)
-          )
-          self.animator().setFrame(frame, display: true, animate: true)
-        } else {
-          print(FlutterError(code: "INVALID_ARGUMENT", message: "Width or height is not provided", details: nil))
-        }
+        self.setFrameSize(call: call)
         return
       case "windowToLeft":
-        // 現在の高さのまま、左へ移動する
-        let frame = NSRect(origin: NSPoint(x: 0, y: windowPositionY), size: NSSize(width: windowWidth, height: windowHeight))
-        NSAnimationContext.runAnimationGroup({ context in
-          context.duration = windowAnimationDuration
-          context.timingFunction = easeOutExpo
-          self.animator().setFrame(frame, display: true, animate: true)
-        })
-
+        self.windowToLeft()
         return
       case "windowToRight":
-        // 現在の高さのまま右へ移動
-        if let screen = NSScreen.main?.visibleFrame {
-          let newTopLeftPoint = NSPoint(x: screen.maxX - windowWidth, y: windowPositionY)
-          let frame = NSRect(origin: newTopLeftPoint, size: NSSize(width: windowWidth, height: windowHeight))
-          self.animator().setFrame(frame, display: true, animate: true)
-          NSAnimationContext.runAnimationGroup({ context in
-            context.duration = windowAnimationDuration
-            context.timingFunction = easeOutExpo
-            self.animator().setFrame(frame, display: true, animate: true)
-          })
-        }
+        self.windowToRight()
         return
       default:
         result(FlutterMethodNotImplemented)
         return
       }
+    }
+  }
+
+  /// ウィンドウの表示状態を切り替えます。
+  /// ウィンドウが表示されている場合は閉じ、表示されていない場合は開きます。
+  func openOrCloseWindow() {
+    if self.isVisible {
+      self.close()
+    } else {
+      self.makeKeyAndOrderFront(nil)
+    }
+  }
+
+  /// windowのサイズを変える
+  func setFrameSize(call: FlutterMethodCall) {
+    if let args = call.arguments as? [String: Any] {
+      let width = (args["width"] as? Int) ?? Int(self.frameWidth)
+      let height = (args["height"] as? Int) ?? Int(self.frameHeight)
+      // NSPointは左下を基準とするため、Frameサイズ変更時に上を固定するためにframeHeight - CGFloat(height)を足している
+      let frame = NSRect(origin: NSPoint(x: self.positionX, y: self.positionY + (self.frameHeight - CGFloat(height))),
+                         size: NSSize(width: width, height: height)
+      )
+      self.animator().setFrame(frame, display: true, animate: true)
+    } else {
+      print(FlutterError(code: "INVALID_ARGUMENT", message: "Width or height is not provided", details: nil))
+    }
+  }
+
+  func windowToLeft() {
+    // 現在の高さのまま、左へ移動する
+    let frame = NSRect(origin: NSPoint(x: 0, y: self.positionY), size: NSSize(width: self.frameWidth, height: self.frameHeight))
+    NSAnimationContext.runAnimationGroup({ context in
+      context.duration = self.windowAnimationDuration
+      context.timingFunction = self.windowAnimation
+      self.animator().setFrame(frame, display: true, animate: true)
+    })
+  }
+
+  func windowToRight() {
+    // 現在の高さのまま右へ移動
+    if let screen = NSScreen.main?.visibleFrame {
+      let newTopLeftPoint = NSPoint(x: screen.maxX - self.frameWidth, y: self.positionY)
+      let frame = NSRect(origin: newTopLeftPoint, size: NSSize(width: self.frameWidth, height: self.frameHeight))
+      self.animator().setFrame(frame, display: true, animate: true)
+      NSAnimationContext.runAnimationGroup({ context in
+        context.duration = self.windowAnimationDuration
+        context.timingFunction = self.windowAnimation
+        self.animator().setFrame(frame, display: true, animate: true)
+      })
     }
   }
 }
