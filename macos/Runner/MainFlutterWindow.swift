@@ -82,10 +82,12 @@ class MainFlutterWindow: NSWindow {
     return self.frame.height
   }
 
+  /// ウィンドウ左下を基準とした縦のポジション
   var positionY: CGFloat {
     return self.frame.origin.y
   }
 
+  /// ウィンドウ左下を基準とした横のポジション
   var positionX: CGFloat {
     return self.frame.origin.x
   }
@@ -135,15 +137,29 @@ class MainFlutterWindow: NSWindow {
   }
 
   /// windowのサイズを変える
+  ///
+  /// ウィンドウが画面下にあれば上に大きくor小さくなり、
+  /// 画面上にあれば下に大きくorちいさくなる。
   func setFrameSize(call: FlutterMethodCall) {
     if let args = call.arguments as? [String: Any] {
       let width = (args["width"] as? Int) ?? Int(self.frameWidth)
       let height = (args["height"] as? Int) ?? Int(self.frameHeight)
-      // NSPointは左下を基準とするため、Frameサイズ変更時に上を固定するためにframeHeight - CGFloat(height)を足している
-      let frame = NSRect(origin: NSPoint(x: self.positionX, y: self.positionY + (self.frameHeight - CGFloat(height))),
-                         size: NSSize(width: width, height: height)
-      )
-      self.animator().setFrame(frame, display: true, animate: true)
+      let screenHeight = NSScreen.main?.frame.height ?? 1080
+      // ウィンドウの上部から画面上部までの距離
+      let distanceToTop = screenHeight - (self.positionY + self.frameHeight)
+      // ウィンドウの下部から画面下部までの距離
+      let distanceToBottom = self.positionY
+      if distanceToTop < distanceToBottom {
+        // NSPointは左下を基準とするため、Frameサイズ変更時に上を固定するためにframeHeight - CGFloat(height)を足している
+        let frame = NSRect(origin: NSPoint(x: self.positionX, y: self.positionY + (self.frameHeight - CGFloat(height))),
+                           size: NSSize(width: width, height: height))
+        self.animator().setFrame(frame, display: true, animate: true)
+      } else {
+        let frame = NSRect(origin: NSPoint(x: self.positionX, y: self.positionY),
+                           size: NSSize(width: width, height: height)
+        )
+        self.animator().setFrame(frame, display: true, animate: true)
+      }
     } else {
       print(FlutterError(code: "INVALID_ARGUMENT", message: "Width or height is not provided", details: nil))
     }
