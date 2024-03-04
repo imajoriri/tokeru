@@ -34,7 +34,9 @@ class BookmarkController extends _$BookmarkController {
 }
 
 class TextFieldScreen extends HookConsumerWidget {
-  const TextFieldScreen({super.key});
+  TextFieldScreen({super.key});
+
+  final largeWindowKey = GlobalKey();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -56,18 +58,15 @@ class TextFieldScreen extends HookConsumerWidget {
 
     ref.listen(windowSizeModeControllerProvider, (previous, next) {
       final _ = switch (next) {
+        // TODO: ここもビルド後にする??
         WindowSizeMode.small => {
             ref.read(methodChannelProvider).invokeMethod(
               AppMethodChannel.setFrameSize.name,
               {"height": 50},
             ),
           },
-        WindowSizeMode.large => {
-            ref.read(methodChannelProvider).invokeMethod(
-              AppMethodChannel.setFrameSize.name,
-              {"height": 500},
-            ),
-          },
+        // .largeになるときは `_LargeWindow` のコールバックでサイズを変えるので不要
+        WindowSizeMode.large => {},
       };
     });
 
@@ -88,7 +87,31 @@ class TextFieldScreen extends HookConsumerWidget {
           children: [
             switch (windowSizeMode) {
               WindowSizeMode.small => _SmallWindow(),
-              WindowSizeMode.large => _LargeWindow(),
+              WindowSizeMode.large =>
+                NotificationListener<SizeChangedLayoutNotification>(
+                  onNotification: (notification) {
+                    // サイズが変更されたことを検知した時の処理
+                    ref.read(methodChannelProvider).invokeMethod(
+                      AppMethodChannel.setFrameSize.name,
+                      {"height": largeWindowKey.currentContext?.size?.height},
+                    );
+                    return true;
+                  },
+                  child: SizeChangedLayoutNotifier(
+                    child: _LargeWindow(
+                      key: largeWindowKey,
+                      onBuildCallback: () {
+                        ref.read(methodChannelProvider).invokeMethod(
+                          AppMethodChannel.setFrameSize.name,
+                          {
+                            "height":
+                                largeWindowKey.currentContext?.size?.height,
+                          },
+                        );
+                      },
+                    ), // サイズ変更を監視したいウィジェット
+                  ),
+                ),
             },
           ],
         ),
