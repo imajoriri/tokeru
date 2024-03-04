@@ -17,7 +17,7 @@ void main() async {
     ProviderScope(
       observers: [_AppObserver()],
       child: AppMaterialApp(
-        home: const TextFieldScreen(),
+        home: TextFieldScreen(),
       ),
     ),
   );
