@@ -53,11 +53,10 @@ class TextFieldScreen extends HookConsumerWidget {
       },
     );
 
+    // 特に何もしていないが、今後何かするかもしれないので思い出しやすいように残してる。
     ref.listen(windowSizeModeControllerProvider, (previous, next) {
       final _ = switch (next) {
-        WindowSizeMode.small => {
-            FocusScope.of(context).unfocus(),
-          },
+        WindowSizeMode.small => {},
         WindowSizeMode.large => {},
       };
     });
@@ -65,6 +64,7 @@ class TextFieldScreen extends HookConsumerWidget {
     channel.setMethodCallHandler((call) async {
       switch (call.method) {
         case 'inactive':
+          FocusScope.of(context).unfocus();
           if (!bookmark) {
             ref.read(windowSizeModeControllerProvider.notifier).toSmall();
           }
@@ -130,6 +130,7 @@ class _LargeWindow extends HookConsumerWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          const TodoList(),
           if (windowSizeMode == WindowSizeMode.large)
             Row(
               children: [
@@ -193,7 +194,6 @@ class _LargeWindow extends HookConsumerWidget {
               ],
             ),
 
-          const TodoList(),
           // 初期リリースでは非表示
           // _MemoScreen(),
         ],
