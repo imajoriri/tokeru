@@ -44,7 +44,7 @@ class TodoList extends HookConsumerWidget {
                 onChanged: (value) {
                   ref
                       .read(todoControllerProvider.notifier)
-                      .updateTodoTitle(index: index, title: value);
+                      .updateTodoTitle(cartId: todos[index].id, title: value);
                 },
                 onChecked: (value) async {
                   await ref

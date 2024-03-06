@@ -84,12 +84,13 @@ class TodoController extends _$TodoController {
     state = AsyncData(tmp);
   }
 
-  /// [index]の[Todo.title]を更新する
+  /// [cartId]の[Todo.title]を更新する
   Future<void> updateTodoTitle({
-    required int index,
+    required String cartId,
     required String title,
   }) async {
-    final todo = state.value![index].copyWith(title: title);
+    final index = state.valueOrNull!.indexWhere((e) => e.id == cartId);
+    final todo = state.valueOrNull![index].copyWith(title: title);
     try {
       await todoRepository!.update(
         id: todo.id,
