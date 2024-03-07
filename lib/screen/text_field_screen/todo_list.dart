@@ -116,9 +116,7 @@ class TodoListItem extends HookConsumerWidget {
     this.onNextTodo,
     this.onPreviousTodo,
     this.onDelete,
-    this.contentPadding = const EdgeInsets.only(
-      bottom: 4,
-    ),
+    this.contentPadding,
   });
 
   final Todo todo;
@@ -239,23 +237,26 @@ class TodoListItem extends HookConsumerWidget {
                 }
                 return KeyEventResult.ignored;
               },
-              child: TextField(
-                controller: controller,
-                focusNode: focusNode,
-                onSubmitted: (value) {
-                  // フォーカスが外れてしまうため、意図的にフォーカスを戻す
-                  focusNode.requestFocus();
-                  onAdd?.call();
-                },
-                onTap: () {
-                  onTapTextField?.call();
-                },
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  // チェックボックスとの高さを調整するためのpadding
-                  contentPadding: contentPadding,
-                  hintText: 'write a todo...',
-                  isCollapsed: true,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: TextField(
+                  controller: controller,
+                  focusNode: focusNode,
+                  onSubmitted: (value) {
+                    // フォーカスが外れてしまうため、意図的にフォーカスを戻す
+                    focusNode.requestFocus();
+                    onAdd?.call();
+                  },
+                  onTap: () {
+                    onTapTextField?.call();
+                  },
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    // チェックボックスとの高さを調整するためのpadding
+                    contentPadding: contentPadding,
+                    hintText: 'write a todo...',
+                    isCollapsed: true,
+                  ),
                 ),
               ),
             ),
