@@ -126,7 +126,7 @@ class _LargeWindow extends HookConsumerWidget {
     );
 
     return Padding(
-      padding: const EdgeInsets.only(top: 2.0, left: 4, right: 4),
+      padding: const EdgeInsets.only(top: 0, left: 4, right: 4),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
