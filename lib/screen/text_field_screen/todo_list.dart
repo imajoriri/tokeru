@@ -33,65 +33,72 @@ class TodoList extends HookConsumerWidget {
             return Offstage(
               key: ValueKey(todos[index].id),
               offstage: offstate,
-              child: TodoListItem(
-                todo: todos[index],
-                contentPadding: windowSizeMode == WindowSizeMode.large
-                    ? null
-                    : const EdgeInsets.symmetric(vertical: 20),
-                onTapTextField: () {
-                  ref.read(windowSizeModeControllerProvider.notifier).toLarge();
-                },
-                onChanged: (value) {
-                  ref
-                      .read(todoControllerProvider.notifier)
-                      .updateTodoTitle(cartId: todos[index].id, title: value);
-                },
-                onChecked: (value) async {
-                  await ref
-                      .read(todoControllerProvider.notifier)
-                      .updateIsDone(index);
-                },
-                onAdd: () async {
-                  await ref
-                      .read(todoControllerProvider.notifier)
-                      .add(index + 1);
-                  ref
-                      .read(todoControllerProvider.notifier)
-                      .updateCurrentOrder();
-                  // rebuild後にnextFocusする
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    FocusScope.of(context).nextFocus();
-                  });
-                },
-                onAddIndent: () {
-                  ref
-                      .read(todoControllerProvider.notifier)
-                      .addIndent(todos[index]);
-                },
-                onMinusIndent: () {
-                  ref
-                      .read(todoControllerProvider.notifier)
-                      .minusIndent(todos[index]);
-                },
-                onNextTodo: () {
-                  if (index + 1 < todos.length) {
-                    FocusScope.of(context).nextFocus();
-                  }
-                },
-                onPreviousTodo: () {
-                  if (index != 0) {
-                    FocusScope.of(context).previousFocus();
-                  }
-                },
-                onDelete: () {
-                  // 最後の１つの場合、previousFoucsすると他のFocusに移動しちゃうため
-                  if (todos.length != 1) {
-                    FocusScope.of(context).previousFocus();
-                  }
-                  ref
-                      .read(todoControllerProvider.notifier)
-                      .delete(todos[index]);
-                },
+              child: Padding(
+                padding: index == todos.length - 1
+                    ? const EdgeInsets.only(bottom: 4)
+                    : EdgeInsets.zero,
+                child: TodoListItem(
+                  todo: todos[index],
+                  contentPadding: windowSizeMode == WindowSizeMode.large
+                      ? null
+                      : const EdgeInsets.symmetric(vertical: 16),
+                  onTapTextField: () {
+                    ref
+                        .read(windowSizeModeControllerProvider.notifier)
+                        .toLarge();
+                  },
+                  onChanged: (value) {
+                    ref
+                        .read(todoControllerProvider.notifier)
+                        .updateTodoTitle(cartId: todos[index].id, title: value);
+                  },
+                  onChecked: (value) async {
+                    await ref
+                        .read(todoControllerProvider.notifier)
+                        .updateIsDone(index);
+                  },
+                  onAdd: () async {
+                    await ref
+                        .read(todoControllerProvider.notifier)
+                        .add(index + 1);
+                    ref
+                        .read(todoControllerProvider.notifier)
+                        .updateCurrentOrder();
+                    // rebuild後にnextFocusする
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      FocusScope.of(context).nextFocus();
+                    });
+                  },
+                  onAddIndent: () {
+                    ref
+                        .read(todoControllerProvider.notifier)
+                        .addIndent(todos[index]);
+                  },
+                  onMinusIndent: () {
+                    ref
+                        .read(todoControllerProvider.notifier)
+                        .minusIndent(todos[index]);
+                  },
+                  onNextTodo: () {
+                    if (index + 1 < todos.length) {
+                      FocusScope.of(context).nextFocus();
+                    }
+                  },
+                  onPreviousTodo: () {
+                    if (index != 0) {
+                      FocusScope.of(context).previousFocus();
+                    }
+                  },
+                  onDelete: () {
+                    // 最後の１つの場合、previousFoucsすると他のFocusに移動しちゃうため
+                    if (todos.length != 1) {
+                      FocusScope.of(context).previousFocus();
+                    }
+                    ref
+                        .read(todoControllerProvider.notifier)
+                        .delete(todos[index]);
+                  },
+                ),
               ),
             );
           },
