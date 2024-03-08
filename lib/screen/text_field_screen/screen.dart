@@ -178,6 +178,17 @@ class _Header extends ConsumerWidget {
               IconButton(
                 onPressed: () {
                   ref.read(bookmarkControllerProvider.notifier).toggle();
+                  // ピンをONにした時は、Largeにする
+                  // OFFにした場合は、smallにし、ウィンドウ自体も非アクティブにするする。
+                  if (ref.read(bookmarkControllerProvider)) {
+                    ref
+                        .read(windowSizeModeControllerProvider.notifier)
+                        .toLarge();
+                  } else {
+                    ref
+                        .read(windowSizeModeControllerProvider.notifier)
+                        .toSmall();
+                  }
                 },
                 tooltip: 'Window does not shrink when inactive',
                 icon: Icon(
