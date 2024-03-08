@@ -69,16 +69,17 @@ class TodoList extends HookConsumerWidget {
                       FocusScope.of(context).nextFocus();
                     });
                   },
-                  onAddIndent: () {
-                    ref
-                        .read(todoControllerProvider.notifier)
-                        .addIndent(todos[index]);
-                  },
-                  onMinusIndent: () {
-                    ref
-                        .read(todoControllerProvider.notifier)
-                        .minusIndent(todos[index]);
-                  },
+                  // インデント機能は一旦オミット
+                  // onAddIndent: () {
+                  // ref
+                  //     .read(todoControllerProvider.notifier)
+                  //     .addIndent(todos[index]);
+                  // },
+                  // onMinusIndent: () {
+                  //   ref
+                  //       .read(todoControllerProvider.notifier)
+                  //       .minusIndent(todos[index]);
+                  // },
                   onNextTodo: () {
                     if (index + 1 < todos.length) {
                       FocusScope.of(context).nextFocus();
@@ -223,15 +224,18 @@ class TodoListItem extends HookConsumerWidget {
                   return KeyEventResult.ignored;
                 }
                 if (event is RawKeyDownEvent) {
-                  if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+                  if (event.logicalKey == LogicalKeyboardKey.arrowDown &&
+                      onNextTodo != null) {
                     onNextTodo?.call();
                     return KeyEventResult.handled;
                   }
-                  if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+                  if (event.logicalKey == LogicalKeyboardKey.arrowUp &&
+                      onPreviousTodo != null) {
                     onPreviousTodo?.call();
                     return KeyEventResult.handled;
                   }
-                  if (event.logicalKey == LogicalKeyboardKey.tab) {
+                  if (event.logicalKey == LogicalKeyboardKey.tab &&
+                      onAddIndent != null) {
                     onAddIndent?.call();
                     return KeyEventResult.handled;
                   }
