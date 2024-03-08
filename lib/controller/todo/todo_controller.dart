@@ -105,7 +105,11 @@ class TodoController extends _$TodoController {
   }
 
   /// TodoのisDoneをtrueに更新し、リストから削除する
-  Future<void> updateIsDone(int index, {bool isDone = true}) async {
+  Future<void> updateIsDone({
+    required String cartId,
+    bool isDone = true,
+  }) async {
+    final index = state.valueOrNull!.indexWhere((e) => e.id == cartId);
     final todo = state.value![index].copyWith(isDone: isDone);
     final tmp = [...state.value!];
     tmp.removeAt(index);
