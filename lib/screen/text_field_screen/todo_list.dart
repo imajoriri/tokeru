@@ -55,7 +55,7 @@ class TodoList extends HookConsumerWidget {
                   onChecked: (value) async {
                     await ref
                         .read(todoControllerProvider.notifier)
-                        .updateIsDone(index);
+                        .updateIsDone(cartId: todos[index].id);
                   },
                   onAdd: () async {
                     await ref
@@ -172,6 +172,8 @@ class TodoListItem extends HookConsumerWidget {
     final controller = useTextEditingController(text: todo.title);
     final focusNode = useFocusNode();
 
+    final isDone = useState(todo.isDone);
+
     Timer? debounce;
     useEffect(
       () {
@@ -201,8 +203,13 @@ class TodoListItem extends HookConsumerWidget {
       child: Row(
         children: [
           Checkbox(
-            value: todo.isDone,
-            onChanged: onChecked,
+            value: isDone.value,
+            onChanged: (val) {
+              isDone.value = val ?? true;
+              Future.delayed(const Duration(milliseconds: 500), () {
+                onChecked?.call(val);
+              });
+            },
             focusNode: useFocusNode(
               skipTraversal: true,
             ),
@@ -249,6 +256,14 @@ class TodoListItem extends HookConsumerWidget {
                 child: TextField(
                   controller: controller,
                   focusNode: focusNode,
+                  readOnly: isDone.value ? true : false,
+                  style: context.textTheme.bodyLarge!.copyWith(
+                    color: isDone.value ? Colors.grey : Colors.black,
+                  ),
+                  maxLines: null,
+                  // maxLinesがnullでもEnterで `onSubmitted`を検知するために
+                  // `TextInputAction.done`である必要がある。
+                  textInputAction: TextInputAction.done,
                   onSubmitted: (value) {
                     // フォーカスが外れてしまうため、意図的にフォーカスを戻す
                     focusNode.requestFocus();
