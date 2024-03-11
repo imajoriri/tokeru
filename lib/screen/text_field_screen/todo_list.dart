@@ -19,6 +19,7 @@ class TodoList extends HookConsumerWidget {
           );
         }
         return ReorderableListView.builder(
+          buildDefaultDragHandles: false,
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: todos.length,
@@ -30,76 +31,84 @@ class TodoList extends HookConsumerWidget {
           itemBuilder: (context, index) {
             final offstate =
                 index == 0 ? false : windowSizeMode == WindowSizeMode.small;
+            final key = ValueKey(todos[index].id);
             return Offstage(
-              key: ValueKey(todos[index].id),
+              key: key,
               offstage: offstate,
-              child: Padding(
-                padding: index == todos.length - 1
-                    ? const EdgeInsets.only(bottom: 4)
-                    : EdgeInsets.zero,
-                child: TodoListItem(
-                  todo: todos[index],
-                  contentPadding: windowSizeMode == WindowSizeMode.large
-                      ? null
-                      : const EdgeInsets.symmetric(vertical: 16),
-                  onTapTextField: () {
-                    ref
-                        .read(windowSizeModeControllerProvider.notifier)
-                        .toLarge();
-                  },
-                  onChanged: (value) {
-                    ref
-                        .read(todoControllerProvider.notifier)
-                        .updateTodoTitle(cartId: todos[index].id, title: value);
-                  },
-                  onChecked: (value) async {
-                    await ref
-                        .read(todoControllerProvider.notifier)
-                        .updateIsDone(cartId: todos[index].id);
-                  },
-                  onAdd: () async {
-                    await ref
-                        .read(todoControllerProvider.notifier)
-                        .add(index + 1);
-                    ref
-                        .read(todoControllerProvider.notifier)
-                        .updateCurrentOrder();
-                    // rebuild後にnextFocusする
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      FocusScope.of(context).nextFocus();
-                    });
-                  },
-                  // インデント機能は一旦オミット
-                  // onAddIndent: () {
-                  // ref
-                  //     .read(todoControllerProvider.notifier)
-                  //     .addIndent(todos[index]);
-                  // },
-                  // onMinusIndent: () {
-                  //   ref
-                  //       .read(todoControllerProvider.notifier)
-                  //       .minusIndent(todos[index]);
-                  // },
-                  onNextTodo: () {
-                    if (index + 1 < todos.length) {
-                      FocusScope.of(context).nextFocus();
-                    }
-                  },
-                  onPreviousTodo: () {
-                    if (index != 0) {
-                      FocusScope.of(context).previousFocus();
-                    }
-                  },
-                  onDelete: () {
-                    // 最後の１つの場合、previousFoucsすると他のFocusに移動しちゃうため
-                    if (todos.length != 1) {
-                      FocusScope.of(context).previousFocus();
-                    }
-                    ref
-                        .read(todoControllerProvider.notifier)
-                        .delete(todos[index]);
-                  },
-                ),
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: index == todos.length - 1
+                        ? const EdgeInsets.only(bottom: 4)
+                        : EdgeInsets.zero,
+                    child: TodoListItem(
+                      todo: todos[index],
+                      contentPadding: windowSizeMode == WindowSizeMode.large
+                          ? null
+                          : const EdgeInsets.symmetric(vertical: 16),
+                      onTapTextField: () {
+                        ref
+                            .read(windowSizeModeControllerProvider.notifier)
+                            .toLarge();
+                      },
+                      onChanged: (value) {
+                        ref
+                            .read(todoControllerProvider.notifier)
+                            .updateTodoTitle(
+                                cartId: todos[index].id, title: value);
+                      },
+                      onChecked: (value) async {
+                        await ref
+                            .read(todoControllerProvider.notifier)
+                            .updateIsDone(cartId: todos[index].id);
+                      },
+                      onAdd: () async {
+                        await ref
+                            .read(todoControllerProvider.notifier)
+                            .add(index + 1);
+                        ref
+                            .read(todoControllerProvider.notifier)
+                            .updateCurrentOrder();
+                        // rebuild後にnextFocusする
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          FocusScope.of(context).nextFocus();
+                        });
+                      },
+                      // インデント機能は一旦オミット
+                      // onAddIndent: () {
+                      // ref
+                      //     .read(todoControllerProvider.notifier)
+                      //     .addIndent(todos[index]);
+                      // },
+                      // onMinusIndent: () {
+                      //   ref
+                      //       .read(todoControllerProvider.notifier)
+                      //       .minusIndent(todos[index]);
+                      // },
+                      onNextTodo: () {
+                        if (index + 1 < todos.length) {
+                          FocusScope.of(context).nextFocus();
+                        }
+                      },
+                      onPreviousTodo: () {
+                        if (index != 0) {
+                          FocusScope.of(context).previousFocus();
+                        }
+                      },
+                      onDelete: () {
+                        // 最後の１つの場合、previousFoucsすると他のFocusに移動しちゃうため
+                        if (todos.length != 1) {
+                          FocusScope.of(context).previousFocus();
+                        }
+                        ref
+                            .read(todoControllerProvider.notifier)
+                            .delete(todos[index]);
+                      },
+                    ),
+                  ),
+                  // ドラッグ&ドロップのアイコン
+                  _DragIndicatorIcon(index: index),
+                ],
               ),
             );
           },
@@ -107,6 +116,44 @@ class TodoList extends HookConsumerWidget {
       },
       error: (e, s) => const Text('happen somethings'),
       loading: () => const CircularProgressIndicator(),
+    );
+  }
+}
+
+/// リストのドラッグ&ドロップ可能を記すアイコン
+///
+/// マウスでHoverしている時のみ表示される。
+/// [WindowSizeMode]が`large`の時は[SizedBox]を返す。
+class _DragIndicatorIcon extends ConsumerWidget {
+  const _DragIndicatorIcon({required this.index});
+
+  /// リストのindex
+  final int index;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final windowSizeMode = ref.watch(windowSizeModeControllerProvider);
+    if (windowSizeMode == WindowSizeMode.small) {
+      return const SizedBox();
+    }
+    return Positioned.directional(
+      textDirection: Directionality.of(context),
+      top: 0,
+      bottom: 0,
+      end: 8,
+      child: Align(
+        alignment: AlignmentDirectional.centerEnd,
+        child: ReorderableDragStartListener(
+          index: index,
+          child: const MouseRegion(
+            cursor: SystemMouseCursors.grabbing,
+            child: Icon(
+              Icons.drag_indicator_outlined,
+              color: Colors.grey,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
