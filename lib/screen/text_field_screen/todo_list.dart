@@ -43,10 +43,7 @@ class TodoList extends HookConsumerWidget {
   }
 }
 
-/// リストのドラッグ&ドロップ可能を記すアイコン
-///
-/// マウスでHoverしている時のみ表示される。
-/// [WindowSizeMode]が`large`の時は[SizedBox]を返す。
+/// [ReorderableListView]の中で使う[Todo]のリスト
 class _ReorderableTodoListItem extends HookConsumerWidget {
   const _ReorderableTodoListItem({
     super.key,
@@ -153,7 +150,7 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
                   child: ReorderableDragStartListener(
                     index: index,
                     child: const MouseRegion(
-                      cursor: SystemMouseCursors.grabbing,
+                      cursor: SystemMouseCursors.grab,
                       child: Icon(
                         Icons.drag_indicator_outlined,
                         color: Colors.grey,
