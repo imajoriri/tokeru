@@ -7,6 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/controller/memo/memo_controller.dart';
 import 'package:quick_flutter/controller/method_channel/method_channel_controller.dart';
 import 'package:quick_flutter/controller/todo/todo_controller.dart';
+import 'package:quick_flutter/controller/todo_focus/todo_focus_controller.dart';
 import 'package:quick_flutter/controller/window_size_mode/window_size_mode_controller.dart';
 import 'package:quick_flutter/model/todo/todo.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
@@ -164,6 +165,7 @@ class _Header extends ConsumerWidget {
           cursor: SystemMouseCursors.grabbing,
           child: Icon(Icons.drag_indicator_outlined),
         ),
+        // 右がわのアイコン
         Expanded(
           flex: 1,
           child: Row(
@@ -205,6 +207,18 @@ class _Header extends ConsumerWidget {
                   );
                 },
                 icon: const Icon(Icons.arrow_circle_right_outlined),
+              ),
+              IconButton(
+                onPressed: () async {
+                  ref.read(windowSizeModeControllerProvider.notifier).toLarge();
+                  await ref.read(todoControllerProvider.notifier).add(0);
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    ref
+                        .read(todoFocusControllerProvider.notifier)
+                        .requestFocus(0);
+                  });
+                },
+                icon: const Icon(Icons.add_circle_outline),
               ),
             ],
           ),

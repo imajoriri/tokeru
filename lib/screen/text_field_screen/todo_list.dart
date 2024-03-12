@@ -80,6 +80,7 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
                   : EdgeInsets.zero,
               child: TodoListItem(
                 todo: todo,
+                focusNode: ref.watch(todoFocusControllerProvider)[index],
                 contentPadding: windowSizeMode == WindowSizeMode.large
                     ? null
                     : const EdgeInsets.symmetric(vertical: 16),
@@ -100,12 +101,14 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
                   await ref
                       .read(todoControllerProvider.notifier)
                       .add(index + 1);
-                  ref
+                  await ref
                       .read(todoControllerProvider.notifier)
                       .updateCurrentOrder();
                   // rebuild後にnextFocusする
                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                    FocusScope.of(context).nextFocus();
+                    ref
+                        .read(todoFocusControllerProvider)[index + 1]
+                        .requestFocus();
                   });
                 },
                 // インデント機能は一旦オミット
@@ -120,21 +123,21 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
                 //       .minusIndent(todos[index]);
                 // },
                 onNextTodo: () {
-                  if (index + 1 < todoLength) {
-                    FocusScope.of(context).nextFocus();
-                  }
+                  ref.read(todoFocusControllerProvider.notifier).focusNext();
                 },
                 onPreviousTodo: () {
-                  if (index != 0) {
-                    FocusScope.of(context).previousFocus();
-                  }
+                  ref
+                      .read(todoFocusControllerProvider.notifier)
+                      .fucusPrevious();
                 },
-                onDelete: () {
+                onDelete: () async {
+                  await ref.read(todoControllerProvider.notifier).delete(todo);
                   // 最後の１つの場合、previousFoucsすると他のFocusに移動しちゃうため
                   if (todoLength != 1) {
-                    FocusScope.of(context).previousFocus();
+                    ref
+                        .read(todoFocusControllerProvider.notifier)
+                        .requestFocus(index - 1);
                   }
-                  ref.read(todoControllerProvider.notifier).delete(todo);
                 },
               ),
             ),
@@ -170,6 +173,7 @@ class TodoListItem extends HookConsumerWidget {
   const TodoListItem({
     super.key,
     required this.todo,
+    required this.focusNode,
     this.onTapTextField,
     this.onChecked,
     this.onChanged,
@@ -183,6 +187,8 @@ class TodoListItem extends HookConsumerWidget {
   });
 
   final Todo todo;
+
+  final FocusNode focusNode;
 
   /// チェックされた時
   final void Function(bool?)? onChecked;
@@ -226,8 +232,6 @@ class TodoListItem extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = useTextEditingController(text: todo.title);
-    final focusNode = useFocusNode();
-
     final isDone = useState(todo.isDone);
 
     Timer? debounce;
@@ -324,8 +328,6 @@ class TodoListItem extends HookConsumerWidget {
                   // `TextInputAction.done`である必要がある。
                   textInputAction: TextInputAction.done,
                   onSubmitted: (value) {
-                    // フォーカスが外れてしまうため、意図的にフォーカスを戻す
-                    focusNode.requestFocus();
                     onAdd?.call();
                   },
                   onTap: () {
