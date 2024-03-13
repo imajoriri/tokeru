@@ -113,6 +113,9 @@ class MainFlutterWindow: NSWindow {
       case "setFrameSize":
         self.setFrameSize(call: call)
         return
+      case "switchHorizen":
+        self.switchHorizen()
+        return
       case "windowToLeft":
         self.windowToLeft()
         return
@@ -122,6 +125,19 @@ class MainFlutterWindow: NSWindow {
       default:
         result(FlutterMethodNotImplemented)
         return
+      }
+    }
+  }
+
+  /// ウィンドウが右にあれば左端に、左にあれば右端に移動する
+  func switchHorizen() {
+    if let screen = NSScreen.main?.visibleFrame {
+      // ウィンドウが今、画面の右にるかどうか
+      let isRight = self.positionX > screen.midX
+      if isRight {
+        self.windowToLeft()
+      } else {
+        self.windowToRight()
       }
     }
   }

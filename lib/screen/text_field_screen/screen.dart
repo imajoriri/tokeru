@@ -173,12 +173,6 @@ class _Header extends ConsumerWidget {
             children: [
               IconButton(
                 onPressed: () {
-                  channel.invokeMethod(AppMethodChannel.windowToLeft.name);
-                },
-                icon: const Icon(Icons.arrow_circle_left_outlined),
-              ),
-              IconButton(
-                onPressed: () {
                   ref.read(bookmarkControllerProvider.notifier).toggle();
                   // ピンをONにした時は、Largeにする
                   // OFFにした場合は、smallにし、ウィンドウ自体も非アクティブにするする。
@@ -203,10 +197,10 @@ class _Header extends ConsumerWidget {
               IconButton(
                 onPressed: () {
                   channel.invokeMethod(
-                    AppMethodChannel.windowToRight.name,
+                    AppMethodChannel.switchHorizen.name,
                   );
                 },
-                icon: const Icon(Icons.arrow_circle_right_outlined),
+                icon: const Icon(Icons.compare_arrows_rounded),
               ),
               IconButton(
                 onPressed: () async {
