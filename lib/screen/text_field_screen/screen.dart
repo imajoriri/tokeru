@@ -150,6 +150,7 @@ class _Header extends ConsumerWidget {
           child: Row(
             children: [
               IconButton(
+                tooltip: 'Close',
                 onPressed: () {
                   channel.invokeMethod(
                     AppMethodChannel.openOrClosePanel.name,
@@ -195,6 +196,7 @@ class _Header extends ConsumerWidget {
                     : context.colorScheme.secondary,
               ),
               IconButton(
+                tooltip: 'Move the windowto the opposite side',
                 onPressed: () {
                   channel.invokeMethod(
                     AppMethodChannel.switchHorizen.name,
@@ -203,6 +205,7 @@ class _Header extends ConsumerWidget {
                 icon: const Icon(Icons.compare_arrows_rounded),
               ),
               IconButton(
+                tooltip: 'Add Todo',
                 onPressed: () async {
                   ref.read(windowSizeModeControllerProvider.notifier).toLarge();
                   await ref.read(todoControllerProvider.notifier).add(0);
