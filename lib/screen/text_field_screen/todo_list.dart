@@ -83,7 +83,7 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
                 focusNode: ref.watch(todoFocusControllerProvider)[index],
                 contentPadding: windowSizeMode == WindowSizeMode.large
                     ? null
-                    : const EdgeInsets.symmetric(vertical: 16),
+                    : const EdgeInsets.symmetric(vertical: 8),
                 onTapTextField: () {
                   ref.read(windowSizeModeControllerProvider.notifier).toLarge();
                 },
@@ -142,7 +142,7 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
               ),
             ),
             // ドラッグ&ドロップのアイコン
-            if (onHover.value)
+            if (onHover.value && windowSizeMode == WindowSizeMode.large)
               Positioned.directional(
                 textDirection: Directionality.of(context),
                 top: 0,
