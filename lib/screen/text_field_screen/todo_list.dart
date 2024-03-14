@@ -9,11 +9,20 @@ class TodoList extends HookConsumerWidget {
     return todos.when(
       data: (todos) {
         if (todos.isEmpty) {
-          return ElevatedButton(
-            onPressed: () {
-              ref.read(todoControllerProvider.notifier).add(0);
-            },
-            child: const Text("追加"),
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextButton(
+              child: const Text('start adding todos!'),
+              onPressed: () async {
+                ref.read(windowSizeModeControllerProvider.notifier).toLarge();
+                await ref.read(todoControllerProvider.notifier).add(0);
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  ref
+                      .read(todoFocusControllerProvider.notifier)
+                      .requestFocus(0);
+                });
+              },
+            ),
           );
         }
         return ReorderableListView.builder(
