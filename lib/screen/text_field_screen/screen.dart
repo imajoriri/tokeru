@@ -196,7 +196,7 @@ class _Header extends ConsumerWidget {
                     : context.colorScheme.secondary,
               ),
               IconButton(
-                tooltip: 'Move the windowto the opposite side',
+                tooltip: 'Move the window to the opposite side',
                 onPressed: () {
                   channel.invokeMethod(
                     AppMethodChannel.switchHorizen.name,
