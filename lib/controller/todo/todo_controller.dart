@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:quick_flutter/controller/user/user_controller.dart';
 import 'package:quick_flutter/model/todo/todo.dart';
@@ -13,6 +15,7 @@ part 'todo_controller.g.dart';
 @Riverpod(keepAlive: true)
 class TodoController extends _$TodoController {
   TodoRepository? todoRepository;
+  Timer? _deleteDonesDebounce;
 
   @override
   FutureOr<List<Todo>> build() async {
@@ -104,20 +107,22 @@ class TodoController extends _$TodoController {
     state = AsyncData(tmp);
   }
 
-  /// TodoのisDoneをtrueに更新し、リストから削除する
+  /// [Todo]のisDoneを更新する。
+  ///
+  /// [Todo]の状態は更新するが、リストの中から削除はしない。
   Future<void> updateIsDone({
     required String cartId,
     bool isDone = true,
   }) async {
     final index = state.valueOrNull!.indexWhere((e) => e.id == cartId);
-    final todo = state.value![index].copyWith(isDone: isDone);
     final tmp = [...state.value!];
-    tmp.removeAt(index);
+    final todo = state.value![index].copyWith(isDone: isDone);
+    tmp[index] = todo;
     state = AsyncData(tmp);
     try {
       await todoRepository!.update(
         id: todo.id,
-        isDone: true,
+        isDone: isDone,
       );
     } on Exception catch (e, s) {
       await FirebaseCrashlytics.instance.recordError(e, s);
@@ -148,5 +153,19 @@ class TodoController extends _$TodoController {
     state = AsyncData(tmp);
 
     await todoRepository!.updateOrder(todos: tmp);
+  }
+
+  /// [Todo.isDone]がtrueのものをリストから削除する。
+  ///
+  /// このメソッドが[milliseconds]以内に複数回呼ばれた場合、最後の呼び出しのみが実行される。
+  Future<void> deleteDoneWithDebounce({int milliseconds = 1200}) async {
+    // 既存のデバウンスタイマーをキャンセル
+    _deleteDonesDebounce?.cancel();
+
+    _deleteDonesDebounce =
+        Timer(Duration(milliseconds: milliseconds), () async {
+      final tmp = [...state.value!.where((e) => !e.isDone)];
+      state = AsyncData(tmp);
+    });
   }
 }

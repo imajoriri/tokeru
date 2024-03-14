@@ -104,7 +104,10 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
                 onChecked: (value) async {
                   await ref
                       .read(todoControllerProvider.notifier)
-                      .updateIsDone(cartId: todo.id);
+                      .updateIsDone(cartId: todo.id, isDone: value!);
+                  ref
+                      .read(todoControllerProvider.notifier)
+                      .deleteDoneWithDebounce();
                 },
                 onAdd: () async {
                   await ref
@@ -241,6 +244,9 @@ class TodoListItem extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = useTextEditingController(text: todo.title);
+    // NOTE: チェック時に`todo_controller`のTodoのisDoneは更新しているが、
+    // idをkeyで割り当てているためリビルドされない。
+    // そのため、このクラスで`isDone`を管理する。
     final isDone = useState(todo.isDone);
 
     Timer? debounce;
@@ -275,9 +281,7 @@ class TodoListItem extends HookConsumerWidget {
             value: isDone.value,
             onChanged: (val) {
               isDone.value = val ?? true;
-              Future.delayed(const Duration(milliseconds: 500), () {
-                onChecked?.call(val);
-              });
+              onChecked?.call(val);
             },
             focusNode: useFocusNode(
               skipTraversal: true,
