@@ -337,7 +337,7 @@ class TodoListItem extends HookConsumerWidget {
                     border: InputBorder.none,
                     // チェックボックスとの高さを調整するためのpadding
                     contentPadding: contentPadding,
-                    hintText: 'write a todo...',
+                    hintText: 'Write a todo...',
                     isCollapsed: true,
                   ),
                 ),
