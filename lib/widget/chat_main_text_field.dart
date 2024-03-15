@@ -70,7 +70,7 @@ class ChatMainTextField extends HookConsumerWidget {
           child: MarkdownTextField(
             controller: controller,
             focus: focus,
-            hintText: 'write a note',
+            hintText: 'Write a note',
           ),
         ),
         Padding(
