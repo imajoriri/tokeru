@@ -56,19 +56,19 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions macosDev = FirebaseOptions(
     apiKey: 'AIzaSyBASHnaNJ0ry00TlXoPeJVQAZkv2cd414w',
-    appId: '1:998557904358:ios:214b952a04fa28e417fa27',
+    appId: '1:998557904358:ios:26798c3f7837a6d617fa27',
     messagingSenderId: '998557904358',
     projectId: 'quick-chat-dev-a442c',
     storageBucket: 'quick-chat-dev-a442c.appspot.com',
-    iosBundleId: 'com.example.quickFlutter.dev',
+    iosBundleId: 'com.tokeru.macos.dev',
   );
 
   static const FirebaseOptions macosProd = FirebaseOptions(
     apiKey: 'AIzaSyDlDMQe3k9nq3I9LTTEEO4xpBJogJyt5rY',
-    appId: '1:93729662960:ios:ad17b70c1e190213f81f35',
+    appId: '1:93729662960:ios:730348869192c221f81f35',
     messagingSenderId: '93729662960',
     projectId: 'quick-chat-pro',
     storageBucket: 'quick-chat-pro.appspot.com',
-    iosBundleId: 'com.example.quickFlutter.prod',
+    iosBundleId: 'com.tokeru.macos.prod',
   );
 }
