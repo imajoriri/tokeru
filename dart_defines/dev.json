@@ -1,6 +1,5 @@
 {
   "flavor": "dev",
   "appName": "devTokeru",
-  "bundleId": "com.example.quickFlutter.dev",
   "appIdSuffix": "dev"
 }
