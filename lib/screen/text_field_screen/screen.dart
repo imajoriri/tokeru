@@ -164,7 +164,10 @@ class _Header extends ConsumerWidget {
         // Dragできるようなアイコン
         const MouseRegion(
           cursor: SystemMouseCursors.grabbing,
-          child: Icon(Icons.drag_indicator_outlined),
+          child: Icon(
+            Icons.drag_indicator_outlined,
+            color: Colors.grey,
+          ),
         ),
         // 右がわのアイコン
         Expanded(
