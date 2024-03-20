@@ -1,8 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
+import 'package:quick_flutter/controller/method_channel/method_channel_controller.dart';
+import 'package:quick_flutter/controller/todo/todo_controller.dart';
+import 'package:quick_flutter/controller/todo_focus/todo_focus_controller.dart';
+import 'package:quick_flutter/controller/window_size_mode/window_size_mode_controller.dart';
 import 'package:quick_flutter/firebase_options.dart';
 import 'package:quick_flutter/screen/text_field_screen/screen.dart';
 import 'package:quick_flutter/systems/color.dart';
@@ -17,10 +22,169 @@ void main() async {
     ProviderScope(
       observers: [_AppObserver()],
       child: AppMaterialApp(
-        home: TextFieldScreen(),
+        home: _PlatformMenuBar(),
       ),
     ),
   );
+}
+
+/// [PlatformMenuBar]の中でRefを使うためにラップしたWidgetクラス
+class _PlatformMenuBar extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final channel = ref.watch(methodChannelProvider);
+    return PlatformMenuBar(
+      menus: [
+        PlatformMenu(
+          label: "",
+          menus: [
+            const PlatformMenuItemGroup(
+              members: [
+                PlatformMenuItem(
+                  label: 'About Tokeru(WIP)',
+                ),
+              ],
+            ),
+            const PlatformMenuItemGroup(
+              members: [
+                PlatformMenuItem(
+                  label: 'Settings...(WIP)',
+                ),
+                PlatformMenuItem(
+                  label: 'Share Tokeru(WIP)',
+                ),
+              ],
+            ),
+            PlatformMenuItemGroup(
+              members: [
+                PlatformMenuItem(
+                  label: 'Show or Hide Tokeru',
+                  shortcut: const SingleActivator(
+                    LogicalKeyboardKey.comma,
+                    shift: true,
+                    meta: true,
+                  ),
+                  onSelected: () {
+                    channel.invokeMethod(
+                      AppMethodChannel.openOrClosePanel.name,
+                    );
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
+
+        // todo
+        PlatformMenu(
+          label: "Todo",
+          menus: [
+            PlatformMenuItemGroup(
+              members: [
+                PlatformMenuItem(
+                  label: 'New Todo...',
+                  onSelected: () async {
+                    ref
+                        .read(windowSizeModeControllerProvider.notifier)
+                        .toLarge();
+                    await ref.read(todoControllerProvider.notifier).add(0);
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      ref
+                          .read(todoFocusControllerProvider.notifier)
+                          .requestFocus(0);
+                    });
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
+
+        // window
+        PlatformMenu(
+          label: "Window",
+          menus: [
+            PlatformMenuItemGroup(
+              members: [
+                PlatformMenuItem(
+                  label: 'Large Window',
+                  onSelected: () async {
+                    ref
+                        .read(windowSizeModeControllerProvider.notifier)
+                        .toLarge();
+                  },
+                ),
+                PlatformMenuItem(
+                  label: 'Minimize Window',
+                  onSelected: () async {
+                    ref
+                        .read(windowSizeModeControllerProvider.notifier)
+                        .toSmall();
+                  },
+                ),
+              ],
+            ),
+            PlatformMenuItemGroup(
+              members: [
+                PlatformMenuItem(
+                  label: '← Move Window to the Left',
+                  onSelected: () async {
+                    channel.invokeMethod(
+                      AppMethodChannel.windowToLeft.name,
+                    );
+                  },
+                ),
+                PlatformMenuItem(
+                  label: 'Move Window to the Right →',
+                  onSelected: () async {
+                    channel.invokeMethod(
+                      AppMethodChannel.windowToRight.name,
+                    );
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
+
+        // contact developer
+        PlatformMenu(
+          label: "You are welcome to contact me!👋",
+          menus: [
+            PlatformMenuItemGroup(
+              members: [
+                PlatformMenuItem(
+                  label: 'Thank you for using Tokeru!😊',
+                  onSelected: () async {},
+                ),
+                PlatformMenuItem(
+                  label: 'I would like to hear your feedback!',
+                  onSelected: () async {},
+                ),
+              ],
+            ),
+            PlatformMenuItemGroup(
+              members: [
+                PlatformMenuItem(
+                  label: '📩 developer X(Twitter) account',
+                  onSelected: () async {},
+                ),
+                PlatformMenuItem(
+                  label: '📝 send feedback️',
+                  onSelected: () async {},
+                ),
+                PlatformMenuItem(
+                  label: '🧑‍💻 Tokeru repository is public',
+                  onSelected: () async {},
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+      child: TextFieldScreen(),
+    );
+  }
 }
 
 class _AppObserver extends ProviderObserver {
