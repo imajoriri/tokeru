@@ -12,13 +12,21 @@ Tokeru は、MacOS の TODO リストアプリです。他のどのアプリよ�
 
 操作性は抜群です。タスクを追加するにはチェックリストのように「Enter」を押すだけです。
 
+<img src="https://github.com/tinp-lab/tokeru/assets/30540418/1202fa73-fdb0-436f-a31e-2ddc68f58334" alt="tokeru icon" width="600"/>
+
 ### 最適なウィンドウサイズになります。
 
-常に表示されますが、他のウィンドウにフォーカスしたらTodo1つ分のサイズに小さくなります。
+常に表示されますが、他のウィンドウにフォーカスしたらTodo、1つ分のサイズに小さくなります。  
+Todoを整理する時は、また大きくなります。
+
+<img src="https://github.com/tinp-lab/tokeru/assets/30540418/c1f40625-184a-43a6-aed8-88e02a8b6530" alt="tokeru icon" width="600"/>
 
 ### 瞬間移動できます。
 
 邪魔だと感じたら"逆サイド"に移動できます。
+
+<img src="https://github.com/tinp-lab/tokeru/assets/30540418/be7969a4-d8ad-4d4f-b53d-2cbdd79547bb" alt="tokeru icon" width="600"/>
+
 
 ### ショートカット対応しています。
 
