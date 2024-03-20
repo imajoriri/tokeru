@@ -2,7 +2,7 @@
 [![Codemagic build status](https://api.codemagic.io/apps/65d834ac3786568a8b6ef02e/65d83d4548306436129e0db1/status_badge.svg)](https://codemagic.io/apps/65d834ac3786568a8b6ef02e/65d83d4548306436129e0db1/latest_build)
 
 <p align="center">
-  <img src="https://github.com/tinp-lab/tokeru/blob/main/logo/app_icon.png" alt="tokeru icon" width="200" height="200" />
+  <img src="https://github.com/tinp-lab/tokeru/assets/30540418/64db0860-14aa-4a6d-b834-ecfa9589c0d5" alt="tokeru icon" width="800" />
 </p>
 
 Tokeru は、ただの TODO アプリです。  
