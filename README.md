@@ -1,24 +1,39 @@
 [![Pull Requests Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
 [![Codemagic build status](https://api.codemagic.io/apps/65d834ac3786568a8b6ef02e/65d83d4548306436129e0db1/status_badge.svg)](https://codemagic.io/apps/65d834ac3786568a8b6ef02e/65d83d4548306436129e0db1/latest_build)
 
-# Tokeru - A MacOS TODO App
+<p align="center">
+  <img src="https://raw.githubusercontent.com/tinp-lab/tokeru/main/logo/app_icon.png" alt="tokeru icon" width="480" />
+</p>
 
-Tokeru is an innovative TODO list app designed specifically for MacOS users. Unlike traditional TODO apps, Tokeru is engineered to remain visible even when its window is not active. It minimizes into a small display showing only the top item on your TODO list, ensuring that your next task is always in sight. Clicking on Tokeru expands it to show your full TODO list, facilitating seamless task management.
+Tokeru は、MacOS の TODO リストアプリです。Tokeru の特徴は、ウィンドウが常に全てのアプリよりも前面に表示されています。
+他の作業に集中している時のウィンドウは TODO、1 つ分のサイズになり、Tokeru を操作する時は全ての TODO の大きさになります。
 
-# Motivation
+# ユーザーとして使う
 
-The inspiration behind Tokeru stems from the fleeting nature of motivation and the ephemeral quality of good ideas. Have you ever felt that an idea that seemed brilliant one day feels less so the next? This realization prompted the development of Tokeru. It's common for enthusiasm to accomplish tasks to diminish over time, leaving potentially great ideas unexplored and tasks undone. Tokeru aims to address this by making it effortless to add tasks to your TODO list immediately, encouraging users to act on their motivation while it's high. By ensuring that the next action is always visible and easy to engage with, Tokeru enhances daily productivity and helps maintain a high level of motivation, making every day an opportunity to capture and act on those fleeting great ideas.
+TestFlight から利用できます。
 
-# Features
+https://testflight.apple.com/join/LaDGDUKa
 
-- Always Visible TODO: The top task of your TODO list remains visible even when the window is not active.
-- Easy Task Addition(Inproggress): Use the shortcut (command + shift + ,) to quickly launch Tokeru and add new tasks.
-- Boost Daily Productivity(Inproggress): Tasks not completed today do not automatically carry over to the next day. Every day is a fresh start, aimed at maximizing productivity.
+# 開発のモチベーション
 
-# Download link
+私は、自分のやりたいことにモチベーションを持っています。Tokeru もそのうちの一つです。
+それは個人開発だけではなく、本を読むとか、運動をするとか zenn を書くとか...
+そんな私は、全ての Todo を TickTick や Things、Notion、などの自由度の高いプロダクトで管理してきました。
+しかし、普段の自分は「やりたいと思ったことをタスク管理ツールに入れ、優先度をつけ、階層構造をつけ、さあ明日からやろう。」となってしまい、そうなった TODO は、業務のタスクを優先してしまい、いつの間にかモチベーションが薄れていく。
+結局手をつけずにチェック、もしくは削除する。
 
-https://github.com/tinp-lab/tokeru/releases
+Tokeru を使った理想の作業
 
-# How to Contribute
+- 朝、Tokeru にその日に行う Todo を書き出す
+- Tokeru を常に表示しておき、Todo の一番上だけを集中して作業する
+- 日中、やりたいことを見つけたら後回しにせずその場でやる
+- その場で行うなら難しいなら Tokeru に追加し、その日のうちに終わらせる
 
-Tokeru is an open-source project, and contributions from the community are welcome. You can help improve Tokeru by reporting bugs, suggesting features, or submitting pull requests. For more details on contributing
+# 素晴らしい機能
+
+- ウィンドウが非アクティブでも、TODO リストの一番上のタスクが常に表示されます。
+- 簡単なタスク追加(進行中): ショートカット (command + shift + ,) を使用して、すばやく Tokeru を起動し、新しいタスクを追加できます。
+
+# 貢献する
+
+Tokeru はオープンソースプロジェクトであり、コミュニティからの貢献を歓迎しています。バグ報告、機能提案、プルリクエストの提出を通じて Tokeru の改善に協力することができます。貢献に関する詳細は
