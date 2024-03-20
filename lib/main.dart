@@ -11,6 +11,7 @@ import 'package:quick_flutter/controller/window_size_mode/window_size_mode_contr
 import 'package:quick_flutter/firebase_options.dart';
 import 'package:quick_flutter/screen/text_field_screen/screen.dart';
 import 'package:quick_flutter/systems/color.dart';
+import 'package:quick_flutter/controller/url/url_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -155,11 +156,15 @@ class _PlatformMenuBar extends ConsumerWidget {
               members: [
                 PlatformMenuItem(
                   label: 'Thank you for using Tokeru!😊',
-                  onSelected: () async {},
+                  onSelected: () async {
+                    await UrlController.developerXAccount.launch();
+                  },
                 ),
                 PlatformMenuItem(
                   label: 'I would like to hear your feedback!',
-                  onSelected: () async {},
+                  onSelected: () async {
+                    await UrlController.developerXAccount.launch();
+                  },
                 ),
               ],
             ),
@@ -167,15 +172,21 @@ class _PlatformMenuBar extends ConsumerWidget {
               members: [
                 PlatformMenuItem(
                   label: '📩 developer X(Twitter) account',
-                  onSelected: () async {},
+                  onSelected: () async {
+                    await UrlController.developerXAccount.launch();
+                  },
                 ),
                 PlatformMenuItem(
                   label: '📝 send feedback️',
-                  onSelected: () async {},
+                  onSelected: () async {
+                    await UrlController.feedback.launch();
+                  },
                 ),
                 PlatformMenuItem(
                   label: '🧑‍💻 Tokeru repository is public',
-                  onSelected: () async {},
+                  onSelected: () async {
+                    await UrlController.tokeruRepository.launch();
+                  },
                 ),
               ],
             ),
