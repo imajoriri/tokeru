@@ -171,15 +171,21 @@ class _PlatformMenuBar extends ConsumerWidget {
             PlatformMenuItemGroup(
               members: [
                 PlatformMenuItem(
-                  label: '📩 developer X(Twitter) account',
+                  label: '📩 Follow on X(Twitter)',
                   onSelected: () async {
                     await UrlController.developerXAccount.launch();
                   },
                 ),
                 PlatformMenuItem(
-                  label: '📝 send feedback️',
+                  label: '💡 Got an idea for a feature',
                   onSelected: () async {
-                    await UrlController.feedback.launch();
+                    await UrlController.featureRequest.launch();
+                  },
+                ),
+                PlatformMenuItem(
+                  label: '📝 Found a bug',
+                  onSelected: () async {
+                    await UrlController.bugReport.launch();
                   },
                 ),
                 PlatformMenuItem(
