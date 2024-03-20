@@ -175,28 +175,49 @@ class _Header extends ConsumerWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              IconButton(
-                onPressed: () {
-                  ref.read(bookmarkControllerProvider.notifier).toggle();
-                  // ピンをONにした時は、Largeにする
-                  // OFFにした場合は、smallにし、ウィンドウ自体も非アクティブにするする。
-                  if (ref.read(bookmarkControllerProvider)) {
-                    ref
-                        .read(windowSizeModeControllerProvider.notifier)
-                        .toLarge();
-                  } else {
-                    ref
-                        .read(windowSizeModeControllerProvider.notifier)
-                        .toSmall();
-                  }
+              MenuAnchor(
+                builder: (
+                  BuildContext context,
+                  MenuController controller,
+                  Widget? child,
+                ) {
+                  return IconButton(
+                    onPressed: () {
+                      if (controller.isOpen) {
+                        controller.close();
+                      } else {
+                        controller.open();
+                      }
+                    },
+                    icon: const Icon(Icons.more_horiz),
+                    tooltip: 'Show menu',
+                  );
                 },
-                tooltip: 'Window does not shrink when inactive',
-                icon: Icon(
-                  bookmark ? Icons.push_pin : Icons.push_pin_outlined,
-                ),
-                color: bookmark
-                    ? context.colorScheme.primary
-                    : context.colorScheme.secondary,
+                menuChildren: [
+                  MenuItemButton(
+                    leadingIcon: Icon(
+                      bookmark ? Icons.push_pin : Icons.push_pin_outlined,
+                      color: bookmark
+                          ? context.colorScheme.primary
+                          : context.colorScheme.secondary,
+                    ),
+                    onPressed: () {
+                      ref.read(bookmarkControllerProvider.notifier).toggle();
+                      // ピンをONにした時は、Largeにする
+                      // OFFにした場合は、smallにし、ウィンドウ自体も非アクティブにするする。
+                      if (ref.read(bookmarkControllerProvider)) {
+                        ref
+                            .read(windowSizeModeControllerProvider.notifier)
+                            .toLarge();
+                      } else {
+                        ref
+                            .read(windowSizeModeControllerProvider.notifier)
+                            .toSmall();
+                      }
+                    },
+                    child: Text(bookmark ? 'Unpin' : 'Pin'),
+                  ),
+                ],
               ),
               IconButton(
                 tooltip: 'Move the window to the opposite side',
