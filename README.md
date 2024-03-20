@@ -2,7 +2,7 @@
 [![Codemagic build status](https://api.codemagic.io/apps/65d834ac3786568a8b6ef02e/65d83d4548306436129e0db1/status_badge.svg)](https://codemagic.io/apps/65d834ac3786568a8b6ef02e/65d83d4548306436129e0db1/latest_build)
 
 <p align="center">
-  <img src="https://github.com/tinp-lab/tokeru/blob/main/logo/app_icon.png" alt="tokeru icon" width="480" />
+  <img src="https://github.com/tinp-lab/tokeru/blob/main/logo/app_icon.png" alt="tokeru icon" width="200" />
 </p>
 
 Tokeru は、MacOS の TODO リストアプリです。Tokeru の特徴は、ウィンドウが常に全てのアプリよりも前面に表示されています。
