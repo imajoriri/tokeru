@@ -21,9 +21,6 @@ class MainFlutterWindow: NSWindow {
 
     self.level = .floating
 
-    // 非アクティブになってもウィンドウが削除されない
-    self.hidesOnDeactivate = false
-
     // 左上のボタンを操作
     self.standardWindowButton(.miniaturizeButton)?.isHidden = true
     self.standardWindowButton(.zoomButton)?.isHidden = true
@@ -42,6 +39,9 @@ class MainFlutterWindow: NSWindow {
     // 画面どこを持っても移動できるようにする
     self.isMovable = true
     self.isMovableByWindowBackground = true
+
+    // 画面がバックグラウンドになった後、5分後に勝手に落ちるのを防ぐ
+    self.isReleasedWhenClosed = false
 
     setupNotification()
 
