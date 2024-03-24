@@ -21,6 +21,10 @@ class TodoList extends HookConsumerWidget {
                       .read(todoFocusControllerProvider.notifier)
                       .requestFocus(0);
                 });
+
+                await FirebaseAnalytics.instance.logEvent(
+                  name: AnalyticsEventName.addTodo.name,
+                );
               },
             ),
           );

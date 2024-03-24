@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +10,7 @@ import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/todo_focus/todo_focus_controller.dart';
 import 'package:quick_flutter/controller/window_size_mode/window_size_mode_controller.dart';
 import 'package:quick_flutter/firebase_options.dart';
+import 'package:quick_flutter/model/analytics_event/analytics_event_name.dart';
 import 'package:quick_flutter/screen/text_field_screen/screen.dart';
 import 'package:quick_flutter/systems/color.dart';
 import 'package:quick_flutter/controller/url/url_controller.dart';
@@ -94,6 +96,10 @@ class _PlatformMenuBar extends ConsumerWidget {
                           .read(todoFocusControllerProvider.notifier)
                           .requestFocus(0);
                     });
+
+                    await FirebaseAnalytics.instance.logEvent(
+                      name: AnalyticsEventName.addTodo.name,
+                    );
                   },
                 ),
               ],
