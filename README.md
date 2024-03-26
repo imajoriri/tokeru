@@ -8,15 +8,25 @@
 <a href="https://www.buymeacoffee.com/imasirooo" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
 
 Tokeru は、個人用Todoアプリです (macOS 11.0以降)。  
-常に最前面に表示されているため、すばやくチェックしたり、Todoを作成できます。
-
-# 機能
+常に最前面に表示されているため、すばやくチェックしたり、Todoを作成できます。  
+与えられた作業以外をこなす人向けのプロダクトを目指しています。
 
 # インストール
 
 現在ベータ版として、TestFlightから利用できます。
 
 https://testflight.apple.com/join/LaDGDUKa
+
+# リリースされている機能
+
+現在、ベータ版では1日のTodo管理を行えます。
+Tokeruの特徴はウィンドウをピンすれば、他のウィンドウを操作中でも常に最前面に表示されます。
+ショートカットキーでいつでも表示、非表示ができます。
+
+# 開発中の機能
+
+- 1日の**時間**を管理する機能
+- 1日の**思考**を管理する機能
 
 # 貢献する
   
