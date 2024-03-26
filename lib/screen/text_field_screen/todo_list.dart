@@ -253,6 +253,22 @@ class TodoListItem extends HookConsumerWidget {
     // そのため、このクラスで`isDone`を管理する。
     final isDone = useState(todo.isDone);
 
+    final hasFocus = useState(focusNode.hasFocus);
+
+    useEffect(
+      () {
+        listener() {
+          hasFocus.value = focusNode.hasFocus;
+        }
+
+        focusNode.addListener(listener);
+        return () {
+          focusNode.removeListener(listener);
+        };
+      },
+      [focusNode],
+    );
+
     Timer? debounce;
     useEffect(
       () {
@@ -272,97 +288,115 @@ class TodoListItem extends HookConsumerWidget {
       },
       [controller],
     );
-    return Padding(
-      padding: EdgeInsets.only(
-        bottom: 4,
-        top: 4,
-        // indexに応じて左にpaddingを追加する
-        left: 20 * todo.indentLevel.toDouble(),
-      ),
-      child: Row(
-        children: [
-          Checkbox(
-            value: isDone.value,
-            onChanged: (val) {
-              isDone.value = val ?? true;
-              onChecked?.call(val);
-            },
-            focusNode: useFocusNode(
-              skipTraversal: true,
-            ),
+    return Stack(
+      fit: StackFit.passthrough,
+      children: [
+        // TextFieldを囲っているContainerに色を付けると
+        // リビルド時にfocusが外れてしまうため、stackでContainerを分けている
+        Positioned(
+          left: 0,
+          right: 0,
+          top: 0,
+          bottom: 0,
+          child: Container(
+            color: hasFocus.value
+                ? context.colorScheme.primary.withOpacity(0.1)
+                : Colors.transparent,
           ),
-          Expanded(
-            child: Focus(
-              skipTraversal: true,
-              onKey: (node, event) {
-                // 日本語入力などでの変換中は無視する
-                if (controller.value.composing.isValid) {
-                  return KeyEventResult.ignored;
-                }
-                if (event is RawKeyDownEvent) {
-                  if (event.logicalKey == LogicalKeyboardKey.arrowDown &&
-                      onNextTodo != null) {
-                    onNextTodo?.call();
-                    return KeyEventResult.handled;
-                  }
-                  if (event.logicalKey == LogicalKeyboardKey.arrowUp &&
-                      onPreviousTodo != null) {
-                    onPreviousTodo?.call();
-                    return KeyEventResult.handled;
-                  }
-                  if (event.logicalKey == LogicalKeyboardKey.tab &&
-                      onAddIndent != null) {
-                    onAddIndent?.call();
-                    return KeyEventResult.handled;
-                  }
-                  // バックスペースキー & カーソルが先頭の場合
-                  if (event.logicalKey == LogicalKeyboardKey.backspace &&
-                      controller.selection.baseOffset == 0 &&
-                      controller.selection.extentOffset == 0) {
-                    // indentが0の場合は削除する
-                    if (todo.indentLevel == 0) {
-                      onDelete?.call();
-                      return KeyEventResult.handled;
+        ),
+        Padding(
+          padding: EdgeInsets.only(
+            bottom: 4,
+            top: 4,
+            // indexに応じて左にpaddingを追加する
+            left: 20 * todo.indentLevel.toDouble(),
+          ),
+          child: Row(
+            children: [
+              Checkbox(
+                value: isDone.value,
+                onChanged: (val) {
+                  isDone.value = val ?? true;
+                  onChecked?.call(val);
+                },
+                focusNode: useFocusNode(
+                  skipTraversal: true,
+                ),
+              ),
+              Expanded(
+                child: Focus(
+                  skipTraversal: true,
+                  onKey: (node, event) {
+                    // 日本語入力などでの変換中は無視する
+                    if (controller.value.composing.isValid) {
+                      return KeyEventResult.ignored;
                     }
-                    // indentが1以上の場合はインデントをマイナスする
-                    onMinusIndent?.call();
-                    return KeyEventResult.handled;
-                  }
-                }
-                return KeyEventResult.ignored;
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 4),
-                child: TextField(
-                  controller: controller,
-                  focusNode: focusNode,
-                  readOnly: isDone.value ? true : false,
-                  style: context.textTheme.bodyLarge!.copyWith(
-                    color: isDone.value ? Colors.grey : Colors.black,
-                  ),
-                  maxLines: null,
-                  // maxLinesがnullでもEnterで `onSubmitted`を検知するために
-                  // `TextInputAction.done`である必要がある。
-                  textInputAction: TextInputAction.done,
-                  onSubmitted: (value) {
-                    onAdd?.call();
+                    if (event is RawKeyDownEvent) {
+                      if (event.logicalKey == LogicalKeyboardKey.arrowDown &&
+                          onNextTodo != null) {
+                        onNextTodo?.call();
+                        return KeyEventResult.handled;
+                      }
+                      if (event.logicalKey == LogicalKeyboardKey.arrowUp &&
+                          onPreviousTodo != null) {
+                        onPreviousTodo?.call();
+                        return KeyEventResult.handled;
+                      }
+                      if (event.logicalKey == LogicalKeyboardKey.tab &&
+                          onAddIndent != null) {
+                        onAddIndent?.call();
+                        return KeyEventResult.handled;
+                      }
+                      // バックスペースキー & カーソルが先頭の場合
+                      if (event.logicalKey == LogicalKeyboardKey.backspace &&
+                          controller.selection.baseOffset == 0 &&
+                          controller.selection.extentOffset == 0) {
+                        // indentが0の場合は削除する
+                        if (todo.indentLevel == 0) {
+                          onDelete?.call();
+                          return KeyEventResult.handled;
+                        }
+                        // indentが1以上の場合はインデントをマイナスする
+                        onMinusIndent?.call();
+                        return KeyEventResult.handled;
+                      }
+                    }
+                    return KeyEventResult.ignored;
                   },
-                  onTap: () {
-                    onTapTextField?.call();
-                  },
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    // チェックボックスとの高さを調整するためのpadding
-                    contentPadding: contentPadding,
-                    hintText: 'Write a todo...',
-                    isCollapsed: true,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 4),
+                    child: TextField(
+                      controller: controller,
+                      focusNode: focusNode,
+                      readOnly: isDone.value ? true : false,
+                      style: context.textTheme.bodyLarge!.copyWith(
+                        color: isDone.value ? Colors.grey : Colors.black,
+                      ),
+                      maxLines: null,
+                      // maxLinesがnullでもEnterで `onSubmitted`を検知するために
+                      // `TextInputAction.done`である必要がある。
+                      textInputAction: TextInputAction.done,
+                      onSubmitted: (value) {
+                        onAdd?.call();
+                      },
+                      onTap: () {
+                        onTapTextField?.call();
+                      },
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        // チェックボックスとの高さを調整するためのpadding
+                        contentPadding: contentPadding,
+                        hintText: 'Write a todo...',
+                        isCollapsed: true,
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

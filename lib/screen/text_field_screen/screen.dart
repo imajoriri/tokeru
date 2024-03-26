@@ -53,23 +53,30 @@ class TextFieldScreen extends HookConsumerWidget {
       onPressed: () {
         final channel = ref.read(methodChannelProvider);
         channel.invokeMethod(AppMethodChannel.openOrClosePanel.name);
+        if (ref.read(todoFocusControllerProvider.notifier).getFocusIndex() ==
+            -1) {
+          ref.read(todoFocusControllerProvider.notifier).requestFocus(0);
+        }
       },
     );
 
-    // 特に何もしていないが、今後何かするかもしれないので思い出しやすいように残してる。
-    ref.listen(windowSizeModeControllerProvider, (previous, next) {
-      final _ = switch (next) {
-        WindowSizeMode.small => {},
-        WindowSizeMode.large => {},
-      };
+    // escでウィンドウを閉じる
+    HardwareKeyboard.instance.addHandler((event) {
+      if (event.logicalKey == LogicalKeyboardKey.escape) {
+        final channel = ref.read(methodChannelProvider);
+        channel.invokeMethod(AppMethodChannel.closeWindow.name);
+        return true;
+      }
+      return false;
     });
 
     channel.setMethodCallHandler((call) async {
       switch (call.method) {
         case 'inactive':
-          FocusScope.of(context).unfocus();
           if (!bookmark) {
-            ref.read(windowSizeModeControllerProvider.notifier).toSmall();
+            channel.invokeMethod(
+              AppMethodChannel.closeWindow.name,
+            );
           }
           break;
       }
@@ -98,7 +105,7 @@ class TextFieldScreen extends HookConsumerWidget {
                   },
                 );
               },
-            ), // サイズ変更を監視したいウィジェット
+            ),
           ),
         ),
       ),
@@ -177,63 +184,13 @@ class _Header extends ConsumerWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              // MenuAnchor(
-              //   builder: (
-              //     BuildContext context,
-              //     MenuController controller,
-              //     Widget? child,
-              //   ) {
-              //     return IconButton(
-              //       onPressed: () {
-              //         if (controller.isOpen) {
-              //           controller.close();
-              //         } else {
-              //           controller.open();
-              //         }
-              //       },
-              //       icon: const Icon(Icons.more_horiz),
-              //       tooltip: 'Show menu',
-              //     );
-              //   },
-              //   menuChildren: [
-              //     MenuItemButton(
-              //       leadingIcon: Icon(
-              //         bookmark ? Icons.push_pin : Icons.push_pin_outlined,
-              //         color: bookmark
-              //             ? context.colorScheme.primary
-              //             : context.colorScheme.secondary,
-              //       ),
-              //       onPressed: () {
-              //         ref.read(bookmarkControllerProvider.notifier).toggle();
-              //         // ピンをONにした時は、Largeにする
-              //         // OFFにした場合は、smallにし、ウィンドウ自体も非アクティブにするする。
-              //         if (ref.read(bookmarkControllerProvider)) {
-              //           ref
-              //               .read(windowSizeModeControllerProvider.notifier)
-              //               .toLarge();
-              //         } else {
-              //           ref
-              //               .read(windowSizeModeControllerProvider.notifier)
-              //               .toSmall();
-              //         }
-              //       },
-              //       child: Text(bookmark ? 'Unpin' : 'Pin'),
-              //     ),
-              //   ],
-              // ),
               IconButton(
                 onPressed: () {
                   ref.read(bookmarkControllerProvider.notifier).toggle();
-                  // ピンをONにした時は、Largeにする
-                  // OFFにした場合は、smallにし、ウィンドウ自体も非アクティブにするする。
-                  if (ref.read(bookmarkControllerProvider)) {
-                    ref
-                        .read(windowSizeModeControllerProvider.notifier)
-                        .toLarge();
-                  } else {
-                    ref
-                        .read(windowSizeModeControllerProvider.notifier)
-                        .toSmall();
+                  if (!ref.read(bookmarkControllerProvider)) {
+                    channel.invokeMethod(
+                      AppMethodChannel.closeWindow.name,
+                    );
                   }
                 },
                 tooltip: 'Window does not shrink when inactive',
