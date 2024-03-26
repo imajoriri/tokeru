@@ -17,7 +17,7 @@ class MainFlutterWindow: NSWindow {
     RegisterGeneratedPlugins(registry: flutterViewController)
 
     // デフォルトのウィンドウサイズを設定
-    self.setFrame(NSRect(x: 0, y: 0, width: 400, height: 700), display: true)
+    self.setFrame(NSRect(x: 0, y: 0, width: 600, height: 500), display: true)
 
     self.level = .floating
 
@@ -110,6 +110,9 @@ class MainFlutterWindow: NSWindow {
       case "openOrClosePanel":
         self.openOrCloseWindow()
         return
+      case "closeWindow":
+        self.closeWindow()
+        return
       case "setFrameSize":
         self.setFrameSize(call: call)
         return
@@ -149,7 +152,14 @@ class MainFlutterWindow: NSWindow {
       self.close()
     } else {
       self.makeKeyAndOrderFront(nil)
+      NSApplication.shared.activate(ignoringOtherApps: true)
     }
+  }
+
+  /// ウィンドウをcloseする
+  /// ウィンドウが表示されている場合は閉じ、表示されていない場合は開きます。
+  func closeWindow() {
+    self.close()
   }
 
   /// windowのサイズを変える

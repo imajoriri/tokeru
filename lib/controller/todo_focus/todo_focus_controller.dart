@@ -63,4 +63,11 @@ class TodoFocusController extends _$TodoFocusController {
       state[index].requestFocus();
     }
   }
+
+  /// フォーカスを持っている要素のindexを返す
+  ///
+  /// フォーカスを持っている要素がない場合は-1を返す
+  int getFocusIndex() {
+    return state.indexWhere((element) => element.hasFocus);
+  }
 }
