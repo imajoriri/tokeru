@@ -1,5 +1,5 @@
 ---
-name: Feature request
+name: Feature request(日本語)
 about: Suggest an idea for this project
 title: ''
 labels: ''
@@ -8,13 +8,11 @@ assignees: ''
 ---
 
 **Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+<!-- リクエストする機能が解決する課題があれば記載してください -->
 
 **Describe the solution you'd like**
-A clear and concise description of what you want to happen.
+<!-- どんな機能が欲しいか簡単に説明お願いします！ -->
 
 **Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
+<!-- 代替として使っている機能、他のサービス等を教えてください -->
 
-**Additional context**
-Add any other context or screenshots about the feature request here.
