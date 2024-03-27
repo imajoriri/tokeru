@@ -5,10 +5,12 @@
   <img src="https://github.com/tinp-lab/tokeru/assets/30540418/64db0860-14aa-4a6d-b834-ecfa9589c0d5" alt="tokeru icon" width="800" />
 </p>
 
+ 
 
-
-Tokeru は、個人用Todoアプリです (macOS 11.0以降)。  
+Tokeruは「**1日の作業パフォーマンスを最大化するアプリ**」です。 (macOS 11.0以降)。  
+まだTodo機能しかありませんが、今後は時間をうまく使うための機能や思考の整理のための機能を実装予定です。  
 常に最前面に表示されているため、すばやくチェックをつけたり、Todoを作成できます。  
+
 
 # インストール
 
