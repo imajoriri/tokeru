@@ -8,8 +8,7 @@
 <a href="https://www.buymeacoffee.com/imasirooo" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
 
 Tokeru は、個人用Todoアプリです (macOS 11.0以降)。  
-常に最前面に表示されているため、すばやくチェックしたり、Todoを作成できます。  
-与えられた作業以外をこなす人向けのプロダクトを目指しています。
+常に最前面に表示されているため、すばやくチェックをつけたり、Todoを作成できます。  
 
 # インストール
 
@@ -23,6 +22,9 @@ https://testflight.apple.com/join/LaDGDUKa
 Tokeruの特徴はウィンドウをピンすれば、他のウィンドウを操作中でも常に最前面に表示されます。
 ショートカットキーでいつでも表示、非表示ができます。
 
+<img width="800" alt="CleanShot 2024-03-27 at 21 27 41@2x" src="https://github.com/imajoriri/tokeru/assets/30540418/fcb2d70e-27af-4209-9280-a401655b57c9">
+
+
 # 開発中の機能
 
 - Todo機能をより進化させる
@@ -32,13 +34,19 @@ Tokeruの特徴はウィンドウをピンすれば、他のウィンドウを�
 - 1日の**時間**を管理する機能
 - 1日の**思考**を管理する機能
 
+[詳しくはDiscussionをご覧ください。
+](https://github.com/imajoriri/tokeru/discussions)
+
 # 貢献する
-  
 
-# 技術スタック
-
-Flutterを採用しています。
+PRは大歓迎です！
+CONTRIBUTING.mdを用意中です。
 
 # Contributors
 
-
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/imajoriri"><img src="https://avatars.githubusercontent.com/u/30540418?v=4?s=100" width="100px;" alt=""/><br /><sub><b>imajoriri</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/kakudenbuzo"><img src="https://avatars.githubusercontent.com/u/53589952?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Buzo</b></sub></a></td>
+  </tr>
+</table>
