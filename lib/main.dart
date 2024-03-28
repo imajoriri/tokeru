@@ -8,7 +8,6 @@ import 'package:logger/logger.dart';
 import 'package:quick_flutter/controller/method_channel/method_channel_controller.dart';
 import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/todo_focus/todo_focus_controller.dart';
-import 'package:quick_flutter/controller/window_size_mode/window_size_mode_controller.dart';
 import 'package:quick_flutter/firebase_options.dart';
 import 'package:quick_flutter/model/analytics_event/analytics_event_name.dart';
 import 'package:quick_flutter/screen/text_field_screen/screen.dart';
@@ -125,9 +124,6 @@ class _PlatformMenuBar extends ConsumerWidget {
                   ),
                   onSelected: () async {
                     FocusManager.instance.primaryFocus?.unfocus();
-                    ref
-                        .read(windowSizeModeControllerProvider.notifier)
-                        .toLarge();
                     await ref.read(todoControllerProvider.notifier).add(0);
                     ref
                         .read(todoFocusControllerProvider.notifier)

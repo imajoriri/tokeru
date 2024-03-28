@@ -9,7 +9,6 @@ import 'package:quick_flutter/controller/memo/memo_controller.dart';
 import 'package:quick_flutter/controller/method_channel/method_channel_controller.dart';
 import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/todo_focus/todo_focus_controller.dart';
-import 'package:quick_flutter/controller/window_size_mode/window_size_mode_controller.dart';
 import 'package:quick_flutter/model/analytics_event/analytics_event_name.dart';
 import 'package:quick_flutter/model/todo/todo.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
@@ -220,7 +219,6 @@ class _Header extends ConsumerWidget {
                 focusNode: FocusNode(skipTraversal: true),
                 tooltip: 'Add Todo',
                 onPressed: () async {
-                  ref.read(windowSizeModeControllerProvider.notifier).toLarge();
                   await ref.read(todoControllerProvider.notifier).add(0);
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     ref
