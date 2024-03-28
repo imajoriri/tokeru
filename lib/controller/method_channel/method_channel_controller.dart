@@ -18,6 +18,7 @@ enum AppMethodChannel {
   setFrameSize,
 
   openOrClosePanel,
+  closeWindow,
 
   /// ウィンドウが右にあれば左端に、左にあれば右端に移動する
   switchHorizen,
