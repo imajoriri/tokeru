@@ -141,7 +141,7 @@ class _PlatformMenuBar extends ConsumerWidget {
             PlatformMenuItemGroup(
               members: [
                 PlatformMenuItem(
-                  label: 'New Todo...',
+                  label: ShortcutActivatorType.newTodo.label,
                   shortcut: ShortcutActivatorType.newTodo.shortcutActivator,
                   onSelected: () async {
                     FocusManager.instance.primaryFocus?.unfocus();
@@ -156,7 +156,7 @@ class _PlatformMenuBar extends ConsumerWidget {
                   },
                 ),
                 PlatformMenuItem(
-                  label: 'Toggle Done',
+                  label: ShortcutActivatorType.toggleDone.label,
                   shortcut: ShortcutActivatorType.toggleDone.shortcutActivator,
                   onSelected: () async {
                     final index = ref
@@ -196,7 +196,7 @@ class _PlatformMenuBar extends ConsumerWidget {
             PlatformMenuItemGroup(
               members: [
                 PlatformMenuItem(
-                  label: 'Pin Window',
+                  label: ShortcutActivatorType.pinWindow.label,
                   onSelected: () async {
                     ref.read(bookmarkControllerProvider.notifier).toggle();
                   },

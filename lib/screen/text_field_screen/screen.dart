@@ -152,7 +152,7 @@ class _Header extends ConsumerWidget {
             children: [
               IconButton(
                 focusNode: FocusNode(skipTraversal: true),
-                tooltip: 'Close',
+                tooltip: ShortcutActivatorType.closeWindow.longLabel,
                 onPressed: () {
                   channel.invokeMethod(
                     AppMethodChannel.openOrClosePanel.name,
@@ -187,7 +187,7 @@ class _Header extends ConsumerWidget {
                     );
                   }
                 },
-                tooltip: 'Window does not hide when inactive',
+                tooltip: ShortcutActivatorType.pinWindow.longLabel,
                 icon: Icon(
                   bookmark ? Icons.push_pin : Icons.push_pin_outlined,
                 ),
@@ -208,8 +208,7 @@ class _Header extends ConsumerWidget {
               // ),
               IconButton(
                 focusNode: FocusNode(skipTraversal: true),
-                tooltip:
-                    'Add Todo${ShortcutActivatorType.newTodo.shortcutLabel}',
+                tooltip: ShortcutActivatorType.newTodo.longLabel,
                 onPressed: () async {
                   await ref.read(todoControllerProvider.notifier).add(0);
                   WidgetsBinding.instance.addPostFrameCallback((_) {
