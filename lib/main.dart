@@ -1,7 +1,6 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
@@ -13,6 +12,7 @@ import 'package:quick_flutter/model/analytics_event/analytics_event_name.dart';
 import 'package:quick_flutter/screen/text_field_screen/screen.dart';
 import 'package:quick_flutter/systems/color.dart';
 import 'package:quick_flutter/controller/url/url_controller.dart';
+import 'package:quick_flutter/widget/shortcutkey.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,17 +43,17 @@ class _CallbackShortcuts extends ConsumerWidget {
     return CallbackShortcuts(
       bindings: {
         // 新規Todoを追加するショートカット
-        const SingleActivator(meta: true, LogicalKeyboardKey.keyN): () async {
+        ShortcutActivatorType.newTodo.shortcutActivator: () async {
           FocusManager.instance.primaryFocus?.unfocus();
           await ref.read(todoControllerProvider.notifier).add(0);
           ref.read(todoFocusControllerProvider.notifier).requestFocus(0);
         },
         // ピン
-        const SingleActivator(meta: true, LogicalKeyboardKey.keyP): () async {
+        ShortcutActivatorType.pinWindow.shortcutActivator: () async {
           ref.read(bookmarkControllerProvider.notifier).toggle();
         },
         // フォーカス中のTodoをチェックするショートカット
-        const SingleActivator(meta: true, LogicalKeyboardKey.enter): () async {
+        ShortcutActivatorType.toggleDone.shortcutActivator: () async {
           final index =
               ref.read(todoFocusControllerProvider.notifier).getFocusIndex();
           if (index != -1) {
@@ -75,7 +75,7 @@ class _CallbackShortcuts extends ConsumerWidget {
           }
         },
         // escでウィンドウを閉じる
-        const SingleActivator(LogicalKeyboardKey.escape): () async {
+        ShortcutActivatorType.closeWindow.shortcutActivator: () async {
           final channel = ref.read(methodChannelProvider);
           channel.invokeMethod(AppMethodChannel.openOrClosePanel.name);
         },
@@ -121,11 +121,8 @@ class _PlatformMenuBar extends ConsumerWidget {
               members: [
                 PlatformMenuItem(
                   label: 'Show or Hide Tokeru',
-                  shortcut: const SingleActivator(
-                    LogicalKeyboardKey.comma,
-                    shift: true,
-                    meta: true,
-                  ),
+                  shortcut:
+                      ShortcutActivatorType.toggleWindow.shortcutActivator,
                   onSelected: () {
                     channel.invokeMethod(
                       AppMethodChannel.openOrClosePanel.name,
@@ -145,10 +142,7 @@ class _PlatformMenuBar extends ConsumerWidget {
               members: [
                 PlatformMenuItem(
                   label: 'New Todo...',
-                  shortcut: const SingleActivator(
-                    LogicalKeyboardKey.keyN,
-                    meta: true,
-                  ),
+                  shortcut: ShortcutActivatorType.newTodo.shortcutActivator,
                   onSelected: () async {
                     FocusManager.instance.primaryFocus?.unfocus();
                     await ref.read(todoControllerProvider.notifier).add(0);
@@ -163,10 +157,7 @@ class _PlatformMenuBar extends ConsumerWidget {
                 ),
                 PlatformMenuItem(
                   label: 'Toggle Done',
-                  shortcut: const SingleActivator(
-                    LogicalKeyboardKey.enter,
-                    meta: true,
-                  ),
+                  shortcut: ShortcutActivatorType.toggleDone.shortcutActivator,
                   onSelected: () async {
                     final index = ref
                         .read(todoFocusControllerProvider.notifier)
@@ -209,10 +200,7 @@ class _PlatformMenuBar extends ConsumerWidget {
                   onSelected: () async {
                     ref.read(bookmarkControllerProvider.notifier).toggle();
                   },
-                  shortcut: const SingleActivator(
-                    LogicalKeyboardKey.keyP,
-                    meta: true,
-                  ),
+                  shortcut: ShortcutActivatorType.pinWindow.shortcutActivator,
                 ),
               ],
             ),
