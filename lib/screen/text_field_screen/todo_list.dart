@@ -39,7 +39,9 @@ class TodoList extends HookConsumerWidget {
                 .reorder(oldIndex, newIndex);
           },
           itemBuilder: (context, index) {
-            final key = ValueKey(todos[index].id);
+            // isDoneが更新されてもWidgetが更新されて欲しいので、idとisDoneをkeyにする
+            final key =
+                ValueKey(todos[index].id + todos[index].isDone.toString());
             return _ReorderableTodoListItem(
               key: key,
               todo: todos[index],
@@ -96,7 +98,7 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
               onChecked: (value) async {
                 await ref
                     .read(todoControllerProvider.notifier)
-                    .updateIsDone(cartId: todo.id, isDone: value!);
+                    .updateIsDone(todoId: todo.id, isDone: value!);
                 ref
                     .read(todoControllerProvider.notifier)
                     .deleteDoneWithDebounce();
@@ -226,11 +228,6 @@ class TodoListItem extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = useTextEditingController(text: todo.title);
-    // NOTE: チェック時に`todo_controller`のTodoのisDoneは更新しているが、
-    // idをkeyで割り当てているためリビルドされない。
-    // そのため、このクラスで`isDone`を管理する。
-    final isDone = useState(todo.isDone);
-
     final hasFocus = useState(focusNode.hasFocus);
 
     useEffect(
@@ -292,9 +289,10 @@ class TodoListItem extends HookConsumerWidget {
           child: Row(
             children: [
               Checkbox(
-                value: isDone.value,
+                // value: isDone.value,
+                value: todo.isDone,
                 onChanged: (val) {
-                  isDone.value = val ?? true;
+                  // isDone.value = val ?? true;
                   onChecked?.call(val);
                 },
                 focusNode: useFocusNode(
@@ -346,9 +344,8 @@ class TodoListItem extends HookConsumerWidget {
                     child: TextField(
                       controller: controller,
                       focusNode: focusNode,
-                      readOnly: isDone.value ? true : false,
                       style: context.textTheme.bodyLarge!.copyWith(
-                        color: isDone.value ? Colors.grey : Colors.black,
+                        color: todo.isDone ? Colors.grey : Colors.black,
                       ),
                       maxLines: null,
                       // maxLinesがnullでもEnterで `onSubmitted`を検知するために

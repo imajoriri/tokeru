@@ -59,16 +59,6 @@ class TextFieldScreen extends HookConsumerWidget {
       },
     );
 
-    // escでウィンドウを閉じる
-    HardwareKeyboard.instance.addHandler((event) {
-      if (event.logicalKey == LogicalKeyboardKey.escape) {
-        final channel = ref.read(methodChannelProvider);
-        channel.invokeMethod(AppMethodChannel.closeWindow.name);
-        return true;
-      }
-      return false;
-    });
-
     channel.setMethodCallHandler((call) async {
       switch (call.method) {
         case 'inactive':

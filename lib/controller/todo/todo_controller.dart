@@ -111,10 +111,10 @@ class TodoController extends _$TodoController {
   ///
   /// [Todo]の状態は更新するが、リストの中から削除はしない。
   Future<void> updateIsDone({
-    required String cartId,
+    required String todoId,
     bool isDone = true,
   }) async {
-    final index = state.valueOrNull!.indexWhere((e) => e.id == cartId);
+    final index = state.valueOrNull!.indexWhere((e) => e.id == todoId);
     final tmp = [...state.value!];
     final todo = state.value![index].copyWith(isDone: isDone);
     tmp[index] = todo;
