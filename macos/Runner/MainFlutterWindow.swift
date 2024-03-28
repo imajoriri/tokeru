@@ -8,6 +8,23 @@ class MainFlutterWindow: NSWindow {
   var channel: FlutterMethodChannel!
   lazy var flutterEngine = FlutterEngine(name: "my flutter engine", project: nil)
 
+  /// ウィンドウのサイズと位置を設定する
+  func setWindow() {
+    // ウィンドウのサイズを設定
+    let windowSize = NSSize(width: 600, height: 500)
+
+    // スクリーンのサイズを取得
+    guard let screen = NSScreen.main else { return }
+    let screenSize = screen.frame.size
+
+    // ウィンドウの新しい位置を計算（画面の中心）
+    let x = (screenSize.width - windowSize.width) / 2
+    let y = (screenSize.height - windowSize.height) / 2
+
+    // ウィンドウの位置とサイズを設定して表示
+    self.setFrame(NSRect(x: x, y: y, width: windowSize.width, height: windowSize.height), display: true)
+  }
+
   override func awakeFromNib() {
     let flutterViewController = FlutterViewController()
     let windowFrame = self.frame
@@ -16,8 +33,7 @@ class MainFlutterWindow: NSWindow {
 
     RegisterGeneratedPlugins(registry: flutterViewController)
 
-    // デフォルトのウィンドウサイズを設定
-    self.setFrame(NSRect(x: 0, y: 0, width: 600, height: 500), display: true)
+    self.setWindow()
 
     self.level = .floating
 
