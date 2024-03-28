@@ -12,7 +12,7 @@ class TodoList extends HookConsumerWidget {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextButton(
-              child: const Text('start adding todos!'),
+              child: const Text('start todos!'),
               onPressed: () async {
                 ref.read(windowSizeModeControllerProvider.notifier).toLarge();
                 await ref.read(todoControllerProvider.notifier).add(0);
