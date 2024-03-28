@@ -9,7 +9,6 @@ import 'package:quick_flutter/controller/memo/memo_controller.dart';
 import 'package:quick_flutter/controller/method_channel/method_channel_controller.dart';
 import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/todo_focus/todo_focus_controller.dart';
-import 'package:quick_flutter/controller/window_size_mode/window_size_mode_controller.dart';
 import 'package:quick_flutter/model/analytics_event/analytics_event_name.dart';
 import 'package:quick_flutter/model/todo/todo.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
@@ -53,23 +52,22 @@ class TextFieldScreen extends HookConsumerWidget {
       onPressed: () {
         final channel = ref.read(methodChannelProvider);
         channel.invokeMethod(AppMethodChannel.openOrClosePanel.name);
+        if (ref.read(todoFocusControllerProvider.notifier).getFocusIndex() ==
+            -1) {
+          ref.read(todoFocusControllerProvider.notifier).requestFocus(0);
+        }
       },
     );
-
-    // 特に何もしていないが、今後何かするかもしれないので思い出しやすいように残してる。
-    ref.listen(windowSizeModeControllerProvider, (previous, next) {
-      final _ = switch (next) {
-        WindowSizeMode.small => {},
-        WindowSizeMode.large => {},
-      };
-    });
 
     channel.setMethodCallHandler((call) async {
       switch (call.method) {
         case 'inactive':
-          FocusScope.of(context).unfocus();
           if (!bookmark) {
-            ref.read(windowSizeModeControllerProvider.notifier).toSmall();
+            channel.invokeMethod(
+              AppMethodChannel.closeWindow.name,
+            );
+          } else {
+            FocusScope.of(context).unfocus();
           }
           break;
       }
@@ -98,7 +96,7 @@ class TextFieldScreen extends HookConsumerWidget {
                   },
                 );
               },
-            ), // サイズ変更を監視したいウィジェット
+            ),
           ),
         ),
       ),
@@ -152,6 +150,7 @@ class _Header extends ConsumerWidget {
           child: Row(
             children: [
               IconButton(
+                focusNode: FocusNode(skipTraversal: true),
                 tooltip: 'Close',
                 onPressed: () {
                   channel.invokeMethod(
@@ -177,66 +176,17 @@ class _Header extends ConsumerWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              // MenuAnchor(
-              //   builder: (
-              //     BuildContext context,
-              //     MenuController controller,
-              //     Widget? child,
-              //   ) {
-              //     return IconButton(
-              //       onPressed: () {
-              //         if (controller.isOpen) {
-              //           controller.close();
-              //         } else {
-              //           controller.open();
-              //         }
-              //       },
-              //       icon: const Icon(Icons.more_horiz),
-              //       tooltip: 'Show menu',
-              //     );
-              //   },
-              //   menuChildren: [
-              //     MenuItemButton(
-              //       leadingIcon: Icon(
-              //         bookmark ? Icons.push_pin : Icons.push_pin_outlined,
-              //         color: bookmark
-              //             ? context.colorScheme.primary
-              //             : context.colorScheme.secondary,
-              //       ),
-              //       onPressed: () {
-              //         ref.read(bookmarkControllerProvider.notifier).toggle();
-              //         // ピンをONにした時は、Largeにする
-              //         // OFFにした場合は、smallにし、ウィンドウ自体も非アクティブにするする。
-              //         if (ref.read(bookmarkControllerProvider)) {
-              //           ref
-              //               .read(windowSizeModeControllerProvider.notifier)
-              //               .toLarge();
-              //         } else {
-              //           ref
-              //               .read(windowSizeModeControllerProvider.notifier)
-              //               .toSmall();
-              //         }
-              //       },
-              //       child: Text(bookmark ? 'Unpin' : 'Pin'),
-              //     ),
-              //   ],
-              // ),
               IconButton(
+                focusNode: FocusNode(skipTraversal: true),
                 onPressed: () {
                   ref.read(bookmarkControllerProvider.notifier).toggle();
-                  // ピンをONにした時は、Largeにする
-                  // OFFにした場合は、smallにし、ウィンドウ自体も非アクティブにするする。
-                  if (ref.read(bookmarkControllerProvider)) {
-                    ref
-                        .read(windowSizeModeControllerProvider.notifier)
-                        .toLarge();
-                  } else {
-                    ref
-                        .read(windowSizeModeControllerProvider.notifier)
-                        .toSmall();
+                  if (!ref.read(bookmarkControllerProvider)) {
+                    channel.invokeMethod(
+                      AppMethodChannel.closeWindow.name,
+                    );
                   }
                 },
-                tooltip: 'Window does not shrink when inactive',
+                tooltip: 'Window does not hide when inactive',
                 icon: Icon(
                   bookmark ? Icons.push_pin : Icons.push_pin_outlined,
                 ),
@@ -244,19 +194,21 @@ class _Header extends ConsumerWidget {
                     ? context.colorScheme.primary
                     : context.colorScheme.secondary,
               ),
+              // 不要なので一旦消す
+              // IconButton(
+              //   focusNode: FocusNode(skipTraversal: true),
+              //   tooltip: 'Move the window to the opposite side',
+              //   onPressed: () {
+              //     channel.invokeMethod(
+              //       AppMethodChannel.switchHorizen.name,
+              //     );
+              //   },
+              //   icon: const Icon(Icons.compare_arrows_rounded),
+              // ),
               IconButton(
-                tooltip: 'Move the window to the opposite side',
-                onPressed: () {
-                  channel.invokeMethod(
-                    AppMethodChannel.switchHorizen.name,
-                  );
-                },
-                icon: const Icon(Icons.compare_arrows_rounded),
-              ),
-              IconButton(
+                focusNode: FocusNode(skipTraversal: true),
                 tooltip: 'Add Todo',
                 onPressed: () async {
-                  ref.read(windowSizeModeControllerProvider.notifier).toLarge();
                   await ref.read(todoControllerProvider.notifier).add(0);
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     ref

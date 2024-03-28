@@ -8,7 +8,6 @@ import 'package:logger/logger.dart';
 import 'package:quick_flutter/controller/method_channel/method_channel_controller.dart';
 import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/todo_focus/todo_focus_controller.dart';
-import 'package:quick_flutter/controller/window_size_mode/window_size_mode_controller.dart';
 import 'package:quick_flutter/firebase_options.dart';
 import 'package:quick_flutter/model/analytics_event/analytics_event_name.dart';
 import 'package:quick_flutter/screen/text_field_screen/screen.dart';
@@ -25,14 +24,63 @@ void main() async {
     ProviderScope(
       observers: [_AppObserver()],
       child: AppMaterialApp(
-        home: _PlatformMenuBar(),
+        home: _PlatformMenuBar(
+          child: _CallbackShortcuts(
+            child: TextFieldScreen(),
+          ),
+        ),
       ),
     ),
   );
 }
 
+/// [CallbackShortcuts]の中でRefを使うためにラップしたWidgetクラス
+class _CallbackShortcuts extends ConsumerWidget {
+  const _CallbackShortcuts({required this.child});
+  final Widget child;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return CallbackShortcuts(
+      bindings: {
+        // 新規Todoを追加するショートカット
+        const SingleActivator(meta: true, LogicalKeyboardKey.keyN): () async {
+          FocusManager.instance.primaryFocus?.unfocus();
+          await ref.read(todoControllerProvider.notifier).add(0);
+          ref.read(todoFocusControllerProvider.notifier).requestFocus(0);
+        },
+        // ピン
+        const SingleActivator(meta: true, LogicalKeyboardKey.keyP): () async {
+          ref.read(bookmarkControllerProvider.notifier).toggle();
+        },
+        // フォーカス中のTodoをチェックするショートカット
+        const SingleActivator(meta: true, LogicalKeyboardKey.enter): () async {
+          final index =
+              ref.read(todoFocusControllerProvider.notifier).getFocusIndex();
+          if (index != -1) {
+            final todo = ref.read(todoControllerProvider).valueOrNull?[index];
+            ref
+                .read(todoControllerProvider.notifier)
+                .updateIsDone(todoId: todo!.id, isDone: !todo.isDone);
+          }
+        },
+        // escでウィンドウを閉じる
+        const SingleActivator(LogicalKeyboardKey.escape): () async {
+          final channel = ref.read(methodChannelProvider);
+          channel.invokeMethod(AppMethodChannel.openOrClosePanel.name);
+        },
+      },
+      child: FocusScope(
+        autofocus: true,
+        child: child,
+      ),
+    );
+  }
+}
+
 /// [PlatformMenuBar]の中でRefを使うためにラップしたWidgetクラス
 class _PlatformMenuBar extends ConsumerWidget {
+  const _PlatformMenuBar({required this.child});
+  final Widget child;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final channel = ref.watch(methodChannelProvider);
@@ -86,20 +134,39 @@ class _PlatformMenuBar extends ConsumerWidget {
               members: [
                 PlatformMenuItem(
                   label: 'New Todo...',
+                  shortcut: const SingleActivator(
+                    LogicalKeyboardKey.keyN,
+                    meta: true,
+                  ),
                   onSelected: () async {
-                    ref
-                        .read(windowSizeModeControllerProvider.notifier)
-                        .toLarge();
+                    FocusManager.instance.primaryFocus?.unfocus();
                     await ref.read(todoControllerProvider.notifier).add(0);
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      ref
-                          .read(todoFocusControllerProvider.notifier)
-                          .requestFocus(0);
-                    });
+                    ref
+                        .read(todoFocusControllerProvider.notifier)
+                        .requestFocus(0);
 
                     await FirebaseAnalytics.instance.logEvent(
                       name: AnalyticsEventName.addTodo.name,
                     );
+                  },
+                ),
+                PlatformMenuItem(
+                  label: 'Toggle Done',
+                  shortcut: const SingleActivator(
+                    LogicalKeyboardKey.enter,
+                    meta: true,
+                  ),
+                  onSelected: () async {
+                    final index = ref
+                        .read(todoFocusControllerProvider.notifier)
+                        .getFocusIndex();
+                    if (index != -1) {
+                      final todo =
+                          ref.read(todoControllerProvider).valueOrNull?[index];
+                      ref
+                          .read(todoControllerProvider.notifier)
+                          .updateIsDone(todoId: todo!.id, isDone: !todo.isDone);
+                    }
                   },
                 ),
               ],
@@ -114,40 +181,14 @@ class _PlatformMenuBar extends ConsumerWidget {
             PlatformMenuItemGroup(
               members: [
                 PlatformMenuItem(
-                  label: 'Large Window',
+                  label: 'Pin Window',
                   onSelected: () async {
-                    ref
-                        .read(windowSizeModeControllerProvider.notifier)
-                        .toLarge();
+                    ref.read(bookmarkControllerProvider.notifier).toggle();
                   },
-                ),
-                PlatformMenuItem(
-                  label: 'Minimize Window',
-                  onSelected: () async {
-                    ref
-                        .read(windowSizeModeControllerProvider.notifier)
-                        .toSmall();
-                  },
-                ),
-              ],
-            ),
-            PlatformMenuItemGroup(
-              members: [
-                PlatformMenuItem(
-                  label: '← Move Window to the Left',
-                  onSelected: () async {
-                    channel.invokeMethod(
-                      AppMethodChannel.windowToLeft.name,
-                    );
-                  },
-                ),
-                PlatformMenuItem(
-                  label: 'Move Window to the Right →',
-                  onSelected: () async {
-                    channel.invokeMethod(
-                      AppMethodChannel.windowToRight.name,
-                    );
-                  },
+                  shortcut: const SingleActivator(
+                    LogicalKeyboardKey.keyP,
+                    meta: true,
+                  ),
                 ),
               ],
             ),
@@ -205,7 +246,7 @@ class _PlatformMenuBar extends ConsumerWidget {
           ],
         ),
       ],
-      child: TextFieldScreen(),
+      child: child,
     );
   }
 }
