@@ -14,6 +14,7 @@ import 'package:quick_flutter/model/todo/todo.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
 import 'package:quick_flutter/widget/markdown_text_editing_controller.dart';
 import 'package:quick_flutter/widget/markdown_text_field.dart';
+import 'package:quick_flutter/widget/shortcutkey.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:super_hot_key/super_hot_key.dart';
 
@@ -207,7 +208,8 @@ class _Header extends ConsumerWidget {
               // ),
               IconButton(
                 focusNode: FocusNode(skipTraversal: true),
-                tooltip: 'Add Todo',
+                tooltip:
+                    'Add Todo${ShortcutActivatorType.newTodo.shortcutLabel}',
                 onPressed: () async {
                   await ref.read(todoControllerProvider.notifier).add(0);
                   WidgetsBinding.instance.addPostFrameCallback((_) {

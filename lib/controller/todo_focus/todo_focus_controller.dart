@@ -59,6 +59,10 @@ class TodoFocusController extends _$TodoFocusController {
 
   /// 指定したindexのフォーカスを要求する
   void requestFocus(int index) {
+    // indexが範囲外の場合は何もしない
+    if (index < 0 || index >= state.length) {
+      return;
+    }
     if (state[index].canRequestFocus) {
       state[index].requestFocus();
     }
