@@ -49,6 +49,10 @@ class _CallbackShortcuts extends ConsumerWidget {
           await ref.read(todoControllerProvider.notifier).add(0);
           ref.read(todoFocusControllerProvider.notifier).requestFocus(0);
         },
+        // ピン
+        const SingleActivator(meta: true, LogicalKeyboardKey.keyP): () async {
+          ref.read(bookmarkControllerProvider.notifier).toggle();
+        },
       },
       child: FocusScope(
         autofocus: true,
@@ -146,40 +150,14 @@ class _PlatformMenuBar extends ConsumerWidget {
             PlatformMenuItemGroup(
               members: [
                 PlatformMenuItem(
-                  label: 'Large Window',
+                  label: 'Pin Window',
                   onSelected: () async {
-                    ref
-                        .read(windowSizeModeControllerProvider.notifier)
-                        .toLarge();
+                    ref.read(bookmarkControllerProvider.notifier).toggle();
                   },
-                ),
-                PlatformMenuItem(
-                  label: 'Minimize Window',
-                  onSelected: () async {
-                    ref
-                        .read(windowSizeModeControllerProvider.notifier)
-                        .toSmall();
-                  },
-                ),
-              ],
-            ),
-            PlatformMenuItemGroup(
-              members: [
-                PlatformMenuItem(
-                  label: '← Move Window to the Left',
-                  onSelected: () async {
-                    channel.invokeMethod(
-                      AppMethodChannel.windowToLeft.name,
-                    );
-                  },
-                ),
-                PlatformMenuItem(
-                  label: 'Move Window to the Right →',
-                  onSelected: () async {
-                    channel.invokeMethod(
-                      AppMethodChannel.windowToRight.name,
-                    );
-                  },
+                  shortcut: const SingleActivator(
+                    LogicalKeyboardKey.keyP,
+                    meta: true,
+                  ),
                 ),
               ],
             ),
