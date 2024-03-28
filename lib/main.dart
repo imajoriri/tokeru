@@ -52,6 +52,22 @@ class _CallbackShortcuts extends ConsumerWidget {
         const SingleActivator(meta: true, LogicalKeyboardKey.keyP): () async {
           ref.read(bookmarkControllerProvider.notifier).toggle();
         },
+        // フォーカス中のTodoをチェックするショートカット
+        const SingleActivator(meta: true, LogicalKeyboardKey.enter): () async {
+          final index =
+              ref.read(todoFocusControllerProvider.notifier).getFocusIndex();
+          if (index != -1) {
+            final todo = ref.read(todoControllerProvider).valueOrNull?[index];
+            ref
+                .read(todoControllerProvider.notifier)
+                .updateIsDone(todoId: todo!.id, isDone: !todo.isDone);
+          }
+        },
+        // escでウィンドウを閉じる
+        const SingleActivator(LogicalKeyboardKey.escape): () async {
+          final channel = ref.read(methodChannelProvider);
+          channel.invokeMethod(AppMethodChannel.openOrClosePanel.name);
+        },
       },
       child: FocusScope(
         autofocus: true,
@@ -132,6 +148,25 @@ class _PlatformMenuBar extends ConsumerWidget {
                     await FirebaseAnalytics.instance.logEvent(
                       name: AnalyticsEventName.addTodo.name,
                     );
+                  },
+                ),
+                PlatformMenuItem(
+                  label: 'Toggle Done',
+                  shortcut: const SingleActivator(
+                    LogicalKeyboardKey.enter,
+                    meta: true,
+                  ),
+                  onSelected: () async {
+                    final index = ref
+                        .read(todoFocusControllerProvider.notifier)
+                        .getFocusIndex();
+                    if (index != -1) {
+                      final todo =
+                          ref.read(todoControllerProvider).valueOrNull?[index];
+                      ref
+                          .read(todoControllerProvider.notifier)
+                          .updateIsDone(todoId: todo!.id, isDone: !todo.isDone);
+                    }
                   },
                 ),
               ],
