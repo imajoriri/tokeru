@@ -77,6 +77,8 @@ class TextFieldScreen extends HookConsumerWidget {
             channel.invokeMethod(
               AppMethodChannel.closeWindow.name,
             );
+          } else {
+            FocusScope.of(context).unfocus();
           }
           break;
       }
@@ -159,6 +161,7 @@ class _Header extends ConsumerWidget {
           child: Row(
             children: [
               IconButton(
+                focusNode: FocusNode(skipTraversal: true),
                 tooltip: 'Close',
                 onPressed: () {
                   channel.invokeMethod(
@@ -185,6 +188,7 @@ class _Header extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               IconButton(
+                focusNode: FocusNode(skipTraversal: true),
                 onPressed: () {
                   ref.read(bookmarkControllerProvider.notifier).toggle();
                   if (!ref.read(bookmarkControllerProvider)) {
@@ -193,7 +197,7 @@ class _Header extends ConsumerWidget {
                     );
                   }
                 },
-                tooltip: 'Window does not shrink when inactive',
+                tooltip: 'Window does not hide when inactive',
                 icon: Icon(
                   bookmark ? Icons.push_pin : Icons.push_pin_outlined,
                 ),
@@ -201,16 +205,19 @@ class _Header extends ConsumerWidget {
                     ? context.colorScheme.primary
                     : context.colorScheme.secondary,
               ),
+              // 不要なので一旦消す
+              // IconButton(
+              //   focusNode: FocusNode(skipTraversal: true),
+              //   tooltip: 'Move the window to the opposite side',
+              //   onPressed: () {
+              //     channel.invokeMethod(
+              //       AppMethodChannel.switchHorizen.name,
+              //     );
+              //   },
+              //   icon: const Icon(Icons.compare_arrows_rounded),
+              // ),
               IconButton(
-                tooltip: 'Move the window to the opposite side',
-                onPressed: () {
-                  channel.invokeMethod(
-                    AppMethodChannel.switchHorizen.name,
-                  );
-                },
-                icon: const Icon(Icons.compare_arrows_rounded),
-              ),
-              IconButton(
+                focusNode: FocusNode(skipTraversal: true),
                 tooltip: 'Add Todo',
                 onPressed: () async {
                   ref.read(windowSizeModeControllerProvider.notifier).toLarge();
