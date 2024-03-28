@@ -25,14 +25,43 @@ void main() async {
     ProviderScope(
       observers: [_AppObserver()],
       child: AppMaterialApp(
-        home: _PlatformMenuBar(),
+        home: _PlatformMenuBar(
+          child: _CallbackShortcuts(
+            child: TextFieldScreen(),
+          ),
+        ),
       ),
     ),
   );
 }
 
+/// [CallbackShortcuts]の中でRefを使うためにラップしたWidgetクラス
+class _CallbackShortcuts extends ConsumerWidget {
+  const _CallbackShortcuts({required this.child});
+  final Widget child;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return CallbackShortcuts(
+      bindings: {
+        // 新規Todoを追加するショートカット
+        const SingleActivator(meta: true, LogicalKeyboardKey.keyN): () async {
+          FocusManager.instance.primaryFocus?.unfocus();
+          await ref.read(todoControllerProvider.notifier).add(0);
+          ref.read(todoFocusControllerProvider.notifier).requestFocus(0);
+        },
+      },
+      child: FocusScope(
+        autofocus: true,
+        child: child,
+      ),
+    );
+  }
+}
+
 /// [PlatformMenuBar]の中でRefを使うためにラップしたWidgetクラス
 class _PlatformMenuBar extends ConsumerWidget {
+  const _PlatformMenuBar({required this.child});
+  final Widget child;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final channel = ref.watch(methodChannelProvider);
@@ -86,16 +115,19 @@ class _PlatformMenuBar extends ConsumerWidget {
               members: [
                 PlatformMenuItem(
                   label: 'New Todo...',
+                  shortcut: const SingleActivator(
+                    LogicalKeyboardKey.keyN,
+                    meta: true,
+                  ),
                   onSelected: () async {
+                    FocusManager.instance.primaryFocus?.unfocus();
                     ref
                         .read(windowSizeModeControllerProvider.notifier)
                         .toLarge();
                     await ref.read(todoControllerProvider.notifier).add(0);
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      ref
-                          .read(todoFocusControllerProvider.notifier)
-                          .requestFocus(0);
-                    });
+                    ref
+                        .read(todoFocusControllerProvider.notifier)
+                        .requestFocus(0);
 
                     await FirebaseAnalytics.instance.logEvent(
                       name: AnalyticsEventName.addTodo.name,
@@ -205,7 +237,7 @@ class _PlatformMenuBar extends ConsumerWidget {
           ],
         ),
       ],
-      child: TextFieldScreen(),
+      child: child,
     );
   }
 }

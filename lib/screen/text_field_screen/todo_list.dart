@@ -120,12 +120,9 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
                   await ref
                       .read(todoControllerProvider.notifier)
                       .updateCurrentOrder();
-                  // rebuild後にnextFocusする
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    ref
-                        .read(todoFocusControllerProvider)[index + 1]
-                        .requestFocus();
-                  });
+                  ref
+                      .read(todoFocusControllerProvider)[index + 1]
+                      .requestFocus();
                 },
                 // インデント機能は一旦オミット
                 // onAddIndent: () {
