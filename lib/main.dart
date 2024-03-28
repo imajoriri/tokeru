@@ -58,9 +58,20 @@ class _CallbackShortcuts extends ConsumerWidget {
               ref.read(todoFocusControllerProvider.notifier).getFocusIndex();
           if (index != -1) {
             final todo = ref.read(todoControllerProvider).valueOrNull?[index];
-            ref
+            await ref
                 .read(todoControllerProvider.notifier)
                 .updateIsDone(todoId: todo!.id, isDone: !todo.isDone);
+
+            // 削除した後に元いた場所にフォーカスを戻す
+            ref.read(todoControllerProvider.notifier).deleteDoneWithDebounce(
+                  // ユーザーのタッチ操作ではないので、長く待つ必要もないので300ms
+                  milliseconds: 300,
+                  onDeleted: () {
+                    ref
+                        .read(todoFocusControllerProvider.notifier)
+                        .requestFocus(index);
+                  },
+                );
           }
         },
         // escでウィンドウを閉じる

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/material.dart';
 import 'package:quick_flutter/controller/user/user_controller.dart';
 import 'package:quick_flutter/model/todo/todo.dart';
 import 'package:quick_flutter/repository/todo/todo_repository.dart';
@@ -158,7 +159,10 @@ class TodoController extends _$TodoController {
   /// [Todo.isDone]がtrueのものをリストから削除する。
   ///
   /// このメソッドが[milliseconds]以内に複数回呼ばれた場合、最後の呼び出しのみが実行される。
-  Future<void> deleteDoneWithDebounce({int milliseconds = 1200}) async {
+  Future<void> deleteDoneWithDebounce({
+    int milliseconds = 1200,
+    VoidCallback? onDeleted,
+  }) async {
     // 既存のデバウンスタイマーをキャンセル
     _deleteDonesDebounce?.cancel();
 
@@ -166,6 +170,7 @@ class TodoController extends _$TodoController {
         Timer(Duration(milliseconds: milliseconds), () async {
       final tmp = [...state.value!.where((e) => !e.isDone)];
       state = AsyncData(tmp);
+      onDeleted?.call();
     });
   }
 }
