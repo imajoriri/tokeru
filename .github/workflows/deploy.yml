@@ -18,15 +18,22 @@ jobs:
           distribution: "zulu"
           java-version: "12.x"
 
-      - uses: ./.github/actions/install_flutter_dependencies
+      - name: "Read flutter version from fvm config"
+         id: flutter_info
+         run: |
+           FLUTTER_VERSION=$(jq -r '.flutterSdkVersion' ./.fvm/fvm_config.json)
+           echo "FLUTTER_VERSION=$FLUTTER_VERSION" >> $GITHUB_ENV
+         shell: bash
+
+      - name: "Setup Flutter"
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
 
       - name: "Install codemagic-cli-tools"
         run: |
           pip3 install codemagic-cli-tools
-
-      - name: "codemagic cli tools version"
-        run: |
-          codemagic-cli-tools --version
 
       - name: "Install the Apple certificate"
         env:
@@ -37,7 +44,7 @@ jobs:
           echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
           openssl pkcs12 -in $CERTIFICATE_PATH -nodes -nocerts -password pass:$P12_PASSWORD | openssl rsa -out $RUNNER_TEMP/cert_key
 
-      - name: "Install the Apple provisioning profile(Codesigning)"
+      - name: "Install the Apple provisioning profile"
         env:
           APP_STORE_CONNECT_KEY_IDENTIFIER: ${{ secrets.APP_STORE_CONNECT_KEY_IDENTIFIER }}
           APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
@@ -53,13 +60,6 @@ jobs:
             --type MAC_APP_DEVELOPMENT \
             --certificate-key=@file:$RUNNER_TEMP/cert_key \
             --create
-
-      - name: "Install the Apple provisioning profile(Distribution)"
-        env:
-          APP_STORE_CONNECT_KEY_IDENTIFIER: ${{ secrets.APP_STORE_CONNECT_KEY_IDENTIFIER }}
-          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
-          APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
-        run: |
           app-store-connect list-certificates \
             --type MAC_INSTALLER_DISTRIBUTION \
             --certificate-key=@file:$RUNNER_TEMP/cert_key \
@@ -85,10 +85,12 @@ jobs:
           new_build_number=$((build_number + 1))
           flutter build macos --dart-define-from-file=dart_defines/prod.json
 
-      - name: "package macOS app"
+      - name: "Package macOS app"
         run: |
           APP_NAME=$(find $(pwd) -name "*.app")
           PACKAGE_NAME=$(basename "$APP_NAME" .app).pkg
+          echo "APP_NAME=$APP_NAME" >> $GITHUB_ENV
+          echo "PACKAGE_NAME=$PACKAGE_NAME" >> $GITHUB_ENV
           xcrun productbuild --component "$APP_NAME" /Applications/ unsigned.pkg
           INSTALLER_CERT_NAME=$(keychain list-certificates \
                     | jq '[.[]
@@ -99,9 +101,10 @@ jobs:
           xcrun productsign --sign "$INSTALLER_CERT_NAME" unsigned.pkg "$PACKAGE_NAME"
           rm -f unsigned.pkg
 
-      - name: "upload TestFlight"
+      - name: "Upload TestFlight"
         env:
           APP_STORE_CONNECT_KEY_IDENTIFIER: ${{ secrets.APP_STORE_CONNECT_KEY_IDENTIFIER }}
           APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
           APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
-        run: app-store-connect publish --path "$PACKAGE_NAME" --testflight --beta-group=group01 --expire-build-submitted-for-review
+        run: 
+          app-store-connect publish --path "${{ env.PACKAGE_NAME }}" --testflight --beta-group=group01 --expire-build-submitted-for-review
