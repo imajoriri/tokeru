@@ -68,8 +68,8 @@ jobs:
       - name: "xcode-project use-profiles"
         run: xcode-project use-profiles
 
-      - name: Build macOS app
-        run: flutter build macos --dart-define-from-file=dart_defines/prod.json
+      # - name: Build macOS app
+      #   run: flutter build macos --dart-define-from-file=dart_defines/prod.json
 
       # - name: Zip the app
       #   run: |
