@@ -1,5 +1,6 @@
 name: Build and Release macOS App
 
+# TODO: workflow_dispatchに変更する
 on:
   pull_request:
     types: [opened, synchronize]
@@ -22,6 +23,10 @@ jobs:
       - name: "Install codemagic-cli-tools"
         run: |
           pip3 install codemagic-cli-tools
+
+      - name: "codemagic cli tools version"
+        run: |
+          codemagic-cli-tools --version
 
       # - name: Build macOS app
       #   run: flutter build macos --dart-define-from-file=dart_defines/prod.json
