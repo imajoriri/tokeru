@@ -99,5 +99,5 @@ jobs:
 
       - name: "Upload TestFlight"
         run: |
-          app-store-connect publish --path "$PACKAGE_NAME" --max-find-build-wait=20 --testflight
+          app-store-connect publish --path "$PACKAGE_NAME" --log-api-calls --testflight
           # app-store-connect publish --path "$PACKAGE_NAME" --testflight --beta-group=group01
