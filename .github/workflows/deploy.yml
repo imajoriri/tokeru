@@ -38,6 +38,10 @@ jobs:
           openssl pkcs12 -in $CERTIFICATE_PATH -nodes -nocerts -password pass:$P12_PASSWORD | openssl rsa -out $RUNNER_TEMP/cert_key
 
       - name: "Install the Apple provisioning profile(Codesigning)"
+        env:
+          APP_STORE_CONNECT_KEY_IDENTIFIER: ${{ secrets.APP_STORE_CONNECT_KEY_IDENTIFIER }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
         run: |
           app-store-connect fetch-signing-files com.tokeru.macos.prod \
             --platform MAC_OS \
@@ -45,14 +49,27 @@ jobs:
             --certificate-key=@file:$RUNNER_TEMP/cert_key \
 
       - name: "Install the Apple provisioning profile(Distribution)"
+        env:
+          APP_STORE_CONNECT_KEY_IDENTIFIER: ${{ secrets.APP_STORE_CONNECT_KEY_IDENTIFIER }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
         run: |
           app-store-connect fetch-signing-files com.tokeru.macos.prod \
             --type MAC_INSTALLER_DISTRIBUTION \
             --certificate-key=@file:$RUNNER_TEMP/cert_key \
             --save
 
-      # - name: Build macOS app
-      #   run: flutter build macos --dart-define-from-file=dart_defines/prod.json
+      - name: "keychain initialize"
+        run: keychain initialize
+
+      - name: "keychain add-certificates"
+        run: keychain add-certificates
+
+      - name: "xcode-project use-profiles"
+        run: xcode-project use-profiles
+
+      - name: Build macOS app
+        run: flutter build macos --dart-define-from-file=dart_defines/prod.json
 
       # - name: Zip the app
       #   run: |
