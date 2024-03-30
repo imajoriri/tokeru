@@ -47,6 +47,11 @@ jobs:
             --platform MAC_OS \
             --type MAC_APP_STORE \
             --certificate-key=@file:$RUNNER_TEMP/cert_key \
+          app-store-connect fetch-signing-files com.tokeru.macos.prod \
+            --platform MAC_OS \
+            --type MAC_APP_DEVELOPMENT \
+            --certificate-key=@file:./cert_key \
+            --create
 
       - name: "Install the Apple provisioning profile(Distribution)"
         env:
