@@ -42,15 +42,16 @@ jobs:
           APP_STORE_CONNECT_KEY_IDENTIFIER: ${{ secrets.APP_STORE_CONNECT_KEY_IDENTIFIER }}
           APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
           APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
+          APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
         run: |
-          app-store-connect fetch-signing-files com.tokeru.macos.prod \
+          app-store-connect fetch-signing-files $APP_BUNDLE_ID \
             --platform MAC_OS \
             --type MAC_APP_STORE \
             --certificate-key=@file:$RUNNER_TEMP/cert_key \
-          app-store-connect fetch-signing-files com.tokeru.macos.prod \
+          app-store-connect fetch-signing-files $APP_BUNDLE_ID \
             --platform MAC_OS \
             --type MAC_APP_DEVELOPMENT \
-            --certificate-key=@file:./cert_key \
+            --certificate-key=@file:$RUNNER_TEMP/cert_key \
             --create
 
       - name: "Install the Apple provisioning profile(Distribution)"
@@ -78,8 +79,9 @@ jobs:
           APP_STORE_CONNECT_KEY_IDENTIFIER: ${{ secrets.APP_STORE_CONNECT_KEY_IDENTIFIER }}
           APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
           APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
+          APPLE_APP_ID: ${{ secrets.APPLE_APP_ID }}
         run: |
-          build_number=$(app-store-connect get-latest-build-number 6479510993) 
+          build_number=$(app-store-connect get-latest-build-number $APPLE_APP_ID) 
           new_build_number=$((build_number + 1))
           flutter build macos --dart-define-from-file=dart_defines/prod.json
 
