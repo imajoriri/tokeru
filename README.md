@@ -8,8 +8,12 @@
  
 
 Tokeruは「**1日の作業パフォーマンスを最大化するアプリ**」です。 (macOS 11.0以降)。  
+`⇧ ⌘ ,`キーでSpotlightやAlfredのようなTodoウィンドウが開きます。  
+ショートカットにも対応しており、作成、チェック、ウィンドウを閉じる操作はキーボードのみで行えます。  
+
 まだTodo機能しかありませんが、今後は時間をうまく使うための機能や思考の整理のための機能を実装予定です。  
-常に最前面に表示されているため、すばやくチェックをつけたり、Todoを作成できます。  
+
+<img width="800" alt="CleanShot 2024-03-27 at 21 27 41@2x" src="https://github.com/imajoriri/tokeru/assets/30540418/fcb2d70e-27af-4209-9280-a401655b57c9">
 
 
 # インストール
@@ -17,14 +21,6 @@ Tokeruは「**1日の作業パフォーマンスを最大化するアプリ**」
 現在ベータ版として、TestFlightから利用できます。
 
 https://testflight.apple.com/join/LaDGDUKa
-
-# リリースされている機能
-
-現在、ベータ版では1日のTodo管理を行えます。
-Tokeruの特徴はウィンドウをピンすれば、他のウィンドウを操作中でも常に最前面に表示されます。
-ショートカットキーでいつでも表示、非表示ができます。
-
-<img width="800" alt="CleanShot 2024-03-27 at 21 27 41@2x" src="https://github.com/imajoriri/tokeru/assets/30540418/fcb2d70e-27af-4209-9280-a401655b57c9">
 
 
 # 開発中の機能
