@@ -44,12 +44,11 @@ jobs:
           APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
           APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
         run: |
-          echo $APP_BUNDLE_ID
-          app-store-connect fetch-signing-files $APP_BUNDLE_ID \
+          app-store-connect fetch-signing-files "$APP_BUNDLE_ID" \
             --platform MAC_OS \
             --type MAC_APP_STORE \
             --certificate-key=@file:$RUNNER_TEMP/cert_key \
-          app-store-connect fetch-signing-files $APP_BUNDLE_ID \
+          app-store-connect fetch-signing-files "$APP_BUNDLE_ID" \
             --platform MAC_OS \
             --type MAC_APP_DEVELOPMENT \
             --certificate-key=@file:$RUNNER_TEMP/cert_key \
