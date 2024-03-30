@@ -69,6 +69,10 @@ jobs:
         run: xcode-project use-profiles
 
       - name: Build macOS app
+        env:
+          APP_STORE_CONNECT_KEY_IDENTIFIER: ${{ secrets.APP_STORE_CONNECT_KEY_IDENTIFIER }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
         run: |
           build_number=$(app-store-connect get-latest-build-number 6479510993) 
           new_build_number=$((build_number + 1))
