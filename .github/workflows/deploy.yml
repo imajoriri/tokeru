@@ -1,8 +1,7 @@
 name: Build and Release macOS App
 
 on:
-  release:
-    types: [published]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -19,20 +18,24 @@ jobs:
 
       - uses: ./.github/actions/install_flutter_dependencies
 
-      - name: Build macOS app
-        run: flutter build macos --dart-define-from-file=dart_defines/prod.json
-
-      - name: Zip the app
+      - name: "Install codemagic-cli-tools"
         run: |
-          cp -r build/macos/Build/Products/Release/Tokeru.app Tokeru.app
-          zip -r release.zip Tokeru.app
+          pip3 install codemagic-cli-tools
 
-      - name: Upload ZIP to Release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./release.zip
-          asset_name: app-macos.zip
-          asset_content_type: application/zip
+      # - name: Build macOS app
+      #   run: flutter build macos --dart-define-from-file=dart_defines/prod.json
+
+      # - name: Zip the app
+      #   run: |
+      #     cp -r build/macos/Build/Products/Release/Tokeru.app Tokeru.app
+      #     zip -r release.zip Tokeru.app
+
+      # - name: Upload ZIP to Release
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ github.event.release.upload_url }}
+      #     asset_path: ./release.zip
+      #     asset_name: app-macos.zip
+      #     asset_content_type: application/zip
