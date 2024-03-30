@@ -35,7 +35,7 @@ jobs:
         run: |
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
           echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
-          openssl pkcs12 -in $CERTIFICATE_PATH -nodes -nocerts | openssl rsa -out cert_key
+          openssl pkcs12 -in $CERTIFICATE_PATH -nodes -nocerts -password pass:$P12_PASSWORD | openssl rsa -out cert_key
 
       - name: "Install the Apple provisioning profile"
         run: |
