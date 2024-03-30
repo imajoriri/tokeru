@@ -35,14 +35,21 @@ jobs:
         run: |
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
           echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
-          openssl pkcs12 -in $CERTIFICATE_PATH -nodes -nocerts -password pass:$P12_PASSWORD | openssl rsa -out cert_key
+          openssl pkcs12 -in $CERTIFICATE_PATH -nodes -nocerts -password pass:$P12_PASSWORD | openssl rsa -out $RUNNER_TEMP/cert_key
 
-      - name: "Install the Apple provisioning profile"
+      - name: "Install the Apple provisioning profile(Codesigning)"
         run: |
           app-store-connect fetch-signing-files com.tokeru.macos.prod \
             --platform MAC_OS \
             --type MAC_APP_STORE \
             --certificate-key=@file:$RUNNER_TEMP/cert_key \
+
+      - name: "Install the Apple provisioning profile(Distribution)"
+        run: |
+          app-store-connect fetch-signing-files com.tokeru.macos.prod \
+            --type MAC_INSTALLER_DISTRIBUTION \
+            --certificate-key=@file:$RUNNER_TEMP/cert_key \
+            --save
 
       # - name: Build macOS app
       #   run: flutter build macos --dart-define-from-file=dart_defines/prod.json
