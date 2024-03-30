@@ -68,20 +68,25 @@ jobs:
       - name: "xcode-project use-profiles"
         run: xcode-project use-profiles
 
-      # - name: Build macOS app
-      #   run: flutter build macos --dart-define-from-file=dart_defines/prod.json
+      - name: Build macOS app
+        run: |
+          build_number=$(app-store-connect get-latest-build-number 6479510993) 
+          new_build_number=$((build_number + 1))
+          flutter build macos --dart-define-from-file=dart_defines/prod.json
 
-      # - name: Zip the app
-      #   run: |
-      #     cp -r build/macos/Build/Products/Release/Tokeru.app Tokeru.app
-      #     zip -r release.zip Tokeru.app
+      - name: "package macOS app"
+        run: |
+          APP_NAME=$(find $(pwd) -name "*.app")
+          PACKAGE_NAME=$(basename "$APP_NAME" .app).pkg
+          xcrun productbuild --component "$APP_NAME" /Applications/ unsigned.pkg
+          INSTALLER_CERT_NAME=$(keychain list-certificates \
+                    | jq '[.[]
+                      | select(.common_name
+                      | contains("Mac Developer Installer"))
+                      | .common_name][0]' \
+                    | xargs)
+          xcrun productsign --sign "$INSTALLER_CERT_NAME" unsigned.pkg "$PACKAGE_NAME"
+          rm -f unsigned.pkg
 
-      # - name: Upload ZIP to Release
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     upload_url: ${{ github.event.release.upload_url }}
-      #     asset_path: ./release.zip
-      #     asset_name: app-macos.zip
-      #     asset_content_type: application/zip
+      - name: "upload TestFlight"
+        run: app-store-connect publish --path "$PACKAGE_NAME" --testflight --beta-group=group01 --expire-build-submitted-for-review
