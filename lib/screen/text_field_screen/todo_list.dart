@@ -40,8 +40,7 @@ class TodoList extends HookConsumerWidget {
           },
           itemBuilder: (context, index) {
             // isDoneが更新されてもWidgetが更新されて欲しいので、idとisDoneをkeyにする
-            final key =
-                ValueKey(todos[index].id + todos[index].isDone.toString());
+            final key = ValueKey(todos[index].id);
             return _ReorderableTodoListItem(
               key: key,
               todo: todos[index],

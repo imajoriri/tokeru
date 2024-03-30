@@ -9,17 +9,19 @@ class MainFlutterWindow: NSWindow {
   lazy var flutterEngine = FlutterEngine(name: "my flutter engine", project: nil)
 
   /// ウィンドウのサイズと位置を設定する
-  func setWindow() {
+  func setDefaultWindow() {
     // ウィンドウのサイズを設定
     let windowSize = NSSize(width: 600, height: 500)
 
     // スクリーンのサイズを取得
-    guard let screen = NSScreen.main else { return }
+    // `NSScreen.screens.first`はアプリを最初に開いた画面
+    guard let screen = NSScreen.screens.first else { return }
     let screenSize = screen.frame.size
 
-    // ウィンドウの新しい位置を計算（画面の中心）
+    // Xはウィンドウの中心
     let x = (screenSize.width - windowSize.width) / 2
-    let y = (screenSize.height - windowSize.height) / 2
+    // Yはウィンドウの中心よりやや上
+    let y = ((screenSize.height - windowSize.height) / 2) + 100
 
     // ウィンドウの位置とサイズを設定して表示
     self.setFrame(NSRect(x: x, y: y, width: windowSize.width, height: windowSize.height), display: true)
@@ -33,7 +35,7 @@ class MainFlutterWindow: NSWindow {
 
     RegisterGeneratedPlugins(registry: flutterViewController)
 
-    self.setWindow()
+    self.setDefaultWindow()
 
     self.level = .floating
 
