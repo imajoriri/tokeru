@@ -106,5 +106,6 @@ jobs:
           APP_STORE_CONNECT_KEY_IDENTIFIER: ${{ secrets.APP_STORE_CONNECT_KEY_IDENTIFIER }}
           APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
           APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
+          PACKAGE_NAME: ${{ env.PACKAGE_NAME }}
         run: |
-          app-store-connect publish --path "${{ env.PACKAGE_NAME }}" --testflight --beta-group=group01 --expire-build-submitted-for-review
+          app-store-connect publish --path "$PACKAGE_NAME" --testflight --beta-group=group01 --expire-build-submitted-for-review
