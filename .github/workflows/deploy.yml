@@ -55,13 +55,13 @@ jobs:
             --certificate-key=@file:$RUNNER_TEMP/cert_key \
             --create
 
-      # - name: "Install the Apple provisioning profile(MAC_APP_DEVELOPMENT)"
-      #   run: |
-      #     app-store-connect fetch-signing-files "$APP_BUNDLE_ID" \
-      #       --platform MAC_OS \
-      #       --type MAC_APP_DIRECT \
-      #       --certificate-key=@file:$RUNNER_TEMP/cert_key \
-      #       --create
+      - name: "Install the Apple provisioning profile(MAC_APP_DEVELOPMENT)"
+        run: |
+          app-store-connect fetch-signing-files "$APP_BUNDLE_ID" \
+            --platform MAC_OS \
+            --type MAC_APP_DEVELOPMENT \
+            --certificate-key=@file:$RUNNER_TEMP/cert_key \
+            --create
 
       - name: "Install the Certificates(MAC_INSTALLER_DISTRIBUTION)"
         run: |
