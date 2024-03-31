@@ -79,7 +79,7 @@ jobs:
           keychain use-login
 
       - name: "xcode-project use-profiles"
-        run: xcode-project use-profiles
+        run: xcode-project use-profiles --archive-method=app-store
 
       - name: "echo"
         run: |
