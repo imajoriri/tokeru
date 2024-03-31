@@ -72,7 +72,9 @@ jobs:
           keychain add-certificates
 
       - name: "xcode-project use-profiles"
-        run: xcode-project use-profiles
+        run: |
+          find **/*.xcodeproj -type f | xargs sed -i "" -E 's/PRODUCT_BUNDLE_IDENTIFIER = ".+";/PRODUCT_BUNDLE_IDENTIFIER = $APP_BUNDLE_ID;/g'
+          xcode-project use-profiles
 
       # - name: Build macOS app
       #   run: |
