@@ -27,18 +27,18 @@ jobs:
           distribution: "zulu"
           java-version: "12.x"
 
-      - name: "Read flutter version from fvm config"
-        id: flutter_info
-        run: |
-          FLUTTER_VERSION=$(jq -r '.flutterSdkVersion' ./.fvm/fvm_config.json)
-          echo "FLUTTER_VERSION=$FLUTTER_VERSION" >> $GITHUB_ENV
-        shell: bash
+      # - name: "Read flutter version from fvm config"
+      #   id: flutter_info
+      #   run: |
+      #     FLUTTER_VERSION=$(jq -r '.flutterSdkVersion' ./.fvm/fvm_config.json)
+      #     echo "FLUTTER_VERSION=$FLUTTER_VERSION" >> $GITHUB_ENV
+      #   shell: bash
 
-      - name: "Setup Flutter"
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
-          cache: true
+      # - name: "Setup Flutter"
+      #   uses: subosito/flutter-action@v2
+      #   with:
+      #     flutter-version: ${{ env.FLUTTER_VERSION }}
+      #     cache: true
 
       - name: "Install codemagic-cli-tools"
         run: |
@@ -68,7 +68,7 @@ jobs:
 
       - name: "Install the Apple provisioning profile(MAC_INSTALLER_DISTRIBUTION)"
         run: |
-          app-store-connect certificates list \
+          app-store-connect certificates create \
             --type MAC_INSTALLER_DISTRIBUTION \
             --certificate-key=@file:$RUNNER_TEMP/cert_key \
             --save
