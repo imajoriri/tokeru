@@ -20,24 +20,24 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
 
-      - name: "setup java"
-        uses: actions/setup-java@v3
-        with:
-          distribution: "zulu"
-          java-version: "12.x"
+      # - name: "setup java"
+      #   uses: actions/setup-java@v3
+      #   with:
+      #     distribution: "zulu"
+      #     java-version: "12.x"
 
-      - name: "Read flutter version from fvm config"
-        id: flutter_info
-        run: |
-          FLUTTER_VERSION=$(jq -r '.flutterSdkVersion' ./.fvm/fvm_config.json)
-          echo "FLUTTER_VERSION=$FLUTTER_VERSION" >> $GITHUB_ENV
-        shell: bash
+      # - name: "Read flutter version from fvm config"
+      #   id: flutter_info
+      #   run: |
+      #     FLUTTER_VERSION=$(jq -r '.flutterSdkVersion' ./.fvm/fvm_config.json)
+      #     echo "FLUTTER_VERSION=$FLUTTER_VERSION" >> $GITHUB_ENV
+      #   shell: bash
 
-      - name: "Setup Flutter"
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
-          cache: true
+      # - name: "Setup Flutter"
+      #   uses: subosito/flutter-action@v2
+      #   with:
+      #     flutter-version: ${{ env.FLUTTER_VERSION }}
+      #     cache: true
 
       - name: "Install codemagic-cli-tools"
         run: |
@@ -84,8 +84,8 @@ jobs:
       - name: "echo"
         run: |
           # keychain list-certificates
-          ll ~/Library/MobileDevice/Provisioning\ Profiles/
-          ll ~/Library/MobileDevice/Certificates
+          ls -la ~/Library/MobileDevice/Provisioning\ Profiles/
+          ls -la ~/Library/MobileDevice/Certificates
 
       # - name: Build macOS app
       #   run: |
