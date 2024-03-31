@@ -71,7 +71,9 @@ jobs:
             --save
 
       - name: "keychain initialize"
-        run: keychain initialize
+        run: |
+          keychain delete 
+          keychain initialize
 
       - name: "keychain add-certificates"
         run: |
