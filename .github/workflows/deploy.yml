@@ -6,7 +6,8 @@ on:
     types: [opened, synchronize]
 
 env:
-  BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+  # BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+  CERT_KEY: ${{ secrets.CERT_KEY }}
   P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
   APP_STORE_CONNECT_KEY_IDENTIFIER: ${{ secrets.APP_STORE_CONNECT_KEY_IDENTIFIER }}
   APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
@@ -46,9 +47,14 @@ jobs:
 
       - name: "Install the Apple certificate"
         run: |
-          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
-          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
-          openssl pkcs12 -in $CERTIFICATE_PATH -nodes -nocerts -password pass:$P12_PASSWORD | openssl rsa -out $RUNNER_TEMP/cert_key
+          CERT_KEY_PATH=$RUNNER_TEMP/cert_key
+          echo -n "$CERT_KEY" >> $CERT_KEY_PATH
+
+      # - name: "Install the Apple certificate"
+      #   run: |
+      #     CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+      #     echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
+      #     openssl pkcs12 -in $CERTIFICATE_PATH -nodes -nocerts -password pass:$P12_PASSWORD | openssl rsa -out $RUNNER_TEMP/cert_key
 
       - name: "Install the Apple provisioning profile(MAC_APP_STORE)"
         run: |
@@ -82,29 +88,29 @@ jobs:
       - name: "xcode-project use-profiles"
         run: xcode-project use-profiles
 
-      - name: Build macOS app
-        run: |
-          build_number=$(app-store-connect get-latest-build-number $APPLE_APP_ID)
-          new_build_number=$((build_number + 1))
-          flutter build macos --dart-define-from-file=dart_defines/prod.json --build-number=$new_build_number
+      # - name: Build macOS app
+      #   run: |
+      #     build_number=$(app-store-connect get-latest-build-number $APPLE_APP_ID)
+      #     new_build_number=$((build_number + 1))
+      #     flutter build macos --dart-define-from-file=dart_defines/prod.json --build-number=$new_build_number
 
-      - name: "Package macOS app"
-        run: |
-          APP_NAME=$(find $(pwd) -name "*.app")
-          PACKAGE_NAME=$(basename "$APP_NAME" .app).pkg
-          echo "APP_NAME=$APP_NAME" >> $GITHUB_ENV
-          echo "PACKAGE_NAME=$PACKAGE_NAME" >> $GITHUB_ENV
-          xcrun productbuild --component "$APP_NAME" /Applications/ unsigned.pkg
-          INSTALLER_CERT_NAME=$(keychain list-certificates \
-                    | jq '[.[]
-                      | select(.common_name
-                      | contains("Mac Developer Installer"))
-                      | .common_name][0]' \
-                    | xargs)
-          xcrun productsign --sign "$INSTALLER_CERT_NAME" unsigned.pkg "$PACKAGE_NAME"
-          rm -f unsigned.pkg
+      # - name: "Package macOS app"
+      #   run: |
+      #     APP_NAME=$(find $(pwd) -name "*.app")
+      #     PACKAGE_NAME=$(basename "$APP_NAME" .app).pkg
+      #     echo "APP_NAME=$APP_NAME" >> $GITHUB_ENV
+      #     echo "PACKAGE_NAME=$PACKAGE_NAME" >> $GITHUB_ENV
+      #     xcrun productbuild --component "$APP_NAME" /Applications/ unsigned.pkg
+      #     INSTALLER_CERT_NAME=$(keychain list-certificates \
+      #               | jq '[.[]
+      #                 | select(.common_name
+      #                 | contains("Mac Developer Installer"))
+      #                 | .common_name][0]' \
+      #               | xargs)
+      #     xcrun productsign --sign "$INSTALLER_CERT_NAME" unsigned.pkg "$PACKAGE_NAME"
+      #     rm -f unsigned.pkg
 
-      - name: "Upload TestFlight"
-        run: |
-          app-store-connect publish --path "$PACKAGE_NAME" --log-api-calls --testflight
-          # app-store-connect publish --path "$PACKAGE_NAME" --testflight --beta-group=group01
+      # - name: "Upload TestFlight"
+      #   run: |
+      #     app-store-connect publish --path "$PACKAGE_NAME" --log-api-calls --testflight
+      #     # app-store-connect publish --path "$PACKAGE_NAME" --testflight --beta-group=group01
