@@ -83,7 +83,7 @@ jobs:
         run: |
           build_number=$(app-store-connect get-latest-build-number $APPLE_APP_ID)
           new_build_number=$((build_number + 1))
-          flutter build macos --dart-define-from-file=dart_defines/prod.json --build-number=$10030
+          flutter build macos --dart-define-from-file=dart_defines/prod.json --build-number=10032
 
       - name: "Package macOS app"
         run: |
