@@ -74,7 +74,9 @@ jobs:
         run: keychain initialize
 
       - name: "keychain add-certificates"
-        run: keychain add-certificates
+        run: |
+          keychain add-certificates
+          keychain use-login
 
       - name: "xcode-project use-profiles"
         run: xcode-project use-profiles
