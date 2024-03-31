@@ -55,7 +55,7 @@ jobs:
           app-store-connect fetch-signing-files "$APP_BUNDLE_ID" \
             --platform MAC_OS \
             --type MAC_APP_STORE \
-            --certificate-key=@file:$RUNNER_TEMP/cert_key
+            --certificate-key=@file:$RUNNER_TEMP/cert_key \
             --create
 
       - name: "Install the Apple provisioning profile(MAC_APP_DEVELOPMENT)"
