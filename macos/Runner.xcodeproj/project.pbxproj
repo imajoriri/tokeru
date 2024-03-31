@@ -243,6 +243,7 @@
 				3399D490228B24CF009A79C7 /* ShellScript */,
 				0EC0B0AF8263D8DB46793ADF /* [CP] Embed Pods Frameworks */,
 				4750E1772B6CC328004DA68A /* swift lint */,
+				472D883A2BBA1C0F004EAC7E /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -384,6 +385,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"$FLUTTER_ROOT\"/packages/flutter_tools/bin/macos_assemble.sh && touch Flutter/ephemeral/tripwire";
+		};
+		472D883A2BBA1C0F004EAC7E /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nfind **/*.xcodeproj -type f | xargs sed -i \"\" -E 's/PRODUCT_BUNDLE_IDENTIFIER = \".+\";/PRODUCT_BUNDLE_IDENTIFIER = com.tokeru.macos.prod;/g'\n\n";
 		};
 		4750E1772B6CC328004DA68A /* swift lint */ = {
 			isa = PBXShellScriptBuildPhase;
