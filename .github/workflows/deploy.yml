@@ -1,11 +1,18 @@
 name: Build and Release macOS App
 
 on:
-  release:
-    types: [published]
+  workflow_dispatch:
+
+env:
+  CERT_KEY: ${{ secrets.CERT_KEY }}
+  APP_STORE_CONNECT_KEY_IDENTIFIER: ${{ secrets.APP_STORE_CONNECT_KEY_IDENTIFIER }}
+  APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+  APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
+  APP_BUNDLE_ID: ${{ secrets.APP_BUNDLE_ID }}
+  APPLE_APP_ID: ${{ secrets.APPLE_APP_ID }}
 
 jobs:
-  build:
+  deploy_macos_app:
     runs-on: macos-latest
     steps:
       - name: "Checkout"
@@ -17,22 +24,79 @@ jobs:
           distribution: "zulu"
           java-version: "12.x"
 
-      - uses: ./.github/actions/install_flutter_dependencies
+      - name: "Read flutter version from fvm config"
+        id: flutter_info
+        run: |
+          FLUTTER_VERSION=$(jq -r '.flutterSdkVersion' ./.fvm/fvm_config.json)
+          echo "FLUTTER_VERSION=$FLUTTER_VERSION" >> $GITHUB_ENV
+        shell: bash
+
+      - name: "Setup Flutter"
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+
+      - name: "Install codemagic-cli-tools"
+        run: |
+          pip3 install codemagic-cli-tools
+
+      - name: "Install the Apple certificate"
+        run: |
+          echo -n "$CERT_KEY" >> $RUNNER_TEMP/cert_key
+
+      - name: "Install the Apple provisioning profile(MAC_APP_STORE)"
+        run: |
+          app-store-connect fetch-signing-files "$APP_BUNDLE_ID" \
+            --platform MAC_OS \
+            --type MAC_APP_STORE \
+            --certificate-key=@file:$RUNNER_TEMP/cert_key \
+            --create
+
+      - name: "Install the Certificates(MAC_INSTALLER_DISTRIBUTION)"
+        run: |
+          app-store-connect certificates list \
+            --type MAC_INSTALLER_DISTRIBUTION \
+            --certificate-key=@file:$RUNNER_TEMP/cert_key \
+            --save
+
+      - name: "keychain initialize"
+        run: |
+          keychain delete 
+          keychain initialize
+
+      - name: "keychain add-certificates"
+        run: |
+          keychain add-certificates
+
+      - name: "xcode-project use-profiles"
+        run: |
+          /usr/bin/plutil -replace CFBundleIdentifier -string $APP_BUNDLE_ID ios/Runner/Info.plist
+          find **/*.xcodeproj -type f | xargs sed -i "" -E 's/PRODUCT_BUNDLE_IDENTIFIER = ".+";//g'
+          xcode-project use-profiles
 
       - name: Build macOS app
-        run: flutter build macos --dart-define-from-file=dart_defines/prod.json
-
-      - name: Zip the app
         run: |
-          cp -r build/macos/Build/Products/Release/Tokeru.app Tokeru.app
-          zip -r release.zip Tokeru.app
+          build_number=$(app-store-connect get-latest-build-number $APPLE_APP_ID)
+          new_build_number=$((build_number + 1))
+          flutter build macos --dart-define-from-file=dart_defines/prod.json --build-number=10039
 
-      - name: Upload ZIP to Release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./release.zip
-          asset_name: app-macos.zip
-          asset_content_type: application/zip
+      - name: "Package macOS app"
+        run: |
+          APP_NAME=$(find $(pwd) -name "*.app")
+          PACKAGE_NAME=$(basename "$APP_NAME" .app).pkg
+          echo "APP_NAME=$APP_NAME" >> $GITHUB_ENV
+          echo "PACKAGE_NAME=$PACKAGE_NAME" >> $GITHUB_ENV
+          xcrun productbuild --component "$APP_NAME" /Applications/ unsigned.pkg
+          INSTALLER_CERT_NAME=$(keychain list-certificates \
+                    | jq '[.[]
+                      | select(.common_name
+                      | contains("Mac Developer Installer"))
+                      | .common_name][0]' \
+                    | xargs)
+          xcrun productsign --sign "$INSTALLER_CERT_NAME" unsigned.pkg "$PACKAGE_NAME"
+          rm -f unsigned.pkg
+
+      - name: "Upload TestFlight"
+        run: |
+          app-store-connect publish --path "$PACKAGE_NAME" --testflight --beta-group=group01

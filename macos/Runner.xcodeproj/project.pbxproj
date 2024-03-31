@@ -743,7 +743,6 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tokeru.macos.$(appIdSuffix)";
-				"PRODUCT_BUNDLE_IDENTIFIER[sdk=macosx*]" = com.tokeru.macos.dev;
 				PRODUCT_NAME = "$(appName)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
