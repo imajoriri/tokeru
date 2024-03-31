@@ -67,7 +67,7 @@ jobs:
 
       - name: "Install the Apple provisioning profile(MAC_INSTALLER_DISTRIBUTION)"
         run: |
-          app-store-connect list-certificates \
+          app-store-connect certificates list \
             --type MAC_INSTALLER_DISTRIBUTION \
             --certificate-key=@file:$RUNNER_TEMP/cert_key \
             --save
