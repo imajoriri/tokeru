@@ -28,18 +28,18 @@ jobs:
           distribution: "zulu"
           java-version: "12.x"
 
-      # - name: "Read flutter version from fvm config"
-      #   id: flutter_info
-      #   run: |
-      #     FLUTTER_VERSION=$(jq -r '.flutterSdkVersion' ./.fvm/fvm_config.json)
-      #     echo "FLUTTER_VERSION=$FLUTTER_VERSION" >> $GITHUB_ENV
-      #   shell: bash
+      - name: "Read flutter version from fvm config"
+        id: flutter_info
+        run: |
+          FLUTTER_VERSION=$(jq -r '.flutterSdkVersion' ./.fvm/fvm_config.json)
+          echo "FLUTTER_VERSION=$FLUTTER_VERSION" >> $GITHUB_ENV
+        shell: bash
 
-      # - name: "Setup Flutter"
-      #   uses: subosito/flutter-action@v2
-      #   with:
-      #     flutter-version: ${{ env.FLUTTER_VERSION }}
-      #     cache: true
+      - name: "Setup Flutter"
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
 
       - name: "Install codemagic-cli-tools"
         run: |
@@ -88,29 +88,28 @@ jobs:
       - name: "xcode-project use-profiles"
         run: xcode-project use-profiles
 
-      # - name: Build macOS app
-      #   run: |
-      #     build_number=$(app-store-connect get-latest-build-number $APPLE_APP_ID)
-      #     new_build_number=$((build_number + 1))
-      #     flutter build macos --dart-define-from-file=dart_defines/prod.json --build-number=$new_build_number
+      - name: Build macOS app
+        run: |
+          build_number=$(app-store-connect get-latest-build-number $APPLE_APP_ID)
+          new_build_number=$((build_number + 1))
+          flutter build macos --dart-define-from-file=dart_defines/prod.json --build-number=$new_build_number
 
-      # - name: "Package macOS app"
-      #   run: |
-      #     APP_NAME=$(find $(pwd) -name "*.app")
-      #     PACKAGE_NAME=$(basename "$APP_NAME" .app).pkg
-      #     echo "APP_NAME=$APP_NAME" >> $GITHUB_ENV
-      #     echo "PACKAGE_NAME=$PACKAGE_NAME" >> $GITHUB_ENV
-      #     xcrun productbuild --component "$APP_NAME" /Applications/ unsigned.pkg
-      #     INSTALLER_CERT_NAME=$(keychain list-certificates \
-      #               | jq '[.[]
-      #                 | select(.common_name
-      #                 | contains("Mac Developer Installer"))
-      #                 | .common_name][0]' \
-      #               | xargs)
-      #     xcrun productsign --sign "$INSTALLER_CERT_NAME" unsigned.pkg "$PACKAGE_NAME"
-      #     rm -f unsigned.pkg
+      - name: "Package macOS app"
+        run: |
+          APP_NAME=$(find $(pwd) -name "*.app")
+          PACKAGE_NAME=$(basename "$APP_NAME" .app).pkg
+          echo "APP_NAME=$APP_NAME" >> $GITHUB_ENV
+          echo "PACKAGE_NAME=$PACKAGE_NAME" >> $GITHUB_ENV
+          xcrun productbuild --component "$APP_NAME" /Applications/ unsigned.pkg
+          INSTALLER_CERT_NAME=$(keychain list-certificates \
+                    | jq '[.[]
+                      | select(.common_name
+                      | contains("Mac Developer Installer"))
+                      | .common_name][0]' \
+                    | xargs)
+          xcrun productsign --sign "$INSTALLER_CERT_NAME" unsigned.pkg "$PACKAGE_NAME"
+          rm -f unsigned.pkg
 
-      # - name: "Upload TestFlight"
-      #   run: |
-      #     app-store-connect publish --path "$PACKAGE_NAME" --log-api-calls --testflight
-      #     # app-store-connect publish --path "$PACKAGE_NAME" --testflight --beta-group=group01
+      - name: "Upload TestFlight"
+        run: |
+          app-store-connect publish --path "$PACKAGE_NAME" --testflight --beta-group=group01
