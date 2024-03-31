@@ -83,7 +83,9 @@ jobs:
 
       - name: "echo"
         run: |
-          keychain list-certificates
+          # keychain list-certificates
+          ll ~/Library/MobileDevice/Provisioning\ Profiles/
+          ll ~/Library/MobileDevice/Certificates
 
       # - name: Build macOS app
       #   run: |
