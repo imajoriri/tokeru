@@ -45,8 +45,7 @@ jobs:
 
       - name: "Install the Apple certificate"
         run: |
-          ssh-keygen -t rsa -b 2048 -m PEM -f $RUNNER_TEMP/cert_key -q -N ""
-          # echo -n "$CERT_KEY" >> $RUNNER_TEMP/cert_key
+          echo -n "$CERT_KEY" >> $RUNNER_TEMP/cert_key
 
       - name: "Install the Apple provisioning profile(MAC_APP_STORE)"
         run: |
@@ -56,17 +55,17 @@ jobs:
             --certificate-key=@file:$RUNNER_TEMP/cert_key \
             --create
 
-      - name: "Install the Apple provisioning profile(MAC_APP_DEVELOPMENT)"
-        run: |
-          app-store-connect fetch-signing-files "$APP_BUNDLE_ID" \
-            --platform MAC_OS \
-            --type MAC_APP_DIRECT \
-            --certificate-key=@file:$RUNNER_TEMP/cert_key \
-            --create
+      # - name: "Install the Apple provisioning profile(MAC_APP_DEVELOPMENT)"
+      #   run: |
+      #     app-store-connect fetch-signing-files "$APP_BUNDLE_ID" \
+      #       --platform MAC_OS \
+      #       --type MAC_APP_DIRECT \
+      #       --certificate-key=@file:$RUNNER_TEMP/cert_key \
+      #       --create
 
       - name: "Install the Certificates(MAC_INSTALLER_DISTRIBUTION)"
         run: |
-          app-store-connect certificates create \
+          app-store-connect certificates list \
             --type MAC_INSTALLER_DISTRIBUTION \
             --certificate-key=@file:$RUNNER_TEMP/cert_key \
             --save
@@ -84,7 +83,7 @@ jobs:
         run: |
           build_number=$(app-store-connect get-latest-build-number $APPLE_APP_ID)
           new_build_number=$((build_number + 1))
-          flutter build macos --dart-define-from-file=dart_defines/prod.json --build-number=$10022
+          flutter build macos --dart-define-from-file=dart_defines/prod.json --build-number=$10030
 
       - name: "Package macOS app"
         run: |
