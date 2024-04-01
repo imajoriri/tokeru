@@ -1,24 +1,28 @@
-[![Pull Requests Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
-[![Codemagic build status](https://api.codemagic.io/apps/65d834ac3786568a8b6ef02e/65d83d4548306436129e0db1/status_badge.svg)](https://codemagic.io/apps/65d834ac3786568a8b6ef02e/65d83d4548306436129e0db1/latest_build)
-
 <p align="center">
   <img src="https://github.com/tinp-lab/tokeru/assets/30540418/64db0860-14aa-4a6d-b834-ecfa9589c0d5" alt="tokeru icon" width="800" />
 </p>
 
+---
  
+[![Pull Requests Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
+[![Codemagic build status](https://api.codemagic.io/apps/65d834ac3786568a8b6ef02e/65d83d4548306436129e0db1/status_badge.svg)](https://codemagic.io/apps/65d834ac3786568a8b6ef02e/65d83d4548306436129e0db1/latest_build)
+
+
 
 Tokeruは「**1日の作業パフォーマンスを最大化するアプリ**」です。 (macOS 11.0以降)。  
-`⇧ ⌘ ,`キーでSpotlightやAlfredのようなTodoウィンドウが開きます。  
-ショートカットにも対応しており、作成、チェック、ウィンドウを閉じる操作はキーボードのみで行えます。  
+`⇧ ⌘ ,`キーでSpotlightやAlfred、Raycastのようなフローティングされたウィンドウが開きます。  
+ほとんどの操作はショートカットにも対応しており、集中力を乱すことはさせません。  
 
-まだTodo機能しかありませんが、今後は時間をうまく使うための機能や思考の整理のための機能を実装予定です。  
+現在、主な機能はTodoのみですが、今後は時間をうまく使うための機能や思考の整理のための機能を実装予定です。  
 
-<img width="800" alt="CleanShot 2024-03-27 at 21 27 41@2x" src="https://github.com/imajoriri/tokeru/assets/30540418/fcb2d70e-27af-4209-9280-a401655b57c9">
+<img width="800" alt="CleanShot 2024-04-02 at 08 13 45@2x" src="https://github.com/imajoriri/tokeru/assets/30540418/7b16d8cf-1241-4138-afa6-edbfaf02df7e">
 
 
 # インストール
 
-現在ベータ版として、TestFlightから利用できます。
+> [!NOTE]
+> Tokeruは現在開発中です。一部の機能はまだリリースされていませんが、一部の人にベータ版としてTestFlightから利用していただいています。
+> 下記のリンクからインストール可能です。
 
 https://testflight.apple.com/join/LaDGDUKa
 
