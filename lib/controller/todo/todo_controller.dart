@@ -17,6 +17,7 @@ part 'todo_controller.g.dart';
 class TodoController extends _$TodoController {
   TodoRepository? todoRepository;
   Timer? _deleteDonesDebounce;
+  Timer? _updateOrderDebounce;
 
   @override
   FutureOr<List<Todo>> build() async {
@@ -133,9 +134,6 @@ class TodoController extends _$TodoController {
   /// [oldIndex]の[Todo]を[newIndex]に移動する
   Future<void> reorder(int oldIndex, int newIndex) async {
     final tmp = [...state.value!];
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
-    }
     final item = tmp.removeAt(oldIndex);
     tmp.insert(newIndex, item);
     state = AsyncData(tmp);
@@ -145,7 +143,9 @@ class TodoController extends _$TodoController {
   }
 
   /// 現在のListの順番をindexとして更新する。
-  /// 新規作成後や削除後に並び替えをリセットするために使用する
+  ///
+  /// 新規作成後や削除後に並び替えをリセットするために使用する。
+  /// ショートカットでの移動時に連続で呼ばれる可能性があるため、APIの呼び出しはデバウンスしている。
   Future<void> updateCurrentOrder() async {
     final tmp = state.value!;
     for (var i = 0; i < tmp.length; i++) {
@@ -153,7 +153,12 @@ class TodoController extends _$TodoController {
     }
     state = AsyncData(tmp);
 
-    await todoRepository!.updateOrder(todos: tmp);
+    // 既存のデバウンスタイマーをキャンセル
+    _updateOrderDebounce?.cancel();
+
+    _updateOrderDebounce = Timer(const Duration(milliseconds: 500), () async {
+      await todoRepository!.updateOrder(todos: tmp);
+    });
   }
 
   /// [Todo.isDone]がtrueのものをリストから削除する。

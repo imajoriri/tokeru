@@ -30,13 +30,12 @@ class TodoFocusController extends _$TodoFocusController {
   /// 現在のフォーカスの次にフォーカスを移動する
   ///
   /// フォーカスがない場合は何もしない。
-  /// フォーカスが最後の要素にある場合は、最初の要素にフォーカスを移動する。
   void focusNext() {
     final currentFocusIndex = state.indexWhere((element) => element.hasFocus);
-    if (currentFocusIndex == -1) {
+    if (currentFocusIndex == -1 || currentFocusIndex == state.length - 1) {
       return;
     }
-    final nextFocusIndex = (currentFocusIndex + 1) % state.length;
+    final nextFocusIndex = currentFocusIndex + 1;
     if (state[nextFocusIndex].canRequestFocus) {
       state[nextFocusIndex].requestFocus();
     }
@@ -45,13 +44,12 @@ class TodoFocusController extends _$TodoFocusController {
   /// 現在のフォーカスの前にフォーカスを移動する
   ///
   /// フォーカスがない場合は何もしない。
-  /// フォーカスが最初の要素にある場合は、最後の要素にフォーカスを移動する。
   void fucusPrevious() {
     final currentFocusIndex = state.indexWhere((element) => element.hasFocus);
-    if (currentFocusIndex == -1) {
+    if (currentFocusIndex == -1 || currentFocusIndex == 0) {
       return;
     }
-    final previousFocusIndex = (currentFocusIndex - 1) % state.length;
+    final previousFocusIndex = currentFocusIndex - 1;
     if (state[previousFocusIndex].canRequestFocus) {
       state[previousFocusIndex].requestFocus();
     }
@@ -65,6 +63,13 @@ class TodoFocusController extends _$TodoFocusController {
     }
     if (state[index].canRequestFocus) {
       state[index].requestFocus();
+    }
+  }
+
+  /// フォーカスを外す
+  void removeFocus() {
+    for (var node in state) {
+      node.unfocus();
     }
   }
 

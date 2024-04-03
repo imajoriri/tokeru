@@ -40,6 +40,7 @@ class _CallbackShortcuts extends ConsumerWidget {
   final Widget child;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final focusController = ref.watch(todoFocusControllerProvider.notifier);
     return CallbackShortcuts(
       bindings: {
         // 新規Todoを追加するショートカット
@@ -78,6 +79,53 @@ class _CallbackShortcuts extends ConsumerWidget {
         ShortcutActivatorType.closeWindow.shortcutActivator: () async {
           final channel = ref.read(methodChannelProvider);
           channel.invokeMethod(AppMethodChannel.openOrClosePanel.name);
+        },
+        // Todoをひとつ上に移動する
+        ShortcutActivatorType.moveUp.shortcutActivator: () async {
+          final index = focusController.getFocusIndex();
+          if (index != -1 && index != 0) {
+            focusController.removeFocus();
+            ref.read(todoControllerProvider.notifier).reorder(index, index - 1);
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              focusController.requestFocus(index - 1);
+            });
+          }
+        },
+        // Todoをひとつ下に移動する
+        ShortcutActivatorType.moveDown.shortcutActivator: () async {
+          final index = focusController.getFocusIndex();
+          if (index != -1 &&
+              index !=
+                  ref.read(todoControllerProvider).valueOrNull!.length - 1) {
+            focusController.removeFocus();
+            ref.read(todoControllerProvider.notifier).reorder(index, index + 1);
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              focusController.requestFocus(index + 1);
+            });
+          }
+        },
+        ShortcutActivatorType.focusUp.shortcutActivator: () {
+          ref.read(todoFocusControllerProvider.notifier).fucusPrevious();
+        },
+        ShortcutActivatorType.focusDown.shortcutActivator: () {
+          ref.read(todoFocusControllerProvider.notifier).focusNext();
+        },
+        // Todoの削除
+        ShortcutActivatorType.deleteTodo.shortcutActivator: () async {
+          final index =
+              ref.read(todoFocusControllerProvider.notifier).getFocusIndex();
+          if (index == -1) return;
+
+          final todoLength =
+              ref.read(todoControllerProvider).valueOrNull!.length;
+          // 最後の１つの場合、previousFoucsすると他のFocusに移動しちゃうため
+          if (todoLength == 1) return;
+
+          final todo = ref.read(todoControllerProvider).valueOrNull![index];
+          await ref.read(todoControllerProvider.notifier).delete(todo);
+          ref
+              .read(todoFocusControllerProvider.notifier)
+              .requestFocus(index - 1);
         },
       },
       child: FocusScope(
@@ -140,6 +188,7 @@ class _PlatformMenuBar extends ConsumerWidget {
           menus: [
             PlatformMenuItemGroup(
               members: [
+                // 新規TODO
                 PlatformMenuItem(
                   label: ShortcutActivatorType.newTodo.label,
                   shortcut: ShortcutActivatorType.newTodo.shortcutActivator,
@@ -155,6 +204,7 @@ class _PlatformMenuBar extends ConsumerWidget {
                     );
                   },
                 ),
+                // フォーカス中のTODOをチェックする
                 PlatformMenuItem(
                   label: ShortcutActivatorType.toggleDone.label,
                   shortcut: ShortcutActivatorType.toggleDone.shortcutActivator,
@@ -181,6 +231,87 @@ class _PlatformMenuBar extends ConsumerWidget {
                                   .requestFocus(index);
                             },
                           );
+                    }
+                  },
+                ),
+                // Todoを削除
+                PlatformMenuItem(
+                  label: ShortcutActivatorType.deleteTodo.label,
+                  shortcut: ShortcutActivatorType.deleteTodo.shortcutActivator,
+                  onSelected: () async {
+                    final index = ref
+                        .read(todoFocusControllerProvider.notifier)
+                        .getFocusIndex();
+                    if (index == -1) return;
+
+                    final todoLength =
+                        ref.read(todoControllerProvider).valueOrNull!.length;
+                    // 最後の１つの場合、previousFoucsすると他のFocusに移動しちゃうため
+                    if (todoLength == 1) return;
+
+                    final todo =
+                        ref.read(todoControllerProvider).valueOrNull![index];
+                    await ref
+                        .read(todoControllerProvider.notifier)
+                        .delete(todo);
+                    ref
+                        .read(todoFocusControllerProvider.notifier)
+                        .requestFocus(index - 1);
+                  },
+                ),
+              ],
+            ),
+            PlatformMenuItemGroup(
+              members: [
+                // 上へ移動
+                PlatformMenuItem(
+                  label: ShortcutActivatorType.moveUp.label,
+                  shortcut: ShortcutActivatorType.moveUp.shortcutActivator,
+                  onSelected: () async {
+                    final index = ref
+                        .read(todoFocusControllerProvider.notifier)
+                        .getFocusIndex();
+                    if (index != -1 && index != 0) {
+                      ref
+                          .read(todoFocusControllerProvider.notifier)
+                          .removeFocus();
+                      ref
+                          .read(todoControllerProvider.notifier)
+                          .reorder(index, index - 1);
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        ref
+                            .read(todoFocusControllerProvider.notifier)
+                            .requestFocus(index - 1);
+                      });
+                    }
+                  },
+                ),
+                // 下へ移動
+                PlatformMenuItem(
+                  label: ShortcutActivatorType.moveDown.label,
+                  shortcut: ShortcutActivatorType.moveDown.shortcutActivator,
+                  onSelected: () async {
+                    final index = ref
+                        .read(todoFocusControllerProvider.notifier)
+                        .getFocusIndex();
+                    if (index != -1 &&
+                        index !=
+                            ref
+                                    .read(todoControllerProvider)
+                                    .valueOrNull!
+                                    .length -
+                                1) {
+                      ref
+                          .read(todoFocusControllerProvider.notifier)
+                          .removeFocus();
+                      ref
+                          .read(todoControllerProvider.notifier)
+                          .reorder(index, index + 1);
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        ref
+                            .read(todoFocusControllerProvider.notifier)
+                            .requestFocus(index + 1);
+                      });
                     }
                   },
                 ),
