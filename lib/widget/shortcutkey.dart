@@ -11,16 +11,54 @@ enum ShortcutActivatorType {
     label: 'Add new Todo...',
   ),
 
-  /// ウィンドウの固定を切り替える
-  pinWindow(
-    shortcutActivator: SingleActivator(meta: true, LogicalKeyboardKey.keyP),
-    label: 'Pin window',
+  /// Todoを削除する
+  deleteTodo(
+    shortcutActivator: SingleActivator(meta: true, LogicalKeyboardKey.keyD),
+    label: 'Delete Todo',
   ),
 
   /// Todoの状態を切り替える
   toggleDone(
-    shortcutActivator: SingleActivator(meta: true, LogicalKeyboardKey.enter),
+    shortcutActivator: SingleActivator(meta: true, LogicalKeyboardKey.keyK),
     label: 'Toggle done',
+  ),
+
+  /// Todoをひとつ上に移動する
+  moveUp(
+    shortcutActivator: SingleActivator(
+      meta: true,
+      LogicalKeyboardKey.arrowUp,
+    ),
+    label: 'Move up',
+  ),
+
+  /// Todoをひとつ下に移動する
+  moveDown(
+    shortcutActivator: SingleActivator(
+      meta: true,
+      LogicalKeyboardKey.arrowDown,
+    ),
+    label: 'Move down',
+  ),
+
+  /// Focusを上に移動する
+  focusUp(
+    shortcutActivator: SingleActivator(LogicalKeyboardKey.arrowUp),
+    label: 'Focus up',
+  ),
+
+  /// Focusを下に移動する
+  focusDown(
+    shortcutActivator: SingleActivator(LogicalKeyboardKey.arrowDown),
+    label: 'Focus down',
+  ),
+
+  // ----ウィンドウ系----
+
+  /// ウィンドウの固定を切り替える
+  pinWindow(
+    shortcutActivator: SingleActivator(meta: true, LogicalKeyboardKey.keyP),
+    label: 'Pin window',
   ),
 
   /// ウィンドウを閉じる

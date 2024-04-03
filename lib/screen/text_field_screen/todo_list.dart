@@ -34,6 +34,11 @@ class TodoList extends HookConsumerWidget {
           shrinkWrap: true,
           itemCount: todos.length,
           onReorder: (oldIndex, newIndex) {
+            // NOTE: なぜか上から下に移動するときはnewIndexが1つずれるので
+            // その分を補正する
+            if (oldIndex < newIndex) {
+              newIndex -= 1;
+            }
             ref
                 .read(todoControllerProvider.notifier)
                 .reorder(oldIndex, newIndex);
@@ -120,12 +125,6 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
               //       .read(todoControllerProvider.notifier)
               //       .minusIndent(todos[index]);
               // },
-              onNextTodo: () {
-                ref.read(todoFocusControllerProvider.notifier).focusNext();
-              },
-              onPreviousTodo: () {
-                ref.read(todoFocusControllerProvider.notifier).fucusPrevious();
-              },
               onDelete: () async {
                 await ref.read(todoControllerProvider.notifier).delete(todo);
                 // 最後の１つの場合、previousFoucsすると他のFocusに移動しちゃうため
@@ -175,8 +174,6 @@ class TodoListItem extends HookConsumerWidget {
     this.onAdd,
     this.onAddIndent,
     this.onMinusIndent,
-    this.onNextTodo,
-    this.onPreviousTodo,
     this.onDelete,
     this.contentPadding,
   });
@@ -210,16 +207,6 @@ class TodoListItem extends HookConsumerWidget {
 
   /// Todo削除
   final void Function()? onDelete;
-
-  /// 次のTodoへ移動する
-  ///
-  /// [LogicalKeyboardKey.arrowDown]が押されたときに呼ばれる
-  final void Function()? onNextTodo;
-
-  /// 前のTodoへ移動する
-  ///
-  /// [LogicalKeyboardKey.arrowUp]が押されたときに呼ばれる
-  final void Function()? onPreviousTodo;
 
   /// debouce用のDuration
   static const debounceDuration = Duration(milliseconds: 400);
@@ -288,10 +275,8 @@ class TodoListItem extends HookConsumerWidget {
           child: Row(
             children: [
               Checkbox(
-                // value: isDone.value,
                 value: todo.isDone,
                 onChanged: (val) {
-                  // isDone.value = val ?? true;
                   onChecked?.call(val);
                 },
                 focusNode: useFocusNode(
@@ -307,16 +292,6 @@ class TodoListItem extends HookConsumerWidget {
                       return KeyEventResult.ignored;
                     }
                     if (event is RawKeyDownEvent) {
-                      if (event.logicalKey == LogicalKeyboardKey.arrowDown &&
-                          onNextTodo != null) {
-                        onNextTodo?.call();
-                        return KeyEventResult.handled;
-                      }
-                      if (event.logicalKey == LogicalKeyboardKey.arrowUp &&
-                          onPreviousTodo != null) {
-                        onPreviousTodo?.call();
-                        return KeyEventResult.handled;
-                      }
                       if (event.logicalKey == LogicalKeyboardKey.tab &&
                           onAddIndent != null) {
                         onAddIndent?.call();
