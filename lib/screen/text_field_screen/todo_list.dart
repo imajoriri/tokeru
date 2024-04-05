@@ -243,6 +243,92 @@ class TodoListItem extends HookWidget {
   /// debouce用のDuration
   static const debounceDuration = Duration(milliseconds: 400);
 
+  KeyEventResult onKey(
+    FocusNode focus,
+    RawKeyEvent event,
+    Todo todo,
+    TextEditingController controller,
+    ValueNotifier<bool> isPressedShift,
+  ) {
+    // 日本語入力などでの変換中は無視する
+    if (controller.value.composing.isValid) {
+      return KeyEventResult.ignored;
+    }
+
+    // キーが押された時のイベント群
+    if (event is RawKeyDownEvent) {
+      // Shiftキーが押されたかどうか
+      if (event.logicalKey == LogicalKeyboardKey.shiftLeft) {
+        isPressedShift.value = true;
+      }
+
+      // Enterが押されたとき、Shiftキーが押されていない場合は`onAdd`を呼ぶ
+      if (event.logicalKey == LogicalKeyboardKey.enter &&
+          !isPressedShift.value) {
+        onAdd?.call();
+        return KeyEventResult.handled;
+      }
+
+      // Tabが押されたとき、`onAddIndent`を呼ぶ
+      if (event.logicalKey == LogicalKeyboardKey.tab && onAddIndent != null) {
+        onAddIndent?.call();
+        return KeyEventResult.handled;
+      }
+
+      // 上矢印キーが押されたとき、複数行入力されていた場合は
+      // 行を1つ上に移動する
+      if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+        // カーソルより前に改行があるかどうか
+        final hasNewLineBeforeCurrentCursor = controller.text
+            .substring(0, controller.selection.baseOffset)
+            .contains('\n');
+        if (hasNewLineBeforeCurrentCursor || isFirst) {
+          return KeyEventResult.ignored;
+        } else {
+          focusPrevious?.call();
+          return KeyEventResult.handled;
+        }
+      }
+
+      // 下矢印キーが押されたとき、複数行入力されていた場合は
+      // 行を1つ下に移動する
+      if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+        // カーソルより後に改行があるかどうか
+        final hasNewLineAfterCurrentCursor = controller.text
+            .substring(controller.selection.baseOffset)
+            .contains('\n');
+        if (hasNewLineAfterCurrentCursor || isLast) {
+          return KeyEventResult.ignored;
+        } else {
+          focusNext?.call();
+          return KeyEventResult.handled;
+        }
+      }
+    }
+
+    // キーが離された時のイベント群
+    if (event is RawKeyUpEvent) {
+      if (event.logicalKey == LogicalKeyboardKey.shiftLeft) {
+        isPressedShift.value = false;
+      }
+
+      // バックスペースキー & カーソルが先頭のケース
+      if (event.logicalKey == LogicalKeyboardKey.backspace &&
+          controller.selection.baseOffset == 0 &&
+          controller.selection.extentOffset == 0) {
+        // indentが0の場合は削除する
+        if (todo.indentLevel == 0) {
+          onDelete?.call();
+          return KeyEventResult.handled;
+        }
+        // indentが1以上の場合はインデントをマイナスする
+        onMinusIndent?.call();
+        return KeyEventResult.handled;
+      }
+    }
+    return KeyEventResult.ignored;
+  }
+
   @override
   Widget build(BuildContext context) {
     final controller = useTextEditingController(text: todo.title);
@@ -321,84 +407,13 @@ class TodoListItem extends HookWidget {
                 child: Focus(
                   skipTraversal: true,
                   onKey: (node, event) {
-                    // 日本語入力などでの変換中は無視する
-                    if (controller.value.composing.isValid) {
-                      return KeyEventResult.ignored;
-                    }
-
-                    // キーが押された時のイベント群
-                    if (event is RawKeyDownEvent) {
-                      // Shiftキーが押されたかどうか
-                      if (event.logicalKey == LogicalKeyboardKey.shiftLeft) {
-                        isPressedShift.value = true;
-                      }
-
-                      // Enterが押されたとき、Shiftキーが押されていない場合は`onAdd`を呼ぶ
-                      if (event.logicalKey == LogicalKeyboardKey.enter &&
-                          !isPressedShift.value) {
-                        onAdd?.call();
-                        return KeyEventResult.handled;
-                      }
-
-                      // Tabが押されたとき、`onAddIndent`を呼ぶ
-                      if (event.logicalKey == LogicalKeyboardKey.tab &&
-                          onAddIndent != null) {
-                        onAddIndent?.call();
-                        return KeyEventResult.handled;
-                      }
-
-                      // 上矢印キーが押されたとき、複数行入力されていた場合は
-                      // 行を1つ上に移動する
-                      if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-                        // カーソルより前に改行があるかどうか
-                        final hasNewLineBeforeCurrentCursor = controller.text
-                            .substring(0, controller.selection.baseOffset)
-                            .contains('\n');
-                        if (hasNewLineBeforeCurrentCursor || isFirst) {
-                          return KeyEventResult.ignored;
-                        } else {
-                          focusPrevious?.call();
-                          return KeyEventResult.handled;
-                        }
-                      }
-
-                      // 下矢印キーが押されたとき、複数行入力されていた場合は
-                      // 行を1つ下に移動する
-                      if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-                        // カーソルより後に改行があるかどうか
-                        final hasNewLineAfterCurrentCursor = controller.text
-                            .substring(controller.selection.baseOffset)
-                            .contains('\n');
-                        if (hasNewLineAfterCurrentCursor || isLast) {
-                          return KeyEventResult.ignored;
-                        } else {
-                          focusNext?.call();
-                          return KeyEventResult.handled;
-                        }
-                      }
-                    }
-
-                    // キーが離された時のイベント群
-                    if (event is RawKeyUpEvent) {
-                      if (event.logicalKey == LogicalKeyboardKey.shiftLeft) {
-                        isPressedShift.value = false;
-                      }
-
-                      // バックスペースキー & カーソルが先頭のケース
-                      if (event.logicalKey == LogicalKeyboardKey.backspace &&
-                          controller.selection.baseOffset == 0 &&
-                          controller.selection.extentOffset == 0) {
-                        // indentが0の場合は削除する
-                        if (todo.indentLevel == 0) {
-                          onDelete?.call();
-                          return KeyEventResult.handled;
-                        }
-                        // indentが1以上の場合はインデントをマイナスする
-                        onMinusIndent?.call();
-                        return KeyEventResult.handled;
-                      }
-                    }
-                    return KeyEventResult.ignored;
+                    return onKey(
+                      node,
+                      event,
+                      todo,
+                      controller,
+                      isPressedShift,
+                    );
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(
