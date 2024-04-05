@@ -35,7 +35,6 @@ void main() async {
 /// [ShortcutActivatorType]に対応するアクションを提供するProvider
 final _shorcutActionMapProvider =
     Provider.autoDispose<Map<ShortcutActivatorType, void Function()>>((ref) {
-  final focusController = ref.watch(todoFocusControllerProvider.notifier);
   return {
     // 新規Todoを追加するショートカット
     ShortcutActivatorType.newTodo: () async {
@@ -76,6 +75,7 @@ final _shorcutActionMapProvider =
     },
     // Todoをひとつ上に移動する
     ShortcutActivatorType.moveUp: () async {
+      final focusController = ref.read(todoFocusControllerProvider.notifier);
       final index = focusController.getFocusIndex();
       if (index != -1 && index != 0) {
         focusController.removeFocus();
@@ -87,6 +87,7 @@ final _shorcutActionMapProvider =
     },
     // Todoをひとつ下に移動する
     ShortcutActivatorType.moveDown: () async {
+      final focusController = ref.read(todoFocusControllerProvider.notifier);
       final index = focusController.getFocusIndex();
       if (index != -1 &&
           index != ref.read(todoControllerProvider).valueOrNull!.length - 1) {
@@ -98,9 +99,22 @@ final _shorcutActionMapProvider =
       }
     },
     ShortcutActivatorType.focusUp: () {
-      ref.read(todoFocusControllerProvider.notifier).fucusPrevious();
+      final focusController = ref.read(todoFocusControllerProvider.notifier);
+      final todos = ref.watch(todoControllerProvider).valueOrNull ?? [];
+      if (focusController.getFocusIndex() == -1) {
+        ref
+            .read(todoFocusControllerProvider.notifier)
+            .requestFocus(todos.length - 1);
+        return;
+      }
+      focusController.fucusPrevious();
     },
     ShortcutActivatorType.focusDown: () {
+      final focusController = ref.read(todoFocusControllerProvider.notifier);
+      if (focusController.getFocusIndex() == -1) {
+        ref.read(todoFocusControllerProvider.notifier).requestFocus(0);
+        return;
+      }
       ref.read(todoFocusControllerProvider.notifier).focusNext();
     },
     // Todoの削除
