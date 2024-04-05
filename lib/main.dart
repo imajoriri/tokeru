@@ -97,12 +97,6 @@ final _shorcutActionMapProvider =
         });
       }
     },
-    ShortcutActivatorType.focusUp: () {
-      ref.read(todoFocusControllerProvider.notifier).fucusPrevious();
-    },
-    ShortcutActivatorType.focusDown: () {
-      ref.read(todoFocusControllerProvider.notifier).focusNext();
-    },
     // Todoの削除
     ShortcutActivatorType.deleteTodo: () async {
       final index =

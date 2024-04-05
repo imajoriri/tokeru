@@ -41,18 +41,6 @@ enum ShortcutActivatorType {
     label: 'Move down',
   ),
 
-  /// Focusを上に移動する
-  focusUp(
-    shortcutActivator: SingleActivator(LogicalKeyboardKey.arrowUp),
-    label: 'Focus up',
-  ),
-
-  /// Focusを下に移動する
-  focusDown(
-    shortcutActivator: SingleActivator(LogicalKeyboardKey.arrowDown),
-    label: 'Focus down',
-  ),
-
   // ----ウィンドウ系----
 
   /// ウィンドウの固定を切り替える
