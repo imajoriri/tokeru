@@ -93,6 +93,8 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
                 : EdgeInsets.zero,
             child: TodoListItem(
               todo: todo,
+              isFirst: index == 0,
+              isLast: index == todoLength - 1,
               focusNode: ref.watch(todoFocusControllerProvider)[index],
               onChanged: (value) {
                 ref
@@ -108,11 +110,17 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
                     .deleteDoneWithDebounce();
               },
               onAdd: () async {
+                // 現在のfocusを外さないと、新しいTodoが追加されたときに
+                // focusが2重になってしまうため、一旦外す
+                ref.read(todoFocusControllerProvider.notifier).removeFocus();
+
                 await ref.read(todoControllerProvider.notifier).add(index + 1);
                 await ref
                     .read(todoControllerProvider.notifier)
                     .updateCurrentOrder();
-                ref.read(todoFocusControllerProvider)[index + 1].requestFocus();
+                ref
+                    .read(todoFocusControllerProvider.notifier)
+                    .requestFocus(index + 1);
               },
               // インデント機能は一旦オミット
               // onAddIndent: () {
@@ -125,6 +133,10 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
               //       .read(todoControllerProvider.notifier)
               //       .minusIndent(todos[index]);
               // },
+              focusNext:
+                  ref.read(todoFocusControllerProvider.notifier).focusNext,
+              focusPrevious:
+                  ref.read(todoFocusControllerProvider.notifier).focusPrevious,
               onDelete: () async {
                 await ref.read(todoControllerProvider.notifier).delete(todo);
                 // 最後の１つの場合、previousFoucsすると他のFocusに移動しちゃうため
@@ -163,10 +175,12 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
   }
 }
 
-class TodoListItem extends HookConsumerWidget {
+class TodoListItem extends HookWidget {
   const TodoListItem({
     super.key,
     required this.todo,
+    required this.isFirst,
+    required this.isLast,
     required this.focusNode,
     this.onTapTextField,
     this.onChecked,
@@ -174,11 +188,19 @@ class TodoListItem extends HookConsumerWidget {
     this.onAdd,
     this.onAddIndent,
     this.onMinusIndent,
+    this.focusNext,
+    this.focusPrevious,
     this.onDelete,
     this.contentPadding,
   });
 
   final Todo todo;
+
+  /// リストの最後の[Todo]かどうか
+  final bool isLast;
+
+  /// リストの最初の[Todo]かどうか
+  final bool isFirst;
 
   final FocusNode focusNode;
 
@@ -205,6 +227,16 @@ class TodoListItem extends HookConsumerWidget {
   /// インデント削除
   final void Function()? onMinusIndent;
 
+  /// 次のTodoにフォーカスを移動する
+  ///
+  /// [isFirst]がtrueの場合は何もしない
+  final void Function()? focusNext;
+
+  /// 前のTodoにフォーカスを移動する
+  ///
+  /// [isLast]がtrueの場合は何もしない
+  final void Function()? focusPrevious;
+
   /// Todo削除
   final void Function()? onDelete;
 
@@ -212,9 +244,10 @@ class TodoListItem extends HookConsumerWidget {
   static const debounceDuration = Duration(milliseconds: 400);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final controller = useTextEditingController(text: todo.title);
     final hasFocus = useState(focusNode.hasFocus);
+    final isPressedShift = useState(false);
 
     useEffect(
       () {
@@ -273,6 +306,7 @@ class TodoListItem extends HookConsumerWidget {
             left: 20 * todo.indentLevel.toDouble(),
           ),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Checkbox(
                 value: todo.isDone,
@@ -291,13 +325,66 @@ class TodoListItem extends HookConsumerWidget {
                     if (controller.value.composing.isValid) {
                       return KeyEventResult.ignored;
                     }
+
+                    // キーが押された時のイベント群
                     if (event is RawKeyDownEvent) {
+                      // Shiftキーが押されたかどうか
+                      if (event.logicalKey == LogicalKeyboardKey.shiftLeft) {
+                        isPressedShift.value = true;
+                      }
+
+                      // Enterが押されたとき、Shiftキーが押されていない場合は`onAdd`を呼ぶ
+                      if (event.logicalKey == LogicalKeyboardKey.enter &&
+                          !isPressedShift.value) {
+                        onAdd?.call();
+                        return KeyEventResult.handled;
+                      }
+
+                      // Tabが押されたとき、`onAddIndent`を呼ぶ
                       if (event.logicalKey == LogicalKeyboardKey.tab &&
                           onAddIndent != null) {
                         onAddIndent?.call();
                         return KeyEventResult.handled;
                       }
-                      // バックスペースキー & カーソルが先頭の場合
+
+                      // 上矢印キーが押されたとき、複数行入力されていた場合は
+                      // 行を1つ上に移動する
+                      if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+                        // カーソルより前に改行があるかどうか
+                        final hasNewLineBeforeCurrentCursor = controller.text
+                            .substring(0, controller.selection.baseOffset)
+                            .contains('\n');
+                        if (hasNewLineBeforeCurrentCursor || isFirst) {
+                          return KeyEventResult.ignored;
+                        } else {
+                          focusPrevious?.call();
+                          return KeyEventResult.handled;
+                        }
+                      }
+
+                      // 下矢印キーが押されたとき、複数行入力されていた場合は
+                      // 行を1つ下に移動する
+                      if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+                        // カーソルより後に改行があるかどうか
+                        final hasNewLineAfterCurrentCursor = controller.text
+                            .substring(controller.selection.baseOffset)
+                            .contains('\n');
+                        if (hasNewLineAfterCurrentCursor || isLast) {
+                          return KeyEventResult.ignored;
+                        } else {
+                          focusNext?.call();
+                          return KeyEventResult.handled;
+                        }
+                      }
+                    }
+
+                    // キーが離された時のイベント群
+                    if (event is RawKeyUpEvent) {
+                      if (event.logicalKey == LogicalKeyboardKey.shiftLeft) {
+                        isPressedShift.value = false;
+                      }
+
+                      // バックスペースキー & カーソルが先頭のケース
                       if (event.logicalKey == LogicalKeyboardKey.backspace &&
                           controller.selection.baseOffset == 0 &&
                           controller.selection.extentOffset == 0) {
@@ -314,7 +401,11 @@ class TodoListItem extends HookConsumerWidget {
                     return KeyEventResult.ignored;
                   },
                   child: Padding(
-                    padding: const EdgeInsets.only(bottom: 4),
+                    padding: const EdgeInsets.only(
+                      bottom: 4,
+                      // チェックボックスとの高さを調整するためのpadding
+                      top: 6,
+                    ),
                     child: TextField(
                       controller: controller,
                       focusNode: focusNode,
@@ -322,12 +413,6 @@ class TodoListItem extends HookConsumerWidget {
                         color: todo.isDone ? Colors.grey : Colors.black,
                       ),
                       maxLines: null,
-                      // maxLinesがnullでもEnterで `onSubmitted`を検知するために
-                      // `TextInputAction.done`である必要がある。
-                      textInputAction: TextInputAction.done,
-                      onSubmitted: (value) {
-                        onAdd?.call();
-                      },
                       onTap: () {
                         onTapTextField?.call();
                       },

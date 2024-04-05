@@ -44,7 +44,7 @@ class TodoFocusController extends _$TodoFocusController {
   /// 現在のフォーカスの前にフォーカスを移動する
   ///
   /// フォーカスがない場合は何もしない。
-  void fucusPrevious() {
+  void focusPrevious() {
     final currentFocusIndex = state.indexWhere((element) => element.hasFocus);
     if (currentFocusIndex == -1 || currentFocusIndex == 0) {
       return;
