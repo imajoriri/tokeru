@@ -8,12 +8,8 @@
 [![Codemagic build status](https://api.codemagic.io/apps/65d834ac3786568a8b6ef02e/65d83d4548306436129e0db1/status_badge.svg)](https://codemagic.io/apps/65d834ac3786568a8b6ef02e/65d83d4548306436129e0db1/latest_build)
 
 
-
 Tokeruは「**1日のタスク、メモ、時間を管理するアプリ**」です。 (macOS 11.0以降)。  
 `⇧ ⌘ ,`キーでSpotlightやAlfred、Raycastのようなフローティングされたウィンドウが開きます。  
-ほとんどの操作はショートカットにも対応しており、集中力を乱すことはさせません。  
-
-現在、主な機能はTodoのみですが、今後は時間をうまく使うための機能や思考の整理のための機能を実装予定です。  
 
 <img width="800" alt="CleanShot 2024-04-02 at 08 13 45@2x" src="https://github.com/imajoriri/tokeru/assets/30540418/7b16d8cf-1241-4138-afa6-edbfaf02df7e">
 
@@ -54,10 +50,12 @@ https://testflight.apple.com/join/LaDGDUKa
 - [x] `⌘ D`: Todoを削除
 - [x] `⌘ P`: ピン機能をON・OFF切り替える
 
-# 貢献する
+# サポート
 
-PRは大歓迎です！
-CONTRIBUTING.mdを用意中です。
+❤️ このプロジェクトが気に入っていただけましたか?
+もしよかったら「Buy me a coffee」を通じてサポートしてください。
+
+<a href="https://www.buymeacoffee.com/imasirooo" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
 
 # Contributors
 
@@ -68,6 +66,6 @@ CONTRIBUTING.mdを用意中です。
   </tr>
 </table>
 
-<a href="https://www.buymeacoffee.com/imasirooo" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+
 
 
