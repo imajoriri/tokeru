@@ -2,13 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/controller/todo_focus/todo_focus_controller.dart';
 import 'package:quick_flutter/controller/todo_text_field_focus/todo_text_field_focus_controller.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'focus_down_action.g.dart';
 
 /// フォーカスを下に移動する[Intent]
 class FocusDownIntent extends Intent {
   const FocusDownIntent();
 }
 
-final todoFocusDownActionProvider = Provider((ref) => TodoFocusDownAction(ref));
+@riverpod
+TodoFocusDownAction todoFocusDownAction(TodoFocusDownActionRef ref) =>
+    TodoFocusDownAction(ref);
 
 /// Todoのフォーカスを下に移動する[Action]
 ///
