@@ -53,10 +53,6 @@ class TextFieldScreen extends HookConsumerWidget {
       onPressed: () {
         final channel = ref.read(methodChannelProvider);
         channel.invokeMethod(AppMethodChannel.openOrClosePanel.name);
-        if (ref.read(todoFocusControllerProvider.notifier).getFocusIndex() ==
-            -1) {
-          ref.read(todoFocusControllerProvider.notifier).requestFocus(0);
-        }
       },
     );
 
@@ -131,9 +127,90 @@ class _LargeWindow extends HookConsumerWidget {
           _Header(),
           const TodoList(),
 
+          const TodoTextField(),
+
           // 初期リリースでは非表示
           // _MemoScreen(),
         ],
+      ),
+    );
+  }
+}
+
+/// 新規Todoを追加するためのTextField
+class TodoTextField extends HookConsumerWidget {
+  const TodoTextField({Key? key}) : super(key: key);
+
+  /// todoを最後に追加し、テキストを空にする
+  void _addTodo(
+    WidgetRef ref,
+    TextEditingController controller,
+    FocusNode focusNode,
+  ) {
+    final lastIndex = ref.read(todoControllerProvider).valueOrNull?.length;
+    ref
+        .read(todoControllerProvider.notifier)
+        .add(lastIndex ?? 0, title: controller.text);
+    controller.clear();
+
+    FirebaseAnalytics.instance.logEvent(
+      name: AnalyticsEventName.addTodo.name,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final canSubmit = useState(false);
+
+    final controller = useTextEditingController();
+    final focusNode = useFocusNode();
+
+    useEffect(
+      () {
+        controller.addListener(() {
+          canSubmit.value = controller.text.isNotEmpty;
+        });
+
+        return null;
+      },
+      [],
+    );
+
+    return CallbackShortcuts(
+      bindings: <ShortcutActivator, VoidCallback>{
+        const SingleActivator(LogicalKeyboardKey.enter, meta: true): () {
+          if (canSubmit.value) {
+            _addTodo(ref, controller, focusNode);
+          }
+        },
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(6),
+        child: Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: controller,
+                focusNode: focusNode,
+                maxLines: null,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Enter a new todo or memo...',
+                ),
+              ),
+            ),
+            const SizedBox(width: 4),
+            IconButton(
+              color: context.colorScheme.primary,
+              onPressed: canSubmit.value
+                  ? () {
+                      _addTodo(ref, controller, focusNode);
+                    }
+                  : null,
+              icon: const Icon(Icons.send),
+            ),
+          ],
+        ),
       ),
     );
   }
