@@ -21,15 +21,13 @@ class MemoRepository {
     final result = await ref.read(userDocumentProvider(userId)).get();
     if (result.exists) {
       final data = result.data() as Map<String, dynamic>;
-      final content = data["deltaJson"] as String?;
-      return Memo(deltaJson: content ?? '');
+      final content = data["content"] as String?;
+      return Memo(content: content ?? '');
     }
-    return const Memo(deltaJson: '');
+    return const Memo(content: '');
   }
 
   Future<void> updateMemo(Memo memo) async {
-    await ref
-        .read(userDocumentProvider(userId))
-        .set({'deltaJson': memo.deltaJson});
+    await ref.read(userDocumentProvider(userId)).set({'content': memo.content});
   }
 }
