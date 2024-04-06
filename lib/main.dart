@@ -10,6 +10,7 @@ import 'package:quick_flutter/firebase_options.dart';
 import 'package:quick_flutter/screen/text_field_screen/screen.dart';
 import 'package:quick_flutter/systems/color.dart';
 import 'package:quick_flutter/controller/url/url_controller.dart';
+import 'package:quick_flutter/widget/actions/close_window/close_window_action.dart';
 import 'package:quick_flutter/widget/actions/focus_down/focus_down_action.dart';
 import 'package:quick_flutter/widget/actions/focus_up/focus_up_action.dart';
 import 'package:quick_flutter/widget/actions/new_todo.dart/new_todo_action.dart';
@@ -41,11 +42,6 @@ void main() async {
 final _shorcutActionMapProvider =
     Provider.autoDispose<Map<ShortcutActivatorType, void Function()>>((ref) {
   return {
-    // escでウィンドウを閉じる
-    ShortcutActivatorType.closeWindow: () async {
-      final channel = ref.read(methodChannelProvider);
-      channel.invokeMethod(AppMethodChannel.openOrClosePanel.name);
-    },
     // Todoをひとつ上に移動する
     ShortcutActivatorType.moveUp: () async {
       final focusController = ref.read(todoFocusControllerProvider.notifier);
@@ -104,11 +100,14 @@ class _CallbackShortcuts extends ConsumerWidget {
             const PinWindowIntent(),
         ShortcutActivatorType.toggleDone.shortcutActivator:
             const ToggleTodoDoneIntent(),
+        ShortcutActivatorType.closeWindow.shortcutActivator:
+            const CloseWindowIntent(),
       },
       child: Actions(
         actions: {
           NewTodoIntent: ref.read(newTodoActionProvider),
           PinWindowIntent: ref.read(pinWindowActionProvider),
+          CloseWindowIntent: ref.read(closeWindowActionProvider),
         },
         child: CallbackShortcuts(
           bindings: ref.watch(_shorcutActionMapProvider).map(
