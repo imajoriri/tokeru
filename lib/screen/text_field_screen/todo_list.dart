@@ -28,31 +28,37 @@ class TodoList extends HookConsumerWidget {
             ),
           );
         }
-        return ReorderableListView.builder(
-          buildDefaultDragHandles: false,
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: todos.length,
-          onReorder: (oldIndex, newIndex) {
-            // NOTE: なぜか上から下に移動するときはnewIndexが1つずれるので
-            // その分を補正する
-            if (oldIndex < newIndex) {
-              newIndex -= 1;
-            }
-            ref
-                .read(todoControllerProvider.notifier)
-                .reorder(oldIndex, newIndex);
+        return Actions(
+          actions: {
+            FocusUpIntent: ref.watch(todoFocusUpActionProvider),
+            FocusDownIntent: ref.watch(todoFocusDownActionProvider),
           },
-          itemBuilder: (context, index) {
-            // isDoneが更新されてもWidgetが更新されて欲しいので、idとisDoneをkeyにする
-            final key = ValueKey(todos[index].id);
-            return _ReorderableTodoListItem(
-              key: key,
-              todo: todos[index],
-              index: index,
-              todoLength: todos.length,
-            );
-          },
+          child: ReorderableListView.builder(
+            buildDefaultDragHandles: false,
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: todos.length,
+            onReorder: (oldIndex, newIndex) {
+              // NOTE: なぜか上から下に移動するときはnewIndexが1つずれるので
+              // その分を補正する
+              if (oldIndex < newIndex) {
+                newIndex -= 1;
+              }
+              ref
+                  .read(todoControllerProvider.notifier)
+                  .reorder(oldIndex, newIndex);
+            },
+            itemBuilder: (context, index) {
+              // isDoneが更新されてもWidgetが更新されて欲しいので、idとisDoneをkeyにする
+              final key = ValueKey(todos[index].id);
+              return _ReorderableTodoListItem(
+                key: key,
+                todo: todos[index],
+                index: index,
+                todoLength: todos.length,
+              );
+            },
+          ),
         );
       },
       error: (e, s) => const Text('happen somethings'),
