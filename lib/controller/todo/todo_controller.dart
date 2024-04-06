@@ -34,9 +34,12 @@ class TodoController extends _$TodoController {
   }
 
   /// Todoを追加する
-  Future<void> add(int index) async {
+  Future<void> add(
+    int index, {
+    String title = '',
+  }) async {
     try {
-      final todo = await todoRepository!.add(index: index);
+      final todo = await todoRepository!.add(index: index, title: title);
       final tmp = [...state.value!];
       tmp.insert(index, todo);
       state = AsyncData(tmp);
