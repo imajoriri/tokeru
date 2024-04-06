@@ -134,7 +134,7 @@ class _LargeWindow extends HookConsumerWidget {
           _Header(),
           const TodoList(),
 
-          const TodoTextField(),
+          const _TodoTextField(),
 
           // 初期リリースでは非表示
           // _MemoScreen(),
@@ -145,8 +145,8 @@ class _LargeWindow extends HookConsumerWidget {
 }
 
 /// 新規Todoを追加するためのTextField
-class TodoTextField extends HookConsumerWidget {
-  const TodoTextField({Key? key}) : super(key: key);
+class _TodoTextField extends HookConsumerWidget {
+  const _TodoTextField({Key? key}) : super(key: key);
 
   /// todoを最後に追加し、テキストを空にする
   void _addTodo(
@@ -159,6 +159,7 @@ class TodoTextField extends HookConsumerWidget {
         .read(todoControllerProvider.notifier)
         .add(lastIndex ?? 0, title: controller.text);
     controller.clear();
+    ref.read(memoControllerProvider.notifier).updateContent('');
 
     FirebaseAnalytics.instance.logEvent(
       name: AnalyticsEventName.addTodo.name,
@@ -178,6 +179,24 @@ class TodoTextField extends HookConsumerWidget {
         controller.addListener(() {
           canSubmit.value = controller.text.isNotEmpty;
           baseOffset.value = controller.selection.baseOffset;
+        });
+
+        return null;
+      },
+      [],
+    );
+
+    // Memoの読み込み時毎回データをセットしているとリビルドされてフォーカスが外れてしまうため
+    // 初回のみmemoの値をセットする
+    final setInitValue = useState(false);
+    useEffect(
+      () {
+        ref.listen(memoControllerProvider, (previous, next) {
+          if (next.hasValue && !setInitValue.value) {
+            final memo = next.valueOrNull!;
+            controller.text = memo.content;
+            setInitValue.value = true;
+          }
         });
 
         return null;
@@ -212,6 +231,11 @@ class TodoTextField extends HookConsumerWidget {
                     border: OutlineInputBorder(),
                     hintText: 'Enter a new todo or memo...',
                   ),
+                  onChanged: (text) {
+                    ref
+                        .read(memoControllerProvider.notifier)
+                        .updateContent(text);
+                  },
                 ),
               ),
               const SizedBox(width: 4),

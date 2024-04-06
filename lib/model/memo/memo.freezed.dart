@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$Memo {
-  String get deltaJson => throw _privateConstructorUsedError;
+  String get content => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $MemoCopyWith<Memo> get copyWith => throw _privateConstructorUsedError;
@@ -27,7 +27,7 @@ abstract class $MemoCopyWith<$Res> {
   factory $MemoCopyWith(Memo value, $Res Function(Memo) then) =
       _$MemoCopyWithImpl<$Res, Memo>;
   @useResult
-  $Res call({String deltaJson});
+  $Res call({String content});
 }
 
 /// @nodoc
@@ -43,12 +43,12 @@ class _$MemoCopyWithImpl<$Res, $Val extends Memo>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? deltaJson = null,
+    Object? content = null,
   }) {
     return _then(_value.copyWith(
-      deltaJson: null == deltaJson
-          ? _value.deltaJson
-          : deltaJson // ignore: cast_nullable_to_non_nullable
+      content: null == content
+          ? _value.content
+          : content // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -61,7 +61,7 @@ abstract class _$$MemoImplCopyWith<$Res> implements $MemoCopyWith<$Res> {
       __$$MemoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String deltaJson});
+  $Res call({String content});
 }
 
 /// @nodoc
@@ -74,12 +74,12 @@ class __$$MemoImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? deltaJson = null,
+    Object? content = null,
   }) {
     return _then(_$MemoImpl(
-      deltaJson: null == deltaJson
-          ? _value.deltaJson
-          : deltaJson // ignore: cast_nullable_to_non_nullable
+      content: null == content
+          ? _value.content
+          : content // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -88,14 +88,14 @@ class __$$MemoImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$MemoImpl implements _Memo {
-  const _$MemoImpl({required this.deltaJson});
+  const _$MemoImpl({required this.content});
 
   @override
-  final String deltaJson;
+  final String content;
 
   @override
   String toString() {
-    return 'Memo(deltaJson: $deltaJson)';
+    return 'Memo(content: $content)';
   }
 
   @override
@@ -103,12 +103,11 @@ class _$MemoImpl implements _Memo {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$MemoImpl &&
-            (identical(other.deltaJson, deltaJson) ||
-                other.deltaJson == deltaJson));
+            (identical(other.content, content) || other.content == content));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, deltaJson);
+  int get hashCode => Object.hash(runtimeType, content);
 
   @JsonKey(ignore: true)
   @override
@@ -118,10 +117,10 @@ class _$MemoImpl implements _Memo {
 }
 
 abstract class _Memo implements Memo {
-  const factory _Memo({required final String deltaJson}) = _$MemoImpl;
+  const factory _Memo({required final String content}) = _$MemoImpl;
 
   @override
-  String get deltaJson;
+  String get content;
   @override
   @JsonKey(ignore: true)
   _$$MemoImplCopyWith<_$MemoImpl> get copyWith =>

@@ -22,19 +22,19 @@ class MemoController extends _$MemoController {
     });
     final user = ref.watch(userControllerProvider);
     if (user.hasError || user.valueOrNull == null) {
-      return const Memo(deltaJson: "");
+      return const Memo(content: "");
     }
     memoRepository = ref.read(memoRepositoryProvider(user.value!.id));
     return await memoRepository!.fetchMemo();
   }
 
-  Future<void> updateDeltaJson(String deltaJson) async {
+  Future<void> updateContent(String content) async {
     if (_debounceTimer?.isActive ?? false) {
       _debounceTimer?.cancel();
     }
     assert(state.valueOrNull != null, "state.valueOrNull is null");
 
-    final memo = state.valueOrNull!.copyWith(deltaJson: deltaJson);
+    final memo = state.valueOrNull!.copyWith(content: content);
 
     if (memoRepository == null) {
       return;
@@ -42,7 +42,7 @@ class MemoController extends _$MemoController {
     _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
       // NOTE: stateを更新してしまうと、再度buildが走ってしまうため、stateを更新しない
       memoRepository!.updateMemo(memo);
-      state = AsyncData(memo.copyWith(deltaJson: deltaJson));
+      state = AsyncData(memo.copyWith(content: content));
     });
   }
 }
