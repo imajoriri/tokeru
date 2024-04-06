@@ -13,6 +13,7 @@ import 'package:quick_flutter/controller/url/url_controller.dart';
 import 'package:quick_flutter/widget/actions/focus_down/focus_down_action.dart';
 import 'package:quick_flutter/widget/actions/focus_up/focus_up_action.dart';
 import 'package:quick_flutter/widget/actions/new_todo.dart/new_todo_action.dart';
+import 'package:quick_flutter/widget/actions/pin_window/pin_window_action.dart';
 import 'package:quick_flutter/widget/shortcutkey.dart';
 
 void main() async {
@@ -39,10 +40,6 @@ void main() async {
 final _shorcutActionMapProvider =
     Provider.autoDispose<Map<ShortcutActivatorType, void Function()>>((ref) {
   return {
-    // ピン
-    ShortcutActivatorType.pinWindow: () async {
-      ref.read(bookmarkControllerProvider.notifier).toggle();
-    },
     // フォーカス中のTodoをチェックするショートカット
     ShortcutActivatorType.toggleDone: () async {
       final index =
@@ -124,10 +121,13 @@ class _CallbackShortcuts extends ConsumerWidget {
         ShortcutActivatorType.focusDown.shortcutActivator:
             const FocusDownIntent(),
         ShortcutActivatorType.newTodo.shortcutActivator: const NewTodoIntent(),
+        ShortcutActivatorType.pinWindow.shortcutActivator:
+            const PinWindowIntent(),
       },
       child: Actions(
         actions: {
           NewTodoIntent: ref.read(newTodoActionProvider),
+          PinWindowIntent: ref.read(pinWindowActionProvider),
         },
         child: CallbackShortcuts(
           bindings: ref.watch(_shorcutActionMapProvider).map(
