@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
@@ -13,6 +12,7 @@ import 'package:quick_flutter/systems/color.dart';
 import 'package:quick_flutter/controller/url/url_controller.dart';
 import 'package:quick_flutter/widget/actions/focus_down/focus_down_action.dart';
 import 'package:quick_flutter/widget/actions/focus_up/focus_up_action.dart';
+import 'package:quick_flutter/widget/actions/new_todo.dart/new_todo_action.dart';
 import 'package:quick_flutter/widget/shortcutkey.dart';
 
 void main() async {
@@ -39,12 +39,6 @@ void main() async {
 final _shorcutActionMapProvider =
     Provider.autoDispose<Map<ShortcutActivatorType, void Function()>>((ref) {
   return {
-    // 新規Todoを追加するショートカット
-    ShortcutActivatorType.newTodo: () async {
-      FocusManager.instance.primaryFocus?.unfocus();
-      await ref.read(todoControllerProvider.notifier).add(0);
-      ref.read(todoFocusControllerProvider.notifier).requestFocus(0);
-    },
     // ピン
     ShortcutActivatorType.pinWindow: () async {
       ref.read(bookmarkControllerProvider.notifier).toggle();
@@ -125,24 +119,27 @@ class _CallbackShortcuts extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Shortcuts(
-      shortcuts: const {
-        SingleActivator(
-          LogicalKeyboardKey.arrowUp,
-        ): FocusUpIntent(),
-        SingleActivator(
-          LogicalKeyboardKey.arrowDown,
-        ): FocusDownIntent(),
+      shortcuts: {
+        ShortcutActivatorType.focusUp.shortcutActivator: const FocusUpIntent(),
+        ShortcutActivatorType.focusDown.shortcutActivator:
+            const FocusDownIntent(),
+        ShortcutActivatorType.newTodo.shortcutActivator: const NewTodoIntent(),
       },
-      child: CallbackShortcuts(
-        bindings: ref.watch(_shorcutActionMapProvider).map(
-              (key, value) => MapEntry(
-                key.shortcutActivator,
-                value,
+      child: Actions(
+        actions: {
+          NewTodoIntent: ref.read(newTodoActionProvider),
+        },
+        child: CallbackShortcuts(
+          bindings: ref.watch(_shorcutActionMapProvider).map(
+                (key, value) => MapEntry(
+                  key.shortcutActivator,
+                  value,
+                ),
               ),
-            ),
-        child: FocusScope(
-          autofocus: true,
-          child: child,
+          child: FocusScope(
+            autofocus: true,
+            child: child,
+          ),
         ),
       ),
     );
