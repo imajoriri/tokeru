@@ -13,6 +13,7 @@ import 'package:quick_flutter/controller/url/url_controller.dart';
 import 'package:quick_flutter/widget/actions/close_window/close_window_action.dart';
 import 'package:quick_flutter/widget/actions/focus_down/focus_down_action.dart';
 import 'package:quick_flutter/widget/actions/focus_up/focus_up_action.dart';
+import 'package:quick_flutter/widget/actions/move_down_todo/move_down_todo_action.dart';
 import 'package:quick_flutter/widget/actions/move_up_todo/move_up_todo_action.dart';
 import 'package:quick_flutter/widget/actions/new_todo.dart/new_todo_action.dart';
 import 'package:quick_flutter/widget/actions/pin_window/pin_window_action.dart';
@@ -43,19 +44,6 @@ void main() async {
 final _shorcutActionMapProvider =
     Provider.autoDispose<Map<ShortcutActivatorType, void Function()>>((ref) {
   return {
-    // Todoをひとつ下に移動する
-    ShortcutActivatorType.moveDown: () async {
-      final focusController = ref.read(todoFocusControllerProvider.notifier);
-      final index = focusController.getFocusIndex();
-      if (index != -1 &&
-          index != ref.read(todoControllerProvider).valueOrNull!.length - 1) {
-        focusController.removeFocus();
-        ref.read(todoControllerProvider.notifier).reorder(index, index + 1);
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          focusController.requestFocus(index + 1);
-        });
-      }
-    },
     // Todoの削除
     ShortcutActivatorType.deleteTodo: () async {
       final index =
@@ -93,6 +81,8 @@ class _CallbackShortcuts extends ConsumerWidget {
             const CloseWindowIntent(),
         ShortcutActivatorType.moveUp.shortcutActivator:
             const MoveUpTodoIntent(),
+        ShortcutActivatorType.moveDown.shortcutActivator:
+            const MoveDownTodoIntent(),
       },
       child: Actions(
         actions: {
