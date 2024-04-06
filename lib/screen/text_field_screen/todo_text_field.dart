@@ -77,6 +77,7 @@ class _TodoTextField extends HookConsumerWidget {
         child: Padding(
           padding: const EdgeInsets.all(6),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Expanded(
                 child: TextField(
@@ -86,6 +87,7 @@ class _TodoTextField extends HookConsumerWidget {
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: 'Enter a new todo or memo...',
+                    contentPadding: EdgeInsets.all(12),
                   ),
                   onChanged: (text) {
                     ref
