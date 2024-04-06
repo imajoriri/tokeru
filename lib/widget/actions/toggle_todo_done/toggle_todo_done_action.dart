@@ -24,20 +24,24 @@ class ToggleTodoDoneAction extends Action<ToggleTodoDoneIntent> {
   Object? invoke(covariant ToggleTodoDoneIntent intent) async {
     final index =
         ref.read(todoFocusControllerProvider.notifier).getFocusIndex();
+    final focusIsLastTodo =
+        ref.read(todoFocusControllerProvider).length == index + 1;
     if (index != -1) {
       final todo = ref.read(todoControllerProvider).valueOrNull?[index];
       await ref
           .read(todoControllerProvider.notifier)
           .updateIsDone(todoId: todo!.id, isDone: !todo.isDone);
 
-      // 削除した後に元いた場所にフォーカスを戻す
       ref.read(todoControllerProvider.notifier).deleteDoneWithDebounce(
             // ユーザーのタッチ操作ではないので、長く待つ必要もないので300ms
             milliseconds: 300,
             onDeleted: () {
+              // Todoの最後にフォーカスしていた場合は、一つ前のTodoにフォーカスを移す
+              // Todo最後以外にフォーカスしていた場合は、削除したTodoの次のTodoにフォーカスを移す
+              final nextIndex = focusIsLastTodo ? index - 1 : index;
               ref
                   .read(todoFocusControllerProvider.notifier)
-                  .requestFocus(index);
+                  .requestFocus(nextIndex);
             },
           );
     }
