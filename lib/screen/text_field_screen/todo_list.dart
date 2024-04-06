@@ -32,6 +32,7 @@ class TodoList extends HookConsumerWidget {
           actions: {
             FocusUpIntent: ref.watch(todoFocusUpActionProvider),
             FocusDownIntent: ref.watch(todoFocusDownActionProvider),
+            ToggleTodoDoneIntent: ref.watch(toggleTodoDoneActionProvider),
           },
           child: ReorderableListView.builder(
             buildDefaultDragHandles: false,

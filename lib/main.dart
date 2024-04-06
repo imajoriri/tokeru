@@ -14,6 +14,7 @@ import 'package:quick_flutter/widget/actions/focus_down/focus_down_action.dart';
 import 'package:quick_flutter/widget/actions/focus_up/focus_up_action.dart';
 import 'package:quick_flutter/widget/actions/new_todo.dart/new_todo_action.dart';
 import 'package:quick_flutter/widget/actions/pin_window/pin_window_action.dart';
+import 'package:quick_flutter/widget/actions/toggle_todo_done/toggle_todo_done_action.dart';
 import 'package:quick_flutter/widget/shortcutkey.dart';
 
 void main() async {
@@ -123,6 +124,8 @@ class _CallbackShortcuts extends ConsumerWidget {
         ShortcutActivatorType.newTodo.shortcutActivator: const NewTodoIntent(),
         ShortcutActivatorType.pinWindow.shortcutActivator:
             const PinWindowIntent(),
+        ShortcutActivatorType.toggleDone.shortcutActivator:
+            const ToggleTodoDoneIntent(),
       },
       child: Actions(
         actions: {
