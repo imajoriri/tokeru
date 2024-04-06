@@ -12,6 +12,8 @@ import 'package:quick_flutter/controller/todo_focus/todo_focus_controller.dart';
 import 'package:quick_flutter/model/analytics_event/analytics_event_name.dart';
 import 'package:quick_flutter/model/todo/todo.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
+import 'package:quick_flutter/widget/actions/focus_down/focus_down_action.dart';
+import 'package:quick_flutter/widget/actions/focus_up/focus_up_action.dart';
 import 'package:quick_flutter/widget/markdown_text_editing_controller.dart';
 import 'package:quick_flutter/widget/markdown_text_field.dart';
 import 'package:quick_flutter/widget/shortcutkey.dart';
@@ -161,6 +163,7 @@ class TodoTextField extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final canSubmit = useState(false);
+    final baseOffset = useState(0);
 
     final controller = useTextEditingController();
     final focusNode = useFocusNode();
@@ -169,6 +172,7 @@ class TodoTextField extends HookConsumerWidget {
       () {
         controller.addListener(() {
           canSubmit.value = controller.text.isNotEmpty;
+          baseOffset.value = controller.selection.baseOffset;
         });
 
         return null;
@@ -176,40 +180,47 @@ class TodoTextField extends HookConsumerWidget {
       [],
     );
 
-    return CallbackShortcuts(
-      bindings: <ShortcutActivator, VoidCallback>{
-        const SingleActivator(LogicalKeyboardKey.enter, meta: true): () {
-          if (canSubmit.value) {
-            _addTodo(ref, controller, focusNode);
-          }
-        },
+    return Actions(
+      actions: {
+        // カーソルがテキストの一番最初にある場合のみ、フォーカスを一つ上に移動する
+        if (baseOffset.value == 0)
+          FocusUpIntent: ref.read(todoFucusLastActionProvider),
       },
-      child: Padding(
-        padding: const EdgeInsets.all(6),
-        child: Row(
-          children: [
-            Expanded(
-              child: TextField(
-                controller: controller,
-                focusNode: focusNode,
-                maxLines: null,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Enter a new todo or memo...',
+      child: CallbackShortcuts(
+        bindings: <ShortcutActivator, VoidCallback>{
+          const SingleActivator(LogicalKeyboardKey.enter, meta: true): () {
+            if (canSubmit.value) {
+              _addTodo(ref, controller, focusNode);
+            }
+          },
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(6),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: controller,
+                  focusNode: focusNode,
+                  maxLines: null,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Enter a new todo or memo...',
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(width: 4),
-            IconButton(
-              color: context.colorScheme.primary,
-              onPressed: canSubmit.value
-                  ? () {
-                      _addTodo(ref, controller, focusNode);
-                    }
-                  : null,
-              icon: const Icon(Icons.send),
-            ),
-          ],
+              const SizedBox(width: 4),
+              IconButton(
+                color: context.colorScheme.primary,
+                onPressed: canSubmit.value
+                    ? () {
+                        _addTodo(ref, controller, focusNode);
+                      }
+                    : null,
+                icon: const Icon(Icons.send),
+              ),
+            ],
+          ),
         ),
       ),
     );

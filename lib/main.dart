@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
@@ -10,6 +11,8 @@ import 'package:quick_flutter/firebase_options.dart';
 import 'package:quick_flutter/screen/text_field_screen/screen.dart';
 import 'package:quick_flutter/systems/color.dart';
 import 'package:quick_flutter/controller/url/url_controller.dart';
+import 'package:quick_flutter/widget/actions/focus_down/focus_down_action.dart';
+import 'package:quick_flutter/widget/actions/focus_up/focus_up_action.dart';
 import 'package:quick_flutter/widget/shortcutkey.dart';
 
 void main() async {
@@ -98,25 +101,6 @@ final _shorcutActionMapProvider =
         });
       }
     },
-    ShortcutActivatorType.focusUp: () {
-      final focusController = ref.read(todoFocusControllerProvider.notifier);
-      final todos = ref.watch(todoControllerProvider).valueOrNull ?? [];
-      if (focusController.getFocusIndex() == -1) {
-        ref
-            .read(todoFocusControllerProvider.notifier)
-            .requestFocus(todos.length - 1);
-        return;
-      }
-      focusController.fucusPrevious();
-    },
-    ShortcutActivatorType.focusDown: () {
-      final focusController = ref.read(todoFocusControllerProvider.notifier);
-      if (focusController.getFocusIndex() == -1) {
-        ref.read(todoFocusControllerProvider.notifier).requestFocus(0);
-        return;
-      }
-      ref.read(todoFocusControllerProvider.notifier).focusNext();
-    },
     // Todoの削除
     ShortcutActivatorType.deleteTodo: () async {
       final index =
@@ -140,16 +124,26 @@ class _CallbackShortcuts extends ConsumerWidget {
   final Widget child;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return CallbackShortcuts(
-      bindings: ref.watch(_shorcutActionMapProvider).map(
-            (key, value) => MapEntry(
-              key.shortcutActivator,
-              value,
+    return Shortcuts(
+      shortcuts: const {
+        SingleActivator(
+          LogicalKeyboardKey.arrowUp,
+        ): FocusUpIntent(),
+        SingleActivator(
+          LogicalKeyboardKey.arrowDown,
+        ): FocusDownIntent(),
+      },
+      child: CallbackShortcuts(
+        bindings: ref.watch(_shorcutActionMapProvider).map(
+              (key, value) => MapEntry(
+                key.shortcutActivator,
+                value,
+              ),
             ),
-          ),
-      child: FocusScope(
-        autofocus: true,
-        child: child,
+        child: FocusScope(
+          autofocus: true,
+          child: child,
+        ),
       ),
     );
   }
