@@ -4,7 +4,7 @@ import HotKey
 import SwiftUI
 import Firebase
 
-class MainFlutterWindow: NSWindow {
+class MainFlutterWindow: NSPanel {
   var channel: FlutterMethodChannel!
   lazy var flutterEngine = FlutterEngine(name: "my flutter engine", project: nil)
 
@@ -48,6 +48,8 @@ class MainFlutterWindow: NSWindow {
     self.titleVisibility = .hidden
     self.titlebarAppearsTransparent = true
     self.styleMask.insert(.fullSizeContentView)
+    // nonactivatingPanelによってTokeruを開いても下のウィンドウのフォーカスが失われない
+    self.styleMask.insert(.nonactivatingPanel)
 
     self.collectionBehavior = [
       // スクリーンのスペースを移動しても表示し続ける
@@ -86,6 +88,12 @@ class MainFlutterWindow: NSWindow {
   override func resignMain() {
     // ここでclose()を呼ばないことで、外部をタップしても閉じない
     super.resignMain()
+  }
+
+  override func close() {
+    super.close()
+    // hideによって、Tokeruを閉じた時に下のウィンドウに再フォーカスされる
+    NSApp.hide(self)
   }
 
   deinit {
