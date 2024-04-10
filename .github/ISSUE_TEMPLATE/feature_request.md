@@ -7,12 +7,10 @@ assignees: ''
 
 ---
 
-**Is your feature request related to a problem? Please describe.**
-<!-- リクエストする機能が解決する課題があれば記載してください -->
+### 課題とソリューション
+<!-- Tokeruを使っている際に感じる課題と解決策の説明をお願いします -->
 
-**Describe the solution you'd like**
-<!-- どんな機能が欲しいか簡単に説明お願いします！ -->
 
-**Describe alternatives you've considered**
+### 参考になる機能、サービス
 <!-- 代替として使っている機能、他のサービス等を教えてください -->
 
