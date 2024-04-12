@@ -283,6 +283,7 @@ class TodoListItem extends HookConsumerWidget {
             left: 20 * todo.indentLevel.toDouble(),
           ),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Checkbox(
                 value: todo.isDone,
@@ -324,7 +325,11 @@ class TodoListItem extends HookConsumerWidget {
                     return KeyEventResult.ignored;
                   },
                   child: Padding(
-                    padding: const EdgeInsets.only(bottom: 4),
+                    padding: const EdgeInsets.only(
+                      bottom: 4,
+                      // チェックボックスとの高さを調整するためのpadding
+                      top: 6,
+                    ),
                     child: TextField(
                       controller: controller,
                       focusNode: focusNode,
