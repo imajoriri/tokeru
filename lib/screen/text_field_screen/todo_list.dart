@@ -94,19 +94,6 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
             child: TodoListItem(
               todo: todo,
               focusNode: ref.watch(todoFocusControllerProvider)[index],
-              onChanged: (value) {
-                ref
-                    .read(todoControllerProvider.notifier)
-                    .updateTodoTitle(cartId: todo.id, title: value);
-              },
-              onChecked: (value) async {
-                await ref
-                    .read(todoControllerProvider.notifier)
-                    .updateIsDone(todoId: todo.id, isDone: value!);
-                ref
-                    .read(todoControllerProvider.notifier)
-                    .deleteDoneWithDebounce();
-              },
             ),
           ),
           // ドラッグ&ドロップのアイコン
@@ -141,36 +128,37 @@ class TodoListItem extends HookConsumerWidget {
     super.key,
     required this.todo,
     required this.focusNode,
-    this.onTapTextField,
-    this.onChecked,
-    this.onChanged,
   });
 
   final Todo todo;
 
   final FocusNode focusNode;
 
-  /// チェックされた時
-  final void Function(bool?)? onChecked;
-
-  /// TextFieldがtapされた時
-  final void Function()? onTapTextField;
-
-  /// checkboxの状態が変更されたときに呼ばれる
-  ///
-  /// [debounceDuration]の時間が経過するまで呼ばれない
-  final void Function(String)? onChanged;
-
   /// debouce用のDuration
   static const debounceDuration = Duration(milliseconds: 400);
 
-  Future<void> deleteTodo(WidgetRef ref) async {
+  Future<void> _deleteTodo(WidgetRef ref) async {
     final currentFocusIndex =
         ref.read(todoFocusControllerProvider.notifier).getFocusIndex();
     await ref.read(todoControllerProvider.notifier).delete(todo);
     ref
         .read(todoFocusControllerProvider.notifier)
         .requestFocus(currentFocusIndex - 1);
+  }
+
+  /// [Todo]のタイトルを更新する
+  void _updateTodoTitle(WidgetRef ref, String title) {
+    ref
+        .read(todoControllerProvider.notifier)
+        .updateTodoTitle(cartId: todo.id, title: title);
+  }
+
+  /// [Todo]のチェックを切り替える
+  void _toggleTodoDone(WidgetRef ref) {
+    ref
+        .read(todoControllerProvider.notifier)
+        .updateIsDone(todoId: todo.id, isDone: !todo.isDone);
+    ref.read(todoControllerProvider.notifier).filterDoneIsTrueWithDebounce();
   }
 
   @override
@@ -201,7 +189,7 @@ class TodoListItem extends HookConsumerWidget {
           }
 
           debounce = Timer(debounceDuration, () {
-            onChanged?.call(controller.text);
+            _updateTodoTitle(ref, controller.text);
           });
         });
 
@@ -251,7 +239,7 @@ class TodoListItem extends HookConsumerWidget {
                 Checkbox(
                   value: todo.isDone,
                   onChanged: (val) {
-                    onChecked?.call(val);
+                    _toggleTodoDone(ref);
                   },
                   focusNode: useFocusNode(
                     skipTraversal: true,
@@ -272,7 +260,7 @@ class TodoListItem extends HookConsumerWidget {
                             controller.selection.extentOffset == 0) {
                           // indentが0の場合は削除する
                           if (todo.indentLevel == 0) {
-                            deleteTodo(ref);
+                            _deleteTodo(ref);
                             return KeyEventResult.handled;
                           }
                         }
@@ -292,9 +280,6 @@ class TodoListItem extends HookConsumerWidget {
                           color: todo.isDone ? Colors.grey : Colors.black,
                         ),
                         maxLines: null,
-                        onTap: () {
-                          onTapTextField?.call();
-                        },
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                           hintText: 'Write a todo...',

@@ -167,7 +167,7 @@ class TodoController extends _$TodoController {
   /// [Todo.isDone]がtrueのものをリストから削除する。
   ///
   /// このメソッドが[milliseconds]以内に複数回呼ばれた場合、最後の呼び出しのみが実行される。
-  Future<void> deleteDoneWithDebounce({
+  Future<void> filterDoneIsTrueWithDebounce({
     int milliseconds = 1200,
     VoidCallback? onDeleted,
   }) async {
