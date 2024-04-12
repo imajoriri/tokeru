@@ -32,7 +32,7 @@ class ToggleTodoDoneAction extends Action<ToggleTodoDoneIntent> {
           .read(todoControllerProvider.notifier)
           .updateIsDone(todoId: todo!.id, isDone: !todo.isDone);
 
-      ref.read(todoControllerProvider.notifier).deleteDoneWithDebounce(
+      ref.read(todoControllerProvider.notifier).filterDoneIsTrueWithDebounce(
             // ユーザーのタッチ操作ではないので、長く待つ必要もないので300ms
             milliseconds: 300,
             onDeleted: () {
