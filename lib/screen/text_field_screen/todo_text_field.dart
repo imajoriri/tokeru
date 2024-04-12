@@ -37,6 +37,7 @@ class _TodoTextField extends HookConsumerWidget {
         controller.addListener(() {
           canSubmit.value = controller.text.isNotEmpty;
           baseOffset.value = controller.selection.baseOffset;
+          isValid.value = controller.value.composing.isValid;
         });
 
         return null;
@@ -50,7 +51,6 @@ class _TodoTextField extends HookConsumerWidget {
     useEffect(
       () {
         ref.listen(memoControllerProvider, (previous, next) {
-          isValid.value = controller.value.composing.isValid;
           if (next.hasValue && !setInitValue.value) {
             final memo = next.valueOrNull!;
             controller.text = memo.content;
