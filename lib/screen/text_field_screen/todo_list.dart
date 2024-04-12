@@ -28,41 +28,31 @@ class TodoList extends HookConsumerWidget {
             ),
           );
         }
-        return Actions(
-          actions: {
-            FocusUpIntent: ref.watch(todoFocusUpActionProvider),
-            FocusDownIntent: ref.watch(todoFocusDownActionProvider),
-            ToggleTodoDoneIntent: ref.watch(toggleTodoDoneActionProvider),
-            MoveUpTodoIntent: ref.watch(moveUpTodoActionProvider),
-            MoveDownTodoIntent: ref.watch(moveDownTodoActionProvider),
-            DeleteTodoIntent: ref.watch(deleteTodoActionProvider),
+        return ReorderableListView.builder(
+          buildDefaultDragHandles: false,
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: todos.length,
+          onReorder: (oldIndex, newIndex) {
+            // NOTE: なぜか上から下に移動するときはnewIndexが1つずれるので
+            // その分を補正する
+            if (oldIndex < newIndex) {
+              newIndex -= 1;
+            }
+            ref
+                .read(todoControllerProvider.notifier)
+                .reorder(oldIndex, newIndex);
           },
-          child: ReorderableListView.builder(
-            buildDefaultDragHandles: false,
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: todos.length,
-            onReorder: (oldIndex, newIndex) {
-              // NOTE: なぜか上から下に移動するときはnewIndexが1つずれるので
-              // その分を補正する
-              if (oldIndex < newIndex) {
-                newIndex -= 1;
-              }
-              ref
-                  .read(todoControllerProvider.notifier)
-                  .reorder(oldIndex, newIndex);
-            },
-            itemBuilder: (context, index) {
-              // isDoneが更新されてもWidgetが更新されて欲しいので、idとisDoneをkeyにする
-              final key = ValueKey(todos[index].id);
-              return _ReorderableTodoListItem(
-                key: key,
-                todo: todos[index],
-                index: index,
-                todoLength: todos.length,
-              );
-            },
-          ),
+          itemBuilder: (context, index) {
+            // isDoneが更新されてもWidgetが更新されて欲しいので、idとisDoneをkeyにする
+            final key = ValueKey(todos[index].id);
+            return _ReorderableTodoListItem(
+              key: key,
+              todo: todos[index],
+              index: index,
+              todoLength: todos.length,
+            );
+          },
         );
       },
       error: (e, s) => const Text('happen somethings'),
@@ -117,33 +107,6 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
                     .read(todoControllerProvider.notifier)
                     .deleteDoneWithDebounce();
               },
-              onAdd: () async {
-                await ref.read(todoControllerProvider.notifier).add(index + 1);
-                await ref
-                    .read(todoControllerProvider.notifier)
-                    .updateCurrentOrder();
-                ref.read(todoFocusControllerProvider)[index + 1].requestFocus();
-              },
-              // インデント機能は一旦オミット
-              // onAddIndent: () {
-              // ref
-              //     .read(todoControllerProvider.notifier)
-              //     .addIndent(todos[index]);
-              // },
-              // onMinusIndent: () {
-              //   ref
-              //       .read(todoControllerProvider.notifier)
-              //       .minusIndent(todos[index]);
-              // },
-              onDelete: () async {
-                await ref.read(todoControllerProvider.notifier).delete(todo);
-                // 最後の１つの場合、previousFoucsすると他のFocusに移動しちゃうため
-                if (todoLength != 1) {
-                  ref
-                      .read(todoFocusControllerProvider.notifier)
-                      .requestFocus(index - 1);
-                }
-              },
             ),
           ),
           // ドラッグ&ドロップのアイコン
@@ -181,11 +144,6 @@ class TodoListItem extends HookConsumerWidget {
     this.onTapTextField,
     this.onChecked,
     this.onChanged,
-    this.onAdd,
-    this.onAddIndent,
-    this.onMinusIndent,
-    this.onDelete,
-    this.contentPadding,
   });
 
   final Todo todo;
@@ -198,28 +156,22 @@ class TodoListItem extends HookConsumerWidget {
   /// TextFieldがtapされた時
   final void Function()? onTapTextField;
 
-  /// TextFieldのcontentPadding
-  final EdgeInsets? contentPadding;
-
   /// checkboxの状態が変更されたときに呼ばれる
   ///
   /// [debounceDuration]の時間が経過するまで呼ばれない
   final void Function(String)? onChanged;
 
-  /// 追加ボタンが押されたときに呼ばれる
-  final void Function()? onAdd;
-
-  /// インデント追加
-  final void Function()? onAddIndent;
-
-  /// インデント削除
-  final void Function()? onMinusIndent;
-
-  /// Todo削除
-  final void Function()? onDelete;
-
   /// debouce用のDuration
   static const debounceDuration = Duration(milliseconds: 400);
+
+  Future<void> deleteTodo(WidgetRef ref) async {
+    final currentFocusIndex =
+        ref.read(todoFocusControllerProvider.notifier).getFocusIndex();
+    await ref.read(todoControllerProvider.notifier).delete(todo);
+    ref
+        .read(todoFocusControllerProvider.notifier)
+        .requestFocus(currentFocusIndex - 1);
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -259,108 +211,104 @@ class TodoListItem extends HookConsumerWidget {
       },
       [controller],
     );
-    return Stack(
-      fit: StackFit.passthrough,
-      children: [
-        // TextFieldを囲っているContainerに色を付けると
-        // リビルド時にfocusが外れてしまうため、stackでContainerを分けている
-        Positioned(
-          left: 0,
-          right: 0,
-          top: 0,
-          bottom: 0,
-          child: Container(
-            color: hasFocus.value
-                ? context.colorScheme.primary.withOpacity(0.1)
-                : Colors.transparent,
+
+    return Actions(
+      actions: {
+        FocusUpIntent: ref.watch(todoFocusUpActionProvider),
+        FocusDownIntent: ref.watch(todoFocusDownActionProvider),
+        ToggleTodoDoneIntent: ref.watch(toggleTodoDoneActionProvider),
+        MoveUpTodoIntent: ref.watch(moveUpTodoActionProvider),
+        MoveDownTodoIntent: ref.watch(moveDownTodoActionProvider),
+        DeleteTodoIntent: ref.watch(deleteTodoActionProvider),
+        NewTodoBelowIntent: ref.watch(newTodoBelowActionProvider),
+      },
+      child: Stack(
+        fit: StackFit.passthrough,
+        children: [
+          // TextFieldを囲っているContainerに色を付けると
+          // リビルド時にfocusが外れてしまうため、stackでContainerを分けている
+          Positioned(
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            child: Container(
+              color: hasFocus.value
+                  ? context.colorScheme.primary.withOpacity(0.1)
+                  : Colors.transparent,
+            ),
           ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(
-            bottom: 4,
-            top: 4,
-            // indexに応じて左にpaddingを追加する
-            left: 20 * todo.indentLevel.toDouble(),
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Checkbox(
-                value: todo.isDone,
-                onChanged: (val) {
-                  onChecked?.call(val);
-                },
-                focusNode: useFocusNode(
-                  skipTraversal: true,
-                ),
-              ),
-              Expanded(
-                child: Focus(
-                  skipTraversal: true,
-                  onKey: (node, event) {
-                    // 日本語入力などでの変換中は無視する
-                    if (controller.value.composing.isValid) {
-                      return KeyEventResult.ignored;
-                    }
-                    if (event is RawKeyDownEvent) {
-                      if (event.logicalKey == LogicalKeyboardKey.tab &&
-                          onAddIndent != null) {
-                        onAddIndent?.call();
-                        return KeyEventResult.handled;
-                      }
-                      // バックスペースキー & カーソルが先頭の場合
-                      if (event.logicalKey == LogicalKeyboardKey.backspace &&
-                          controller.selection.baseOffset == 0 &&
-                          controller.selection.extentOffset == 0) {
-                        // indentが0の場合は削除する
-                        if (todo.indentLevel == 0) {
-                          onDelete?.call();
-                          return KeyEventResult.handled;
-                        }
-                        // indentが1以上の場合はインデントをマイナスする
-                        onMinusIndent?.call();
-                        return KeyEventResult.handled;
-                      }
-                    }
-                    return KeyEventResult.ignored;
+          Padding(
+            padding: EdgeInsets.only(
+              bottom: 4,
+              top: 4,
+              // indexに応じて左にpaddingを追加する
+              left: 20 * todo.indentLevel.toDouble(),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Checkbox(
+                  value: todo.isDone,
+                  onChanged: (val) {
+                    onChecked?.call(val);
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      bottom: 4,
-                      // チェックボックスとの高さを調整するためのpadding
-                      top: 6,
-                    ),
-                    child: TextField(
-                      controller: controller,
-                      focusNode: focusNode,
-                      style: context.textTheme.bodyLarge!.copyWith(
-                        color: todo.isDone ? Colors.grey : Colors.black,
-                      ),
-                      maxLines: null,
-                      // maxLinesがnullでもEnterで `onSubmitted`を検知するために
-                      // `TextInputAction.done`である必要がある。
-                      textInputAction: TextInputAction.done,
-                      onSubmitted: (value) {
-                        onAdd?.call();
-                      },
-                      onTap: () {
-                        onTapTextField?.call();
-                      },
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
+                  focusNode: useFocusNode(
+                    skipTraversal: true,
+                  ),
+                ),
+                Expanded(
+                  child: Focus(
+                    skipTraversal: true,
+                    onKey: (node, event) {
+                      // 日本語入力などでの変換中は無視する
+                      if (controller.value.composing.isValid) {
+                        return KeyEventResult.ignored;
+                      }
+                      if (event is RawKeyDownEvent) {
+                        // バックスペースキー & カーソルが先頭の場合
+                        if (event.logicalKey == LogicalKeyboardKey.backspace &&
+                            controller.selection.baseOffset == 0 &&
+                            controller.selection.extentOffset == 0) {
+                          // indentが0の場合は削除する
+                          if (todo.indentLevel == 0) {
+                            deleteTodo(ref);
+                            return KeyEventResult.handled;
+                          }
+                        }
+                      }
+                      return KeyEventResult.ignored;
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: 4,
                         // チェックボックスとの高さを調整するためのpadding
-                        contentPadding: contentPadding,
-                        hintText: 'Write a todo...',
-                        isCollapsed: true,
+                        top: 6,
+                      ),
+                      child: TextField(
+                        controller: controller,
+                        focusNode: focusNode,
+                        style: context.textTheme.bodyLarge!.copyWith(
+                          color: todo.isDone ? Colors.grey : Colors.black,
+                        ),
+                        maxLines: null,
+                        onTap: () {
+                          onTapTextField?.call();
+                        },
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Write a todo...',
+                          isCollapsed: true,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

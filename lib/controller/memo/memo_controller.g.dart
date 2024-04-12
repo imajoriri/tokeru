@@ -6,7 +6,7 @@ part of 'memo_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$memoControllerHash() => r'65a8a71d1a74a62d80f4ce687d994a43e0432c13';
+String _$memoControllerHash() => r'bb166001a76120115afeaf0a9470016b7dce0346';
 
 /// Userに紐づく[Memo]を返すController
 ///
