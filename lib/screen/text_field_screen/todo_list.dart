@@ -166,7 +166,13 @@ class TodoListItem extends HookConsumerWidget {
     final controller = useTextEditingController(text: todo.title);
     final hasFocus = useState(focusNode.hasFocus);
     // 日本語入力などでの変換中は無視するためのフラグ
-    var isValid = useState(false);
+    final isValid = useState(false);
+
+    // 上の行にフォーカスを移動可能かどうか
+    final canFocusUp = useState(true);
+
+    // 下の行にフォーカスを移動可能かどうか
+    final canFocusDown = useState(true);
 
     useEffect(
       () {
@@ -202,10 +208,31 @@ class TodoListItem extends HookConsumerWidget {
       [controller],
     );
 
+    useEffect(
+      () {
+        controller.addListener(() {
+          // baseOffsetより前に改行があるかどうか
+          final beforeNewLine = controller.text
+              .substring(0, controller.selection.baseOffset)
+              .contains('\n');
+          // baseOffsetより後に改行があるかどうか
+          final afterNewLine = controller.text
+              .substring(controller.selection.baseOffset)
+              .contains('\n');
+          canFocusUp.value = !beforeNewLine;
+          canFocusDown.value = !afterNewLine;
+        });
+        return null;
+      },
+      [controller],
+    );
+
     return Actions(
       actions: {
-        FocusUpIntent: ref.watch(todoFocusUpActionProvider),
-        FocusDownIntent: ref.watch(todoFocusDownActionProvider),
+        if (canFocusUp.value)
+          FocusUpIntent: ref.watch(todoFocusUpActionProvider),
+        if (canFocusDown.value)
+          FocusDownIntent: ref.watch(todoFocusDownActionProvider),
         ToggleTodoDoneIntent: ref.watch(toggleTodoDoneActionProvider),
         MoveUpTodoIntent: ref.watch(moveUpTodoActionProvider),
         MoveDownTodoIntent: ref.watch(moveDownTodoActionProvider),
