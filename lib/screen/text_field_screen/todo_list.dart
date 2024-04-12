@@ -165,6 +165,8 @@ class TodoListItem extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = useTextEditingController(text: todo.title);
     final hasFocus = useState(focusNode.hasFocus);
+    // 日本語入力などでの変換中は無視するためのフラグ
+    var isValid = useState(false);
 
     useEffect(
       () {
@@ -208,7 +210,8 @@ class TodoListItem extends HookConsumerWidget {
         MoveUpTodoIntent: ref.watch(moveUpTodoActionProvider),
         MoveDownTodoIntent: ref.watch(moveDownTodoActionProvider),
         DeleteTodoIntent: ref.watch(deleteTodoActionProvider),
-        NewTodoBelowIntent: ref.watch(newTodoBelowActionProvider),
+        if (!isValid.value)
+          NewTodoBelowIntent: ref.watch(newTodoBelowActionProvider),
       },
       child: Stack(
         fit: StackFit.passthrough,
@@ -249,6 +252,7 @@ class TodoListItem extends HookConsumerWidget {
                   child: Focus(
                     skipTraversal: true,
                     onKey: (node, event) {
+                      isValid.value = controller.value.composing.isValid;
                       // 日本語入力などでの変換中は無視する
                       if (controller.value.composing.isValid) {
                         return KeyEventResult.ignored;

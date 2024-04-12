@@ -26,6 +26,8 @@ class _TodoTextField extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final canSubmit = useState(false);
     final baseOffset = useState(0);
+    // 日本語入力などでの変換中は無視するためのフラグ
+    var isValid = useState(false);
 
     final controller = useTextEditingController();
     final focusNode = ref.watch(todoTextFieldFocusControllerProvider);
@@ -48,6 +50,7 @@ class _TodoTextField extends HookConsumerWidget {
     useEffect(
       () {
         ref.listen(memoControllerProvider, (previous, next) {
+          isValid.value = controller.value.composing.isValid;
           if (next.hasValue && !setInitValue.value) {
             final memo = next.valueOrNull!;
             controller.text = memo.content;
@@ -68,11 +71,12 @@ class _TodoTextField extends HookConsumerWidget {
       },
       child: CallbackShortcuts(
         bindings: <ShortcutActivator, VoidCallback>{
-          const SingleActivator(LogicalKeyboardKey.enter, meta: true): () {
-            if (canSubmit.value) {
-              _addTodo(ref, controller, focusNode);
-            }
-          },
+          if (!isValid.value)
+            const SingleActivator(LogicalKeyboardKey.enter): () {
+              if (canSubmit.value) {
+                _addTodo(ref, controller, focusNode);
+              }
+            },
         },
         child: Padding(
           padding: const EdgeInsets.all(6),
