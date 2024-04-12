@@ -11,6 +11,14 @@ enum ShortcutActivatorType {
     label: 'Add new Todo...',
   ),
 
+  /// 新しいTodoを現在のフォーカスの1つ下に追加する
+  newTodoBelow(
+    shortcutActivator: SingleActivator(
+      LogicalKeyboardKey.enter,
+    ),
+    label: 'Add new Todo below...',
+  ),
+
   /// Todoを削除する
   deleteTodo(
     shortcutActivator: SingleActivator(meta: true, LogicalKeyboardKey.keyD),
