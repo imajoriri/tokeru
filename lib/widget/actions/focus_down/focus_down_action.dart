@@ -59,6 +59,32 @@ class TodoFocusDownAction extends CustomAction<FocusDownIntent> {
     }
 
     ref.read(todoFocusControllerProvider.notifier).focusNext();
+    moveCursorToFirstLine(
+      textEditingController,
+      ref.read(todoTextEditingControllerProvider)[currentIndex + 1],
+    );
     return null;
+  }
+
+  /// 複数行のTodoに移動した際に、一番上の行にカーソルを移動する
+  void moveCursorToFirstLine(
+    TextEditingController previousController,
+    TextEditingController nextController,
+  ) {
+    final previousLastLineIndex = previousController.text.lastIndexOf('\n') + 1;
+    // previouseControllerの最後の行の先頭からカーソルまでの文字数
+    final previousBaseOffset =
+        previousController.selection.baseOffset - previousLastLineIndex;
+
+    final nextTextLength = nextController.text.length;
+
+    nextController.selection = TextSelection(
+      baseOffset: nextTextLength > previousBaseOffset
+          ? previousBaseOffset
+          : nextTextLength,
+      extentOffset: nextTextLength > previousBaseOffset
+          ? previousBaseOffset
+          : nextTextLength,
+    );
   }
 }

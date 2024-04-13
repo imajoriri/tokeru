@@ -39,22 +39,53 @@ class TodoFocusUpAction extends CustomAction<FocusUpIntent> {
       return null;
     }
 
+    // 先頭のTodoにフォーカスがある場合は、フォーカスを移動しない
+    if (currentIndex == 0) {
+      return KeyEventResult.ignored;
+    }
+
     final textEditingController =
         ref.read(todoTextEditingControllerProvider)[currentIndex];
 
+    // 日本語入力などでの変換中は無視する
     if (textEditingController.value.composing.isValid) {
       return KeyEventResult.ignored;
     }
 
-    // TextEditingContollerのカーソルが一番上の行にいない場合は、フォーカスを移動しない
     final isFirstLine = !textEditingController.text
         .substring(0, textEditingController.selection.baseOffset)
         .contains('\n');
+    // TextEditingContollerのカーソルが一番上の行にいない場合は、フォーカスを移動しない
     if (!isFirstLine) {
       return KeyEventResult.ignored;
     }
+
     focusController.fucusPrevious();
+    moveCursorToLastLine(
+      textEditingController,
+      ref.read(todoTextEditingControllerProvider)[currentIndex - 1],
+    );
     return null;
+  }
+
+  /// [nextController]のカーソルを一番下の行に設定する。
+  void moveCursorToLastLine(
+    TextEditingController previousController,
+    TextEditingController nextController,
+  ) {
+    final previousBaseOffset = previousController.selection.baseOffset;
+    final nextLastLineIndex = nextController.text.lastIndexOf('\n');
+    final nextTextLength = nextController.text.length;
+
+    // 移動前のカーソルの先頭からの位置と、移動後のカーソルの最後の行の先頭からの位置を合わせる
+    final lastLineOffset = nextLastLineIndex + 1 + previousBaseOffset;
+
+    nextController.selection = TextSelection(
+      baseOffset:
+          lastLineOffset <= nextTextLength ? lastLineOffset : nextTextLength,
+      extentOffset:
+          lastLineOffset <= nextTextLength ? lastLineOffset : nextTextLength,
+    );
   }
 }
 
