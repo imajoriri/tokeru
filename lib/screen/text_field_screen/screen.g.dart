@@ -7,7 +7,7 @@ part of 'screen.dart';
 // **************************************************************************
 
 String _$bookmarkControllerHash() =>
-    r'03ce89f2a876574cc0f1caa78e22e85620eb3cee';
+    r'8057b39d0205bc4dbbe9c442ee54c67322059ce3';
 
 /// See also [BookmarkController].
 @ProviderFor(BookmarkController)
