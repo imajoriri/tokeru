@@ -94,6 +94,7 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
             child: TodoListItem(
               todo: todo,
               focusNode: ref.watch(todoFocusControllerProvider)[index],
+              controller: ref.watch(todoTextEditingControllerProvider)[index],
             ),
           ),
           // ドラッグ&ドロップのアイコン
@@ -127,10 +128,13 @@ class TodoListItem extends HookConsumerWidget {
   const TodoListItem({
     super.key,
     required this.todo,
+    required this.controller,
     required this.focusNode,
   });
 
   final Todo todo;
+
+  final TextEditingController controller;
 
   final FocusNode focusNode;
 
@@ -163,16 +167,9 @@ class TodoListItem extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final controller = useTextEditingController(text: todo.title);
     final hasFocus = useState(focusNode.hasFocus);
     // 日本語入力などでの変換中は無視するためのフラグ
     final isValid = useState(false);
-
-    // 上の行にフォーカスを移動可能かどうか
-    final canFocusUp = useState(true);
-
-    // 下の行にフォーカスを移動可能かどうか
-    final canFocusDown = useState(true);
 
     useEffect(
       () {
@@ -208,31 +205,10 @@ class TodoListItem extends HookConsumerWidget {
       [controller],
     );
 
-    useEffect(
-      () {
-        controller.addListener(() {
-          // baseOffsetより前に改行があるかどうか
-          final beforeNewLine = controller.text
-              .substring(0, controller.selection.baseOffset)
-              .contains('\n');
-          // baseOffsetより後に改行があるかどうか
-          final afterNewLine = controller.text
-              .substring(controller.selection.baseOffset)
-              .contains('\n');
-          canFocusUp.value = !beforeNewLine;
-          canFocusDown.value = !afterNewLine;
-        });
-        return null;
-      },
-      [controller],
-    );
-
     return Actions(
       actions: {
-        if (canFocusUp.value)
-          FocusUpIntent: ref.watch(todoFocusUpActionProvider),
-        if (canFocusDown.value)
-          FocusDownIntent: ref.watch(todoFocusDownActionProvider),
+        FocusUpIntent: ref.watch(todoFocusUpActionProvider),
+        FocusDownIntent: ref.watch(todoFocusDownActionProvider),
         ToggleTodoDoneIntent: ref.watch(toggleTodoDoneActionProvider),
         MoveUpTodoIntent: ref.watch(moveUpTodoActionProvider),
         MoveDownTodoIntent: ref.watch(moveDownTodoActionProvider),
