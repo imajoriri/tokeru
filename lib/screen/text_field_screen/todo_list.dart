@@ -289,7 +289,7 @@ class TodoListItem extends HookConsumerWidget {
                         maxLines: null,
                         decoration: const InputDecoration(
                           border: InputBorder.none,
-                          hintText: 'Write a todo...',
+                          hintText: 'Write a Todo or Memo(Shift + Enter)...',
                           isCollapsed: true,
                         ),
                       ),

@@ -90,7 +90,7 @@ class _TodoTextField extends HookConsumerWidget {
                   maxLines: null,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
-                    hintText: 'Enter a new todo or memo...',
+                    hintText: 'Write a Todo or Memo(Shift + Enter)...',
                     contentPadding: EdgeInsets.all(12),
                   ),
                   onChanged: (text) {
