@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -5,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:quick_flutter/controller/method_channel/method_channel_controller.dart';
 import 'package:quick_flutter/firebase_options.dart';
+import 'package:quick_flutter/model/analytics_event/analytics_event_name.dart';
 import 'package:quick_flutter/screen/text_field_screen/screen.dart';
 import 'package:quick_flutter/systems/color.dart';
 import 'package:quick_flutter/controller/url/url_controller.dart';
@@ -68,6 +70,7 @@ class _CallbackShortcuts extends ConsumerWidget {
             const DeleteTodoIntent(),
       },
       child: Actions(
+        dispatcher: _LoggingActionDispatcher(),
         actions: {
           NewTodoIntent: ref.read(newTodoActionProvider),
           PinWindowIntent: ref.read(pinWindowActionProvider),
@@ -76,6 +79,26 @@ class _CallbackShortcuts extends ConsumerWidget {
         child: child,
       ),
     );
+  }
+}
+
+class _LoggingActionDispatcher extends ActionDispatcher {
+  @override
+  (bool, Object?) invokeActionIfEnabled(
+    covariant Action<Intent> action,
+    covariant Intent intent, [
+    BuildContext? context,
+  ]) {
+    if (action is! DoNothingAction) {
+      FirebaseAnalytics.instance.logEvent(
+        name: AnalyticsEventName.tapShortcutKey.name,
+        parameters: {
+          'action': action.runtimeType.toString(),
+        },
+      );
+    }
+
+    return super.invokeActionIfEnabled(action, intent, context);
   }
 }
 
