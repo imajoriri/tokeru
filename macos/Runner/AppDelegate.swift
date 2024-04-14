@@ -11,9 +11,14 @@ class AppDelegate: FlutterAppDelegate {
   /// docのアプリアイコンを押された時に表示する
   override func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
     for window in sender.windows {
+      // 一度orderOutすることでステージマネージャーを使っている際に
+      // 他のアプリケーションが隠れることを防いでいる。
+      // 本来はapplicationShouldHandleReopenのreturnをfalseにすれば実現できるはずだがうまくいかないので
+      // 代替案を使っている
+      window.orderOut(nil)
       window.makeKeyAndOrderFront(nil)
     }
-    return true
+    return false
   }
 
   // accessoryにすることで、menu barが表示されない
