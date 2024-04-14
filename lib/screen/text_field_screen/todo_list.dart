@@ -163,6 +163,10 @@ class TodoListItem extends HookConsumerWidget {
         .read(todoControllerProvider.notifier)
         .updateIsDone(todoId: todo.id, isDone: !todo.isDone);
     ref.read(todoControllerProvider.notifier).filterDoneIsTrueWithDebounce();
+
+    FirebaseAnalytics.instance.logEvent(
+      name: AnalyticsEventName.toggleTodoDone.name,
+    );
   }
 
   @override
