@@ -231,9 +231,12 @@ class TodoListItem extends HookConsumerWidget {
             top: 0,
             bottom: 0,
             child: Container(
-              color: hasFocus.value
-                  ? context.colorScheme.primary.withOpacity(0.1)
-                  : Colors.transparent,
+              decoration: BoxDecoration(
+                color: hasFocus.value
+                    ? context.colorScheme.primary.withOpacity(0.1)
+                    : Colors.transparent,
+                borderRadius: BorderRadius.circular(4),
+              ),
             ),
           ),
           Padding(
