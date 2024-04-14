@@ -4,12 +4,20 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:quick_flutter/controller/method_channel/method_channel_controller.dart';
-import 'package:quick_flutter/controller/todo/todo_controller.dart';
-import 'package:quick_flutter/controller/todo_focus/todo_focus_controller.dart';
 import 'package:quick_flutter/firebase_options.dart';
 import 'package:quick_flutter/screen/text_field_screen/screen.dart';
 import 'package:quick_flutter/systems/color.dart';
 import 'package:quick_flutter/controller/url/url_controller.dart';
+import 'package:quick_flutter/widget/actions/close_window/close_window_action.dart';
+import 'package:quick_flutter/widget/actions/delete_todo/delete_todo_action.dart';
+import 'package:quick_flutter/widget/actions/focus_down/focus_down_action.dart';
+import 'package:quick_flutter/widget/actions/focus_up/focus_up_action.dart';
+import 'package:quick_flutter/widget/actions/move_down_todo/move_down_todo_action.dart';
+import 'package:quick_flutter/widget/actions/move_up_todo/move_up_todo_action.dart';
+import 'package:quick_flutter/widget/actions/new_todo.dart/new_todo_action.dart';
+import 'package:quick_flutter/widget/actions/new_todo_below/new_todo_below_action.dart';
+import 'package:quick_flutter/widget/actions/pin_window/pin_window_action.dart';
+import 'package:quick_flutter/widget/actions/toggle_todo_done/toggle_todo_done_action.dart';
 import 'package:quick_flutter/widget/shortcutkey.dart';
 
 void main() async {
@@ -22,8 +30,8 @@ void main() async {
     ProviderScope(
       observers: [_AppObserver()],
       child: AppMaterialApp(
-        home: _PlatformMenuBar(
-          child: _CallbackShortcuts(
+        home: _CallbackShortcuts(
+          child: _PlatformMenuBar(
             child: TextFieldScreen(),
           ),
         ),
@@ -32,123 +40,39 @@ void main() async {
   );
 }
 
-/// [ShortcutActivatorType]に対応するアクションを提供するProvider
-final _shorcutActionMapProvider =
-    Provider.autoDispose<Map<ShortcutActivatorType, void Function()>>((ref) {
-  return {
-    // 新規Todoを追加するショートカット
-    ShortcutActivatorType.newTodo: () async {
-      FocusManager.instance.primaryFocus?.unfocus();
-      await ref.read(todoControllerProvider.notifier).add(0);
-      ref.read(todoFocusControllerProvider.notifier).requestFocus(0);
-    },
-    // ピン
-    ShortcutActivatorType.pinWindow: () async {
-      ref.read(bookmarkControllerProvider.notifier).toggle();
-    },
-    // フォーカス中のTodoをチェックするショートカット
-    ShortcutActivatorType.toggleDone: () async {
-      final index =
-          ref.read(todoFocusControllerProvider.notifier).getFocusIndex();
-      if (index != -1) {
-        final todo = ref.read(todoControllerProvider).valueOrNull?[index];
-        await ref
-            .read(todoControllerProvider.notifier)
-            .updateIsDone(todoId: todo!.id, isDone: !todo.isDone);
-
-        // 削除した後に元いた場所にフォーカスを戻す
-        ref.read(todoControllerProvider.notifier).deleteDoneWithDebounce(
-              // ユーザーのタッチ操作ではないので、長く待つ必要もないので300ms
-              milliseconds: 300,
-              onDeleted: () {
-                ref
-                    .read(todoFocusControllerProvider.notifier)
-                    .requestFocus(index);
-              },
-            );
-      }
-    },
-    // escでウィンドウを閉じる
-    ShortcutActivatorType.closeWindow: () async {
-      final channel = ref.read(methodChannelProvider);
-      channel.invokeMethod(AppMethodChannel.openOrClosePanel.name);
-    },
-    // Todoをひとつ上に移動する
-    ShortcutActivatorType.moveUp: () async {
-      final focusController = ref.read(todoFocusControllerProvider.notifier);
-      final index = focusController.getFocusIndex();
-      if (index != -1 && index != 0) {
-        focusController.removeFocus();
-        ref.read(todoControllerProvider.notifier).reorder(index, index - 1);
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          focusController.requestFocus(index - 1);
-        });
-      }
-    },
-    // Todoをひとつ下に移動する
-    ShortcutActivatorType.moveDown: () async {
-      final focusController = ref.read(todoFocusControllerProvider.notifier);
-      final index = focusController.getFocusIndex();
-      if (index != -1 &&
-          index != ref.read(todoControllerProvider).valueOrNull!.length - 1) {
-        focusController.removeFocus();
-        ref.read(todoControllerProvider.notifier).reorder(index, index + 1);
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          focusController.requestFocus(index + 1);
-        });
-      }
-    },
-    ShortcutActivatorType.focusUp: () {
-      final focusController = ref.read(todoFocusControllerProvider.notifier);
-      final todos = ref.watch(todoControllerProvider).valueOrNull ?? [];
-      if (focusController.getFocusIndex() == -1) {
-        ref
-            .read(todoFocusControllerProvider.notifier)
-            .requestFocus(todos.length - 1);
-        return;
-      }
-      focusController.fucusPrevious();
-    },
-    ShortcutActivatorType.focusDown: () {
-      final focusController = ref.read(todoFocusControllerProvider.notifier);
-      if (focusController.getFocusIndex() == -1) {
-        ref.read(todoFocusControllerProvider.notifier).requestFocus(0);
-        return;
-      }
-      ref.read(todoFocusControllerProvider.notifier).focusNext();
-    },
-    // Todoの削除
-    ShortcutActivatorType.deleteTodo: () async {
-      final index =
-          ref.read(todoFocusControllerProvider.notifier).getFocusIndex();
-      if (index == -1) return;
-
-      final todoLength = ref.read(todoControllerProvider).valueOrNull!.length;
-      // 最後の１つの場合、previousFoucsすると他のFocusに移動しちゃうため
-      if (todoLength == 1) return;
-
-      final todo = ref.read(todoControllerProvider).valueOrNull![index];
-      await ref.read(todoControllerProvider.notifier).delete(todo);
-      ref.read(todoFocusControllerProvider.notifier).requestFocus(index - 1);
-    },
-  };
-});
-
 /// [CallbackShortcuts]の中でRefを使うためにラップしたWidgetクラス
 class _CallbackShortcuts extends ConsumerWidget {
   const _CallbackShortcuts({required this.child});
   final Widget child;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return CallbackShortcuts(
-      bindings: ref.watch(_shorcutActionMapProvider).map(
-            (key, value) => MapEntry(
-              key.shortcutActivator,
-              value,
-            ),
-          ),
-      child: FocusScope(
-        autofocus: true,
+    return Shortcuts(
+      shortcuts: {
+        ShortcutActivatorType.focusUp.shortcutActivator: const FocusUpIntent(),
+        ShortcutActivatorType.focusDown.shortcutActivator:
+            const FocusDownIntent(),
+        ShortcutActivatorType.newTodo.shortcutActivator: const NewTodoIntent(),
+        ShortcutActivatorType.newTodoBelow.shortcutActivator:
+            const NewTodoBelowIntent(),
+        ShortcutActivatorType.pinWindow.shortcutActivator:
+            const PinWindowIntent(),
+        ShortcutActivatorType.toggleDone.shortcutActivator:
+            const ToggleTodoDoneIntent(),
+        ShortcutActivatorType.closeWindow.shortcutActivator:
+            const CloseWindowIntent(),
+        ShortcutActivatorType.moveUp.shortcutActivator:
+            const MoveUpTodoIntent(),
+        ShortcutActivatorType.moveDown.shortcutActivator:
+            const MoveDownTodoIntent(),
+        ShortcutActivatorType.deleteTodo.shortcutActivator:
+            const DeleteTodoIntent(),
+      },
+      child: Actions(
+        actions: {
+          NewTodoIntent: ref.read(newTodoActionProvider),
+          PinWindowIntent: ref.read(pinWindowActionProvider),
+          CloseWindowIntent: ref.read(closeWindowActionProvider),
+        },
         child: child,
       ),
     );
@@ -162,7 +86,6 @@ class _PlatformMenuBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final channel = ref.watch(methodChannelProvider);
-    final shortcutActionMap = ref.watch(_shorcutActionMapProvider);
     return PlatformMenuBar(
       menus: [
         PlatformMenu(
@@ -212,21 +135,34 @@ class _PlatformMenuBar extends ConsumerWidget {
                 PlatformMenuItem(
                   label: ShortcutActivatorType.newTodo.label,
                   shortcut: ShortcutActivatorType.newTodo.shortcutActivator,
-                  onSelected: shortcutActionMap[ShortcutActivatorType.newTodo],
+                  onSelected: () {
+                    Actions.maybeInvoke<NewTodoIntent>(
+                      context,
+                      const NewTodoIntent(),
+                    );
+                  },
                 ),
                 // フォーカス中のTODOをチェックする
                 PlatformMenuItem(
                   label: ShortcutActivatorType.toggleDone.label,
                   shortcut: ShortcutActivatorType.toggleDone.shortcutActivator,
-                  onSelected:
-                      shortcutActionMap[ShortcutActivatorType.toggleDone],
+                  onSelected: () {
+                    Actions.maybeInvoke<ToggleTodoDoneIntent>(
+                      context,
+                      const ToggleTodoDoneIntent(),
+                    );
+                  },
                 ),
                 // Todoを削除
                 PlatformMenuItem(
                   label: ShortcutActivatorType.deleteTodo.label,
                   shortcut: ShortcutActivatorType.deleteTodo.shortcutActivator,
-                  onSelected:
-                      shortcutActionMap[ShortcutActivatorType.deleteTodo],
+                  onSelected: () {
+                    Actions.maybeInvoke<DeleteTodoIntent>(
+                      context,
+                      const DeleteTodoIntent(),
+                    );
+                  },
                 ),
               ],
             ),
@@ -236,13 +172,21 @@ class _PlatformMenuBar extends ConsumerWidget {
                 PlatformMenuItem(
                   label: ShortcutActivatorType.moveUp.label,
                   shortcut: ShortcutActivatorType.moveUp.shortcutActivator,
-                  onSelected: shortcutActionMap[ShortcutActivatorType.moveUp],
+                  onSelected: () => Actions.maybeInvoke<MoveUpTodoIntent>(
+                    context,
+                    const MoveUpTodoIntent(),
+                  ),
                 ),
                 // 下へ移動
                 PlatformMenuItem(
                   label: ShortcutActivatorType.moveDown.label,
                   shortcut: ShortcutActivatorType.moveDown.shortcutActivator,
-                  onSelected: shortcutActionMap[ShortcutActivatorType.moveDown],
+                  onSelected: () {
+                    Actions.maybeInvoke<MoveDownTodoIntent>(
+                      context,
+                      const MoveDownTodoIntent(),
+                    );
+                  },
                 ),
               ],
             ),
@@ -257,8 +201,12 @@ class _PlatformMenuBar extends ConsumerWidget {
               members: [
                 PlatformMenuItem(
                   label: ShortcutActivatorType.pinWindow.label,
-                  onSelected:
-                      shortcutActionMap[ShortcutActivatorType.pinWindow],
+                  onSelected: () {
+                    Actions.maybeInvoke<PinWindowIntent>(
+                      context,
+                      const PinWindowIntent(),
+                    );
+                  },
                   shortcut: ShortcutActivatorType.pinWindow.shortcutActivator,
                 ),
               ],

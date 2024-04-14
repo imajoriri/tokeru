@@ -8,13 +8,13 @@ class _MemoScreen extends HookConsumerWidget {
     final focusNode = useFocusNode();
     final initValue = useState(false);
     final controller =
-        useMarkdownTextEditingController(text: memo.valueOrNull?.deltaJson);
+        useMarkdownTextEditingController(text: memo.valueOrNull?.content);
 
     ref.listen(memoControllerProvider, (previous, next) {
       // 初回のみmemoの値をセットする
       if (next.hasValue && !initValue.value) {
         final memo = next.valueOrNull!;
-        controller.text = memo.deltaJson;
+        controller.text = memo.content;
         initValue.value = true;
       }
     });
@@ -31,7 +31,7 @@ class _MemoScreen extends HookConsumerWidget {
         ),
         maxLines: null,
         onChanged: (text) {
-          ref.read(memoControllerProvider.notifier).updateDeltaJson(text);
+          ref.read(memoControllerProvider.notifier).updateContent(text);
         },
       ),
     );

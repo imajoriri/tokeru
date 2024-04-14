@@ -94,46 +94,7 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
             child: TodoListItem(
               todo: todo,
               focusNode: ref.watch(todoFocusControllerProvider)[index],
-              onChanged: (value) {
-                ref
-                    .read(todoControllerProvider.notifier)
-                    .updateTodoTitle(cartId: todo.id, title: value);
-              },
-              onChecked: (value) async {
-                await ref
-                    .read(todoControllerProvider.notifier)
-                    .updateIsDone(todoId: todo.id, isDone: value!);
-                ref
-                    .read(todoControllerProvider.notifier)
-                    .deleteDoneWithDebounce();
-              },
-              onAdd: () async {
-                await ref.read(todoControllerProvider.notifier).add(index + 1);
-                await ref
-                    .read(todoControllerProvider.notifier)
-                    .updateCurrentOrder();
-                ref.read(todoFocusControllerProvider)[index + 1].requestFocus();
-              },
-              // インデント機能は一旦オミット
-              // onAddIndent: () {
-              // ref
-              //     .read(todoControllerProvider.notifier)
-              //     .addIndent(todos[index]);
-              // },
-              // onMinusIndent: () {
-              //   ref
-              //       .read(todoControllerProvider.notifier)
-              //       .minusIndent(todos[index]);
-              // },
-              onDelete: () async {
-                await ref.read(todoControllerProvider.notifier).delete(todo);
-                // 最後の１つの場合、previousFoucsすると他のFocusに移動しちゃうため
-                if (todoLength != 1) {
-                  ref
-                      .read(todoFocusControllerProvider.notifier)
-                      .requestFocus(index - 1);
-                }
-              },
+              controller: ref.watch(todoTextEditingControllerProvider)[index],
             ),
           ),
           // ドラッグ&ドロップのアイコン
@@ -167,54 +128,48 @@ class TodoListItem extends HookConsumerWidget {
   const TodoListItem({
     super.key,
     required this.todo,
+    required this.controller,
     required this.focusNode,
-    this.onTapTextField,
-    this.onChecked,
-    this.onChanged,
-    this.onAdd,
-    this.onAddIndent,
-    this.onMinusIndent,
-    this.onDelete,
-    this.contentPadding,
   });
 
   final Todo todo;
 
+  final TextEditingController controller;
+
   final FocusNode focusNode;
-
-  /// チェックされた時
-  final void Function(bool?)? onChecked;
-
-  /// TextFieldがtapされた時
-  final void Function()? onTapTextField;
-
-  /// TextFieldのcontentPadding
-  final EdgeInsets? contentPadding;
-
-  /// checkboxの状態が変更されたときに呼ばれる
-  ///
-  /// [debounceDuration]の時間が経過するまで呼ばれない
-  final void Function(String)? onChanged;
-
-  /// 追加ボタンが押されたときに呼ばれる
-  final void Function()? onAdd;
-
-  /// インデント追加
-  final void Function()? onAddIndent;
-
-  /// インデント削除
-  final void Function()? onMinusIndent;
-
-  /// Todo削除
-  final void Function()? onDelete;
 
   /// debouce用のDuration
   static const debounceDuration = Duration(milliseconds: 400);
 
+  Future<void> _deleteTodo(WidgetRef ref) async {
+    final currentFocusIndex =
+        ref.read(todoFocusControllerProvider.notifier).getFocusIndex();
+    await ref.read(todoControllerProvider.notifier).delete(todo);
+    ref
+        .read(todoFocusControllerProvider.notifier)
+        .requestFocus(currentFocusIndex - 1);
+  }
+
+  /// [Todo]のタイトルを更新する
+  void _updateTodoTitle(WidgetRef ref, String title) {
+    ref
+        .read(todoControllerProvider.notifier)
+        .updateTodoTitle(cartId: todo.id, title: title);
+  }
+
+  /// [Todo]のチェックを切り替える
+  void _toggleTodoDone(WidgetRef ref) {
+    ref
+        .read(todoControllerProvider.notifier)
+        .updateIsDone(todoId: todo.id, isDone: !todo.isDone);
+    ref.read(todoControllerProvider.notifier).filterDoneIsTrueWithDebounce();
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final controller = useTextEditingController(text: todo.title);
     final hasFocus = useState(focusNode.hasFocus);
+    // 日本語入力などでの変換中は無視するためのフラグ
+    final isValid = useState(false);
 
     useEffect(
       () {
@@ -239,7 +194,7 @@ class TodoListItem extends HookConsumerWidget {
           }
 
           debounce = Timer(debounceDuration, () {
-            onChanged?.call(controller.text);
+            _updateTodoTitle(ref, controller.text);
           });
         });
 
@@ -249,103 +204,103 @@ class TodoListItem extends HookConsumerWidget {
       },
       [controller],
     );
-    return Stack(
-      fit: StackFit.passthrough,
-      children: [
-        // TextFieldを囲っているContainerに色を付けると
-        // リビルド時にfocusが外れてしまうため、stackでContainerを分けている
-        Positioned(
-          left: 0,
-          right: 0,
-          top: 0,
-          bottom: 0,
-          child: Container(
-            color: hasFocus.value
-                ? context.colorScheme.primary.withOpacity(0.1)
-                : Colors.transparent,
+
+    return Actions(
+      actions: {
+        FocusUpIntent: ref.watch(todoFocusUpActionProvider),
+        FocusDownIntent: ref.watch(todoFocusDownActionProvider),
+        ToggleTodoDoneIntent: ref.watch(toggleTodoDoneActionProvider),
+        MoveUpTodoIntent: ref.watch(moveUpTodoActionProvider),
+        MoveDownTodoIntent: ref.watch(moveDownTodoActionProvider),
+        DeleteTodoIntent: ref.watch(deleteTodoActionProvider),
+        if (!isValid.value)
+          NewTodoBelowIntent: ref.watch(newTodoBelowActionProvider),
+      },
+      child: Stack(
+        fit: StackFit.passthrough,
+        children: [
+          // TextFieldを囲っているContainerに色を付けると
+          // リビルド時にfocusが外れてしまうため、stackでContainerを分けている
+          Positioned(
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            child: Container(
+              color: hasFocus.value
+                  ? context.colorScheme.primary.withOpacity(0.1)
+                  : Colors.transparent,
+            ),
           ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(
-            bottom: 4,
-            top: 4,
-            // indexに応じて左にpaddingを追加する
-            left: 20 * todo.indentLevel.toDouble(),
-          ),
-          child: Row(
-            children: [
-              Checkbox(
-                value: todo.isDone,
-                onChanged: (val) {
-                  onChecked?.call(val);
-                },
-                focusNode: useFocusNode(
-                  skipTraversal: true,
-                ),
-              ),
-              Expanded(
-                child: Focus(
-                  skipTraversal: true,
-                  onKey: (node, event) {
-                    // 日本語入力などでの変換中は無視する
-                    if (controller.value.composing.isValid) {
-                      return KeyEventResult.ignored;
-                    }
-                    if (event is RawKeyDownEvent) {
-                      if (event.logicalKey == LogicalKeyboardKey.tab &&
-                          onAddIndent != null) {
-                        onAddIndent?.call();
-                        return KeyEventResult.handled;
-                      }
-                      // バックスペースキー & カーソルが先頭の場合
-                      if (event.logicalKey == LogicalKeyboardKey.backspace &&
-                          controller.selection.baseOffset == 0 &&
-                          controller.selection.extentOffset == 0) {
-                        // indentが0の場合は削除する
-                        if (todo.indentLevel == 0) {
-                          onDelete?.call();
-                          return KeyEventResult.handled;
-                        }
-                        // indentが1以上の場合はインデントをマイナスする
-                        onMinusIndent?.call();
-                        return KeyEventResult.handled;
-                      }
-                    }
-                    return KeyEventResult.ignored;
+          Padding(
+            padding: EdgeInsets.only(
+              bottom: 4,
+              top: 4,
+              // indexに応じて左にpaddingを追加する
+              left: 20 * todo.indentLevel.toDouble(),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Checkbox(
+                  value: todo.isDone,
+                  onChanged: (val) {
+                    _toggleTodoDone(ref);
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 4),
-                    child: TextField(
-                      controller: controller,
-                      focusNode: focusNode,
-                      style: context.textTheme.bodyLarge!.copyWith(
-                        color: todo.isDone ? Colors.grey : Colors.black,
-                      ),
-                      maxLines: null,
-                      // maxLinesがnullでもEnterで `onSubmitted`を検知するために
-                      // `TextInputAction.done`である必要がある。
-                      textInputAction: TextInputAction.done,
-                      onSubmitted: (value) {
-                        onAdd?.call();
-                      },
-                      onTap: () {
-                        onTapTextField?.call();
-                      },
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
+                  focusNode: useFocusNode(
+                    skipTraversal: true,
+                  ),
+                ),
+                Expanded(
+                  child: Focus(
+                    skipTraversal: true,
+                    onKey: (node, event) {
+                      isValid.value = controller.value.composing.isValid;
+                      // 日本語入力などでの変換中は無視する
+                      if (controller.value.composing.isValid) {
+                        return KeyEventResult.ignored;
+                      }
+                      if (event is RawKeyDownEvent) {
+                        // バックスペースキー & カーソルが先頭の場合
+                        if (event.logicalKey == LogicalKeyboardKey.backspace &&
+                            controller.selection.baseOffset == 0 &&
+                            controller.selection.extentOffset == 0) {
+                          // indentが0の場合は削除する
+                          if (todo.indentLevel == 0) {
+                            _deleteTodo(ref);
+                            return KeyEventResult.handled;
+                          }
+                        }
+                      }
+                      return KeyEventResult.ignored;
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: 4,
                         // チェックボックスとの高さを調整するためのpadding
-                        contentPadding: contentPadding,
-                        hintText: 'Write a todo...',
-                        isCollapsed: true,
+                        top: 6,
+                      ),
+                      child: TextField(
+                        controller: controller,
+                        focusNode: focusNode,
+                        style: context.textTheme.bodyLarge!.copyWith(
+                          color: todo.isDone ? Colors.grey : Colors.black,
+                        ),
+                        maxLines: null,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Write a Todo or Memo(Shift + Enter)...',
+                          isCollapsed: true,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
