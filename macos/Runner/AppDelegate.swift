@@ -8,18 +8,17 @@ class AppDelegate: FlutterAppDelegate {
     return false
   }
 
-  /// docのアプリアイコンを押された時に表示する
-  override func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
-    for window in sender.windows {
-      window.makeKeyAndOrderFront(nil)
-    }
-    return true
-  }
-
   // accessoryにすることで、menu barが表示されない
   override func applicationDidFinishLaunching(_ notification: Notification) {
     // menu barあった方がショートカットキーを学習させられるので一旦コメントアウトする
     // 思い出しやすいようにコード自体は残す
     // NSApp.setActivationPolicy(.accessory)
+  }
+
+  // Dockやアプリケーションスイッチャーで選択された時にウィンドウを表示する
+  override func applicationDidBecomeActive(_ notification: Notification) {
+    for window in NSApp.windows {
+      window.makeKeyAndOrderFront(nil)
+    }
   }
 }
