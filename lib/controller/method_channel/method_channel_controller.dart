@@ -22,5 +22,8 @@ enum AppMethodChannel {
 
   /// ウィンドウが右にあれば左端に、左にあれば右端に移動する
   switchHorizen,
+
+  /// 設定画面を開く
+  openSetting,
   ;
 }

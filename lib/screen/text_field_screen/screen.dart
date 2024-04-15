@@ -188,6 +188,15 @@ class _Header extends ConsumerWidget {
               IconButton(
                 focusNode: FocusNode(skipTraversal: true),
                 onPressed: () {
+                  channel.invokeMethod(
+                    AppMethodChannel.openSetting.name,
+                  );
+                },
+                icon: const Icon(Icons.settings),
+              ),
+              IconButton(
+                focusNode: FocusNode(skipTraversal: true),
+                onPressed: () {
                   ref.read(bookmarkControllerProvider.notifier).toggle();
                   if (!ref.read(bookmarkControllerProvider)) {
                     channel.invokeMethod(
