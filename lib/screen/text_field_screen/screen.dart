@@ -14,6 +14,7 @@ import 'package:quick_flutter/controller/todo_text_field_focus/todo_text_field_f
 import 'package:quick_flutter/model/analytics_event/analytics_event_name.dart';
 import 'package:quick_flutter/model/todo/todo.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
+import 'package:quick_flutter/systems/flavor.dart';
 import 'package:quick_flutter/widget/actions/delete_todo/delete_todo_action.dart';
 import 'package:quick_flutter/widget/actions/focus_down/focus_down_action.dart';
 import 'package:quick_flutter/widget/actions/focus_up/focus_up_action.dart';
@@ -36,7 +37,8 @@ part 'todo_text_field.dart';
 class BookmarkController extends _$BookmarkController {
   @override
   bool build() {
-    return false;
+    const flavorEnv = String.fromEnvironment('flavor');
+    return flavorEnv == Flavor.prod.name ? false : true;
   }
 
   void toggle() {
