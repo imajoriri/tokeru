@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:quick_flutter/controller/memo/memo_controller.dart';
 import 'package:quick_flutter/controller/method_channel/method_channel_controller.dart';
 import 'package:quick_flutter/controller/todo/todo_controller.dart';
@@ -26,7 +27,7 @@ import 'package:quick_flutter/widget/markdown_text_editing_controller.dart';
 import 'package:quick_flutter/widget/markdown_text_field.dart';
 import 'package:quick_flutter/widget/shortcutkey.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:super_hot_key/super_hot_key.dart';
+// import 'package:super_hot_key/super_hot_key.dart';
 
 part 'screen.g.dart';
 part 'todo_list.dart';
@@ -56,13 +57,14 @@ class TextFieldScreen extends HookConsumerWidget {
     final channel = ref.watch(methodChannelProvider);
     final bookmark = ref.watch(bookmarkControllerProvider);
 
-    HotKey.create(
-      definition: HotKeyDefinition(
-        key: PhysicalKeyboardKey.comma,
-        shift: true,
-        meta: true,
-      ),
-      onPressed: () {
+    HotKey hotKey = HotKey(
+      key: PhysicalKeyboardKey.comma,
+      modifiers: [HotKeyModifier.meta, HotKeyModifier.shift],
+    );
+    hotKeyManager.register(
+      hotKey,
+      keyDownHandler: (hotKey) {
+        print('onKeyDown+${hotKey.toJson()}');
         final channel = ref.read(methodChannelProvider);
         channel.invokeMethod(AppMethodChannel.openOrClosePanel.name);
       },

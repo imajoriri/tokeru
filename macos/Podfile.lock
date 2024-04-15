@@ -173,6 +173,10 @@ PODS:
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
   - GTMSessionFetcher/Core (3.3.2)
+  - HotKey (0.2.0)
+  - hotkey_manager_macos (0.0.1):
+    - FlutterMacOS
+    - HotKey
   - irondash_engine_context (0.0.1):
     - FlutterMacOS
   - leveldb-library (1.22.4)
@@ -199,6 +203,7 @@ DEPENDENCIES:
   - firebase_crashlytics (from `Flutter/ephemeral/.symlinks/plugins/firebase_crashlytics/macos`)
   - FirebaseFirestore (from `https://github.com/invertase/firestore-ios-sdk-frameworks.git`, tag `10.22.0`)
   - FlutterMacOS (from `Flutter/ephemeral`)
+  - hotkey_manager_macos (from `Flutter/ephemeral/.symlinks/plugins/hotkey_manager_macos/macos`)
   - irondash_engine_context (from `Flutter/ephemeral/.symlinks/plugins/irondash_engine_context/macos`)
   - super_native_extensions (from `Flutter/ephemeral/.symlinks/plugins/super_native_extensions/macos`)
   - url_launcher_macos (from `Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos`)
@@ -226,6 +231,7 @@ SPEC REPOS:
     - GoogleDataTransport
     - GoogleUtilities
     - GTMSessionFetcher
+    - HotKey
     - leveldb-library
     - nanopb
     - PromisesObjC
@@ -251,6 +257,8 @@ EXTERNAL SOURCES:
     :tag: 10.22.0
   FlutterMacOS:
     :path: Flutter/ephemeral
+  hotkey_manager_macos:
+    :path: Flutter/ephemeral/.symlinks/plugins/hotkey_manager_macos/macos
   irondash_engine_context:
     :path: Flutter/ephemeral/.symlinks/plugins/irondash_engine_context/macos
   super_native_extensions:
@@ -294,6 +302,8 @@ SPEC CHECKSUMS:
   GoogleDataTransport: 6c09b596d841063d76d4288cc2d2f42cc36e1e2a
   GoogleUtilities: d053d902a8edaa9904e1bd00c37535385b8ed152
   GTMSessionFetcher: 0e876eea9782ec6462e91ab872711c357322c94f
+  HotKey: e96d8a2ddbf4591131e2bb3f54e69554d90cdca6
+  hotkey_manager_macos: 1e2edb0c7ae4fe67108af44a9d3445de41404160
   irondash_engine_context: da62996ee25616d2f01bbeb85dc115d813359478
   leveldb-library: 06a69cc7582d64b29424a63e085e683cc188230a
   nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5
