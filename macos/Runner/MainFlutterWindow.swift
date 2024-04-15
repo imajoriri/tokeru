@@ -100,7 +100,6 @@ class MainFlutterWindow: NSPanel {
     // 設定画面が開いたままだと、再度このウィンドウを開いたときに設定画面がまた開いてしまうため
     // closeとnilを代入する
     if settingsView != nil {
-      settingsView.close()
       settingsView = nil
     }
     super.close()
@@ -174,7 +173,7 @@ class MainFlutterWindow: NSPanel {
     if(settingsView == nil) {
       settingsView = SettingsView()
     }
-    settingsView!.orderFront(nil)
+    settingsView?.orderFront(nil)
   }
 
   /// ウィンドウが右にあれば左端に、左にあれば右端に移動する
