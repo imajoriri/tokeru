@@ -7,6 +7,7 @@ import Firebase
 class MainFlutterWindow: NSPanel {
   var channel: FlutterMethodChannel!
   lazy var flutterEngine = FlutterEngine(name: "my flutter engine", project: nil)
+  var settingsView : SettingsView!
 
   /// ウィンドウのサイズと位置を設定する
   func setDefaultWindow() {
@@ -67,12 +68,17 @@ class MainFlutterWindow: NSPanel {
 
     channel = FlutterMethodChannel(name: "quick.flutter/panel", binaryMessenger: flutterViewController.engine.binaryMessenger)
     setHandler(channel: channel)
+
     super.awakeFromNib()
   }
 
   private func setupNotification() {
     NotificationCenter.default.addObserver(self, selector: #selector(handleDidBecomeKeyNotification(_:)), name: NSWindow.didBecomeKeyNotification, object: self)
     NotificationCenter.default.addObserver(self, selector: #selector(handleDidResignKeyNotification(_:)), name: NSWindow.didResignKeyNotification, object: self)
+  }
+
+  deinit {
+    NotificationCenter.default.removeObserver(self)
   }
 
   // ウィンドウがキーウィンドウになった時の処理を行う
@@ -91,13 +97,15 @@ class MainFlutterWindow: NSPanel {
   }
 
   override func close() {
+    // 設定画面が開いたままだと、再度このウィンドウを開いたときに設定画面がまた開いてしまうため
+    // closeとnilを代入する
+    if settingsView != nil {
+      settingsView.close()
+      settingsView = nil
+    }
     super.close()
     // hideによって、Tokeruを閉じた時に下のウィンドウに再フォーカスされる
     NSApp.hide(self)
-  }
-
-  deinit {
-    NotificationCenter.default.removeObserver(self)
   }
 
   var frameWidth: CGFloat {
@@ -163,10 +171,10 @@ class MainFlutterWindow: NSPanel {
 
   /// 設定画面を開く
   func openSetting() {
-    print("open settings")
-    SettingsView().makeKeyAndOrderFront(nil)
-//    self.makeKeyAndOrderFront(SettingsView())
-//    NSApp.activate(ignoringOtherApps: false)
+    if(settingsView == nil) {
+      settingsView = SettingsView()
+    }
+    settingsView!.orderFront(nil)
   }
 
   /// ウィンドウが右にあれば左端に、左にあれば右端に移動する
@@ -183,17 +191,19 @@ class MainFlutterWindow: NSPanel {
   }
 
   /// ウィンドウの表示状態を切り替えます。
+  ///
   /// ウィンドウが表示されている場合は閉じ、表示されていない場合は開きます。
   func openOrCloseWindow() {
     if self.isVisible {
       self.close()
     } else {
       self.makeKeyAndOrderFront(nil)
-      NSApplication.shared.activate(ignoringOtherApps: true)
+      NSApp.activate(ignoringOtherApps: true)
     }
   }
 
   /// ウィンドウをcloseする
+  ///
   /// ウィンドウが表示されている場合は閉じ、表示されていない場合は開きます。
   func closeWindow() {
     self.close()

@@ -55,6 +55,14 @@ class SettingsView: NSPanel {
 //    setHandler(channel: channel)
     super.awakeFromNib()
   }
+
+  override var canBecomeKey: Bool {
+      return false
+    }
+
+    override var canBecomeMain: Bool {
+      return false
+    }
 }
 
 //struct SettingsView: View {
