@@ -45,6 +45,20 @@ void main() async {
   );
 }
 
+@pragma('vm:entry-point')
+void settings() {
+  print("settings entry point");
+  runApp(
+    AppMaterialApp(
+      home: ProviderScope(
+        child: Container(
+          child: Text('new panel'),
+        ),
+      ),
+    ),
+  );
+}
+
 /// [CallbackShortcuts]の中でRefを使うためにラップしたWidgetクラス
 class _CallbackShortcuts extends ConsumerWidget {
   const _CallbackShortcuts({required this.child});
