@@ -233,22 +233,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.0"
-  device_info_plus:
-    dependency: transitive
-    description:
-      name: device_info_plus
-      sha256: "77f757b789ff68e4eaf9c56d1752309bd9f7ad557cb105b938a7f8eb89e59110"
-      url: "https://pub.dev"
-    source: hosted
-    version: "9.1.2"
-  device_info_plus_platform_interface:
-    dependency: transitive
-    description:
-      name: device_info_plus_platform_interface
-      sha256: d3b01d5868b50ae571cd1dc6e502fc94d956b665756180f7b16ead09e836fd64
-      url: "https://pub.dev"
-    source: hosted
-    version: "7.0.0"
   fake_async:
     dependency: transitive
     description:
@@ -257,14 +241,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.1"
-  ffi:
-    dependency: transitive
-    description:
-      name: ffi
-      sha256: "7bf0adc28a23d395f19f3f1eb21dd7cfd1dd9f8e1c50051c069122e6853bc878"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.0"
   file:
     dependency: transitive
     description:
@@ -541,22 +517,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
-  irondash_engine_context:
-    dependency: transitive
-    description:
-      name: irondash_engine_context
-      sha256: "4f5e2629296430cce08cdff42e47cef07b8f74a64fdbdfb0525d147bc1a969a2"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.5.2"
-  irondash_message_channel:
-    dependency: transitive
-    description:
-      name: irondash_message_channel
-      sha256: dd581214215dca054bd9873209d690ec3609288c28774cb509dbd86b21180cf8
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.6.0"
   js:
     dependency: transitive
     description:
@@ -661,14 +621,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.8.3"
-  pixel_snap:
-    dependency: transitive
-    description:
-      name: pixel_snap
-      sha256: "677410ea37b07cd37ecb6d5e6c0d8d7615a7cf3bd92ba406fd1ac57e937d1fb0"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.5"
   plugin_platform_interface:
     dependency: transitive
     description:
@@ -826,30 +778,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
-  super_hot_key:
-    dependency: "direct main"
-    description:
-      name: super_hot_key
-      sha256: "710a72bb99eaca79032a0d715aa8e8040d420b645a436b0805c9e2c355b0abbe"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.8.5"
-  super_keyboard_layout:
-    dependency: transitive
-    description:
-      name: super_keyboard_layout
-      sha256: a7e54a31b3c5490498a20cd5620faee25c9ee1689d99ba4151b2991b37aaf917
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.8.5"
-  super_native_extensions:
-    dependency: transitive
-    description:
-      name: super_native_extensions
-      sha256: f96db6b137a0b135e43034289bb55ca6447b65225076036e81f97ebb6381ffeb
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.8.5"
   term_glyph:
     dependency: transitive
     description:
@@ -994,22 +922,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.0"
-  win32:
-    dependency: transitive
-    description:
-      name: win32
-      sha256: "464f5674532865248444b4c3daca12bd9bf2d7c47f759ce2617986e7229494a8"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.2.0"
-  win32_registry:
-    dependency: transitive
-    description:
-      name: win32_registry
-      sha256: "41fd8a189940d8696b1b810efb9abcf60827b6cbfab90b0c43e8439e3a39d85a"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.2"
   yaml:
     dependency: transitive
     description:
