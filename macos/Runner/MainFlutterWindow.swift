@@ -151,11 +151,22 @@ class MainFlutterWindow: NSPanel {
       case "windowToRight":
         self.windowToRight()
         return
+      case "openSetting":
+        self.openSetting()
+        return
       default:
         result(FlutterMethodNotImplemented)
         return
       }
     }
+  }
+
+  /// 設定画面を開く
+  func openSetting() {
+    print("open settings")
+    SettingsView().makeKeyAndOrderFront(nil)
+//    self.makeKeyAndOrderFront(SettingsView())
+//    NSApp.activate(ignoringOtherApps: false)
   }
 
   /// ウィンドウが右にあれば左端に、左にあれば右端に移動する
