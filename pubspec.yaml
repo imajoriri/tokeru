@@ -22,7 +22,6 @@ dependencies:
   collection: ^1.17.0
   intl: ^0.18.1
   desktop_window: ^0.4.0
-  super_hot_key: ^0.8.5
   logger: ^2.0.2+1
   # firebase
   firebase_auth: ^4.17.4
