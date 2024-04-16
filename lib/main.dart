@@ -2,15 +2,23 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:logger/logger.dart';
+import 'package:quick_flutter/controller/bookmark/bookmark_controller.dart';
+import 'package:quick_flutter/controller/hot_key/hot_key_controller.dart';
 import 'package:quick_flutter/controller/method_channel/method_channel_controller.dart';
+import 'package:quick_flutter/controller/screen_type/screen_type_controller.dart';
+import 'package:quick_flutter/controller/todo/todo_controller.dart';
+import 'package:quick_flutter/controller/todo_focus/todo_focus_controller.dart';
 import 'package:quick_flutter/firebase_options.dart';
 import 'package:quick_flutter/model/analytics_event/analytics_event_name.dart';
-import 'package:quick_flutter/screen/text_field_screen/screen.dart';
+import 'package:quick_flutter/screen/settings/settings_screen.dart';
+import 'package:quick_flutter/screen/todo_screen/todo_screen.dart';
 import 'package:quick_flutter/systems/color.dart';
 import 'package:quick_flutter/controller/url/url_controller.dart';
+import 'package:quick_flutter/systems/context_extension.dart';
 import 'package:quick_flutter/widget/actions/close_window/close_window_action.dart';
 import 'package:quick_flutter/widget/actions/delete_todo/delete_todo_action.dart';
 import 'package:quick_flutter/widget/actions/focus_down/focus_down_action.dart';
@@ -37,7 +45,54 @@ void main() async {
       child: AppMaterialApp(
         home: _CallbackShortcuts(
           child: _PlatformMenuBar(
-            child: TextFieldScreen(),
+            child: Consumer(builder: (context, ref, child) {
+              final largeWindowKey = GlobalKey();
+              final channel = ref.watch(methodChannelProvider);
+              final bookmark = ref.watch(bookmarkControllerProvider);
+              ref.watch(hotKeyControllerProvider);
+
+              channel.setMethodCallHandler((call) async {
+                switch (call.method) {
+                  case 'inactive':
+                    if (!bookmark) {
+                      channel.invokeMethod(
+                        AppMethodChannel.closeWindow.name,
+                      );
+                    }
+                    break;
+                }
+                return null;
+              });
+
+              return Material(
+                child: SingleChildScrollView(
+                  child: NotificationListener<SizeChangedLayoutNotification>(
+                    onNotification: (notification) {
+                      // サイズが変更されたことを検知した時の処理
+                      ref.read(methodChannelProvider).invokeMethod(
+                        AppMethodChannel.setFrameSize.name,
+                        {"height": largeWindowKey.currentContext?.size?.height},
+                      );
+                      return true;
+                    },
+                    child: SizeChangedLayoutNotifier(
+                      child: _LargeWindow(
+                        key: largeWindowKey,
+                        onBuildCallback: () {
+                          ref.read(methodChannelProvider).invokeMethod(
+                            AppMethodChannel.setFrameSize.name,
+                            {
+                              "height":
+                                  largeWindowKey.currentContext?.size?.height,
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }),
           ),
         ),
       ),
@@ -45,18 +100,116 @@ void main() async {
   );
 }
 
-@pragma('vm:entry-point')
-void settings() {
-  print("settings entry point");
-  runApp(
-    AppMaterialApp(
-      home: ProviderScope(
-        child: Container(
-          child: Text('new panel'),
-        ),
+class _LargeWindow extends HookConsumerWidget {
+  const _LargeWindow({Key? key, this.onBuildCallback}) : super(key: key);
+
+  /// ビルド後に呼ばれるコールバック
+  final Function? onBuildCallback;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final screenType = ref.watch(screenTypeControllerProvider);
+    useEffect(
+      () {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          onBuildCallback?.call();
+        });
+        return null;
+      },
+      const [],
+    );
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 0, left: 4, right: 4),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _Header(),
+          switch (screenType) {
+            ScreenType.todo => const TodoScreen(),
+            ScreenType.settings => SettingsScreen(),
+          },
+        ],
       ),
-    ),
-  );
+    );
+  }
+}
+
+class _Header extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final channel = ref.watch(methodChannelProvider);
+    final bookmark = ref.watch(bookmarkControllerProvider);
+    return Row(
+      children: [
+        Expanded(
+          flex: 1,
+          child: Row(
+            children: [
+              IconButton(
+                focusNode: FocusNode(skipTraversal: true),
+                tooltip: ShortcutActivatorType.closeWindow.longLabel,
+                onPressed: () {
+                  channel.invokeMethod(
+                    AppMethodChannel.openOrClosePanel.name,
+                  );
+                },
+                icon: const Icon(Icons.close),
+              ),
+            ],
+          ),
+        ),
+
+        // 右がわのアイコン
+        Expanded(
+          flex: 1,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              IconButton(
+                focusNode: FocusNode(skipTraversal: true),
+                onPressed: () {
+                  ref.read(screenTypeControllerProvider.notifier).screenType =
+                      ScreenType.settings;
+                },
+                icon: const Icon(Icons.keyboard_command_key_sharp),
+              ),
+              IconButton(
+                focusNode: FocusNode(skipTraversal: true),
+                onPressed: () {
+                  ref.read(bookmarkControllerProvider.notifier).toggle();
+                },
+                tooltip: ShortcutActivatorType.pinWindow.longLabel,
+                icon: Icon(
+                  bookmark ? Icons.push_pin : Icons.push_pin_outlined,
+                ),
+                color: bookmark
+                    ? context.colorScheme.primary
+                    : context.colorScheme.secondary,
+              ),
+              IconButton(
+                focusNode: FocusNode(skipTraversal: true),
+                tooltip: ShortcutActivatorType.newTodo.longLabel,
+                onPressed: () async {
+                  await ref.read(todoControllerProvider.notifier).add(0);
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    ref
+                        .read(todoFocusControllerProvider.notifier)
+                        .requestFocus(0);
+                  });
+
+                  await FirebaseAnalytics.instance.logEvent(
+                    name: AnalyticsEventName.addTodo.name,
+                  );
+                },
+                icon: const Icon(Icons.add_circle_outline),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 /// [CallbackShortcuts]の中でRefを使うためにラップしたWidgetクラス

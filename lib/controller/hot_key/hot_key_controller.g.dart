@@ -6,7 +6,7 @@ part of 'hot_key_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$hotKeyControllerHash() => r'7072d5d8238210f41f73f29753de596b1aa1c494';
+String _$hotKeyControllerHash() => r'512a0771ccd3428f1baf16751f272cd525930ae1';
 
 /// アプリを起動するためのホットキーを登録するController
 ///
