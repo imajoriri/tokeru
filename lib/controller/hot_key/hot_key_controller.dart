@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:quick_flutter/controller/method_channel/method_channel_controller.dart';
+import 'package:quick_flutter/repository/hotkey/hotkey_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'hot_key_controller.g.dart';
@@ -20,16 +21,25 @@ class HotKeyState with _$HotKeyState {
 class HotKeyController extends _$HotKeyController {
   @override
   Future<HotKeyState> build() async {
+    final (:keyId, :modifiers) =
+        await ref.watch(hotkeyRepositoryProvider).fetchHotkey();
     final hotKey = HotKey(
-      key: LogicalKeyboardKey.comma,
-      modifiers: [HotKeyModifier.meta, HotKeyModifier.shift],
+      key: keyId != null ? LogicalKeyboardKey(keyId) : LogicalKeyboardKey.comma,
+      modifiers: modifiers
+              ?.map(
+                (e) =>
+                    _convertLogicalKeyboardKeyToModifier(LogicalKeyboardKey(e)),
+              )
+              .toList() ??
+          [HotKeyModifier.meta, HotKeyModifier.shift],
     );
+
     hotKeyManager.register(
       hotKey,
       keyDownHandler: _keyDownHandler,
     );
     return HotKeyState(
-      key: LogicalKeyboardKey.comma,
+      key: hotKey.logicalKey,
       modifiers: hotKey.modifiers
               ?.map(_convertModifierToLogicalKeyboardKey)
               .toList() ??
@@ -85,6 +95,10 @@ class HotKeyController extends _$HotKeyController {
       hotKey,
       keyDownHandler: _keyDownHandler,
     );
+    ref.read(hotkeyRepositoryProvider).updateHotkey(
+          key.keyId,
+          modifiers.map((e) => e.keyId).toList(),
+        );
     state = AsyncData(HotKeyState(key: key, modifiers: modifiers));
   }
 }
