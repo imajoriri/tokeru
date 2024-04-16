@@ -1,4 +1,4 @@
-part of 'screen.dart';
+part of 'todo_screen.dart';
 
 /// 新規Todoを追加するためのTextField
 class _TodoTextField extends HookConsumerWidget {
@@ -29,7 +29,9 @@ class _TodoTextField extends HookConsumerWidget {
     // 日本語入力などでの変換中は無視するためのフラグ
     var isValid = useState(false);
 
-    final controller = useTextEditingController();
+    final controller = useTextEditingController(
+      text: ref.read(memoControllerProvider).valueOrNull?.content,
+    );
     final focusNode = ref.watch(todoTextFieldFocusControllerProvider);
 
     useEffect(

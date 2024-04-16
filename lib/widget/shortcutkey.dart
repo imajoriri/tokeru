@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:quick_flutter/systems/keyboard_key_extension.dart';
 
 /// アプリ内のショートカットキーを定義するクラス
 ///
@@ -102,16 +103,16 @@ enum ShortcutActivatorType {
   String get shortcutLabel {
     List<String> fullLabels = [];
     if (shortcutActivator.alt) {
-      fullLabels.add(LogicalKeyboardKey.alt.keyLabel);
+      fullLabels.add(LogicalKeyboardKey.alt.shortcutLabel);
     }
     if (shortcutActivator.control) {
-      fullLabels.add('⌃');
+      fullLabels.add(LogicalKeyboardKey.alt.shortcutLabel);
     }
     if (shortcutActivator.meta) {
-      fullLabels.add('⌘');
+      fullLabels.add(LogicalKeyboardKey.meta.shortcutLabel);
     }
     if (shortcutActivator.shift) {
-      fullLabels.add('⇧');
+      fullLabels.add(LogicalKeyboardKey.alt.shortcutLabel);
     }
     fullLabels.add(shortcutActivator.trigger.keyLabel);
 

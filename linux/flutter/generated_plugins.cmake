@@ -4,8 +4,7 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   desktop_window
-  irondash_engine_context
-  super_native_extensions
+  hotkey_manager_linux
   url_launcher_linux
 )
 
