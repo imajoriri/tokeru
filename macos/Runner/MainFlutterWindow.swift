@@ -7,7 +7,6 @@ import Firebase
 class MainFlutterWindow: NSPanel {
   var channel: FlutterMethodChannel!
   lazy var flutterEngine = FlutterEngine(name: "my flutter engine", project: nil)
-  var settingsView : SettingsView!
 
   /// ウィンドウのサイズと位置を設定する
   func setDefaultWindow() {
@@ -97,11 +96,6 @@ class MainFlutterWindow: NSPanel {
   }
 
   override func close() {
-    // 設定画面が開いたままだと、再度このウィンドウを開いたときに設定画面がまた開いてしまうため
-    // closeとnilを代入する
-    if settingsView != nil {
-      settingsView = nil
-    }
     super.close()
     // hideによって、Tokeruを閉じた時に下のウィンドウに再フォーカスされる
     NSApp.hide(self)
@@ -158,22 +152,11 @@ class MainFlutterWindow: NSPanel {
       case "windowToRight":
         self.windowToRight()
         return
-      case "openSetting":
-        self.openSetting()
-        return
       default:
         result(FlutterMethodNotImplemented)
         return
       }
     }
-  }
-
-  /// 設定画面を開く
-  func openSetting() {
-    if(settingsView == nil) {
-      settingsView = SettingsView()
-    }
-    settingsView?.orderFront(nil)
   }
 
   /// ウィンドウが右にあれば左端に、左にあれば右端に移動する

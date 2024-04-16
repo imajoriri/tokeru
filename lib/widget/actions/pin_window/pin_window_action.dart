@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quick_flutter/screen/text_field_screen/screen.dart';
+import 'package:quick_flutter/controller/bookmark/bookmark_controller.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'pin_window_action.g.dart';
