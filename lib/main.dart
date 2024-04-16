@@ -45,54 +45,59 @@ void main() async {
       child: AppMaterialApp(
         home: _CallbackShortcuts(
           child: _PlatformMenuBar(
-            child: Consumer(builder: (context, ref, child) {
-              final largeWindowKey = GlobalKey();
-              final channel = ref.watch(methodChannelProvider);
-              final bookmark = ref.watch(bookmarkControllerProvider);
-              ref.watch(hotKeyControllerProvider);
+            child: Consumer(
+              builder: (context, ref, child) {
+                final largeWindowKey = GlobalKey();
+                final channel = ref.watch(methodChannelProvider);
+                final bookmark = ref.watch(bookmarkControllerProvider);
+                ref.watch(hotKeyControllerProvider);
 
-              channel.setMethodCallHandler((call) async {
-                switch (call.method) {
-                  case 'inactive':
-                    if (!bookmark) {
-                      channel.invokeMethod(
-                        AppMethodChannel.closeWindow.name,
-                      );
-                    }
-                    break;
-                }
-                return null;
-              });
+                channel.setMethodCallHandler((call) async {
+                  switch (call.method) {
+                    case 'inactive':
+                      if (!bookmark) {
+                        channel.invokeMethod(
+                          AppMethodChannel.closeWindow.name,
+                        );
+                      }
+                      break;
+                  }
+                  return null;
+                });
 
-              return Material(
-                child: SingleChildScrollView(
-                  child: NotificationListener<SizeChangedLayoutNotification>(
-                    onNotification: (notification) {
-                      // サイズが変更されたことを検知した時の処理
-                      ref.read(methodChannelProvider).invokeMethod(
-                        AppMethodChannel.setFrameSize.name,
-                        {"height": largeWindowKey.currentContext?.size?.height},
-                      );
-                      return true;
-                    },
-                    child: SizeChangedLayoutNotifier(
-                      child: _LargeWindow(
-                        key: largeWindowKey,
-                        onBuildCallback: () {
-                          ref.read(methodChannelProvider).invokeMethod(
-                            AppMethodChannel.setFrameSize.name,
-                            {
-                              "height":
-                                  largeWindowKey.currentContext?.size?.height,
-                            },
-                          );
-                        },
+                return Material(
+                  child: SingleChildScrollView(
+                    child: NotificationListener<SizeChangedLayoutNotification>(
+                      onNotification: (notification) {
+                        // サイズが変更されたことを検知した時の処理
+                        ref.read(methodChannelProvider).invokeMethod(
+                          AppMethodChannel.setFrameSize.name,
+                          {
+                            "height":
+                                largeWindowKey.currentContext?.size?.height,
+                          },
+                        );
+                        return true;
+                      },
+                      child: SizeChangedLayoutNotifier(
+                        child: _LargeWindow(
+                          key: largeWindowKey,
+                          onBuildCallback: () {
+                            ref.read(methodChannelProvider).invokeMethod(
+                              AppMethodChannel.setFrameSize.name,
+                              {
+                                "height":
+                                    largeWindowKey.currentContext?.size?.height,
+                              },
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
-                ),
-              );
-            }),
+                );
+              },
+            ),
           ),
         ),
       ),
@@ -127,7 +132,7 @@ class _LargeWindow extends HookConsumerWidget {
           _Header(),
           switch (screenType) {
             ScreenType.todo => const TodoScreen(),
-            ScreenType.settings => SettingsScreen(),
+            ScreenType.settings => const SettingsScreen(),
           },
         ],
       ),
