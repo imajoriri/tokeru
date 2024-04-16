@@ -112,7 +112,11 @@ class _HotkeyItem extends HookConsumerWidget {
           'Hotkey',
           style: context.textTheme.titleSmall,
         ),
-        const SizedBox(height: 4),
+        Text(
+          'Open or hide the panel with a hotkey.',
+          style: context.textTheme.bodySmall,
+        ),
+        const SizedBox(height: 8),
         Row(
           children: [
             for (final modifier in modifiers) ...[
