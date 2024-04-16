@@ -30,6 +30,7 @@ dependencies:
   cloud_firestore: ^4.15.8
   firebase_analytics: ^10.8.7
   hotkey_manager: ^0.2.2
+  shared_preferences: ^2.2.3
 
   url_launcher: ^6.2.5
 

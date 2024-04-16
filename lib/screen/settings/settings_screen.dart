@@ -148,7 +148,12 @@ class _HotkeyItem extends HookConsumerWidget {
                       controller.open();
                     }
                   },
-                  child: Text(selectedKey?.shortcutLabel ?? 'Key'),
+                  child: Row(
+                    children: [
+                      Text(selectedKey?.shortcutLabel ?? 'Key'),
+                      const Icon(Icons.arrow_drop_down),
+                    ],
+                  ),
                 );
               },
               menuChildren: List<MenuItemButton>.generate(
