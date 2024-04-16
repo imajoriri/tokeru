@@ -7,6 +7,7 @@ extension LogicalKeyboardKeyEx on LogicalKeyboardKey {
       LogicalKeyboardKey.shift => '⇧',
       LogicalKeyboardKey.meta => '⌘',
       LogicalKeyboardKey.alt => '⌥',
+      LogicalKeyboardKey.space => 'Space',
       _ => keyLabel,
     };
   }

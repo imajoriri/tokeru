@@ -64,6 +64,47 @@ class _HotkeyItem extends HookConsumerWidget {
       LogicalKeyboardKey.alt,
       LogicalKeyboardKey.shift,
     ];
+
+    final keys = [
+      LogicalKeyboardKey.keyA,
+      LogicalKeyboardKey.keyB,
+      LogicalKeyboardKey.keyC,
+      LogicalKeyboardKey.keyD,
+      LogicalKeyboardKey.keyE,
+      LogicalKeyboardKey.keyF,
+      LogicalKeyboardKey.keyG,
+      LogicalKeyboardKey.keyH,
+      LogicalKeyboardKey.keyI,
+      LogicalKeyboardKey.keyJ,
+      LogicalKeyboardKey.keyK,
+      LogicalKeyboardKey.keyL,
+      LogicalKeyboardKey.keyM,
+      LogicalKeyboardKey.keyN,
+      LogicalKeyboardKey.keyO,
+      LogicalKeyboardKey.keyP,
+      LogicalKeyboardKey.keyQ,
+      LogicalKeyboardKey.keyR,
+      LogicalKeyboardKey.keyS,
+      LogicalKeyboardKey.keyT,
+      LogicalKeyboardKey.keyU,
+      LogicalKeyboardKey.keyV,
+      LogicalKeyboardKey.keyW,
+      LogicalKeyboardKey.keyX,
+      LogicalKeyboardKey.keyY,
+      LogicalKeyboardKey.keyZ,
+      LogicalKeyboardKey.comma,
+      LogicalKeyboardKey.period,
+      LogicalKeyboardKey.space,
+      LogicalKeyboardKey.enter,
+      LogicalKeyboardKey.escape,
+      LogicalKeyboardKey.backspace,
+      LogicalKeyboardKey.delete,
+      LogicalKeyboardKey.arrowUp,
+      LogicalKeyboardKey.arrowDown,
+      LogicalKeyboardKey.arrowLeft,
+      LogicalKeyboardKey.arrowRight,
+    ];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -92,6 +133,36 @@ class _HotkeyItem extends HookConsumerWidget {
                 ),
               ),
             ],
+            const SizedBox(width: 8),
+            MenuAnchor(
+              builder: (
+                BuildContext context,
+                MenuController controller,
+                Widget? child,
+              ) {
+                return ElevatedButton(
+                  onPressed: () {
+                    if (controller.isOpen) {
+                      controller.close();
+                    } else {
+                      controller.open();
+                    }
+                  },
+                  child: Text(selectedKey?.shortcutLabel ?? 'Key'),
+                );
+              },
+              menuChildren: List<MenuItemButton>.generate(
+                keys.length,
+                (int index) => MenuItemButton(
+                  onPressed: () {
+                    ref
+                        .read(hotKeyControllerProvider.notifier)
+                        .setKey(keys[index]);
+                  },
+                  child: Text(keys[index].shortcutLabel),
+                ),
+              ),
+            ),
           ],
         ),
         if (ref.watch(hotKeyControllerProvider).hasError)

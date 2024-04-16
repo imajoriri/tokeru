@@ -60,6 +60,12 @@ class HotKeyController extends _$HotKeyController {
     await _updateKey(key, modifiers);
   }
 
+  /// Hotkeyのキーを設定する
+  Future<void> setKey(LogicalKeyboardKey key) async {
+    final modifiers = state.valueOrNull?.modifiers ?? <LogicalKeyboardKey>[];
+    await _updateKey(key, modifiers);
+  }
+
   Future<void> _keyDownHandler(HotKey hotKey) async {
     final channel = ref.read(methodChannelProvider);
     channel.invokeMethod(AppMethodChannel.openOrClosePanel.name);
