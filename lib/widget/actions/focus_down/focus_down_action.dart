@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/todo_focus/todo_focus_controller.dart';
 import 'package:quick_flutter/controller/todo_text_editing_controller/todo_text_editing_controller.dart';
 import 'package:quick_flutter/controller/todo_text_field_focus/todo_text_field_focus_controller.dart';
@@ -36,8 +37,9 @@ class TodoFocusDownAction extends CustomAction<FocusDownIntent> {
       return null;
     }
 
+    final todo = ref.read(todoControllerProvider).valueOrNull![currentIndex];
     final textEditingController =
-        ref.read(todoTextEditingControllerProvider)[currentIndex];
+        ref.read(todoTextEditingControllerProvider(todo));
 
     if (textEditingController.value.composing.isValid) {
       return KeyEventResult.ignored;
@@ -61,7 +63,11 @@ class TodoFocusDownAction extends CustomAction<FocusDownIntent> {
     ref.read(todoFocusControllerProvider.notifier).focusNext();
     moveCursorToFirstLine(
       textEditingController,
-      ref.read(todoTextEditingControllerProvider)[currentIndex + 1],
+      ref.read(
+        todoTextEditingControllerProvider(
+          ref.read(todoControllerProvider).valueOrNull![currentIndex + 1],
+        ),
+      ),
     );
     return null;
   }
