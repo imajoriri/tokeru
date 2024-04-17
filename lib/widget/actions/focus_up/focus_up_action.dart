@@ -44,8 +44,9 @@ class TodoFocusUpAction extends CustomAction<FocusUpIntent> {
       return KeyEventResult.ignored;
     }
 
+    final todo = ref.read(todoControllerProvider).valueOrNull![currentIndex];
     final textEditingController =
-        ref.read(todoTextEditingControllerProvider)[currentIndex];
+        ref.read(todoTextEditingControllerProvider(todo));
 
     // 日本語入力などでの変換中は無視する
     if (textEditingController.value.composing.isValid) {
@@ -63,7 +64,11 @@ class TodoFocusUpAction extends CustomAction<FocusUpIntent> {
     focusController.fucusPrevious();
     moveCursorToLastLine(
       textEditingController,
-      ref.read(todoTextEditingControllerProvider)[currentIndex - 1],
+      ref.read(
+        todoTextEditingControllerProvider(
+          ref.read(todoControllerProvider).valueOrNull![currentIndex - 1],
+        ),
+      ),
     );
     return null;
   }
