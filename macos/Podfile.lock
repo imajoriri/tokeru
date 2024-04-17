@@ -7,8 +7,6 @@ PODS:
     - nanopb (< 2.30910.0, >= 2.30908.0)
   - desktop_window (0.0.1):
     - FlutterMacOS
-  - device_info_plus (0.0.1):
-    - FlutterMacOS
   - Firebase/Analytics (10.22.0):
     - Firebase/Core
   - Firebase/Auth (10.22.0):
@@ -173,8 +171,10 @@ PODS:
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
   - GTMSessionFetcher/Core (3.3.2)
-  - irondash_engine_context (0.0.1):
+  - HotKey (0.2.0)
+  - hotkey_manager_macos (0.0.1):
     - FlutterMacOS
+    - HotKey
   - leveldb-library (1.22.4)
   - nanopb (2.30909.1):
     - nanopb/decode (= 2.30909.1)
@@ -184,7 +184,8 @@ PODS:
   - PromisesObjC (2.4.0)
   - PromisesSwift (2.4.0):
     - PromisesObjC (= 2.4.0)
-  - super_native_extensions (0.0.1):
+  - shared_preferences_foundation (0.0.1):
+    - Flutter
     - FlutterMacOS
   - url_launcher_macos (0.0.1):
     - FlutterMacOS
@@ -192,15 +193,14 @@ PODS:
 DEPENDENCIES:
   - cloud_firestore (from `Flutter/ephemeral/.symlinks/plugins/cloud_firestore/macos`)
   - desktop_window (from `Flutter/ephemeral/.symlinks/plugins/desktop_window/macos`)
-  - device_info_plus (from `Flutter/ephemeral/.symlinks/plugins/device_info_plus/macos`)
   - firebase_analytics (from `Flutter/ephemeral/.symlinks/plugins/firebase_analytics/macos`)
   - firebase_auth (from `Flutter/ephemeral/.symlinks/plugins/firebase_auth/macos`)
   - firebase_core (from `Flutter/ephemeral/.symlinks/plugins/firebase_core/macos`)
   - firebase_crashlytics (from `Flutter/ephemeral/.symlinks/plugins/firebase_crashlytics/macos`)
   - FirebaseFirestore (from `https://github.com/invertase/firestore-ios-sdk-frameworks.git`, tag `10.22.0`)
   - FlutterMacOS (from `Flutter/ephemeral`)
-  - irondash_engine_context (from `Flutter/ephemeral/.symlinks/plugins/irondash_engine_context/macos`)
-  - super_native_extensions (from `Flutter/ephemeral/.symlinks/plugins/super_native_extensions/macos`)
+  - hotkey_manager_macos (from `Flutter/ephemeral/.symlinks/plugins/hotkey_manager_macos/macos`)
+  - shared_preferences_foundation (from `Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin`)
   - url_launcher_macos (from `Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos`)
 
 SPEC REPOS:
@@ -226,6 +226,7 @@ SPEC REPOS:
     - GoogleDataTransport
     - GoogleUtilities
     - GTMSessionFetcher
+    - HotKey
     - leveldb-library
     - nanopb
     - PromisesObjC
@@ -236,8 +237,6 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/cloud_firestore/macos
   desktop_window:
     :path: Flutter/ephemeral/.symlinks/plugins/desktop_window/macos
-  device_info_plus:
-    :path: Flutter/ephemeral/.symlinks/plugins/device_info_plus/macos
   firebase_analytics:
     :path: Flutter/ephemeral/.symlinks/plugins/firebase_analytics/macos
   firebase_auth:
@@ -251,10 +250,10 @@ EXTERNAL SOURCES:
     :tag: 10.22.0
   FlutterMacOS:
     :path: Flutter/ephemeral
-  irondash_engine_context:
-    :path: Flutter/ephemeral/.symlinks/plugins/irondash_engine_context/macos
-  super_native_extensions:
-    :path: Flutter/ephemeral/.symlinks/plugins/super_native_extensions/macos
+  hotkey_manager_macos:
+    :path: Flutter/ephemeral/.symlinks/plugins/hotkey_manager_macos/macos
+  shared_preferences_foundation:
+    :path: Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin
   url_launcher_macos:
     :path: Flutter/ephemeral/.symlinks/plugins/url_launcher_macos/macos
 
@@ -266,7 +265,6 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   cloud_firestore: ca256bd6d6834f56a5831db5cb7e1c13dad63105
   desktop_window: fb7c4f12c1129f947ac482296b6f14059d57a3c3
-  device_info_plus: 5401765fde0b8d062a2f8eb65510fb17e77cf07f
   Firebase: 797fd7297b7e1be954432743a0b3f90038e45a71
   firebase_analytics: d3b627594fb80567824609e9c2622bd4f48aee81
   firebase_auth: da7042c5d5460fdb30b3f0fca1f6acf21d60860c
@@ -294,12 +292,13 @@ SPEC CHECKSUMS:
   GoogleDataTransport: 6c09b596d841063d76d4288cc2d2f42cc36e1e2a
   GoogleUtilities: d053d902a8edaa9904e1bd00c37535385b8ed152
   GTMSessionFetcher: 0e876eea9782ec6462e91ab872711c357322c94f
-  irondash_engine_context: da62996ee25616d2f01bbeb85dc115d813359478
+  HotKey: e96d8a2ddbf4591131e2bb3f54e69554d90cdca6
+  hotkey_manager_macos: 1e2edb0c7ae4fe67108af44a9d3445de41404160
   leveldb-library: 06a69cc7582d64b29424a63e085e683cc188230a
   nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
-  super_native_extensions: 85efee3a7495b46b04befcfc86ed12069264ebf3
+  shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
   url_launcher_macos: d2691c7dd33ed713bf3544850a623080ec693d95
 
 PODFILE CHECKSUM: c70193f3e18b39b1424023e9036e18333ae8f0ac
