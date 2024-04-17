@@ -44,8 +44,7 @@ class TodoList extends HookConsumerWidget {
                 .reorder(oldIndex, newIndex);
           },
           itemBuilder: (context, index) {
-            // isDoneが更新されてもWidgetが更新されて欲しいので、idとisDoneをkeyにする
-            final key = ValueKey(todos[index].id);
+            final key = Key(todos[index].id);
             return _ReorderableTodoListItem(
               key: key,
               todo: todos[index],
@@ -94,7 +93,7 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
             child: TodoListItem(
               todo: todo,
               focusNode: ref.watch(todoFocusControllerProvider)[index],
-              controller: ref.watch(todoTextEditingControllerProvider)[index],
+              controller: ref.watch(todoTextEditingControllerProvider(todo)),
             ),
           ),
           // ドラッグ&ドロップのアイコン
@@ -154,7 +153,7 @@ class TodoListItem extends HookConsumerWidget {
   void _updateTodoTitle(WidgetRef ref, String title) {
     ref
         .read(todoControllerProvider.notifier)
-        .updateTodoTitle(cartId: todo.id, title: title);
+        .updateTodoTitle(todoId: todo.id, title: title);
   }
 
   /// [Todo]のチェックを切り替える

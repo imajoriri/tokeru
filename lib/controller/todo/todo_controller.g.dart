@@ -6,7 +6,7 @@ part of 'todo_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$todoControllerHash() => r'7a9cf096b8c6aaacba0101a6d912e4575bdcf628';
+String _$todoControllerHash() => r'31f8fd11323ada0e77cfd4fd6e9af4a741f28615';
 
 /// Userに紐づく[Todo]を返すController
 ///
