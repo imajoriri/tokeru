@@ -94,10 +94,10 @@ class TodoController extends _$TodoController {
 
   /// [cartId]の[Todo.title]を更新する
   Future<void> updateTodoTitle({
-    required String cartId,
+    required String todoId,
     required String title,
   }) async {
-    final index = state.valueOrNull!.indexWhere((e) => e.id == cartId);
+    final index = state.valueOrNull!.indexWhere((e) => e.id == todoId);
     final todo = state.valueOrNull![index].copyWith(title: title);
     try {
       await todoRepository!.update(
@@ -108,7 +108,10 @@ class TodoController extends _$TodoController {
       await FirebaseCrashlytics.instance.recordError(e, s);
     }
     final tmp = [...state.value!];
-    tmp[index] = todo;
+    // ショートカットのソートと被り、最初に取得したindexと変わっている場合があるので
+    // ここで再度indexを取得する
+    final newindex = state.valueOrNull!.indexWhere((e) => e.id == todoId);
+    tmp[newindex] = todo;
     state = AsyncData(tmp);
   }
 
