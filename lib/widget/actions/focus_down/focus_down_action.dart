@@ -39,7 +39,7 @@ class TodoFocusDownAction extends CustomAction<FocusDownIntent> {
 
     final todo = ref.read(todoControllerProvider).valueOrNull![currentIndex];
     final textEditingController =
-        ref.read(todoTextEditingControllerProvider(todo));
+        ref.read(todoTextEditingControllerProvider(todo.id));
 
     if (textEditingController.value.composing.isValid) {
       return KeyEventResult.ignored;
@@ -65,7 +65,7 @@ class TodoFocusDownAction extends CustomAction<FocusDownIntent> {
       textEditingController,
       ref.read(
         todoTextEditingControllerProvider(
-          ref.read(todoControllerProvider).valueOrNull![currentIndex + 1],
+          ref.read(todoControllerProvider).valueOrNull![currentIndex + 1].id,
         ),
       ),
     );

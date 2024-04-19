@@ -93,7 +93,7 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
             child: TodoListItem(
               todo: todo,
               focusNode: ref.watch(todoFocusControllerProvider)[index],
-              controller: ref.watch(todoTextEditingControllerProvider(todo)),
+              controller: ref.watch(todoTextEditingControllerProvider(todo.id)),
             ),
           ),
           // ドラッグ&ドロップのアイコン
