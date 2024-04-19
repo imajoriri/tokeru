@@ -46,7 +46,7 @@ class TodoFocusUpAction extends CustomAction<FocusUpIntent> {
 
     final todo = ref.read(todoControllerProvider).valueOrNull![currentIndex];
     final textEditingController =
-        ref.read(todoTextEditingControllerProvider(todo));
+        ref.read(todoTextEditingControllerProvider(todo.id));
 
     // 日本語入力などでの変換中は無視する
     if (textEditingController.value.composing.isValid) {
@@ -66,7 +66,7 @@ class TodoFocusUpAction extends CustomAction<FocusUpIntent> {
       textEditingController,
       ref.read(
         todoTextEditingControllerProvider(
-          ref.read(todoControllerProvider).valueOrNull![currentIndex - 1],
+          ref.read(todoControllerProvider).valueOrNull![currentIndex - 1].id,
         ),
       ),
     );
