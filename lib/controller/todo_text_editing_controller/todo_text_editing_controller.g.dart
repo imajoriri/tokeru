@@ -7,7 +7,7 @@ part of 'todo_text_editing_controller.dart';
 // **************************************************************************
 
 String _$todoTextEditingControllerHash() =>
-    r'665f743b2ee05039d55c0e1182f80ee36b8920c6';
+    r'36fe8f459bb505bb8379de2584e76db8fce3452c';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -32,10 +32,10 @@ class _SystemHash {
 
 abstract class _$TodoTextEditingController
     extends BuildlessAutoDisposeNotifier<TextEditingController> {
-  late final Todo todo;
+  late final String todoId;
 
   TextEditingController build(
-    Todo todo,
+    String todoId,
   );
 }
 
@@ -58,10 +58,10 @@ class TodoTextEditingControllerFamily extends Family<TextEditingController> {
   ///
   /// Copied from [TodoTextEditingController].
   TodoTextEditingControllerProvider call(
-    Todo todo,
+    String todoId,
   ) {
     return TodoTextEditingControllerProvider(
-      todo,
+      todoId,
     );
   }
 
@@ -70,7 +70,7 @@ class TodoTextEditingControllerFamily extends Family<TextEditingController> {
     covariant TodoTextEditingControllerProvider provider,
   ) {
     return call(
-      provider.todo,
+      provider.todoId,
     );
   }
 
@@ -98,9 +98,9 @@ class TodoTextEditingControllerProvider extends AutoDisposeNotifierProviderImpl<
   ///
   /// Copied from [TodoTextEditingController].
   TodoTextEditingControllerProvider(
-    Todo todo,
+    String todoId,
   ) : this._internal(
-          () => TodoTextEditingController()..todo = todo,
+          () => TodoTextEditingController()..todoId = todoId,
           from: todoTextEditingControllerProvider,
           name: r'todoTextEditingControllerProvider',
           debugGetCreateSourceHash:
@@ -110,7 +110,7 @@ class TodoTextEditingControllerProvider extends AutoDisposeNotifierProviderImpl<
           dependencies: TodoTextEditingControllerFamily._dependencies,
           allTransitiveDependencies:
               TodoTextEditingControllerFamily._allTransitiveDependencies,
-          todo: todo,
+          todoId: todoId,
         );
 
   TodoTextEditingControllerProvider._internal(
@@ -120,17 +120,17 @@ class TodoTextEditingControllerProvider extends AutoDisposeNotifierProviderImpl<
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.todo,
+    required this.todoId,
   }) : super.internal();
 
-  final Todo todo;
+  final String todoId;
 
   @override
   TextEditingController runNotifierBuild(
     covariant TodoTextEditingController notifier,
   ) {
     return notifier.build(
-      todo,
+      todoId,
     );
   }
 
@@ -139,13 +139,13 @@ class TodoTextEditingControllerProvider extends AutoDisposeNotifierProviderImpl<
     return ProviderOverride(
       origin: this,
       override: TodoTextEditingControllerProvider._internal(
-        () => create()..todo = todo,
+        () => create()..todoId = todoId,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        todo: todo,
+        todoId: todoId,
       ),
     );
   }
@@ -158,13 +158,13 @@ class TodoTextEditingControllerProvider extends AutoDisposeNotifierProviderImpl<
 
   @override
   bool operator ==(Object other) {
-    return other is TodoTextEditingControllerProvider && other.todo == todo;
+    return other is TodoTextEditingControllerProvider && other.todoId == todoId;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, todo.hashCode);
+    hash = _SystemHash.combine(hash, todoId.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -172,8 +172,8 @@ class TodoTextEditingControllerProvider extends AutoDisposeNotifierProviderImpl<
 
 mixin TodoTextEditingControllerRef
     on AutoDisposeNotifierProviderRef<TextEditingController> {
-  /// The parameter `todo` of this provider.
-  Todo get todo;
+  /// The parameter `todoId` of this provider.
+  String get todoId;
 }
 
 class _TodoTextEditingControllerProviderElement
@@ -182,7 +182,7 @@ class _TodoTextEditingControllerProviderElement
   _TodoTextEditingControllerProviderElement(super.provider);
 
   @override
-  Todo get todo => (origin as TodoTextEditingControllerProvider).todo;
+  String get todoId => (origin as TodoTextEditingControllerProvider).todoId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
