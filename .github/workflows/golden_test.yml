@@ -38,6 +38,7 @@ jobs:
           if $new_branch_exist = "true"; then
             git branch $new_branch origin/$new_branch
             git checkout $new_branch
+            git merge $current_branch
           else
             git checkout -b $new_branch
           fi
@@ -49,13 +50,6 @@ jobs:
           git status --porcelain
           if git status --porcelain | grep -q ".*\/goldens\/.*\.png"; then
             echo "has_file_changes=true" >> $GITHUB_ENV
-            git add .
-            git commit -m "Update golden test"
-            if $new_branch_exist = "true"; then
-              git push
-            else
-              git push origin $new_branch
-            fi
           else
             echo "has_file_changes=false" >> $GITHUB_ENV
             echo "No changes"
