@@ -58,6 +58,7 @@ jobs:
             fi
           else
             echo "has_file_changes=false" >> $GITHUB_ENV
+            echo "No changes"
           fi
 
       # ファイルチェンジがある場合のみコミットとプッシュを行う
