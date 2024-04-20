@@ -25,7 +25,7 @@ jobs:
         run: |
           git config user.name "GitHub Action"
           git config user.email "github-action@github.com"
-          git checkout -b feature/update-pubspec-${{ steps.timestamp.outputs.timestamp }}
+          git checkout -b feature/update-pubspec
           git add .
           git commit -m "Update pubspec.yaml"
           # git push origin feature/update-pubspec-${{ steps.timestamp.outputs.timestamp }}
