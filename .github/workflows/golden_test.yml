@@ -41,7 +41,7 @@ jobs:
           fi
 
       # Goldenファイルの更新をし、変更があるかどうかを確認する
-      - name: "Run tests"
+      - name: "Update golden file and check changes"
         run: |
           flutter test --update-goldens
           if $(git status --porcelain) = "" ; then
@@ -50,17 +50,17 @@ jobs:
             echo "no_changes=false" >> $GITHUB_ENV
           fi
 
-      # # ファイルチェンジがある場合のみコミットとプッシュを行う
-      # - name: git add, commit and push
-      #   if: env.no_changes == 'false'
-      #   run: |
-      #     git add .
-      #     git commit -m "Update golden test"
-      #     if [ ${{ steps.check_branch.outputs.branch_exists }} = "true" ]; then
-      #       git push
-      #     else
-      #       git push origin feature/update-pubspec
-      #     fi
+      # ファイルチェンジがある場合のみコミットとプッシュを行う
+      - name: git add, commit and push
+        if: env.no_changes == 'false'
+        run: |
+          git add .
+          git commit -m "Update golden test"
+          if [ ${{ steps.check_branch.outputs.branch_exists }} = "true" ]; then
+            git push
+          else
+            git push origin feature/update-pubspec
+          fi
 
       # # TODO: リポ名を汎用的にする
       # - name: create Pull Request to flutter-repo
