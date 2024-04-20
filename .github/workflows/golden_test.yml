@@ -21,8 +21,8 @@ jobs:
       # 現在のブランチと作成するブランチの名前をセットする
       - name: Set branch name
         run: |
-          echo "current_branch=${{ github.ref_name }}" >> $GITHUB_ENV
-          echo "create_branch_name=${current_branch}-update-golden" >> $GITHUB_ENV
+          echo "current_branch=${{ github.head_ref }}" >> $GITHUB_ENV
+          echo "create_branch_name=${{ github.head_ref }}-update-golden" >> $GITHUB_ENV
           if git ls-remote --heads origin $create_branch_name ; then
             echo "branch_exists=true" >> $GITHUB_ENV
           else
