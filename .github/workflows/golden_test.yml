@@ -11,7 +11,7 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
 
-      # - uses: ./.github/actions/install_flutter_dependencies
+      - uses: ./.github/actions/install_flutter_dependencies
 
       - name: Config git
         run: |
@@ -40,15 +40,15 @@ jobs:
             git checkout -b feature/update-pubspec
           fi
 
-      # # Goldenファイルの更新をし、変更があるかどうかを確認する
-      # - name: "Run tests"
-      #   run: |
-      #   flutter test --update-goldens
-      #   if [$(git status --porcelain) = "" ]; then
-      #     echo "no_changes=false" >> $GITHUB_ENV
-      #   else
-      #     echo "no_changes=true" >> $GITHUB_ENV
-      #   fi
+      # Goldenファイルの更新をし、変更があるかどうかを確認する
+      - name: "Run tests"
+        run: |
+        flutter test --update-goldens
+        if $(git status --porcelain) = "" ; then
+          echo "no_changes=true" >> $GITHUB_ENV
+        else
+          echo "no_changes=false" >> $GITHUB_ENV
+        fi
 
       # # ファイルチェンジがある場合のみコミットとプッシュを行う
       # - name: git add, commit and push
