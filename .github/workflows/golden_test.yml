@@ -1,4 +1,4 @@
-name: Create goldten test pull request
+name: Create golden test pull request
 
 on:
   pull_request:
@@ -23,6 +23,7 @@ jobs:
         run: |
           echo "current_branch=${{ github.head_ref }}" >> $GITHUB_ENV
           echo "new_branch=${{ github.head_ref }}-update-golden" >> $GITHUB_ENV
+          git ls-remote --heads origin $new_branch
           if git ls-remote --heads origin $new_branch | grep -q "refs/heads/$new_branch"; then
             echo "new_branch_exist=true" >> $GITHUB_ENV
           else
@@ -75,7 +76,7 @@ jobs:
             echo "pr_exists=true" >> $GITHUB_ENV
           fi
 
-      # PRが存在しない、かつファイルチェンジがある場合のみPRを作成する
+      # PRが存在しない場合のみPRを作成する
       - name: create Pull Request to flutter-repo
         if: env.pr_exists == 'false'
         run: |
