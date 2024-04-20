@@ -77,13 +77,13 @@ jobs:
 
       # PRが存在しない、かつファイルチェンジがある場合のみPRを作成する
       - name: create Pull Request to flutter-repo
-        if: env.pr_exists == 'false' && env.has_file_changes == 'true'
+        if: env.pr_exists == 'false'
         run: |
           gh pr create \
             --title "update goldten test" \
-            --repo imajoriri/tokeru \
+            --repo ${{ github.repository }} \
             --body "update goldten test" \
             --base $current_branch \
-            --head $create_branch_name \
+            --head $new_branch \
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
