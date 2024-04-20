@@ -29,16 +29,16 @@ jobs:
             echo "branch_exists=false" >> $GITHUB_ENV
           fi
 
-      # # ブランチの作成。
-      # # すでにリモートにブランチが存在する場合はそのブランチに切り替える。
-      # # ブランチが存在しない場合は新規作成する。
-      # - name: Create new feature branch
-      #   run: |
-      #     if [ ${{ steps.check_branch.outputs.branch_exists }} = "true" ]; then
-      #       git branch feature/update-pubspec origin/feature/update-pubspec
-      #     else
-      #       git checkout -b feature/update-pubspec
-      #     fi
+      # ブランチの作成。
+      # すでにリモートにブランチが存在する場合はそのブランチに切り替える。
+      # ブランチが存在しない場合は新規作成する。
+      - name: Create new feature branch
+        run: |
+          if [ ${{ steps.check_branch.outputs.branch_exists }} = "true" ]; then
+            git branch feature/update-pubspec origin/feature/update-pubspec
+          else
+            git checkout -b feature/update-pubspec
+          fi
 
       # # Goldenファイルの更新をし、変更があるかどうかを確認する
       # - name: "Run tests"
