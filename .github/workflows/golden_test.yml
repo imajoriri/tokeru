@@ -72,7 +72,7 @@ jobs:
 
       # PRが存在しない、かつファイルチェンジがある場合のみPRを作成する
       - name: create Pull Request to flutter-repo
-        if: $pr_exists == 'false' && env.no_changes == 'false'
+        if: env.pr_exists == 'false' && env.no_changes == 'false'
         run: |
           gh pr create \
             --title "update goldten test" \
