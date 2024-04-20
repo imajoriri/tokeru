@@ -81,7 +81,7 @@ jobs:
               --repo ${{ github.repository }} \
               --body "update goldten test" \
               --base $current_branch \
-              --head $new_branch \
+              --head $new_branch
           fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
