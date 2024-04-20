@@ -271,8 +271,8 @@ class TodoListItem extends HookConsumerWidget {
                         if (event.logicalKey == LogicalKeyboardKey.backspace &&
                             controller.selection.baseOffset == 0 &&
                             controller.selection.extentOffset == 0) {
-                          // indentが0の場合は削除する
-                          if (todo.indentLevel == 0) {
+                          // 空文字の場合は削除
+                          if (controller.text.isEmpty) {
                             _deleteTodo(ref);
                             return KeyEventResult.handled;
                           }
