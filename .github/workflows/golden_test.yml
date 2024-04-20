@@ -24,9 +24,9 @@ jobs:
           echo "current_branch=${{ github.head_ref }}" >> $GITHUB_ENV
           echo "new_branch=${{ github.head_ref }}-update-golden" >> $GITHUB_ENV
           if  git ls-remote --heads origin $new_branch | grep -q "refs/heads/$new_branch"; then
-            echo "branch_exists=false" >> $GITHUB_ENV
+            echo "has_branch=true" >> $GITHUB_ENV
           else
-            echo "branch_exists=true" >> $GITHUB_ENV
+            echo "has_branch=false" >> $GITHUB_ENV
           fi
 
       # ブランチの作成。
@@ -34,7 +34,7 @@ jobs:
       # ブランチが存在しない場合は新規作成する。
       - name: Create new branch
         run: |
-          if $branch_exists = "true"; then
+          if $has_branch = "true"; then
             git branch $new_branch origin/$new_branch
           else
             git checkout -b $new_branch
