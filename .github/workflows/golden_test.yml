@@ -21,7 +21,7 @@ jobs:
       # 現在のブランチと作成するブランチの名前をセットする
       - name: Set branch name
         run: |
-          echo "current_branch=$(git branch --show-current)" >> $GITHUB_ENV
+          echo "current_branch=${{ github.ref_name }}" >> $GITHUB_ENV
           echo "create_branch_name=${current_branch}-update-golden" >> $GITHUB_ENV
           if git ls-remote --heads origin $create_branch_name ; then
             echo "branch_exists=true" >> $GITHUB_ENV
@@ -34,8 +34,8 @@ jobs:
       # ブランチが存在しない場合は新規作成する。
       - name: Create new feature branch
         run: |
-          if [ ${{ steps.check_branch.outputs.branch_exists }} = "true" ]; then
-            git branch feature/update-pubspec origin/feature/update-pubspec
+          if [ ${branch_exists} = "true" ]; then
+            git branch $create_branch_name origin/$create_branch_name
           else
             git checkout -b feature/update-pubspec
           fi
