@@ -34,8 +34,10 @@ jobs:
       # ブランチが存在しない場合は新規作成する。
       - name: Create new branch
         run: |
+          git fetch
           if $has_branch = "true"; then
             git branch $new_branch origin/$new_branch
+            git checkout $new_branch
           else
             git checkout -b $new_branch
           fi
