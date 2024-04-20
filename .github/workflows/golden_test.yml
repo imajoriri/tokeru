@@ -43,7 +43,9 @@ jobs:
             git checkout -b feature/update-pubspec
           fi
 
+      # ファイルチェンジがある場合のみコミットとプッシュを行う
       - name: git add, commit and push
+        if: env.no_changes == 'false'
         run: |
           git add .
           git commit -m "Update golden test"
