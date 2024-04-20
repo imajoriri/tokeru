@@ -28,7 +28,8 @@ jobs:
           git checkout -b feature/update-pubspec-${{ steps.timestamp.outputs.timestamp }}
           git add .
           git commit -m "Update pubspec.yaml"
-          git push origin feature/update-pubspec-${{ steps.timestamp.outputs.timestamp }}
+          # git push origin feature/update-pubspec-${{ steps.timestamp.outputs.timestamp }}
+          git push origin feature/update-pubspec
 
       - name: create Pull Request to flutter-repo
         run: |
@@ -37,6 +38,6 @@ jobs:
             --repo imajoriri/tokeru \
             --body "update goldten test" \
             --base main \
-            --head feature/update-pubspec-${{ steps.timestamp.outputs.timestamp }} \
+            --head feature/update-pubspec \
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
