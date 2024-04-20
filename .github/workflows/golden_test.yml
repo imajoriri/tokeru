@@ -22,6 +22,7 @@ jobs:
       - name: Set branch name
         run: |
           echo "current_branch=${{ github.head_ref }}" >> $GITHUB_ENV
+
           echo "new_branch=${{ github.head_ref }}-update-golden" >> $GITHUB_ENV
           if  git ls-remote --heads origin $new_branch | grep -q "refs/heads/$new_branch"; then
             echo "new_branch_exist=true" >> $GITHUB_ENV
@@ -46,10 +47,10 @@ jobs:
       - name: "Update golden file and check changes"
         run: |
           flutter test --update-goldens
-          if $(git status --porcelain) = ""; then
-            echo "has_file_changes=false" >> $GITHUB_ENV
-          else
+          if git status --porcelain | grep -q ".*\/goldens\/.*\.png"; then
             echo "has_file_changes=true" >> $GITHUB_ENV
+          else
+            echo "has_file_changes=false" >> $GITHUB_ENV
           fi
 
       # ファイルチェンジがある場合のみコミットとプッシュを行う
