@@ -78,7 +78,7 @@ jobs:
             --title "update goldten test" \
             --repo imajoriri/tokeru \
             --body "update goldten test" \
-            --base ${{ steps.check_branch.outputs.current_branch }} \
-            --head ${{ steps.check_branch.outputs.create_branch_name }} \
+            --base $current_branch \
+            --head $create_branch_name \
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
