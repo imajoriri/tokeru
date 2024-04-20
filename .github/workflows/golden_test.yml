@@ -23,7 +23,7 @@ jobs:
         run: |
           echo "current_branch=${{ github.head_ref }}" >> $GITHUB_ENV
           echo "create_branch_name=${{ github.head_ref }}-update-golden" >> $GITHUB_ENV
-          if  [ git ls-remote --heads origin $create_branch_name = "" ] ; then
+          if  git ls-remote --heads origin $create_branch_name = ""  ; then
             echo "branch_exists=false" >> $GITHUB_ENV
           else
             echo "branch_exists=true" >> $GITHUB_ENV
