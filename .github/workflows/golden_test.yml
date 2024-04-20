@@ -43,12 +43,12 @@ jobs:
       # Goldenファイルの更新をし、変更があるかどうかを確認する
       - name: "Run tests"
         run: |
-        flutter test --update-goldens
-        if $(git status --porcelain) = "" ; then
-          echo "no_changes=true" >> $GITHUB_ENV
-        else
-          echo "no_changes=false" >> $GITHUB_ENV
-        fi
+          flutter test --update-goldens
+          if $(git status --porcelain) = "" ; then
+            echo "no_changes=true" >> $GITHUB_ENV
+          else
+            echo "no_changes=false" >> $GITHUB_ENV
+          fi
 
       # # ファイルチェンジがある場合のみコミットとプッシュを行う
       # - name: git add, commit and push
