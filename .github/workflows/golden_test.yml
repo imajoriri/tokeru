@@ -16,28 +16,50 @@ jobs:
       - name: "Run tests"
         run: flutter test --update-goldens
 
-      - name: Get current date and time
-        id: timestamp
-        run: |
-          echo "timestamp=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_OUTPUT
-
-      - name: Commit and Push to new feature branch
+      - name: Config git
         run: |
           git config user.name "GitHub Action"
           git config user.email "github-action@github.com"
-          git checkout -b feature/update-pubspec
+
+      # 現在のブランチと作成するブランチの名前をセットする
+      - name: Set branch name
+        run: |
+          echo "current_branch=$(git branch --show-current)" >> $GITHUB_ENV
+          echo "create_branch_name=${{ steps.check_branch.outputs.current_branch }}-update-golden" >> $GITHUB_ENV
+          if git ls-remote --heads origin ${{ steps.check_branch.outputs.create_branch_name }}; then
+            echo "branch_exists=true" >> $GITHUB_ENV
+          else
+            echo "branch_exists=false" >> $GITHUB_ENV
+
+      # ブランチの作成。
+      # すでにリモートにブランチが存在する場合はそのブランチに切り替える。
+      # ブランチが存在しない場合は新規作成する。
+      - name: Create new feature branch
+        run: |
+          if [ ${{ steps.check_branch.outputs.branch_exists }} = "true" ]; then
+            git branch feature/update-pubspec origin/feature/update-pubspec
+          else
+            git checkout -b feature/update-pubspec
+          fi
+
+      - name: git add, commit and push
+        run: |
           git add .
-          git commit -m "Update pubspec.yaml"
-          # git push origin feature/update-pubspec-${{ steps.timestamp.outputs.timestamp }}
-          git push origin feature/update-pubspec
+          git commit -m "Update golden test"
+          if [ ${{ steps.check_branch.outputs.branch_exists }} = "true" ]; then
+            git push
+          else
+            git push origin feature/update-pubspec
+          fi
 
       - name: create Pull Request to flutter-repo
+        if: env.branch_exists == 'false' && env.no_changes == 'false'
         run: |
           gh pr create \
             --title "update goldten test" \
             --repo imajoriri/tokeru \
             --body "update goldten test" \
-            --base main \
-            --head feature/update-pubspec \
+            --base ${{ steps.check_branch.outputs.current_branch }} \
+            --head ${{ steps.check_branch.outputs.create_branch_name }} \
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
