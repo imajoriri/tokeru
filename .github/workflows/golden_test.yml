@@ -1,4 +1,4 @@
-name: flutter test
+name: Create goldten test pull request
 
 on:
   pull_request:
@@ -13,7 +13,7 @@ jobs:
 
       - uses: ./.github/actions/install_flutter_dependencies
 
-      - name: "Create goldten test pull request"
+      - name: "Run tests"
         run: flutter test --update-goldens
 
       - name: Get current date and time
