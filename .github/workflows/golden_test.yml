@@ -23,7 +23,7 @@ jobs:
         run: |
           echo "current_branch=${{ github.head_ref }}" >> $GITHUB_ENV
           echo "create_branch_name=${{ github.head_ref }}-update-golden" >> $GITHUB_ENV
-          if  git ls-remote --heads origin $create_branch_name == ""  ; then
+          if  git ls-remote --heads origin $create_branch_name | grep -q "refs/heads/$current_branch"; then
             echo "branch_exists=false" >> $GITHUB_ENV
           else
             echo "branch_exists=true" >> $GITHUB_ENV
@@ -34,7 +34,7 @@ jobs:
       # ブランチが存在しない場合は新規作成する。
       - name: Create new feature branch
         run: |
-          if $branch_exists == "true"; then
+          if $branch_exists = "true"; then
             git branch $create_branch_name origin/$create_branch_name
           else
             git checkout -b $create_branch_name
@@ -44,7 +44,7 @@ jobs:
       - name: "Update golden file and check changes"
         run: |
           flutter test --update-goldens
-          if $(git status --porcelain) == ""; then
+          if $(git status --porcelain) = ""; then
             echo "no_changes=true" >> $GITHUB_ENV
           else
             echo "no_changes=false" >> $GITHUB_ENV
@@ -56,7 +56,7 @@ jobs:
         run: |
           git add .
           git commit -m "Update golden test"
-          if $branch_exists == "true"; then
+          if $branch_exists = "true"; then
             git push
           else
             git push origin $create_branch_name
