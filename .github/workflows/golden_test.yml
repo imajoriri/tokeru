@@ -23,6 +23,9 @@ jobs:
         run: |
           echo "current_branch=${{ github.head_ref }}" >> $GITHUB_ENV
           echo "new_branch=${{ github.head_ref }}-update-golden" >> $GITHUB_ENV
+
+      - name: Check new branch exists
+        run: |
           git ls-remote --heads origin $new_branch
           if git ls-remote --heads origin $new_branch | grep -q "refs/heads/$new_branch"; then
             echo "new_branch_exist=true" >> $GITHUB_ENV
