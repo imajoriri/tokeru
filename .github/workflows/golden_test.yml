@@ -37,7 +37,7 @@ jobs:
           if [ ${branch_exists} = "true" ]; then
             git branch $create_branch_name origin/$create_branch_name
           else
-            git checkout -b feature/update-pubspec
+            git checkout -b $create_branch_name
           fi
 
       # Goldenファイルの更新をし、変更があるかどうかを確認する
@@ -56,10 +56,10 @@ jobs:
         run: |
           git add .
           git commit -m "Update golden test"
-          if [ ${{ steps.check_branch.outputs.branch_exists }} = "true" ]; then
+          if $branch_exists = "true"; then
             git push
           else
-            git push origin feature/update-pubspec
+            git push origin $create_branch_name
           fi
 
       # # TODO: リポ名を汎用的にする
