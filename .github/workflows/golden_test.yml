@@ -38,7 +38,7 @@ jobs:
           if $new_branch_exist = "true"; then
             git branch $new_branch origin/$new_branch
             git checkout $new_branch
-            git merge $current_branch
+            git merge origin/$current_branch
           else
             git checkout -b $new_branch
           fi
