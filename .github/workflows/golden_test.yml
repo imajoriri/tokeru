@@ -35,6 +35,7 @@ jobs:
       - name: Create new branch
         run: |
           git fetch origin $new_branch
+          git fetch origin $current_branch
           if $new_branch_exist = "true"; then
             git branch $new_branch origin/$new_branch
             git checkout $new_branch
