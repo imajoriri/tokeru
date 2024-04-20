@@ -8,7 +8,7 @@ void main() {
     const size = Size(415, 896);
 
     await tester.pumpWidgetBuilder(
-      const Text('super fgsample'),
+      const Text('super fgflsample'),
       surfaceSize: size,
     );
 
