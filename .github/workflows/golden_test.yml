@@ -22,9 +22,8 @@ jobs:
       - name: Set branch name
         run: |
           echo "current_branch=${{ github.head_ref }}" >> $GITHUB_ENV
-
           echo "new_branch=${{ github.head_ref }}-update-golden" >> $GITHUB_ENV
-          if  git ls-remote --heads origin $new_branch | grep -q "refs/heads/$new_branch"; then
+          if git ls-remote --heads origin $new_branch | grep -q "refs/heads/$new_branch"; then
             echo "new_branch_exist=true" >> $GITHUB_ENV
           else
             echo "new_branch_exist=false" >> $GITHUB_ENV
@@ -50,21 +49,28 @@ jobs:
           git status --porcelain
           if git status --porcelain | grep -q ".*\/goldens\/.*\.png"; then
             echo "has_file_changes=true" >> $GITHUB_ENV
+            git add .
+            git commit -m "Update golden test"
+            if $new_branch_exist = "true"; then
+              git push
+            else
+              git push origin $new_branch
+            fi
           else
             echo "has_file_changes=false" >> $GITHUB_ENV
           fi
 
       # ファイルチェンジがある場合のみコミットとプッシュを行う
-      - name: git add, commit and push
-        if: env.has_file_changes == 'true'
-        run: |
-          git add .
-          git commit -m "Update golden test"
-          if $new_branch_exist = "true"; then
-            git push
-          else
-            git push origin $new_branch
-          fi
+      # - name: git add, commit and push
+      #   if: env.has_file_changes == 'true'
+      #   run: |
+      #     git add .
+      #     git commit -m "Update golden test"
+      #     if $new_branch_exist = "true"; then
+      #       git push
+      #     else
+      #       git push origin $new_branch
+      #     fi
 
       # - name: Check pull request exists
       #   run: |
