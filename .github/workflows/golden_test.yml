@@ -53,20 +53,19 @@ jobs:
             echo "has_file_changes=true" >> $GITHUB_ENV
           else
             echo "has_file_changes=false" >> $GITHUB_ENV
-            echo "No changes"
           fi
 
       # ファイルチェンジがある場合のみコミットとプッシュを行う
-      # - name: git add, commit and push
-      #   if: env.has_file_changes == 'true'
-      #   run: |
-      #     git add .
-      #     git commit -m "Update golden test"
-      #     if $new_branch_exist = "true"; then
-      #       git push
-      #     else
-      #       git push origin $new_branch
-      #     fi
+      - name: git add, commit and push
+        if: env.has_file_changes == 'true'
+        run: |
+          git add .
+          git commit -m "Update golden test"
+          if $new_branch_exist = "true"; then
+            git push
+          else
+            git push origin $new_branch
+          fi
 
       # - name: Check pull request exists
       #   run: |
