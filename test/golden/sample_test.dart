@@ -7,7 +7,8 @@ void main() {
     await loadAppFonts();
     const size = Size(415, 896);
 
-    await tester.pumpWidgetBuilder(const Text('sample'), surfaceSize: size);
+    await tester.pumpWidgetBuilder(const Text('hoge sample'),
+        surfaceSize: size);
 
     await screenMatchesGolden(tester, 'myApp');
   });
