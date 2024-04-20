@@ -13,9 +13,6 @@ jobs:
 
       - uses: ./.github/actions/install_flutter_dependencies
 
-      - name: "Run tests"
-        run: flutter test --update-goldens
-
       - name: Config git
         run: |
           git config user.name "GitHub Action"
@@ -42,6 +39,9 @@ jobs:
           else
             git checkout -b feature/update-pubspec
           fi
+
+      - name: "Run tests"
+        run: flutter test --update-goldens
 
       # ファイルチェンジがある場合のみコミットとプッシュを行う
       - name: git add, commit and push
