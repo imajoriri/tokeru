@@ -67,23 +67,23 @@ jobs:
             git push origin $new_branch
           fi
 
-      # - name: Check pull request exists
-      #   run: |
-      #     if git ls-remote --heads origin $new_branch | grep -q "refs/heads/$new_branch"; then
-      #       echo "pr_exists=false" >> $GITHUB_ENV
-      #     else
-      #       echo "pr_exists=true" >> $GITHUB_ENV
-      #     fi
+      - name: Check pull request exists
+        run: |
+          if git ls-remote --heads origin $new_branch | grep -q "refs/heads/$new_branch"; then
+            echo "pr_exists=false" >> $GITHUB_ENV
+          else
+            echo "pr_exists=true" >> $GITHUB_ENV
+          fi
 
-      # # PRが存在しない、かつファイルチェンジがある場合のみPRを作成する
-      # - name: create Pull Request to flutter-repo
-      #   if: env.pr_exists == 'false' && env.has_changes == 'false'
-      #   run: |
-      #     gh pr create \
-      #       --title "update goldten test" \
-      #       --repo imajoriri/tokeru \
-      #       --body "update goldten test" \
-      #       --base $current_branch \
-      #       --head $create_branch_name \
-      #   env:
-      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # PRが存在しない、かつファイルチェンジがある場合のみPRを作成する
+      - name: create Pull Request to flutter-repo
+        if: env.pr_exists == 'false' && env.has_file_changes == 'true'
+        run: |
+          gh pr create \
+            --title "update goldten test" \
+            --repo imajoriri/tokeru \
+            --body "update goldten test" \
+            --base $current_branch \
+            --head $create_branch_name \
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
