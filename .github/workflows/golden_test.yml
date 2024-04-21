@@ -1,14 +1,13 @@
 name: Create golden test pull request
 
 on:
-  pull_request:
-    types: [opened, synchronize]
+  workflow_dispatch:
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: "Checkout"
+      - name: Checkout
         uses: actions/checkout@v4
 
       - uses: ./.github/actions/install_flutter_dependencies
@@ -49,7 +48,7 @@ jobs:
           fi
 
       # Goldenファイルの更新をし、変更があるかどうかを確認する
-      - name: "Update golden file and check changes"
+      - name: Update golden file and check changes
         run: |
           flutter test --update-goldens
           git status --porcelain
@@ -58,7 +57,7 @@ jobs:
             exit 1
           fi
 
-      - name: git add, commit and push
+      - name: Git add, commit and push
         run: |
           git add .
           git commit -m "Update golden test"
@@ -69,7 +68,7 @@ jobs:
           fi
 
       # PRが存在しない場合のみPRを作成する
-      - name: Check pull request exists
+      - name: Create pull request if not exists
         run: |
           PR_COUNT=$(gh pr list --head $new_branch --json number --jq length)
           if [ "$PR_COUNT" -eq 0 ]; then
