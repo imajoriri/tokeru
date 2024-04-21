@@ -53,7 +53,7 @@ jobs:
         run: |
           flutter test --update-goldens
           git status --porcelain
-          if !git status --porcelain | grep -q ".*\/goldens\/.*\.png"; then
+          if ! git status --porcelain | grep -q ".*\/goldens\/.*\.png"; then
             echo "Error: No golden test changes found."
             exit 1
           fi
