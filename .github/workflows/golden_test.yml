@@ -53,15 +53,12 @@ jobs:
         run: |
           flutter test --update-goldens
           git status --porcelain
-          if git status --porcelain | grep -q ".*\/goldens\/.*\.png"; then
-            echo "has_file_changes=true" >> $GITHUB_ENV
-          else
-            echo "has_file_changes=false" >> $GITHUB_ENV
+          if !git status --porcelain | grep -q ".*\/goldens\/.*\.png"; then
+            echo "Error: No golden test changes found."
+            exit 1
           fi
 
-      # ファイルチェンジがある場合のみコミットとプッシュを行う
       - name: git add, commit and push
-        if: env.has_file_changes == 'true'
         run: |
           git add .
           git commit -m "Update golden test"
