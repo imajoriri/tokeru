@@ -41,10 +41,11 @@ List<FreeEvent> _findFreeTimes({
   });
 
   // 時間が被っているイベントがある場合、短い方を削除
+  // 例えば、A: 10:00-12:00, B: 10:30-11:30 の場合、Bを削除
   for (int i = 0; i < events.length - 1; i++) {
     for (int j = i + 1; j < events.length; j++) {
-      if (events[i].start.isBefore(events[j].end) &&
-          events[j].start.isBefore(events[i].end)) {
+      if (events[i].start.isBefore(events[j].start) &&
+          events[i].end.isAfter(events[j].end)) {
         if (events[i].duration > events[j].duration) {
           events.removeAt(j);
         } else {
