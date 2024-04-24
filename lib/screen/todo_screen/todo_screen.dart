@@ -5,12 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:quick_flutter/controller/free_calendar_event/free_calendar_event_controller.dart';
+import 'package:quick_flutter/controller/google_sign_in/google_sign_in_controller.dart';
 import 'package:quick_flutter/controller/memo/memo_controller.dart';
+import 'package:quick_flutter/controller/today_calendar_event/today_calendar_event_controller.dart';
 import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/todo_focus/todo_focus_controller.dart';
 import 'package:quick_flutter/controller/todo_text_editing_controller/todo_text_editing_controller.dart';
 import 'package:quick_flutter/controller/todo_text_field_focus/todo_text_field_focus_controller.dart';
 import 'package:quick_flutter/model/analytics_event/analytics_event_name.dart';
+import 'package:quick_flutter/model/calendar_event/calendar_event.dart';
 import 'package:quick_flutter/model/todo/todo.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
 import 'package:quick_flutter/widget/actions/delete_todo/delete_todo_action.dart';
@@ -26,14 +30,16 @@ import 'package:quick_flutter/widget/markdown_text_field.dart';
 part 'todo_list.dart';
 part 'memo.dart';
 part 'todo_text_field.dart';
+part 'today_section.dart';
 
-class TodoScreen extends StatelessWidget {
+class TodoScreen extends ConsumerWidget {
   const TodoScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return const Column(
       children: [
+        _TodaySection(),
         TodoList(),
         _TodoTextField(),
       ],

@@ -7,7 +7,7 @@ part of 'todo_text_editing_controller.dart';
 // **************************************************************************
 
 String _$todoTextEditingControllerHash() =>
-    r'36fe8f459bb505bb8379de2584e76db8fce3452c';
+    r'fd851ecd79bd8949610b46fc9c25edf847b33d92';
 
 /// Copied from Dart SDK
 class _SystemHash {

@@ -35,6 +35,7 @@ dependencies:
   googleapis: ^13.1.0
   googleapis_auth: ^1.6.0
   google_sign_in: ^6.2.1
+  extension_google_sign_in_as_googleapis_auth: ^2.0.12
 
   url_launcher: ^6.2.5
 
