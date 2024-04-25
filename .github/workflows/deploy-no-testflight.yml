@@ -22,7 +22,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: "zulu"
-          java-version: "12.x"
+          java-version: "13.x"
 
       - name: "Read flutter version from fvm config"
         id: flutter_info
