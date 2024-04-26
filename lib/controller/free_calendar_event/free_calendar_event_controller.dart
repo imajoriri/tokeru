@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:quick_flutter/model/calendar_event/calendar_event.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -30,59 +31,56 @@ List<FreeEvent> _findFreeTimes({
   required DateTime start,
   required DateTime end,
 }) {
-  // イベントを開始時間でソート
-  events.sort((a, b) => a.start.compareTo(b.start));
-
   List<FreeEvent> freeTimes = [];
-
-  // startの時刻より前のイベントを削除
-  events.removeWhere((element) {
-    return element.end.isBefore(start);
-  });
-
-  // 時間が被っているイベントがある場合、短い方を削除
-  // 例えば、A: 10:00-12:00, B: 10:30-11:30 の場合、Bを削除
-  for (int i = 0; i < events.length - 1; i++) {
-    for (int j = i + 1; j < events.length; j++) {
-      if (events[i].start.isBefore(events[j].start) &&
-          events[i].end.isAfter(events[j].end)) {
-        if (events[i].duration > events[j].duration) {
-          events.removeAt(j);
-        } else {
-          events.removeAt(i);
-        }
-      }
-    }
-  }
-
-  // startの時刻がイベントの中にあるかどうか
-  final startIsEventNow = events.indexWhere((element) {
-        return start.isAfter(element.start) && start.isBefore(element.end);
-      }) !=
-      -1;
-
-  // startの時刻がイベント中ではない場合、startから最初のイベントまでの空き時間を追加
-  if (events.isNotEmpty && !startIsEventNow) {
-    freeTimes.add(FreeEvent(start: start, end: events.first.start));
-  }
-
-  // 各イベント間の空き時間を計算
-  for (int i = 0; i < events.length - 1; i++) {
-    // イベントの終了時刻が次のイベントの開始時刻より前の場合、空き時間を追加
-    if (events[i].end.isBefore(events[i + 1].start)) {
-      freeTimes.add(FreeEvent(start: events[i].end, end: events[i + 1].start));
-    }
-  }
-
-  // 最後のイベントから今日の終了時刻まで
-  if (events.isNotEmpty && events.last.end.isBefore(end)) {
-    freeTimes.add(FreeEvent(start: events.last.end, end: end));
-  }
 
   // イベントがない場合は、全日が空き時間
   if (events.isEmpty) {
-    freeTimes.add(FreeEvent(start: start, end: end));
+    return [FreeEvent(start: start, end: end)];
   }
 
+  // start ~ end間にないイベントを削除
+  events.removeWhere((element) {
+    return element.end.isBefore(start) || element.start.isAfter(end);
+  });
+
+  // イベントを開始時間でソート
+  events.sort((a, b) => a.start.compareTo(b.start));
+
+  // start と endの擬似イベントを追加
+  events.insert(0, TitleEvent(title: 'start', start: start, end: start));
+  events.add(TitleEvent(title: 'end', start: end, end: end));
+
+  // 全く同じ時間のイベントを削除する
+  events = events.where((event) {
+    return events.indexWhere((event2) {
+          return event.start == event2.start && event.end == event2.end;
+        }) ==
+        events.indexOf(event);
+  }).toList();
+
+  for (int i = 0; i < events.length - 1; i++) {
+    final event = events[i];
+    // eventの終了時刻よりstartが前で、eventの終了時刻よりendが後のイベントが他にある場合
+    // 何もしない
+    if (events.indexWhere((event2) {
+          return event.end.isAfter(event2.start) &&
+              (event.end.isBefore(event2.end));
+        }) !=
+        -1) {
+      continue;
+    }
+
+    // eventの終了時刻よりstartが後のEventがある場合、
+    // eventの終了時刻からstartまでの空き時間を追加
+    final nextEvent = events.firstWhereOrNull((event2) {
+      return (event.end.isBefore(event2.start) ||
+              event.end.isAtSameMomentAs(event2.start)) &&
+          // eventと同じ時間のイベントは除外(自身も含まれてしまうため)
+          (event.start != event2.start && event.end != event2.end);
+    });
+    if (nextEvent != null && event.end != nextEvent.start) {
+      freeTimes.add(FreeEvent(start: event.end, end: nextEvent.start));
+    }
+  }
   return freeTimes;
 }
