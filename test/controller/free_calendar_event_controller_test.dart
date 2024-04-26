@@ -190,7 +190,7 @@ void main() {
         ],
       );
     });
-    // 2つのイベントが完全にかぶっている場合
+
     test('2つのイベントが完全にかぶっている場合、 短いイベントは無視される', () async {
       final container = createContainer();
       final freeEvents = container.read(
@@ -263,7 +263,6 @@ void main() {
       );
     });
 
-    // 2つのイベントがかぶっているが、被っていない時間もある場合
     test('2つのイベントがかぶっているが、片方が片方に完全に被っているわけではない場合', () async {
       final container = createContainer();
       final freeEvents = container.read(
@@ -329,6 +328,80 @@ void main() {
           ),
           FreeEvent(
             start: DateTime(2021, 1, 1, 14, 0),
+            end: DateTime(2021, 1, 1, 16, 0),
+          ),
+        ],
+      );
+    });
+
+    test('連続している2つのイベントがある場合', () async {
+      final container = createContainer();
+      final freeEvents = container.read(
+        freeCalendarEventControllerProvider(
+          [
+            TitleEvent(
+              title: 'event1',
+              start: DateTime(2021, 1, 1, 10, 0),
+              end: DateTime(2021, 1, 1, 12, 0),
+            ),
+            TitleEvent(
+              title: 'event2',
+              start: DateTime(2021, 1, 1, 12, 0),
+              end: DateTime(2021, 1, 1, 14, 0),
+            ),
+          ],
+          DateTime(2021, 1, 1, 8, 0),
+          DateTime(2021, 1, 1, 16, 0),
+          const Duration(hours: 1),
+        ),
+      );
+
+      expect(
+        freeEvents,
+        [
+          FreeEvent(
+            start: DateTime(2021, 1, 1, 8, 0),
+            end: DateTime(2021, 1, 1, 10, 0),
+          ),
+          FreeEvent(
+            start: DateTime(2021, 1, 1, 14, 0),
+            end: DateTime(2021, 1, 1, 16, 0),
+          ),
+        ],
+      );
+    });
+
+    test('全く同じ時間の2つのイベントがある場合', () async {
+      final container = createContainer();
+      final freeEvents = container.read(
+        freeCalendarEventControllerProvider(
+          [
+            TitleEvent(
+              title: 'event1',
+              start: DateTime(2021, 1, 1, 10, 0),
+              end: DateTime(2021, 1, 1, 12, 0),
+            ),
+            TitleEvent(
+              title: 'event2',
+              start: DateTime(2021, 1, 1, 10, 0),
+              end: DateTime(2021, 1, 1, 12, 0),
+            ),
+          ],
+          DateTime(2021, 1, 1, 8, 0),
+          DateTime(2021, 1, 1, 16, 0),
+          const Duration(hours: 1),
+        ),
+      );
+
+      expect(
+        freeEvents,
+        [
+          FreeEvent(
+            start: DateTime(2021, 1, 1, 8, 0),
+            end: DateTime(2021, 1, 1, 10, 0),
+          ),
+          FreeEvent(
+            start: DateTime(2021, 1, 1, 12, 0),
             end: DateTime(2021, 1, 1, 16, 0),
           ),
         ],
