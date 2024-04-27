@@ -39,6 +39,7 @@ jobs:
 
       - name: "Install codemagic-cli-tools"
         run: |
+          brew install xyz
           pip3 install codemagic-cli-tools
 
       - name: "Install the Apple certificate"
