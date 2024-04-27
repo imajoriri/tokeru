@@ -39,11 +39,7 @@ jobs:
 
       - name: "Install codemagic-cli-tools"
         run: |
-          # brew install codemagic-cli-tools
           pip3 install codemagic-cli-tools --break-system-packages
-          # python3 -m venv path/to/venv
-          # source path/to/venv/bin/activate
-          # python3 -m pip install xyz
 
       - name: "Install the Apple certificate"
         run: |
