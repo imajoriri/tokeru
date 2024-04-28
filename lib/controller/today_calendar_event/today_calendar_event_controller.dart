@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:googleapis/calendar/v3.dart';
 import 'package:quick_flutter/controller/google_sign_in/google_sign_in_controller.dart';
 import 'package:quick_flutter/model/calendar_event/calendar_event.dart';
@@ -10,10 +12,21 @@ part 'today_calendar_event_controller.g.dart';
 ///
 /// [GoogleSignIn]がログイン済みの場合のみ、イベントを取得します。
 /// ログイン状態が変更された場合は、自動的に再取得します。
+/// また、24時に自身をinvalidateするため、watchすると自動的に更新される。
 @riverpod
 Future<List<TitleEvent>> todayCalendarEventController(
   TodayCalendarEventControllerRef ref,
 ) async {
+  // 24時に自信をinvalidateする
+  final now = DateTime.now();
+  final end = DateTime(now.year, now.month, now.day, 23, 59, 59);
+  final duration = end.difference(now);
+  final timer = Timer(
+    duration,
+    () => ref.invalidateSelf(),
+  );
+  ref.onDispose(() => timer.cancel());
+
   final googleSignIn = ref.watch(googleSignInControllerProvider).valueOrNull;
   if (googleSignIn == null) {
     return [];
@@ -27,7 +40,6 @@ Future<List<TitleEvent>> todayCalendarEventController(
   final client = await googleSignIn.authenticatedClient();
   final calendarApi = CalendarApi(client!);
 
-  final now = DateTime.now();
   final todayStart = DateTime(now.year, now.month, now.day);
   final todayEnd = todayStart.add(const Duration(days: 1));
 
