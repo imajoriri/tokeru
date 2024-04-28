@@ -55,6 +55,8 @@ class _FreeTimes extends HookConsumerWidget {
           convertToMinutesAndSeconds(freeTimeMinitues),
           style: Theme.of(context).textTheme.bodyLarge,
         ),
+        const _JustNowEvent(),
+        const Spacer(),
         // 更新ボタン
         IconButton(
           focusNode: FocusNode(skipTraversal: true),
@@ -64,20 +66,20 @@ class _FreeTimes extends HookConsumerWidget {
           icon: const Icon(Icons.refresh),
         ),
         // ログインボタン
-        IconButton(
-          focusNode: FocusNode(skipTraversal: true),
-          onPressed: () {
-            ref.read(googleSignInControllerProvider).valueOrNull!.signIn();
-          },
-          icon: const Icon(Icons.login),
-        ),
-        IconButton(
-          focusNode: FocusNode(skipTraversal: true),
-          onPressed: () {
-            ref.read(googleSignInControllerProvider).valueOrNull!.signOut();
-          },
-          icon: const Icon(Icons.logout),
-        ),
+        // IconButton(
+        //   focusNode: FocusNode(skipTraversal: true),
+        //   onPressed: () {
+        //     ref.read(googleSignInControllerProvider).valueOrNull!.signIn();
+        //   },
+        //   icon: const Icon(Icons.login),
+        // ),
+        // IconButton(
+        //   focusNode: FocusNode(skipTraversal: true),
+        //   onPressed: () {
+        //     ref.read(googleSignInControllerProvider).valueOrNull!.signOut();
+        //   },
+        //   icon: const Icon(Icons.logout),
+        // ),
       ],
     );
   }
@@ -87,5 +89,30 @@ class _FreeTimes extends HookConsumerWidget {
     int minutes = totalSeconds ~/ 60;
     int seconds = totalSeconds % 60;
     return "$minutes:${seconds.toString().padLeft(2, '0')}"; // 分:秒の形式で返す
+  }
+}
+
+class _JustNowEvent extends HookConsumerWidget {
+  const _JustNowEvent();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final justNowEvents = ref.watch(justNowEventControllerProvider);
+
+    return justNowEvents.isEmpty
+        ? const Padding(
+            padding: EdgeInsets.only(left: 8.0),
+            child: Text("作業中..."),
+          )
+        : Column(
+            children: justNowEvents
+                .map(
+                  (event) => Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(event.title),
+                  ),
+                )
+                .toList(),
+          );
   }
 }
