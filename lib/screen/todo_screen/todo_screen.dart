@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/controller/free_calendar_event/free_calendar_event_controller.dart';
-import 'package:quick_flutter/controller/google_sign_in/google_sign_in_controller.dart';
 import 'package:quick_flutter/controller/just_now_event/just_now_event_controller.dart';
 import 'package:quick_flutter/controller/memo/memo_controller.dart';
 import 'package:quick_flutter/controller/today_calendar_event/today_calendar_event_controller.dart';
@@ -41,6 +40,7 @@ class TodoScreen extends ConsumerWidget {
     return const Column(
       children: [
         _TodaySection(),
+        Divider(),
         TodoList(),
         _TodoTextField(),
       ],
