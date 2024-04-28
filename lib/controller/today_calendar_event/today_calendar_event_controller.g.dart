@@ -7,12 +7,13 @@ part of 'today_calendar_event_controller.dart';
 // **************************************************************************
 
 String _$todayCalendarEventControllerHash() =>
-    r'2f7e1d1c43c560c2af871322bcb70a57bf654a98';
+    r'91f1e160466ce6b17133e15ba3d87103afa0797a';
 
 /// 今日の[TitleEvent]を取得するコントローラー。
 ///
 /// [GoogleSignIn]がログイン済みの場合のみ、イベントを取得します。
 /// ログイン状態が変更された場合は、自動的に再取得します。
+/// また、24時に自身をinvalidateするため、watchすると自動的に更新される。
 ///
 /// Copied from [todayCalendarEventController].
 @ProviderFor(todayCalendarEventController)
