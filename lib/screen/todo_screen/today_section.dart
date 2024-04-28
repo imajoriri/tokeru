@@ -55,6 +55,7 @@ class _FreeTimes extends HookConsumerWidget {
           convertToMinutesAndSeconds(freeTimeMinitues),
           style: Theme.of(context).textTheme.bodyLarge,
         ),
+        const SizedBox(width: 12),
         const _JustNowEvent(),
         const Spacer(),
         // 更新ボタン
@@ -105,11 +106,14 @@ class _JustNowEvent extends HookConsumerWidget {
             child: Text("作業中..."),
           )
         : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: justNowEvents
                 .map(
                   (event) => Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(event.title),
+                    padding: const EdgeInsets.only(bottom: 4),
+                    child: Text(
+                      "${event.title} ${event.start.hour}:${event.start.minute} ~ ${event.end.hour}:${event.end.minute}",
+                    ),
                   ),
                 )
                 .toList(),
