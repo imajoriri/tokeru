@@ -8,7 +8,8 @@ part 'free_calendar_event_controller.g.dart';
 
 /// [TitleEvent]のリストから[FreeEvent]のリストを取得するコントローラー。
 ///
-/// [duration]ごとに自身をinvalidateするため、watchすると自動的に更新される。
+/// [duration]ごとに自身をinvalidateするため、
+/// watchする位置はなるべくWidgetの末端に置くことを推薦する。
 /// [events]が空の場合は、全日が空き時間となる。
 @riverpod
 List<FreeEvent> freeCalendarEventController(
