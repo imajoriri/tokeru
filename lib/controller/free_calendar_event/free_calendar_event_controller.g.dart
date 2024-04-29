@@ -32,7 +32,8 @@ class _SystemHash {
 
 /// [TitleEvent]のリストから[FreeEvent]のリストを取得するコントローラー。
 ///
-/// [duration]ごとに自身をinvalidateするため、watchすると自動的に更新される。
+/// [duration]ごとに自身をinvalidateするため、
+/// watchする位置はなるべくWidgetの末端に置くことを推薦する。
 /// [events]が空の場合は、全日が空き時間となる。
 ///
 /// Copied from [freeCalendarEventController].
@@ -41,14 +42,16 @@ const freeCalendarEventControllerProvider = FreeCalendarEventControllerFamily();
 
 /// [TitleEvent]のリストから[FreeEvent]のリストを取得するコントローラー。
 ///
-/// [duration]ごとに自身をinvalidateするため、watchすると自動的に更新される。
+/// [duration]ごとに自身をinvalidateするため、
+/// watchする位置はなるべくWidgetの末端に置くことを推薦する。
 /// [events]が空の場合は、全日が空き時間となる。
 ///
 /// Copied from [freeCalendarEventController].
 class FreeCalendarEventControllerFamily extends Family<List<FreeEvent>> {
   /// [TitleEvent]のリストから[FreeEvent]のリストを取得するコントローラー。
   ///
-  /// [duration]ごとに自身をinvalidateするため、watchすると自動的に更新される。
+  /// [duration]ごとに自身をinvalidateするため、
+  /// watchする位置はなるべくWidgetの末端に置くことを推薦する。
   /// [events]が空の場合は、全日が空き時間となる。
   ///
   /// Copied from [freeCalendarEventController].
@@ -56,7 +59,8 @@ class FreeCalendarEventControllerFamily extends Family<List<FreeEvent>> {
 
   /// [TitleEvent]のリストから[FreeEvent]のリストを取得するコントローラー。
   ///
-  /// [duration]ごとに自身をinvalidateするため、watchすると自動的に更新される。
+  /// [duration]ごとに自身をinvalidateするため、
+  /// watchする位置はなるべくWidgetの末端に置くことを推薦する。
   /// [events]が空の場合は、全日が空き時間となる。
   ///
   /// Copied from [freeCalendarEventController].
@@ -103,7 +107,8 @@ class FreeCalendarEventControllerFamily extends Family<List<FreeEvent>> {
 
 /// [TitleEvent]のリストから[FreeEvent]のリストを取得するコントローラー。
 ///
-/// [duration]ごとに自身をinvalidateするため、watchすると自動的に更新される。
+/// [duration]ごとに自身をinvalidateするため、
+/// watchする位置はなるべくWidgetの末端に置くことを推薦する。
 /// [events]が空の場合は、全日が空き時間となる。
 ///
 /// Copied from [freeCalendarEventController].
@@ -111,7 +116,8 @@ class FreeCalendarEventControllerProvider
     extends AutoDisposeProvider<List<FreeEvent>> {
   /// [TitleEvent]のリストから[FreeEvent]のリストを取得するコントローラー。
   ///
-  /// [duration]ごとに自身をinvalidateするため、watchすると自動的に更新される。
+  /// [duration]ごとに自身をinvalidateするため、
+  /// watchする位置はなるべくWidgetの末端に置くことを推薦する。
   /// [events]が空の場合は、全日が空き時間となる。
   ///
   /// Copied from [freeCalendarEventController].

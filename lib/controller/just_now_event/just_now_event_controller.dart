@@ -10,7 +10,8 @@ const _justNowEventDuration = Duration(seconds: 30);
 
 /// [todayCalendarEventControllerProvider]の[TitleEvent]のリストから現在の時間のイベントを取得するコントローラー。
 ///
-/// [_justNowEventDuration]毎に自身をinvalidateするため、watchすると自動的に更新される。
+/// [_justNowEventDuration]毎に自身をinvalidateするため、
+/// watchする位置はなるべくWidgetの末端に置くことを推薦する。
 @riverpod
 List<TitleEvent> justNowEventController(
   JustNowEventControllerRef ref,
