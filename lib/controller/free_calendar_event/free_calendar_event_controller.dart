@@ -47,10 +47,6 @@ List<FreeEvent> _findFreeTimes({
   // イベントを開始時間でソート
   events.sort((a, b) => a.start.compareTo(b.start));
 
-  // start と endの擬似イベントを追加
-  events.insert(0, TitleEvent(title: 'start', start: start, end: start));
-  events.add(TitleEvent(title: 'end', start: end, end: end));
-
   // 全く同じ時間のイベントを削除する
   events = events.where((event) {
     return events.indexWhere((event2) {
@@ -59,13 +55,35 @@ List<FreeEvent> _findFreeTimes({
         events.indexOf(event);
   }).toList();
 
+  // 終了時刻が同じイベントがある場合、期間が短い方を削除する
+  events.removeWhere((event) {
+    return events.indexWhere((event2) {
+          return event.start.isAfter(event2.start) &&
+              event.end.isAtSameMomentAs(event2.end);
+        }) !=
+        -1;
+  });
+
+  // 開始時刻が同じイベントがある場合、期間が短い方を削除する
+  events.removeWhere((event) {
+    return events.indexWhere((event2) {
+          return event.start.isAtSameMomentAs(event2.start) &&
+              event.end.isBefore(event2.end);
+        }) !=
+        -1;
+  });
+
+  // start と endの擬似イベントを追加
+  events.insert(0, TitleEvent(title: 'start', start: start, end: start));
+  events.add(TitleEvent(title: 'end', start: end, end: end));
+
   for (int i = 0; i < events.length - 1; i++) {
     final event = events[i];
     // eventの終了時刻よりstartが前で、eventの終了時刻よりendが後のイベントが他にある場合
     // 何もしない
     if (events.indexWhere((event2) {
           return event.end.isAfter(event2.start) &&
-              (event.end.isBefore(event2.end));
+              event.end.isBefore(event2.end);
         }) !=
         -1) {
       continue;
