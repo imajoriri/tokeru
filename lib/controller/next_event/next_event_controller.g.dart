@@ -7,12 +7,9 @@ part of 'next_event_controller.dart';
 // **************************************************************************
 
 String _$nextEventControllerHash() =>
-    r'5d831be39be1a65ac87c982f0c16702de492bf1f';
+    r'd915eee9bd67b906ffce6db6daa55cb26c96a0f4';
 
 /// [todayCalendarEventControllerProvider]の[TitleEvent]のリストから次のイベントを取得するコントローラー。
-///
-/// [_duration]毎に自身をinvalidateするため、
-/// watchする位置はなるべくWidgetの末端に置くことを推薦する。
 ///
 /// Copied from [nextEventController].
 @ProviderFor(nextEventController)

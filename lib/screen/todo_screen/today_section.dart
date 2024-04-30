@@ -100,12 +100,11 @@ class _FreeTimes extends HookConsumerWidget {
               },
               const Spacer(),
               // 更新ボタン
-              IconButton(
-                focusNode: FocusNode(skipTraversal: true),
-                onPressed: () {
+              GestureDetector(
+                onTap: () {
                   ref.invalidate(todayCalendarEventControllerProvider);
                 },
-                icon: const Icon(Icons.refresh),
+                child: const Icon(Icons.refresh),
               ),
             ],
           ),
