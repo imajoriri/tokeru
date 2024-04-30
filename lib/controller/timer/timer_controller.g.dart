@@ -6,7 +6,7 @@ part of 'timer_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$timerControllerHash() => r'4f31804c162512685f800a6636b4684ec87ab439';
+String _$timerControllerHash() => r'68de1749832a267fa704923496d88554ab0f8ddb';
 
 /// [duration]ごとに自身をinvalidateするコントローラー。
 ///

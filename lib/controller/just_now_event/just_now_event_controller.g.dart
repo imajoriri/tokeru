@@ -7,9 +7,13 @@ part of 'just_now_event_controller.dart';
 // **************************************************************************
 
 String _$justNowEventControllerHash() =>
-    r'7b9c2e3965d4dfae22fa6d49b979bb0be811ea84';
+    r'ee050afa4d818db53e881127cf70c05bd56e073d';
 
 /// [todayCalendarEventControllerProvider]の[TitleEvent]のリストから現在の時間のイベントを取得するコントローラー。
+///
+/// [timerControllerProvider]をwatchしているため、定期的に自動的に更新される。
+/// そのため、Widget側でwatchするだけで、自動的に更新される。
+/// watchする位置はなるべくWidgetの末端に置くことを推薦する。
 ///
 /// Copied from [justNowEventController].
 @ProviderFor(justNowEventController)
