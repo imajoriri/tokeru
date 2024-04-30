@@ -7,7 +7,7 @@ part of 'today_calendar_event_controller.dart';
 // **************************************************************************
 
 String _$todayCalendarEventControllerHash() =>
-    r'91f1e160466ce6b17133e15ba3d87103afa0797a';
+    r'3e8ff20ff7ff93c47bd53c4d56a5ac5de7a11292';
 
 /// 今日の[TitleEvent]を取得するコントローラー。
 ///

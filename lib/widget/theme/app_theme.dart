@@ -19,6 +19,8 @@ class AppTheme {
       backgroundPrimaryActionEnabled: const Color(0xff4F378B),
       backgroundPrimaryActionDisabled: const Color(0xff21005D),
       backgroundPrimaryActionHovered: const Color(0xff381E72),
+      eventInProgress: const Color(0xff218011),
+      eventStop: const Color(0xffC20B2A),
     );
 
     return defaultTheme.copyWith(
@@ -78,6 +80,8 @@ class AppTheme {
       backgroundPrimaryActionEnabled: const Color(0xff4F378B),
       backgroundPrimaryActionDisabled: const Color(0xff21005D),
       backgroundPrimaryActionHovered: const Color(0xff381E72),
+      eventInProgress: const Color(0xff218011),
+      eventStop: const Color(0xffC20B2A),
     );
 
     return defaultTheme.copyWith(

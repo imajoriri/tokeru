@@ -1,8 +1,24 @@
+import 'package:extension_google_sign_in_as_googleapis_auth/extension_google_sign_in_as_googleapis_auth.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/calendar/v3.dart';
+import 'package:googleapis_auth/googleapis_auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'google_sign_in_controller.g.dart';
+part 'google_sign_in_controller.freezed.dart';
+
+@freezed
+class GoogleSignInState with _$GoogleSignInState {
+  /// Googleサインインの状態を表す。
+  ///
+  /// [isSignIn]がtrueの場合、ログイン済み。
+  /// [client]にはログイン情報が格納される。
+  const factory GoogleSignInState({
+    required bool isSignIn,
+    AuthClient? client,
+  }) = _GoogleSignInState;
+}
 
 /// [GoogleSignIn]を取得するためのコントローラー。
 ///
@@ -11,7 +27,7 @@ part 'google_sign_in_controller.g.dart';
 @riverpod
 class GoogleSignInController extends _$GoogleSignInController {
   @override
-  FutureOr<GoogleSignIn> build() async {
+  FutureOr<GoogleSignInState> build() async {
     final googleSignIn = GoogleSignIn(
       clientId:
           // TODO: 環境変数に置き換える?
@@ -22,6 +38,10 @@ class GoogleSignInController extends _$GoogleSignInController {
       ],
     );
     await googleSignIn.signInSilently();
-    return googleSignIn;
+    final isSignIn = await googleSignIn.isSignedIn();
+    return GoogleSignInState(
+      isSignIn: isSignIn,
+      client: await googleSignIn.authenticatedClient(),
+    );
   }
 }
