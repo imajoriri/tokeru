@@ -7,9 +7,13 @@ part of 'next_event_controller.dart';
 // **************************************************************************
 
 String _$nextEventControllerHash() =>
-    r'd915eee9bd67b906ffce6db6daa55cb26c96a0f4';
+    r'0c0cbb48936ab0e2fafcfc216055057b60b12719';
 
 /// [todayCalendarEventControllerProvider]の[TitleEvent]のリストから次のイベントを取得するコントローラー。
+///
+/// [timerControllerProvider]をwatchしているため、定期的に自動的に更新される。
+/// そのため、Widget側でwatchするだけで、自動的に更新される。
+/// watchする位置はなるべくWidgetの末端に置くことを推薦する。
 ///
 /// Copied from [nextEventController].
 @ProviderFor(nextEventController)
