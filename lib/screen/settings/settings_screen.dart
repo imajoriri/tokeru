@@ -5,6 +5,7 @@ import 'package:quick_flutter/controller/hot_key/hot_key_controller.dart';
 import 'package:quick_flutter/controller/screen_type/screen_type_controller.dart';
 import 'package:quick_flutter/systems/context_extension.dart';
 import 'package:quick_flutter/systems/keyboard_key_extension.dart';
+import 'package:quick_flutter/widget/theme/app_theme.dart';
 
 class SettingsScreen extends HookConsumerWidget {
   const SettingsScreen({super.key});
@@ -110,11 +111,11 @@ class _HotkeyItem extends HookConsumerWidget {
       children: [
         Text(
           'Hotkey',
-          style: context.textTheme.titleSmall,
+          style: context.appTextTheme.labelMidium,
         ),
         Text(
           'Open or hide the panel with a hotkey.',
-          style: context.textTheme.bodySmall,
+          style: context.appTextTheme.bodySmall,
         ),
         const SizedBox(height: 8),
         Row(
@@ -132,7 +133,10 @@ class _HotkeyItem extends HookConsumerWidget {
                             .toggleModifier(modifier);
                       },
                     ),
-                    Text(modifier.shortcutLabel),
+                    Text(
+                      modifier.shortcutLabel,
+                      style: context.appTextTheme.labelMidium,
+                    ),
                   ],
                 ),
               ),
@@ -154,7 +158,10 @@ class _HotkeyItem extends HookConsumerWidget {
                   },
                   child: Row(
                     children: [
-                      Text(selectedKey?.shortcutLabel ?? 'Key'),
+                      Text(
+                        selectedKey?.shortcutLabel ?? 'Key',
+                        style: context.appTextTheme.labelMidium,
+                      ),
                       const Icon(Icons.arrow_drop_down),
                     ],
                   ),
@@ -168,7 +175,10 @@ class _HotkeyItem extends HookConsumerWidget {
                         .read(hotKeyControllerProvider.notifier)
                         .setKey(keys[index]);
                   },
-                  child: Text(keys[index].shortcutLabel),
+                  child: Text(
+                    keys[index].shortcutLabel,
+                    style: context.appTextTheme.labelMidium,
+                  ),
                 ),
               ),
             ),
@@ -178,7 +188,7 @@ class _HotkeyItem extends HookConsumerWidget {
           Text(
             ref.watch(hotKeyControllerProvider).error.toString(),
             style: context.textTheme.labelMedium!.copyWith(
-              color: context.colorScheme.error,
+              color: context.appColors.textDanger,
             ),
           ),
       ],

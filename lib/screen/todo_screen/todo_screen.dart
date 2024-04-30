@@ -16,7 +16,6 @@ import 'package:quick_flutter/controller/todo_text_field_focus/todo_text_field_f
 import 'package:quick_flutter/model/analytics_event/analytics_event_name.dart';
 import 'package:quick_flutter/model/calendar_event/calendar_event.dart';
 import 'package:quick_flutter/model/todo/todo.dart';
-import 'package:quick_flutter/systems/context_extension.dart';
 import 'package:quick_flutter/widget/actions/delete_todo/delete_todo_action.dart';
 import 'package:quick_flutter/widget/actions/focus_down/focus_down_action.dart';
 import 'package:quick_flutter/widget/actions/focus_up/focus_up_action.dart';
@@ -26,6 +25,7 @@ import 'package:quick_flutter/widget/actions/new_todo_below/new_todo_below_actio
 import 'package:quick_flutter/widget/actions/toggle_todo_done/toggle_todo_done_action.dart';
 import 'package:quick_flutter/widget/markdown_text_editing_controller.dart';
 import 'package:quick_flutter/widget/markdown_text_field.dart';
+import 'package:quick_flutter/widget/theme/app_theme.dart';
 
 part 'todo_list.dart';
 part 'memo.dart';
