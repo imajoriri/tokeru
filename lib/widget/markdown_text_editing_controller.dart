@@ -12,7 +12,6 @@ class MarkdownTextEditingController extends TextEditingController {
     );
   }
 
-  // TODO: 余裕ができたら実装した
   // @override
   // TextSpan buildTextSpan(
   //     {required BuildContext context, TextStyle? style, bool? withComposing}) {
