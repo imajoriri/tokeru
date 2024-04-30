@@ -16,9 +16,7 @@ import 'package:quick_flutter/firebase_options.dart';
 import 'package:quick_flutter/model/analytics_event/analytics_event_name.dart';
 import 'package:quick_flutter/screen/settings/settings_screen.dart';
 import 'package:quick_flutter/screen/todo_screen/todo_screen.dart';
-import 'package:quick_flutter/systems/color.dart';
 import 'package:quick_flutter/controller/url/url_controller.dart';
-import 'package:quick_flutter/systems/context_extension.dart';
 import 'package:quick_flutter/widget/actions/close_window/close_window_action.dart';
 import 'package:quick_flutter/widget/actions/delete_todo/delete_todo_action.dart';
 import 'package:quick_flutter/widget/actions/focus_down/focus_down_action.dart';
@@ -30,6 +28,7 @@ import 'package:quick_flutter/widget/actions/new_todo_below/new_todo_below_actio
 import 'package:quick_flutter/widget/actions/pin_window/pin_window_action.dart';
 import 'package:quick_flutter/widget/actions/toggle_todo_done/toggle_todo_done_action.dart';
 import 'package:quick_flutter/widget/shortcutkey.dart';
+import 'package:quick_flutter/widget/theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -66,6 +65,7 @@ void main() async {
                 });
 
                 return Material(
+                  color: context.appColors.backgroundDefault,
                   child: SingleChildScrollView(
                     child: NotificationListener<SizeChangedLayoutNotification>(
                       onNotification: (notification) {
@@ -189,8 +189,8 @@ class _Header extends ConsumerWidget {
                   bookmark ? Icons.push_pin : Icons.push_pin_outlined,
                 ),
                 color: bookmark
-                    ? context.colorScheme.primary
-                    : context.colorScheme.secondary,
+                    ? context.appColors.backgroundPrimaryActionEnabled
+                    : null,
               ),
               IconButton(
                 focusNode: FocusNode(skipTraversal: true),
@@ -511,15 +511,9 @@ class AppMaterialApp extends MaterialApp {
           home: home,
           title: 'Flutter Demo',
           debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: AppColor.seed,
-              outline: AppColor.outline,
-              outlineVariant: AppColor.outlineVariant,
-              shadow: AppColor.shadow,
-            ),
-            useMaterial3: true,
-          ),
+          theme: AppTheme.light,
+          darkTheme: AppTheme.dark,
+          themeMode: ThemeMode.light,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
         );

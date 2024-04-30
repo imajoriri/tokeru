@@ -232,7 +232,7 @@ class TodoListItem extends HookConsumerWidget {
             child: Container(
               decoration: BoxDecoration(
                 color: hasFocus.value
-                    ? context.colorScheme.primary.withOpacity(0.1)
+                    ? context.appColors.backgroundPrimaryContainer
                     : Colors.transparent,
                 borderRadius: BorderRadius.circular(4),
               ),
@@ -289,8 +289,10 @@ class TodoListItem extends HookConsumerWidget {
                       child: TextField(
                         controller: controller,
                         focusNode: focusNode,
-                        style: context.textTheme.bodyLarge!.copyWith(
-                          color: todo.isDone ? Colors.grey : Colors.black,
+                        style: context.appTextTheme.bodyLarge.copyWith(
+                          color: todo.isDone
+                              ? Colors.grey
+                              : context.appColors.textDefault,
                         ),
                         maxLines: null,
                         decoration: const InputDecoration(
