@@ -7,7 +7,7 @@ part of 'google_sign_in_controller.dart';
 // **************************************************************************
 
 String _$googleSignInControllerHash() =>
-    r'ce81cfa45dbdbb57c86cbc6632cd82231015e774';
+    r'8b0a76f248fe07937661e175b7d2e4f3b61599b7';
 
 /// [GoogleSignIn]を取得するためのコントローラー。
 ///
@@ -17,7 +17,7 @@ String _$googleSignInControllerHash() =>
 /// Copied from [GoogleSignInController].
 @ProviderFor(GoogleSignInController)
 final googleSignInControllerProvider = AutoDisposeAsyncNotifierProvider<
-    GoogleSignInController, GoogleSignIn>.internal(
+    GoogleSignInController, GoogleSignInState>.internal(
   GoogleSignInController.new,
   name: r'googleSignInControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -27,6 +27,6 @@ final googleSignInControllerProvider = AutoDisposeAsyncNotifierProvider<
   allTransitiveDependencies: null,
 );
 
-typedef _$GoogleSignInController = AutoDisposeAsyncNotifier<GoogleSignIn>;
+typedef _$GoogleSignInController = AutoDisposeAsyncNotifier<GoogleSignInState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

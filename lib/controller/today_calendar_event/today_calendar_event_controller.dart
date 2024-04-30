@@ -4,7 +4,6 @@ import 'package:googleapis/calendar/v3.dart';
 import 'package:quick_flutter/controller/google_sign_in/google_sign_in_controller.dart';
 import 'package:quick_flutter/model/calendar_event/calendar_event.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:extension_google_sign_in_as_googleapis_auth/extension_google_sign_in_as_googleapis_auth.dart';
 
 part 'today_calendar_event_controller.g.dart';
 
@@ -32,13 +31,11 @@ Future<List<TitleEvent>> todayCalendarEventController(
     return [];
   }
 
-  final isSignIn = googleSignIn.currentUser != null;
-  if (!isSignIn) {
+  if (!googleSignIn.isSignIn) {
     return [];
   }
 
-  final client = await googleSignIn.authenticatedClient();
-  final calendarApi = CalendarApi(client!);
+  final calendarApi = CalendarApi(googleSignIn.client!);
 
   final todayStart = DateTime(now.year, now.month, now.day);
   final todayEnd = todayStart.add(const Duration(days: 1));

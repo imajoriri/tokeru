@@ -13,6 +13,8 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     required this.backgroundPrimaryActionEnabled,
     required this.backgroundPrimaryActionDisabled,
     required this.backgroundPrimaryActionHovered,
+    required this.eventInProgress,
+    required this.eventStop,
   });
 
   // Text
@@ -32,6 +34,8 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
   final Color backgroundPrimaryActionDisabled;
   final Color backgroundPrimaryActionHovered;
 
+  final Color eventInProgress;
+  final Color eventStop;
   @override
   ThemeExtension<AppColorsExtension> copyWith({
     Color? textDefault,
@@ -45,6 +49,8 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     Color? backgroundPrimaryActionEnabled,
     Color? backgroundPrimaryActionDisabled,
     Color? backgroundPrimaryActionHovered,
+    Color? eventInProgress,
+    Color? eventStop,
   }) {
     return AppColorsExtension(
       textDefault: textDefault ?? this.textDefault,
@@ -62,6 +68,8 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
           this.backgroundPrimaryActionDisabled,
       backgroundPrimaryActionHovered:
           backgroundPrimaryActionHovered ?? this.backgroundPrimaryActionHovered,
+      eventInProgress: eventInProgress ?? this.eventInProgress,
+      eventStop: eventStop ?? this.eventStop,
     );
   }
 
@@ -104,6 +112,8 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
         other.backgroundPrimaryActionHovered,
         t,
       )!,
+      eventInProgress: Color.lerp(eventInProgress, other.eventInProgress, t)!,
+      eventStop: Color.lerp(eventStop, other.eventStop, t)!,
     );
   }
 }
