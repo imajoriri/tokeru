@@ -104,7 +104,7 @@ class _TodoTextField extends HookConsumerWidget {
               ),
               const SizedBox(width: 4),
               IconButton(
-                color: context.colorScheme.primary,
+                color: context.appColors.backgroundPrimaryActionEnabled,
                 onPressed: canSubmit.value
                     ? () {
                         _addTodo(ref, controller, focusNode);
