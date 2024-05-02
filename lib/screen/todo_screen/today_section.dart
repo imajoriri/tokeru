@@ -98,14 +98,6 @@ class _FreeTimes extends HookConsumerWidget {
                 _FreeTimeStatus.free => const _NextEvent(),
                 _FreeTimeStatus.busy => const _JustNowEvent(),
               },
-              const Spacer(),
-              // 更新ボタン
-              GestureDetector(
-                onTap: () {
-                  ref.invalidate(todayCalendarEventControllerProvider);
-                },
-                child: const Icon(Icons.refresh),
-              ),
             ],
           ),
         ],
@@ -174,8 +166,10 @@ class _NextEvent extends HookConsumerWidget {
     final duration = event.start.difference(now);
     final minutes = duration.inMinutes;
 
+    final title = event.title.isEmpty ? 'busy' : event.title;
+
     return Text(
-      '(Next is "${event.title}" in ${minutes}min)',
+      '(Next is "$title" in ${minutes}min)',
       style: context.appTextTheme.bodyMedium,
     );
   }
@@ -193,8 +187,10 @@ class _JustNowEvent extends HookConsumerWidget {
       return const SizedBox();
     }
 
+    final title = event.title.isEmpty ? 'busy' : event.title;
+
     return Text(
-      '("${event.title}" is ${event.start.hour}:${event.start.minute} ~ ${event.end.hour}:${event.end.minute})',
+      '("$title" is ${event.start.hour}:${event.start.minute} ~ ${event.end.hour}:${event.end.minute})',
       style: context.appTextTheme.bodyMedium,
     );
   }
