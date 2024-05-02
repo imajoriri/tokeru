@@ -174,6 +174,8 @@ class TodoListItem extends HookConsumerWidget {
     // 日本語入力などでの変換中は無視するためのフラグ
     final isValid = useState(false);
 
+    var text = controller.text;
+
     useEffect(
       () {
         listener() {
@@ -197,7 +199,10 @@ class TodoListItem extends HookConsumerWidget {
           }
 
           debounce = Timer(debounceDuration, () {
-            _updateTodoTitle(ref, controller.text);
+            if (text != controller.text) {
+              _updateTodoTitle(ref, controller.text);
+            }
+            text = controller.text;
           });
         });
 
