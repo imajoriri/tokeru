@@ -85,6 +85,12 @@ enum ShortcutActivatorType {
     ),
     label: 'Toggle window',
   ),
+
+  /// データをリフレッシュする
+  reload(
+    shortcutActivator: SingleActivator(meta: true, LogicalKeyboardKey.keyR),
+    label: 'Reload window',
+  ),
   ;
 
   const ShortcutActivatorType({

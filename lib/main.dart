@@ -26,6 +26,7 @@ import 'package:quick_flutter/widget/actions/move_up_todo/move_up_todo_action.da
 import 'package:quick_flutter/widget/actions/new_todo.dart/new_todo_action.dart';
 import 'package:quick_flutter/widget/actions/new_todo_below/new_todo_below_action.dart';
 import 'package:quick_flutter/widget/actions/pin_window/pin_window_action.dart';
+import 'package:quick_flutter/widget/actions/reload/reload_action.dart';
 import 'package:quick_flutter/widget/actions/toggle_todo_done/toggle_todo_done_action.dart';
 import 'package:quick_flutter/widget/shortcutkey.dart';
 import 'package:quick_flutter/widget/theme/app_theme.dart';
@@ -243,6 +244,7 @@ class _CallbackShortcuts extends ConsumerWidget {
             const MoveDownTodoIntent(),
         ShortcutActivatorType.deleteTodo.shortcutActivator:
             const DeleteTodoIntent(),
+        ShortcutActivatorType.reload.shortcutActivator: const ReloadIntent(),
       },
       child: Actions(
         dispatcher: _LoggingActionDispatcher(),
@@ -250,6 +252,7 @@ class _CallbackShortcuts extends ConsumerWidget {
           NewTodoIntent: ref.read(newTodoActionProvider),
           PinWindowIntent: ref.read(pinWindowActionProvider),
           CloseWindowIntent: ref.read(closeWindowActionProvider),
+          ReloadIntent: ref.read(reloadActionProvider),
         },
         child: child,
       ),
@@ -406,6 +409,20 @@ class _PlatformMenuBar extends ConsumerWidget {
                     );
                   },
                   shortcut: ShortcutActivatorType.pinWindow.shortcutActivator,
+                ),
+              ],
+            ),
+            PlatformMenuItemGroup(
+              members: [
+                PlatformMenuItem(
+                  label: ShortcutActivatorType.reload.label,
+                  onSelected: () {
+                    Actions.maybeInvoke<ReloadIntent>(
+                      context,
+                      const ReloadIntent(),
+                    );
+                  },
+                  shortcut: ShortcutActivatorType.reload.shortcutActivator,
                 ),
               ],
             ),
