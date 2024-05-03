@@ -178,7 +178,6 @@ class _NextEvent extends HookConsumerWidget {
     final hours = duration.inHours;
     final minutes = hours > 0 ? duration.inMinutes % 60 : duration.inMinutes;
     final timeStr = hours > 0 ? '${hours}h ${minutes}min' : '${minutes}min';
-    print(hours);
 
     final title = event.title.isEmpty ? 'busy' : event.title;
 
