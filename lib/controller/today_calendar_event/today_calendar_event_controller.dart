@@ -16,10 +16,12 @@ part 'today_calendar_event_controller.g.dart';
 Future<List<TitleEvent>> todayCalendarEventController(
   TodayCalendarEventControllerRef ref,
 ) async {
-  // 24時に自信をinvalidateする
   final now = DateTime.now();
-  final end = DateTime(now.year, now.month, now.day, 23, 59, 59);
-  final duration = end.difference(now);
+  final nextDay = DateTime.now().add(const Duration(days: 1));
+  final nextDayStart =
+      DateTime(nextDay.year, nextDay.month, nextDay.day, 0, 0, 1);
+  // 24時に自信をinvalidateする
+  final duration = nextDayStart.difference(now);
   final timer = Timer(
     duration,
     () => ref.invalidateSelf(),
