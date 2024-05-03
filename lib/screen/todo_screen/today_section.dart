@@ -34,7 +34,7 @@ class _LoadingView extends StatelessWidget {
                 .copyWith(color: context.appColors.textSubtle),
           ),
           const SizedBox(height: 4),
-          Text("__:__", style: context.appTextTheme.bodyLarge),
+          Text("--:--", style: context.appTextTheme.bodyLarge),
         ],
       ),
     );
@@ -61,13 +61,13 @@ class _FreeTimes extends HookConsumerWidget {
         titleEvents,
         start,
         end,
-        const Duration(minutes: 1),
+        const Duration(seconds: 1),
       ),
     );
     // 残りの分数
     final freeTimeMinitues = freeEvents.fold(
       0,
-      (previousValue, element) => previousValue + element.duration.inMinutes,
+      (previousValue, element) => previousValue + element.duration.inSeconds,
     );
 
     return Padding(
@@ -91,9 +91,13 @@ class _FreeTimes extends HookConsumerWidget {
               const SizedBox(width: 4),
               Text(
                 convertToMinutesAndSeconds(freeTimeMinitues),
-                style: context.appTextTheme.bodyLarge,
+                style: context.appTextTheme.bodyLarge.copyWith(
+                  fontFeatures: [
+                    const FontFeature.tabularFigures(),
+                  ],
+                ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 12),
               switch (freeTimeStatus) {
                 _FreeTimeStatus.free => const _NextEvent(),
                 _FreeTimeStatus.busy => const _JustNowEvent(),
@@ -105,11 +109,18 @@ class _FreeTimes extends HookConsumerWidget {
     );
   }
 
-  /// 分数を分:秒の形式に変換する
+  /// 分数を時:分:秒の形式に変換する
   String convertToMinutesAndSeconds(int totalSeconds) {
-    int minutes = totalSeconds ~/ 60;
+    final hours = totalSeconds ~/ 3600;
+    int minutes = (totalSeconds % 3600) ~/ 60;
     int seconds = totalSeconds % 60;
-    return "$minutes:${seconds.toString().padLeft(2, '0')}"; // 分:秒の形式で返す
+
+    // 数字が一桁の場合、先頭に0を付けて二桁にする
+    String formattedHours = hours.toString().padLeft(2, '0');
+    String formattedMinutes = minutes.toString().padLeft(2, '0');
+    String formattedSeconds = seconds.toString().padLeft(2, '0');
+
+    return "$formattedHours:$formattedMinutes:$formattedSeconds";
   }
 }
 
@@ -164,12 +175,15 @@ class _NextEvent extends HookConsumerWidget {
     // スタートまでの時間
     final now = DateTime.now();
     final duration = event.start.difference(now);
-    final minutes = duration.inMinutes;
+    final hours = duration.inHours;
+    final minutes = hours > 0 ? duration.inMinutes % 60 : duration.inMinutes;
+    final timeStr = hours > 0 ? '${hours}h ${minutes}min' : '${minutes}min';
+    print(hours);
 
     final title = event.title.isEmpty ? 'busy' : event.title;
 
     return Text(
-      '(Next is "$title" in ${minutes}min)',
+      '(Next is "$title" in $timeStr)',
       style: context.appTextTheme.bodyMedium,
     );
   }
@@ -188,9 +202,13 @@ class _JustNowEvent extends HookConsumerWidget {
     }
 
     final title = event.title.isEmpty ? 'busy' : event.title;
+    final startHour = event.start.hour.toString().padLeft(2, '0');
+    final startMinute = event.start.minute.toString().padLeft(2, '0');
+    final endHour = event.end.hour.toString().padLeft(2, '0');
+    final endMinute = event.end.minute.toString().padLeft(2, '0');
 
     return Text(
-      '("$title" is ${event.start.hour}:${event.start.minute} ~ ${event.end.hour}:${event.end.minute})',
+      '("$title" is $startHour:$startMinute ~ $endHour:$endMinute)',
       style: context.appTextTheme.bodyMedium,
     );
   }
