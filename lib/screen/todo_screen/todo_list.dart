@@ -73,7 +73,7 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
   final int index;
 
   /// Todo
-  final Todo todo;
+  final TodoItem todo;
 
   /// [Todo]の個数
   final int todoLength;
@@ -90,11 +90,20 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
             padding: index == todoLength - 1
                 ? const EdgeInsets.only(bottom: 4)
                 : EdgeInsets.zero,
-            child: TodoListItem(
-              todo: todo,
-              focusNode: ref.watch(todoFocusControllerProvider)[index],
-              controller: ref.watch(todoTextEditingControllerProvider(todo.id)),
-            ),
+            // child: TodoListItem(
+            //   todo: todo,
+            //   focusNode: ref.watch(todoFocusControllerProvider)[index],
+            //   controller: ref.watch(todoTextEditingControllerProvider(todo.id)),
+            // ),
+            child: switch (todo) {
+              Todo() => TodoListItem(
+                  todo: todo as Todo,
+                  focusNode: ref.watch(todoFocusControllerProvider)[index],
+                  controller:
+                      ref.watch(todoTextEditingControllerProvider(todo.id)),
+                ),
+              TodoDivider() => const Text("divider"),
+            },
           ),
           // ドラッグ&ドロップのアイコン
           if (onHover.value)

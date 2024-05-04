@@ -5,15 +5,29 @@ import 'package:quick_flutter/systems/timestamp_converter.dart';
 part 'todo.freezed.dart';
 part 'todo.g.dart';
 
-@freezed
-class Todo with _$Todo {
-  const factory Todo({
+@Freezed(unionKey: 'type')
+sealed class TodoItem with _$TodoItem {
+  @FreezedUnionValue('todo')
+  const factory TodoItem.todo({
     required String id,
     required String title,
     required bool isDone,
     required int indentLevel,
     required int index,
     @TimestampConverter() required DateTime createdAt,
-  }) = _Todo;
-  factory Todo.fromJson(Map<String, dynamic> json) => _$TodoFromJson(json);
+  }) = Todo;
+
+  @FreezedUnionValue('divider')
+  const factory TodoItem.divider({
+    required String id,
+    required int index,
+    @TimestampConverter() required DateTime createdAt,
+  }) = TodoDivider;
+
+  factory TodoItem.fromJson(Map<String, dynamic> json) {
+    if (json['type'] == '' || json['type'] == null) {
+      return Todo.fromJson(json);
+    }
+    return _$TodoItemFromJson(json);
+  }
 }

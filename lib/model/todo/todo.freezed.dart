@@ -14,43 +14,98 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-Todo _$TodoFromJson(Map<String, dynamic> json) {
-  return _Todo.fromJson(json);
+TodoItem _$TodoItemFromJson(Map<String, dynamic> json) {
+  switch (json['type']) {
+    case 'todo':
+      return Todo.fromJson(json);
+    case 'divider':
+      return TodoDivider.fromJson(json);
+
+    default:
+      throw CheckedFromJsonException(
+          json, 'type', 'TodoItem', 'Invalid union type "${json['type']}"!');
+  }
 }
 
 /// @nodoc
-mixin _$Todo {
+mixin _$TodoItem {
   String get id => throw _privateConstructorUsedError;
-  String get title => throw _privateConstructorUsedError;
-  bool get isDone => throw _privateConstructorUsedError;
-  int get indentLevel => throw _privateConstructorUsedError;
   int get index => throw _privateConstructorUsedError;
   @TimestampConverter()
   DateTime get createdAt => throw _privateConstructorUsedError;
-
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            String id,
+            String title,
+            bool isDone,
+            int indentLevel,
+            int index,
+            @TimestampConverter() DateTime createdAt)
+        todo,
+    required TResult Function(
+            String id, int index, @TimestampConverter() DateTime createdAt)
+        divider,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String id, String title, bool isDone, int indentLevel,
+            int index, @TimestampConverter() DateTime createdAt)?
+        todo,
+    TResult? Function(
+            String id, int index, @TimestampConverter() DateTime createdAt)?
+        divider,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String id, String title, bool isDone, int indentLevel,
+            int index, @TimestampConverter() DateTime createdAt)?
+        todo,
+    TResult Function(
+            String id, int index, @TimestampConverter() DateTime createdAt)?
+        divider,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(Todo value) todo,
+    required TResult Function(TodoDivider value) divider,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(Todo value)? todo,
+    TResult? Function(TodoDivider value)? divider,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(Todo value)? todo,
+    TResult Function(TodoDivider value)? divider,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $TodoCopyWith<Todo> get copyWith => throw _privateConstructorUsedError;
+  $TodoItemCopyWith<TodoItem> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $TodoCopyWith<$Res> {
-  factory $TodoCopyWith(Todo value, $Res Function(Todo) then) =
-      _$TodoCopyWithImpl<$Res, Todo>;
+abstract class $TodoItemCopyWith<$Res> {
+  factory $TodoItemCopyWith(TodoItem value, $Res Function(TodoItem) then) =
+      _$TodoItemCopyWithImpl<$Res, TodoItem>;
   @useResult
-  $Res call(
-      {String id,
-      String title,
-      bool isDone,
-      int indentLevel,
-      int index,
-      @TimestampConverter() DateTime createdAt});
+  $Res call({String id, int index, @TimestampConverter() DateTime createdAt});
 }
 
 /// @nodoc
-class _$TodoCopyWithImpl<$Res, $Val extends Todo>
-    implements $TodoCopyWith<$Res> {
-  _$TodoCopyWithImpl(this._value, this._then);
+class _$TodoItemCopyWithImpl<$Res, $Val extends TodoItem>
+    implements $TodoItemCopyWith<$Res> {
+  _$TodoItemCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -61,9 +116,6 @@ class _$TodoCopyWithImpl<$Res, $Val extends Todo>
   @override
   $Res call({
     Object? id = null,
-    Object? title = null,
-    Object? isDone = null,
-    Object? indentLevel = null,
     Object? index = null,
     Object? createdAt = null,
   }) {
@@ -72,18 +124,6 @@ class _$TodoCopyWithImpl<$Res, $Val extends Todo>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      isDone: null == isDone
-          ? _value.isDone
-          : isDone // ignore: cast_nullable_to_non_nullable
-              as bool,
-      indentLevel: null == indentLevel
-          ? _value.indentLevel
-          : indentLevel // ignore: cast_nullable_to_non_nullable
-              as int,
       index: null == index
           ? _value.index
           : index // ignore: cast_nullable_to_non_nullable
@@ -97,7 +137,7 @@ class _$TodoCopyWithImpl<$Res, $Val extends Todo>
 }
 
 /// @nodoc
-abstract class _$$TodoImplCopyWith<$Res> implements $TodoCopyWith<$Res> {
+abstract class _$$TodoImplCopyWith<$Res> implements $TodoItemCopyWith<$Res> {
   factory _$$TodoImplCopyWith(
           _$TodoImpl value, $Res Function(_$TodoImpl) then) =
       __$$TodoImplCopyWithImpl<$Res>;
@@ -114,7 +154,7 @@ abstract class _$$TodoImplCopyWith<$Res> implements $TodoCopyWith<$Res> {
 
 /// @nodoc
 class __$$TodoImplCopyWithImpl<$Res>
-    extends _$TodoCopyWithImpl<$Res, _$TodoImpl>
+    extends _$TodoItemCopyWithImpl<$Res, _$TodoImpl>
     implements _$$TodoImplCopyWith<$Res> {
   __$$TodoImplCopyWithImpl(_$TodoImpl _value, $Res Function(_$TodoImpl) _then)
       : super(_value, _then);
@@ -160,14 +200,16 @@ class __$$TodoImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$TodoImpl implements _Todo {
+class _$TodoImpl implements Todo {
   const _$TodoImpl(
       {required this.id,
       required this.title,
       required this.isDone,
       required this.indentLevel,
       required this.index,
-      @TimestampConverter() required this.createdAt});
+      @TimestampConverter() required this.createdAt,
+      final String? $type})
+      : $type = $type ?? 'todo';
 
   factory _$TodoImpl.fromJson(Map<String, dynamic> json) =>
       _$$TodoImplFromJson(json);
@@ -186,9 +228,12 @@ class _$TodoImpl implements _Todo {
   @TimestampConverter()
   final DateTime createdAt;
 
+  @JsonKey(name: 'type')
+  final String $type;
+
   @override
   String toString() {
-    return 'Todo(id: $id, title: $title, isDone: $isDone, indentLevel: $indentLevel, index: $index, createdAt: $createdAt)';
+    return 'TodoItem.todo(id: $id, title: $title, isDone: $isDone, indentLevel: $indentLevel, index: $index, createdAt: $createdAt)';
   }
 
   @override
@@ -218,6 +263,85 @@ class _$TodoImpl implements _Todo {
       __$$TodoImplCopyWithImpl<_$TodoImpl>(this, _$identity);
 
   @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            String id,
+            String title,
+            bool isDone,
+            int indentLevel,
+            int index,
+            @TimestampConverter() DateTime createdAt)
+        todo,
+    required TResult Function(
+            String id, int index, @TimestampConverter() DateTime createdAt)
+        divider,
+  }) {
+    return todo(id, title, isDone, indentLevel, index, createdAt);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String id, String title, bool isDone, int indentLevel,
+            int index, @TimestampConverter() DateTime createdAt)?
+        todo,
+    TResult? Function(
+            String id, int index, @TimestampConverter() DateTime createdAt)?
+        divider,
+  }) {
+    return todo?.call(id, title, isDone, indentLevel, index, createdAt);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String id, String title, bool isDone, int indentLevel,
+            int index, @TimestampConverter() DateTime createdAt)?
+        todo,
+    TResult Function(
+            String id, int index, @TimestampConverter() DateTime createdAt)?
+        divider,
+    required TResult orElse(),
+  }) {
+    if (todo != null) {
+      return todo(id, title, isDone, indentLevel, index, createdAt);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(Todo value) todo,
+    required TResult Function(TodoDivider value) divider,
+  }) {
+    return todo(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(Todo value)? todo,
+    TResult? Function(TodoDivider value)? divider,
+  }) {
+    return todo?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(Todo value)? todo,
+    TResult Function(TodoDivider value)? divider,
+    required TResult orElse(),
+  }) {
+    if (todo != null) {
+      return todo(this);
+    }
+    return orElse();
+  }
+
+  @override
   Map<String, dynamic> toJson() {
     return _$$TodoImplToJson(
       this,
@@ -225,8 +349,8 @@ class _$TodoImpl implements _Todo {
   }
 }
 
-abstract class _Todo implements Todo {
-  const factory _Todo(
+abstract class Todo implements TodoItem {
+  const factory Todo(
       {required final String id,
       required final String title,
       required final bool isDone,
@@ -234,15 +358,12 @@ abstract class _Todo implements Todo {
       required final int index,
       @TimestampConverter() required final DateTime createdAt}) = _$TodoImpl;
 
-  factory _Todo.fromJson(Map<String, dynamic> json) = _$TodoImpl.fromJson;
+  factory Todo.fromJson(Map<String, dynamic> json) = _$TodoImpl.fromJson;
 
   @override
   String get id;
-  @override
   String get title;
-  @override
   bool get isDone;
-  @override
   int get indentLevel;
   @override
   int get index;
@@ -252,5 +373,208 @@ abstract class _Todo implements Todo {
   @override
   @JsonKey(ignore: true)
   _$$TodoImplCopyWith<_$TodoImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$TodoDividerImplCopyWith<$Res>
+    implements $TodoItemCopyWith<$Res> {
+  factory _$$TodoDividerImplCopyWith(
+          _$TodoDividerImpl value, $Res Function(_$TodoDividerImpl) then) =
+      __$$TodoDividerImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String id, int index, @TimestampConverter() DateTime createdAt});
+}
+
+/// @nodoc
+class __$$TodoDividerImplCopyWithImpl<$Res>
+    extends _$TodoItemCopyWithImpl<$Res, _$TodoDividerImpl>
+    implements _$$TodoDividerImplCopyWith<$Res> {
+  __$$TodoDividerImplCopyWithImpl(
+      _$TodoDividerImpl _value, $Res Function(_$TodoDividerImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? index = null,
+    Object? createdAt = null,
+  }) {
+    return _then(_$TodoDividerImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      index: null == index
+          ? _value.index
+          : index // ignore: cast_nullable_to_non_nullable
+              as int,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$TodoDividerImpl implements TodoDivider {
+  const _$TodoDividerImpl(
+      {required this.id,
+      required this.index,
+      @TimestampConverter() required this.createdAt,
+      final String? $type})
+      : $type = $type ?? 'divider';
+
+  factory _$TodoDividerImpl.fromJson(Map<String, dynamic> json) =>
+      _$$TodoDividerImplFromJson(json);
+
+  @override
+  final String id;
+  @override
+  final int index;
+  @override
+  @TimestampConverter()
+  final DateTime createdAt;
+
+  @JsonKey(name: 'type')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'TodoItem.divider(id: $id, index: $index, createdAt: $createdAt)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$TodoDividerImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.index, index) || other.index == index) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, index, createdAt);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$TodoDividerImplCopyWith<_$TodoDividerImpl> get copyWith =>
+      __$$TodoDividerImplCopyWithImpl<_$TodoDividerImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            String id,
+            String title,
+            bool isDone,
+            int indentLevel,
+            int index,
+            @TimestampConverter() DateTime createdAt)
+        todo,
+    required TResult Function(
+            String id, int index, @TimestampConverter() DateTime createdAt)
+        divider,
+  }) {
+    return divider(id, index, createdAt);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String id, String title, bool isDone, int indentLevel,
+            int index, @TimestampConverter() DateTime createdAt)?
+        todo,
+    TResult? Function(
+            String id, int index, @TimestampConverter() DateTime createdAt)?
+        divider,
+  }) {
+    return divider?.call(id, index, createdAt);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String id, String title, bool isDone, int indentLevel,
+            int index, @TimestampConverter() DateTime createdAt)?
+        todo,
+    TResult Function(
+            String id, int index, @TimestampConverter() DateTime createdAt)?
+        divider,
+    required TResult orElse(),
+  }) {
+    if (divider != null) {
+      return divider(id, index, createdAt);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(Todo value) todo,
+    required TResult Function(TodoDivider value) divider,
+  }) {
+    return divider(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(Todo value)? todo,
+    TResult? Function(TodoDivider value)? divider,
+  }) {
+    return divider?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(Todo value)? todo,
+    TResult Function(TodoDivider value)? divider,
+    required TResult orElse(),
+  }) {
+    if (divider != null) {
+      return divider(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$TodoDividerImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class TodoDivider implements TodoItem {
+  const factory TodoDivider(
+          {required final String id,
+          required final int index,
+          @TimestampConverter() required final DateTime createdAt}) =
+      _$TodoDividerImpl;
+
+  factory TodoDivider.fromJson(Map<String, dynamic> json) =
+      _$TodoDividerImpl.fromJson;
+
+  @override
+  String get id;
+  @override
+  int get index;
+  @override
+  @TimestampConverter()
+  DateTime get createdAt;
+  @override
+  @JsonKey(ignore: true)
+  _$$TodoDividerImplCopyWith<_$TodoDividerImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
