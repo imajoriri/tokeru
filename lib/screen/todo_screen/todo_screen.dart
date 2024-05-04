@@ -46,7 +46,7 @@ class TodoScreen extends ConsumerWidget {
         _TodaySection(),
         Divider(),
         TodoList(),
-        _TodoTextField(),
+        // _TodoTextField(),
       ],
     );
   }
