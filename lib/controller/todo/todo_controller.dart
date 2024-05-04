@@ -9,10 +9,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'todo_controller.g.dart';
 
-/// Userに紐づく[Todo]を返すController
+/// Userに紐づく[TodoItem]を返すController
 ///
-/// ユーザーがログインしていない場合は、[Todo]は空の状態で返す。
-/// ウィンドウがミニモードになったとき等でも状態を保持するためにkeepAliveをtrueにする
+/// ユーザーがログインしていない場合は、[TodoItem]は空の状態で返す。
 @Riverpod(keepAlive: true)
 class TodoController extends _$TodoController {
   TodoRepository? todoRepository;
@@ -20,7 +19,7 @@ class TodoController extends _$TodoController {
   Timer? _updateOrderDebounce;
 
   @override
-  FutureOr<List<Todo>> build() async {
+  FutureOr<List<TodoItem>> build() async {
     final user = ref.watch(userControllerProvider);
     if (user.hasError || user.valueOrNull == null) {
       return [];
@@ -33,7 +32,7 @@ class TodoController extends _$TodoController {
     return todos;
   }
 
-  /// Todoを追加する
+  /// [Todo]を追加する
   Future<void> add(
     int index, {
     String title = '',
@@ -48,7 +47,7 @@ class TodoController extends _$TodoController {
     }
   }
 
-  /// インデントを追加する
+  /// [Todo]のインデントを追加する
   Future<void> addIndent(Todo todo) async {
     try {
       todoRepository!.update(
@@ -60,11 +59,13 @@ class TodoController extends _$TodoController {
     }
     final tmp = [...state.value!];
     final index = tmp.indexWhere((element) => element.id == todo.id);
-    tmp[index] = tmp[index].copyWith(indentLevel: tmp[index].indentLevel + 1);
+    // todoがTodoクラスなので、tmp[index]もTodoでキャストして良い。
+    final tmpTodo = tmp[index] as Todo;
+    tmp[index] = tmpTodo.copyWith(indentLevel: tmpTodo.indentLevel + 1);
     state = AsyncData(tmp);
   }
 
-  /// インデントを削除する
+  /// [Todo]のインデントを削除する
   Future<void> minusIndent(Todo todo) async {
     try {
       todoRepository!.update(
@@ -76,12 +77,14 @@ class TodoController extends _$TodoController {
     }
     final tmp = [...state.value!];
     final index = tmp.indexWhere((element) => element.id == todo.id);
-    tmp[index] = tmp[index].copyWith(indentLevel: tmp[index].indentLevel - 1);
+    // todoがTodoクラスなので、tmp[index]もTodoでキャストして良い。
+    final tmpTodo = tmp[index] as Todo;
+    tmp[index] = tmpTodo.copyWith(indentLevel: tmpTodo.indentLevel - 1);
     state = AsyncData(tmp);
   }
 
-  /// Todoを削除する
-  Future<void> delete(Todo todo) async {
+  /// [TodoItem]を削除する
+  Future<void> delete(TodoItem todo) async {
     try {
       todoRepository!.delete(id: todo.id);
     } on Exception catch (e, s) {
@@ -92,13 +95,13 @@ class TodoController extends _$TodoController {
     state = AsyncData(tmp);
   }
 
-  /// [cartId]の[Todo.title]を更新する
+  /// [todoId]に一致する[Todo.title]を更新する
   Future<void> updateTodoTitle({
     required String todoId,
     required String title,
   }) async {
     final index = state.valueOrNull!.indexWhere((e) => e.id == todoId);
-    final todo = state.valueOrNull![index].copyWith(title: title);
+    final todo = (state.valueOrNull![index] as Todo).copyWith(title: title);
     try {
       await todoRepository!.update(
         id: todo.id,
@@ -124,7 +127,7 @@ class TodoController extends _$TodoController {
   }) async {
     final index = state.valueOrNull!.indexWhere((e) => e.id == todoId);
     final tmp = [...state.value!];
-    final todo = state.value![index].copyWith(isDone: isDone);
+    final todo = (state.value![index] as Todo).copyWith(isDone: isDone);
     tmp[index] = todo;
     state = AsyncData(tmp);
     try {
@@ -137,7 +140,7 @@ class TodoController extends _$TodoController {
     }
   }
 
-  /// [oldIndex]の[Todo]を[newIndex]に移動する
+  /// [oldIndex]の[TodoItem]を[newIndex]に移動する
   Future<void> reorder(int oldIndex, int newIndex) async {
     final tmp = [...state.value!];
     final item = tmp.removeAt(oldIndex);
@@ -179,7 +182,7 @@ class TodoController extends _$TodoController {
 
     _deleteDonesDebounce =
         Timer(Duration(milliseconds: milliseconds), () async {
-      final tmp = [...state.value!.where((e) => !e.isDone)];
+      final tmp = [...state.value!.whereType<Todo>().where((e) => !e.isDone)];
       state = AsyncData(tmp);
       onDeleted?.call();
     });

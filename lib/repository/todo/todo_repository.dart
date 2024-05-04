@@ -5,7 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'todo_repository.g.dart';
 
-/// [Todo]を扱うRepository
+/// [TodoItem]を扱うRepository
 @riverpod
 TodoRepository todoRepository(TodoRepositoryRef ref, String userId) =>
     TodoRepository(ref: ref, userId: userId);
@@ -21,41 +21,39 @@ class TodoRepository {
   /// Todoを取得する
   ///
   /// isDoneがfalseのTodoを取得する
-  Future<List<Todo>> fetchTodos() async {
+  Future<List<TodoItem>> fetchTodos() async {
     final response = await ref
         .read(userDocumentProvider(userId))
         .collection('todos')
         .where('isDone', isEqualTo: false)
         .get();
     return (response.docs.map((doc) {
-      return Todo.fromJson(doc.data()..['id'] = doc.id);
+      return TodoItem.fromJson(doc.data()..['id'] = doc.id);
     }).toList());
   }
 
-  /// Todoを追加し、idを返す
-  Future<Todo> add({
+  /// [Todo]を追加し、[TodoItem]として返す。
+  Future<TodoItem> add({
     String title = '',
     bool isDone = false,
     int indentLevel = 0,
     int index = 0,
   }) async {
     final createdAt = DateTime.now();
-    final res =
-        await ref.read(userDocumentProvider(userId)).collection("todos").add({
-      'title': title,
-      'isDone': isDone,
-      'indentLevel': indentLevel,
-      'index': index,
-      'createdAt': createdAt,
-    });
-    return Todo(
-      id: res.id,
+    final todo = TodoItem.todo(
+      id: '',
       title: title,
       isDone: isDone,
       indentLevel: indentLevel,
       index: index,
       createdAt: createdAt,
     );
+    final json = todo.toJson();
+    final res = await ref
+        .read(userDocumentProvider(userId))
+        .collection("todos")
+        .add(json);
+    return todo.copyWith(id: res.id);
   }
 
   /// Todoを更新する
@@ -90,7 +88,7 @@ class TodoRepository {
   /// 並び順を更新する
   ///
   /// [todos]の順番で 'index' を一気に更新する
-  Future<void> updateOrder({required List<Todo> todos}) async {
+  Future<void> updateOrder({required List<TodoItem> todos}) async {
     final firestore = ref.read(firestoreProvider);
     final batch = firestore.batch();
 
