@@ -32,6 +32,22 @@ class TodoRepository {
     }).toList());
   }
 
+  /// 指定した日付より後に作成されたTodoを取得する
+  Future<List<TodoItem>> fetchTodosAfter({
+    required DateTime date,
+    isDone = false,
+  }) async {
+    final response = await ref
+        .read(userDocumentProvider(userId))
+        .collection('todos')
+        .where('isDone', isEqualTo: isDone)
+        .where('createdAt', isGreaterThan: date)
+        .get();
+    return (response.docs.map((doc) {
+      return TodoItem.fromJson(doc.data()..['id'] = doc.id);
+    }).toList());
+  }
+
   /// [Todo]を追加し、[TodoItem]として返す。
   Future<TodoItem> add({
     String title = '',

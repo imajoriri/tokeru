@@ -26,7 +26,9 @@ class TodoController extends _$TodoController {
     }
     todoRepository = ref.read(todoRepositoryProvider(user.value!.id));
 
-    final todos = await todoRepository!.fetchTodos();
+    final now = DateTime.now();
+    final todayStart = DateTime(now.year, now.month, now.day);
+    final todos = await todoRepository!.fetchTodosAfter(date: todayStart);
     // index順に並び替える
     todos.sort((a, b) => a.index.compareTo(b.index));
     return todos;
