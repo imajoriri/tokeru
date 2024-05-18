@@ -43,8 +43,8 @@ class TodoScreen extends ConsumerWidget {
     return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _TodaySection(),
-        Divider(),
+        // _TodaySection(),
+        // Divider(),
         TodoList(),
         // _TodoTextField(),
       ],

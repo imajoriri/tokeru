@@ -48,22 +48,22 @@ void main() async {
             child: Consumer(
               builder: (context, ref, child) {
                 final largeWindowKey = GlobalKey();
-                final channel = ref.watch(methodChannelProvider);
-                final bookmark = ref.watch(bookmarkControllerProvider);
+                // final channel = ref.watch(methodChannelProvider);
+                // final bookmark = ref.watch(bookmarkControllerProvider);
                 ref.watch(hotKeyControllerProvider);
 
-                channel.setMethodCallHandler((call) async {
-                  switch (call.method) {
-                    case 'inactive':
-                      if (!bookmark) {
-                        channel.invokeMethod(
-                          AppMethodChannel.closeWindow.name,
-                        );
-                      }
-                      break;
-                  }
-                  return null;
-                });
+                // channel.setMethodCallHandler((call) async {
+                //   switch (call.method) {
+                //     case 'inactive':
+                //       if (!bookmark) {
+                //         channel.invokeMethod(
+                //           AppMethodChannel.closeWindow.name,
+                //         );
+                //       }
+                //       break;
+                //   }
+                //   return null;
+                // });
 
                 return Material(
                   color: context.appColors.backgroundDefault,
@@ -71,26 +71,26 @@ void main() async {
                     child: NotificationListener<SizeChangedLayoutNotification>(
                       onNotification: (notification) {
                         // サイズが変更されたことを検知した時の処理
-                        ref.read(methodChannelProvider).invokeMethod(
-                          AppMethodChannel.setFrameSize.name,
-                          {
-                            "height":
-                                largeWindowKey.currentContext?.size?.height,
-                          },
-                        );
+                        // ref.read(methodChannelProvider).invokeMethod(
+                        //   AppMethodChannel.setFrameSize.name,
+                        //   {
+                        //     "height":
+                        //         largeWindowKey.currentContext?.size?.height,
+                        //   },
+                        // );
                         return true;
                       },
                       child: SizeChangedLayoutNotifier(
                         child: _LargeWindow(
                           key: largeWindowKey,
                           onBuildCallback: () {
-                            ref.read(methodChannelProvider).invokeMethod(
-                              AppMethodChannel.setFrameSize.name,
-                              {
-                                "height":
-                                    largeWindowKey.currentContext?.size?.height,
-                              },
-                            );
+                            // ref.read(methodChannelProvider).invokeMethod(
+                            //   AppMethodChannel.setFrameSize.name,
+                            //   {
+                            //     "height":
+                            //         largeWindowKey.currentContext?.size?.height,
+                            //   },
+                            // );
                           },
                         ),
                       ),
