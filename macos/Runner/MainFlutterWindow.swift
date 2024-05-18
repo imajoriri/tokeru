@@ -4,7 +4,7 @@ import HotKey
 import SwiftUI
 import Firebase
 
-class MainFlutterWindow: NSPanel {
+class MainFlutterWindow: NSWindow {
   var channel: FlutterMethodChannel!
   lazy var flutterEngine = FlutterEngine(name: "my flutter engine", project: nil)
 
@@ -37,7 +37,7 @@ class MainFlutterWindow: NSPanel {
 
     self.setDefaultWindow()
 
-    self.level = .floating
+//    self.level = .floating
 
     // 左上のボタンを操作
     self.standardWindowButton(.miniaturizeButton)?.isHidden = true
@@ -51,10 +51,10 @@ class MainFlutterWindow: NSPanel {
     // nonactivatingPanelによってTokeruを開いても下のウィンドウのフォーカスが失われない
     self.styleMask.insert(.nonactivatingPanel)
 
-    self.collectionBehavior = [
-      // スクリーンのスペースを移動しても表示し続ける
-      .canJoinAllSpaces
-    ]
+//    self.collectionBehavior = [
+//      // スクリーンのスペースを移動しても表示し続ける
+//      .canJoinAllSpaces
+//    ]
 
     // 画面どこを持っても移動できるようにする
     self.isMovable = true
@@ -90,16 +90,16 @@ class MainFlutterWindow: NSPanel {
     channel.invokeMethod("inactive", arguments: nil)
   }
 
-  override func resignMain() {
-    // ここでclose()を呼ばないことで、外部をタップしても閉じない
-    super.resignMain()
-  }
-
-  override func close() {
-    super.close()
-    // hideによって、Tokeruを閉じた時に下のウィンドウに再フォーカスされる
-    NSApp.hide(self)
-  }
+//  override func resignMain() {
+//    // ここでclose()を呼ばないことで、外部をタップしても閉じない
+//    super.resignMain()
+//  }
+//
+//  override func close() {
+//    super.close()
+//    // hideによって、Tokeruを閉じた時に下のウィンドウに再フォーカスされる
+//    NSApp.hide(self)
+//  }
 
   var frameWidth: CGFloat {
     return self.frame.width
