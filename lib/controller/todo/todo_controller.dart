@@ -9,7 +9,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'todo_controller.g.dart';
 
-/// Userに紐づく[TodoItem]を返すController
+/// 今日作成された[TodoItem]を返すController
 ///
 /// ユーザーがログインしていない場合は、[TodoItem]は空の状態で返す。
 @Riverpod(keepAlive: true)

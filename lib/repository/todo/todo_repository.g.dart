@@ -29,22 +29,22 @@ class _SystemHash {
   }
 }
 
-/// [Todo]を扱うRepository
+/// [TodoItem]を扱うRepository
 ///
 /// Copied from [todoRepository].
 @ProviderFor(todoRepository)
 const todoRepositoryProvider = TodoRepositoryFamily();
 
-/// [Todo]を扱うRepository
+/// [TodoItem]を扱うRepository
 ///
 /// Copied from [todoRepository].
 class TodoRepositoryFamily extends Family<TodoRepository> {
-  /// [Todo]を扱うRepository
+  /// [TodoItem]を扱うRepository
   ///
   /// Copied from [todoRepository].
   const TodoRepositoryFamily();
 
-  /// [Todo]を扱うRepository
+  /// [TodoItem]を扱うRepository
   ///
   /// Copied from [todoRepository].
   TodoRepositoryProvider call(
@@ -79,11 +79,11 @@ class TodoRepositoryFamily extends Family<TodoRepository> {
   String? get name => r'todoRepositoryProvider';
 }
 
-/// [Todo]を扱うRepository
+/// [TodoItem]を扱うRepository
 ///
 /// Copied from [todoRepository].
 class TodoRepositoryProvider extends AutoDisposeProvider<TodoRepository> {
-  /// [Todo]を扱うRepository
+  /// [TodoItem]を扱うRepository
   ///
   /// Copied from [todoRepository].
   TodoRepositoryProvider(
