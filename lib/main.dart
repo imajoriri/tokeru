@@ -69,32 +69,30 @@ void main() async {
 
                 return Material(
                   color: context.appColors.backgroundDefault,
-                  child: SingleChildScrollView(
-                    child: NotificationListener<SizeChangedLayoutNotification>(
-                      onNotification: (notification) {
-                        // サイズが変更されたことを検知した時の処理
-                        // ref.read(methodChannelProvider).invokeMethod(
-                        //   AppMethodChannel.setFrameSize.name,
-                        //   {
-                        //     "height":
-                        //         largeWindowKey.currentContext?.size?.height,
-                        //   },
-                        // );
-                        return true;
-                      },
-                      child: SizeChangedLayoutNotifier(
-                        child: _LargeWindow(
-                          key: largeWindowKey,
-                          onBuildCallback: () {
-                            // ref.read(methodChannelProvider).invokeMethod(
-                            //   AppMethodChannel.setFrameSize.name,
-                            //   {
-                            //     "height":
-                            //         largeWindowKey.currentContext?.size?.height,
-                            //   },
-                            // );
-                          },
-                        ),
+                  child: NotificationListener<SizeChangedLayoutNotification>(
+                    onNotification: (notification) {
+                      // サイズが変更されたことを検知した時の処理
+                      // ref.read(methodChannelProvider).invokeMethod(
+                      //   AppMethodChannel.setFrameSize.name,
+                      //   {
+                      //     "height":
+                      //         largeWindowKey.currentContext?.size?.height,
+                      //   },
+                      // );
+                      return true;
+                    },
+                    child: SizeChangedLayoutNotifier(
+                      child: _LargeWindow(
+                        key: largeWindowKey,
+                        onBuildCallback: () {
+                          // ref.read(methodChannelProvider).invokeMethod(
+                          //   AppMethodChannel.setFrameSize.name,
+                          //   {
+                          //     "height":
+                          //         largeWindowKey.currentContext?.size?.height,
+                          //   },
+                          // );
+                        },
                       ),
                     ),
                   ),
@@ -133,10 +131,12 @@ class _LargeWindow extends HookConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           _Header(),
-          switch (screenType) {
-            ScreenType.todo => const TodoScreen(),
-            ScreenType.settings => const SettingsScreen(),
-          },
+          Expanded(
+            child: switch (screenType) {
+              ScreenType.todo => const TodoScreen(),
+              ScreenType.settings => const SettingsScreen(),
+            },
+          ),
         ],
       ),
     );

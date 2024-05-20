@@ -42,15 +42,17 @@ class TodoScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // _TodaySection(),
-        // Divider(),
-        TodoList(),
-        PastTodoList(),
-        // _TodoTextField(),
-      ],
+    return const SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // _TodaySection(),
+          // Divider(),
+          TodoList(),
+          PastTodoList(),
+          // _TodoTextField(),
+        ],
+      ),
     );
   }
 }
