@@ -11,8 +11,9 @@ class TodoListItem extends HookConsumerWidget {
   const TodoListItem({
     super.key,
     required this.todo,
-    required this.controller,
-    required this.focusNode,
+    this.readOnly = false,
+    this.controller,
+    this.focusNode,
     this.onDeleted,
     this.onUpdate,
     this.onToggleDone,
@@ -20,9 +21,12 @@ class TodoListItem extends HookConsumerWidget {
 
   final Todo todo;
 
-  final TextEditingController controller;
+  final TextEditingController? controller;
 
-  final FocusNode focusNode;
+  final FocusNode? focusNode;
+
+  /// [Todo]の編集ができるかどうか。
+  final bool readOnly;
 
   /// [Todo]の削除時に呼ばれるコールバック
   ///
@@ -40,43 +44,45 @@ class TodoListItem extends HookConsumerWidget {
   ///
   /// このメソッドは以下のタイミングで呼ばれる。
   /// - [Checkbox]がタップされた時
-  final void Function(bool)? onToggleDone;
+  final void Function(bool?)? onToggleDone;
 
   /// debouce用のDuration
   static const debounceDuration = Duration(milliseconds: 400);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final hasFocus = useState(focusNode.hasFocus);
-    var text = controller.text;
+    final effectiveController = controller ?? useTextEditingController();
+    final effectiveFocusNode = focusNode ?? useFocusNode();
+    final hasFocus = useState(focusNode?.hasFocus ?? false);
+    var text = controller?.text ?? '';
 
     useEffect(
       () {
         listener() {
-          hasFocus.value = focusNode.hasFocus;
+          hasFocus.value = effectiveFocusNode.hasFocus;
         }
 
-        focusNode.addListener(listener);
+        effectiveFocusNode.addListener(listener);
         return () {
-          focusNode.removeListener(listener);
+          effectiveFocusNode.removeListener(listener);
         };
       },
-      [focusNode],
+      [effectiveFocusNode],
     );
 
     Timer? debounce;
     useEffect(
       () {
-        controller.addListener(() {
+        effectiveController.addListener(() {
           if (debounce?.isActive ?? false) {
             debounce?.cancel();
           }
 
           debounce = Timer(debounceDuration, () {
-            if (text != controller.text) {
-              onUpdate?.call(controller.text);
+            if (text != effectiveController.text) {
+              onUpdate?.call(effectiveController.text);
             }
-            text = controller.text;
+            text = effectiveController.text;
           });
         });
 
@@ -118,9 +124,7 @@ class TodoListItem extends HookConsumerWidget {
             children: [
               Checkbox(
                 value: todo.isDone,
-                onChanged: (val) {
-                  onToggleDone?.call(val!);
-                },
+                onChanged: onToggleDone,
                 focusNode: useFocusNode(
                   skipTraversal: true,
                 ),
@@ -132,10 +136,10 @@ class TodoListItem extends HookConsumerWidget {
                     if (event is RawKeyDownEvent) {
                       // バックスペースキー & カーソルが先頭の場合
                       if (event.logicalKey == LogicalKeyboardKey.backspace &&
-                          controller.selection.baseOffset == 0 &&
-                          controller.selection.extentOffset == 0) {
+                          effectiveController.selection.baseOffset == 0 &&
+                          effectiveController.selection.extentOffset == 0) {
                         // 空文字の場合は削除
-                        if (controller.text.isEmpty) {
+                        if (effectiveController.text.isEmpty) {
                           onDeleted?.call();
                           return KeyEventResult.handled;
                         }
@@ -150,13 +154,14 @@ class TodoListItem extends HookConsumerWidget {
                       top: 6,
                     ),
                     child: TextField(
-                      controller: controller,
-                      focusNode: focusNode,
+                      controller: effectiveController,
+                      focusNode: effectiveFocusNode,
                       style: context.appTextTheme.bodyLarge.copyWith(
                         color: todo.isDone
                             ? Colors.grey
                             : context.appColors.textDefault,
                       ),
+                      readOnly: readOnly,
                       maxLines: null,
                       decoration: const InputDecoration(
                         border: InputBorder.none,
