@@ -133,9 +133,10 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
                         .read(todoControllerProvider.notifier)
                         .updateTodoTitle(todoId: todo.id, title: value),
                     onToggleDone: (value) {
-                      ref
-                          .read(todoControllerProvider.notifier)
-                          .updateIsDone(todoId: todo.id, isDone: value);
+                      ref.read(todoControllerProvider.notifier).updateIsDone(
+                            todoId: todo.id,
+                            isDone: value ?? false,
+                          );
                       ref
                           .read(todoControllerProvider.notifier)
                           .filterDoneIsTrueWithDebounce();

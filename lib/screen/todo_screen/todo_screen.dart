@@ -10,6 +10,7 @@ import 'package:quick_flutter/controller/google_sign_in/google_sign_in_controlle
 import 'package:quick_flutter/controller/just_now_event/just_now_event_controller.dart';
 import 'package:quick_flutter/controller/memo/memo_controller.dart';
 import 'package:quick_flutter/controller/next_event/next_event_controller.dart';
+import 'package:quick_flutter/controller/past_todo/past_todo_controller.dart';
 import 'package:quick_flutter/controller/today_calendar_event/today_calendar_event_controller.dart';
 import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/todo_focus/todo_focus_controller.dart';
@@ -34,6 +35,7 @@ part 'todo_list.dart';
 part 'memo.dart';
 part 'todo_text_field.dart';
 part 'today_section.dart';
+part 'past_todo_list.dart';
 
 class TodoScreen extends ConsumerWidget {
   const TodoScreen({super.key});
@@ -46,6 +48,7 @@ class TodoScreen extends ConsumerWidget {
         // _TodaySection(),
         // Divider(),
         TodoList(),
+        PastTodoList(),
         // _TodoTextField(),
       ],
     );
