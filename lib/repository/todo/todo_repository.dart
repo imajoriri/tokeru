@@ -18,30 +18,36 @@ class TodoRepository {
   final Ref ref;
   final String userId;
 
-  /// Todoを取得する
-  ///
-  /// isDoneがfalseのTodoを取得する
-  Future<List<TodoItem>> fetchTodos() async {
-    final response = await ref
-        .read(userDocumentProvider(userId))
-        .collection('todos')
-        .where('isDone', isEqualTo: false)
-        .get();
-    return (response.docs.map((doc) {
-      return TodoItem.fromJson(doc.data()..['id'] = doc.id);
-    }).toList());
-  }
-
   /// 指定した日付より後に作成されたTodoを取得する
   Future<List<TodoItem>> fetchTodosAfter({
     required DateTime date,
-    isDone = false,
+    bool isDone = false,
+    int limit = 50,
   }) async {
     final response = await ref
         .read(userDocumentProvider(userId))
         .collection('todos')
         .where('isDone', isEqualTo: isDone)
         .where('createdAt', isGreaterThan: date)
+        .limit(limit)
+        .get();
+    return (response.docs.map((doc) {
+      return TodoItem.fromJson(doc.data()..['id'] = doc.id);
+    }).toList());
+  }
+
+  /// 指定した日付より前に作成されたTodoを取得する
+  Future<List<TodoItem>> fetchTodosBefore({
+    required DateTime date,
+    bool isDone = false,
+    int limit = 50,
+  }) async {
+    final response = await ref
+        .read(userDocumentProvider(userId))
+        .collection('todos')
+        .where('isDone', isEqualTo: isDone)
+        .where('createdAt', isLessThan: date)
+        .limit(limit)
         .get();
     return (response.docs.map((doc) {
       return TodoItem.fromJson(doc.data()..['id'] = doc.id);
