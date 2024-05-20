@@ -90,11 +90,6 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
             padding: index == todoLength - 1
                 ? const EdgeInsets.only(bottom: 4)
                 : EdgeInsets.zero,
-            // child: TodoListItem(
-            //   todo: todo,
-            //   focusNode: ref.watch(todoFocusControllerProvider)[index],
-            //   controller: ref.watch(todoTextEditingControllerProvider(todo.id)),
-            // ),
             child: switch (todo) {
               Todo() => TodoListItem(
                   todo: todo as Todo,
