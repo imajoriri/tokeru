@@ -1,3 +1,4 @@
+import 'package:quick_flutter/controller/refresh/refresh_controller.dart';
 import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/user/user_controller.dart';
 import 'package:quick_flutter/model/todo/todo.dart';
@@ -11,6 +12,7 @@ part 'today_done_todo_controller.g.dart';
 class TodayDoneTodoController extends _$TodayDoneTodoController {
   @override
   FutureOr<List<TodoItem>> build() async {
+    ref.watch(refreshControllerProvider);
     final user = ref.watch(userControllerProvider);
     if (user.hasError || user.valueOrNull == null) {
       return [];
