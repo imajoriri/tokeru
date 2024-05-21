@@ -7,7 +7,7 @@ part of 'today_done_todo_controller.dart';
 // **************************************************************************
 
 String _$todayDoneTodoControllerHash() =>
-    r'95a334fc431387d75f588f5db5c4445c5c3cf5ee';
+    r'b7db0aa8b7f85b0311a4e82fc637e37647290123';
 
 /// 今日の完了済みの[TodoItem]を取得するコントローラー
 ///
