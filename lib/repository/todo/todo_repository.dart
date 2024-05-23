@@ -29,6 +29,7 @@ class TodoRepository {
         .collection('todos')
         .where('isDone', isEqualTo: isDone)
         .where('createdAt', isGreaterThan: date)
+        .orderBy('createdAt', descending: true)
         .limit(limit)
         .get();
     return (response.docs.map((doc) {
@@ -47,6 +48,7 @@ class TodoRepository {
         .collection('todos')
         .where('isDone', isEqualTo: isDone)
         .where('createdAt', isLessThan: date)
+        .orderBy('createdAt', descending: true)
         .limit(limit)
         .get();
     return (response.docs.map((doc) {
