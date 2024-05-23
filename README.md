@@ -14,6 +14,7 @@ Tokeruは「**1日のタスク、メモ、時間を管理するアプリ**」で
 <img width="800" alt="CleanShot 2024-04-02 at 08 13 45@2x" src="https://github.com/imajoriri/tokeru/assets/30540418/7b16d8cf-1241-4138-afa6-edbfaf02df7e">
 
 
+
 # インストール
 
 > [!NOTE]
