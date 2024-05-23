@@ -6,6 +6,12 @@ class _TodayDoneSection extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final todos = ref.watch(todayDoneTodoControllerProvider).valueOrNull ?? [];
-    return Text('Today Done ${todos.length}');
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        'Today Done ${todos.length}',
+        style: context.appTextTheme.titleSmall,
+      ),
+    );
   }
 }
