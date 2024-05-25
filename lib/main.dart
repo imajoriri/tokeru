@@ -9,6 +9,7 @@ import 'package:logger/logger.dart';
 import 'package:quick_flutter/controller/bookmark/bookmark_controller.dart';
 import 'package:quick_flutter/controller/hot_key/hot_key_controller.dart';
 import 'package:quick_flutter/controller/method_channel/method_channel_controller.dart';
+import 'package:quick_flutter/controller/refresh/refresh_controller.dart';
 import 'package:quick_flutter/controller/screen_type/screen_type_controller.dart';
 import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/todo_focus/todo_focus_controller.dart';
@@ -62,7 +63,12 @@ void main() async {
                       // }
                       break;
                     case 'active':
-                      ref.invalidate(todoControllerProvider);
+                      // 更新が昨日以前の場合は、データを更新する
+                      if (ref
+                          .read(refreshControllerProvider.notifier)
+                          .isPast()) {
+                        ref.invalidate(refreshControllerProvider);
+                      }
                   }
                   return null;
                 });
