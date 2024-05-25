@@ -6,16 +6,18 @@ part of 'refresh_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$refreshControllerHash() => r'e154023361fff3d6ab14052b91969f67c2aa2446';
+String _$refreshControllerHash() => r'196079fe3021e8cd5993334c31dfe3a726fa2b31';
 
 /// データを更新するためのコントローラー。
 ///
+/// 最新更新日を返す。
 /// このコントローラーをref.watchすることで、データの更新を行う。
 ///
-/// Copied from [refreshController].
-@ProviderFor(refreshController)
-final refreshControllerProvider = Provider<void>.internal(
-  refreshController,
+/// Copied from [RefreshController].
+@ProviderFor(RefreshController)
+final refreshControllerProvider =
+    NotifierProvider<RefreshController, DateTime>.internal(
+  RefreshController.new,
   name: r'refreshControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
@@ -24,6 +26,6 @@ final refreshControllerProvider = Provider<void>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef RefreshControllerRef = ProviderRef<void>;
+typedef _$RefreshController = Notifier<DateTime>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
