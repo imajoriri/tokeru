@@ -151,54 +151,14 @@ class _LargeWindow extends HookConsumerWidget {
 class _Header extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final channel = ref.watch(methodChannelProvider);
     return Row(
       children: [
-        Expanded(
-          flex: 1,
-          child: Row(
-            children: [
-              IconButton(
-                focusNode: FocusNode(skipTraversal: true),
-                tooltip: ShortcutActivatorType.closeWindow.longLabel,
-                onPressed: () {
-                  channel.invokeMethod(
-                    AppMethodChannel.openOrClosePanel.name,
-                  );
-                },
-                icon: const Icon(Icons.close),
-              ),
-            ],
-          ),
-        ),
-
         // 右がわのアイコン
         Expanded(
           flex: 1,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              // IconButton(
-              //   focusNode: FocusNode(skipTraversal: true),
-              //   onPressed: () {
-              //     ref.read(screenTypeControllerProvider.notifier).screenType =
-              //         ScreenType.settings;
-              //   },
-              //   icon: const Icon(Icons.keyboard_command_key_sharp),
-              // ),
-              // IconButton(
-              //   focusNode: FocusNode(skipTraversal: true),
-              //   onPressed: () {
-              //     ref.read(bookmarkControllerProvider.notifier).toggle();
-              //   },
-              //   tooltip: ShortcutActivatorType.pinWindow.longLabel,
-              //   icon: Icon(
-              //     bookmark ? Icons.push_pin : Icons.push_pin_outlined,
-              //   ),
-              //   color: bookmark
-              //       ? context.appColors.backgroundPrimaryActionEnabled
-              //       : null,
-              // ),
               IconButton(
                 focusNode: FocusNode(skipTraversal: true),
                 tooltip: ShortcutActivatorType.newTodo.longLabel,

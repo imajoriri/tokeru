@@ -40,9 +40,9 @@ class MainFlutterWindow: NSWindow {
 //    self.level = .floating
 
     // 左上のボタンを操作
-    self.standardWindowButton(.miniaturizeButton)?.isHidden = true
-    self.standardWindowButton(.zoomButton)?.isHidden = true
-    self.standardWindowButton(.closeButton)?.isHidden = true
+//    self.standardWindowButton(.miniaturizeButton)?.isHidden = true
+//    self.standardWindowButton(.zoomButton)?.isHidden = true
+//    self.standardWindowButton(.closeButton)?.isHidden = true
 
     // タイトルを非表示にする
     self.titleVisibility = .hidden
