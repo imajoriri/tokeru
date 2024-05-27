@@ -6,7 +6,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:logger/logger.dart';
-import 'package:quick_flutter/controller/bookmark/bookmark_controller.dart';
 import 'package:quick_flutter/controller/hot_key/hot_key_controller.dart';
 import 'package:quick_flutter/controller/method_channel/method_channel_controller.dart';
 import 'package:quick_flutter/controller/refresh/refresh_controller.dart';
@@ -153,7 +152,6 @@ class _Header extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final channel = ref.watch(methodChannelProvider);
-    final bookmark = ref.watch(bookmarkControllerProvider);
     return Row(
       children: [
         Expanded(
@@ -180,27 +178,27 @@ class _Header extends ConsumerWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              IconButton(
-                focusNode: FocusNode(skipTraversal: true),
-                onPressed: () {
-                  ref.read(screenTypeControllerProvider.notifier).screenType =
-                      ScreenType.settings;
-                },
-                icon: const Icon(Icons.keyboard_command_key_sharp),
-              ),
-              IconButton(
-                focusNode: FocusNode(skipTraversal: true),
-                onPressed: () {
-                  ref.read(bookmarkControllerProvider.notifier).toggle();
-                },
-                tooltip: ShortcutActivatorType.pinWindow.longLabel,
-                icon: Icon(
-                  bookmark ? Icons.push_pin : Icons.push_pin_outlined,
-                ),
-                color: bookmark
-                    ? context.appColors.backgroundPrimaryActionEnabled
-                    : null,
-              ),
+              // IconButton(
+              //   focusNode: FocusNode(skipTraversal: true),
+              //   onPressed: () {
+              //     ref.read(screenTypeControllerProvider.notifier).screenType =
+              //         ScreenType.settings;
+              //   },
+              //   icon: const Icon(Icons.keyboard_command_key_sharp),
+              // ),
+              // IconButton(
+              //   focusNode: FocusNode(skipTraversal: true),
+              //   onPressed: () {
+              //     ref.read(bookmarkControllerProvider.notifier).toggle();
+              //   },
+              //   tooltip: ShortcutActivatorType.pinWindow.longLabel,
+              //   icon: Icon(
+              //     bookmark ? Icons.push_pin : Icons.push_pin_outlined,
+              //   ),
+              //   color: bookmark
+              //       ? context.appColors.backgroundPrimaryActionEnabled
+              //       : null,
+              // ),
               IconButton(
                 focusNode: FocusNode(skipTraversal: true),
                 tooltip: ShortcutActivatorType.newTodo.longLabel,
