@@ -17,7 +17,6 @@ import 'package:quick_flutter/model/analytics_event/analytics_event_name.dart';
 import 'package:quick_flutter/screen/settings/settings_screen.dart';
 import 'package:quick_flutter/screen/todo_screen/todo_screen.dart';
 import 'package:quick_flutter/controller/url/url_controller.dart';
-import 'package:quick_flutter/widget/actions/close_window/close_window_action.dart';
 import 'package:quick_flutter/widget/actions/delete_todo/delete_todo_action.dart';
 import 'package:quick_flutter/widget/actions/focus_down/focus_down_action.dart';
 import 'package:quick_flutter/widget/actions/focus_up/focus_up_action.dart';
@@ -202,8 +201,6 @@ class _CallbackShortcuts extends ConsumerWidget {
             const PinWindowIntent(),
         ShortcutActivatorType.toggleDone.shortcutActivator:
             const ToggleTodoDoneIntent(),
-        ShortcutActivatorType.closeWindow.shortcutActivator:
-            const CloseWindowIntent(),
         ShortcutActivatorType.moveUp.shortcutActivator:
             const MoveUpTodoIntent(),
         ShortcutActivatorType.moveDown.shortcutActivator:
@@ -217,7 +214,6 @@ class _CallbackShortcuts extends ConsumerWidget {
         actions: {
           NewTodoIntent: ref.read(newTodoActionProvider),
           PinWindowIntent: ref.read(pinWindowActionProvider),
-          CloseWindowIntent: ref.read(closeWindowActionProvider),
           ReloadIntent: ref.read(reloadActionProvider),
         },
         child: child,

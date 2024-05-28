@@ -70,12 +70,6 @@ enum ShortcutActivatorType {
     label: 'Pin window',
   ),
 
-  /// ウィンドウを閉じる
-  closeWindow(
-    shortcutActivator: SingleActivator(LogicalKeyboardKey.escape),
-    label: 'Close window',
-  ),
-
   /// ウィンドウを表示・非表示を切り替える
   toggleWindow(
     shortcutActivator: SingleActivator(
