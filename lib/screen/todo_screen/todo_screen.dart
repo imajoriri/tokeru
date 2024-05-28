@@ -12,7 +12,6 @@ import 'package:quick_flutter/controller/memo/memo_controller.dart';
 import 'package:quick_flutter/controller/next_event/next_event_controller.dart';
 import 'package:quick_flutter/controller/past_todo/past_todo_controller.dart';
 import 'package:quick_flutter/controller/today_calendar_event/today_calendar_event_controller.dart';
-import 'package:quick_flutter/controller/today_done_todo/today_done_todo_controller.dart';
 import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/todo_focus/todo_focus_controller.dart';
 import 'package:quick_flutter/controller/todo_text_editing_controller/todo_text_editing_controller.dart';
@@ -37,7 +36,6 @@ part 'memo.dart';
 part 'todo_text_field.dart';
 part 'today_section.dart';
 part 'past_todo_list.dart';
-part 'today_done_section.dart';
 
 class TodoScreen extends ConsumerWidget {
   const TodoScreen({super.key});
@@ -50,7 +48,6 @@ class TodoScreen extends ConsumerWidget {
         children: [
           // _TodaySection(),
           // Divider(),
-          _TodayDoneSection(),
           TodoList(),
           PastTodoList(),
           // _TodoTextField(),

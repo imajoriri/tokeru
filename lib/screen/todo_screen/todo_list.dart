@@ -6,56 +6,71 @@ class TodoList extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final todos = ref.watch(todoControllerProvider);
-    return todos.when(
-      data: (todos) {
-        if (todos.isEmpty) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextButton(
-              child: const Text('start todos!'),
-              onPressed: () async {
-                await ref.read(todoControllerProvider.notifier).add(0);
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  ref
-                      .read(todoFocusControllerProvider.notifier)
-                      .requestFocus(0);
-                });
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Title
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8.0),
+          child: Text('Today', style: context.appTextTheme.titleSmall),
+        ),
 
-                await FirebaseAnalytics.instance.logEvent(
-                  name: AnalyticsEventName.addTodo.name,
-                );
-              },
-            ),
-          );
-        }
-        return ReorderableListView.builder(
-          buildDefaultDragHandles: false,
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: todos.length,
-          onReorder: (oldIndex, newIndex) {
-            // NOTE: なぜか上から下に移動するときはnewIndexが1つずれるので
-            // その分を補正する
-            if (oldIndex < newIndex) {
-              newIndex -= 1;
+        // TodoList
+        todos.when(
+          data: (todos) {
+            if (todos.isEmpty) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  child: const Text('start todos!'),
+                  onPressed: () async {
+                    await ref.read(todoControllerProvider.notifier).add(0);
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      ref
+                          .read(todoFocusControllerProvider.notifier)
+                          .requestFocus(0);
+                    });
+
+                    await FirebaseAnalytics.instance.logEvent(
+                      name: AnalyticsEventName.addTodo.name,
+                    );
+                  },
+                ),
+              );
             }
-            ref
-                .read(todoControllerProvider.notifier)
-                .reorder(oldIndex, newIndex);
-          },
-          itemBuilder: (context, index) {
-            final key = Key(todos[index].id);
-            return _ReorderableTodoListItem(
-              key: key,
-              todo: todos[index],
-              index: index,
-              todoLength: todos.length,
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: ReorderableListView.builder(
+                buildDefaultDragHandles: false,
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: todos.length,
+                onReorder: (oldIndex, newIndex) {
+                  // NOTE: なぜか上から下に移動するときはnewIndexが1つずれるので
+                  // その分を補正する
+                  if (oldIndex < newIndex) {
+                    newIndex -= 1;
+                  }
+                  ref
+                      .read(todoControllerProvider.notifier)
+                      .reorder(oldIndex, newIndex);
+                },
+                itemBuilder: (context, index) {
+                  final key = Key(todos[index].id);
+                  return _ReorderableTodoListItem(
+                    key: key,
+                    todo: todos[index],
+                    index: index,
+                    todoLength: todos.length,
+                  );
+                },
+              ),
             );
           },
-        );
-      },
-      error: (e, s) => const Text('happen somethings'),
-      loading: () => const CircularProgressIndicator(),
+          error: (e, s) => const Text('happen somethings'),
+          loading: () => const CircularProgressIndicator(),
+        ),
+      ],
     );
   }
 }
@@ -97,9 +112,7 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
       child: Stack(
         children: [
           Padding(
-            padding: index == todoLength - 1
-                ? const EdgeInsets.only(bottom: 4)
-                : EdgeInsets.zero,
+            padding: EdgeInsets.zero,
             child: switch (todo) {
               Todo() => Actions(
                   actions: {
