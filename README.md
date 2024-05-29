@@ -8,47 +8,15 @@
 [![Codemagic build status](https://api.codemagic.io/apps/65d834ac3786568a8b6ef02e/65d83d4548306436129e0db1/status_badge.svg)](https://codemagic.io/apps/65d834ac3786568a8b6ef02e/65d83d4548306436129e0db1/latest_build)
 
 
-Tokeruは「**1日のタスク、メモ、時間を管理するアプリ**」です。 (macOS 11.0以降)。  
-`⇧ ⌘ ,`キーでSpotlightやAlfred、Raycastのようなフローティングされたウィンドウが開きます。  
+Tokeruは**"今日"のTodoを管理するアプリ**です。 (macOS 11.0以降)。  
+明日にはリセットされ、新たな気持ちで1日を始められます。  
 
-<img width="800" alt="CleanShot 2024-04-02 at 08 13 45@2x" src="https://github.com/imajoriri/tokeru/assets/30540418/7b16d8cf-1241-4138-afa6-edbfaf02df7e">
+
 
 
 # インストール
 
-> [!NOTE]
-> Tokeruは現在開発中です。一部の機能はまだリリースされていませんが、一部の人にベータ版としてTestFlightから利用していただいています。
-> 下記のリンクからインストール可能です。
-
-https://testflight.apple.com/join/LaDGDUKa
-
-
-# 機能/ロードマップ
-
-### ウィンドウ操作
-
-- [x] `⌘ ⇧ ,`でウィンドウを開く・閉じる
-- [x] Tokeru以外のアプリケーションをタッチすることでTokeruを非表示にする
-- [x] ピン機能をONにすればTokeru以外のアプリケーションをタッチしても非表示にされない
-
-### Todoを管理する機能
-
-- [x] 一般的なTodoの作成・削除・完了機能
-- [x] Enterを押せば1つ下にTodoを作成できる
-- [x] Todoを並び替えできる
-- [ ] インデント機能
-
-### メモを管理する機能
-
-- [ ] 最高のユーザー体験を提供できるような仕様を決める
-
-### ショートカットキー
-
-- [x] `⌘ N`: 新規Todoを一番上に追加
-- [x] `⌘ K`: Todoを完了させる
-- [x] `⌘ ↑(↓)`: Todoを1つ上(下)に移動
-- [x] `⌘ D`: Todoを削除
-- [x] `⌘ P`: ピン機能をON・OFF切り替える
+App Storeにて公開予定。
 
 # サポート
 
