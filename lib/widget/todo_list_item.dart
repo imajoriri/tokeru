@@ -158,8 +158,8 @@ class TodoListItem extends HookConsumerWidget {
                       controller: effectiveController,
                       focusNode: effectiveFocusNode,
                       style: context.appTextTheme.bodyLarge.copyWith(
-                        color: todo.isDone
-                            ? Colors.grey
+                        color: todo.isDone || readOnly
+                            ? context.appColors.textSubtle
                             : context.appColors.textDefault,
                       ),
                       readOnly: readOnly,
