@@ -152,6 +152,8 @@ class MainFlutterWindow: NSWindow {
       case "windowToRight":
         self.windowToRight()
         return
+      case "quit":
+        self.quit()
       default:
         result(FlutterMethodNotImplemented)
         return
@@ -189,6 +191,11 @@ class MainFlutterWindow: NSWindow {
   /// ウィンドウが表示されている場合は閉じ、表示されていない場合は開きます。
   func closeWindow() {
     self.close()
+  }
+
+  /// アプリケーションを終了する。
+  func quit() {
+    NSApplication.shared.terminate(nil)
   }
 
   /// windowのサイズを変える

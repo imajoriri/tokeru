@@ -64,20 +64,10 @@ enum ShortcutActivatorType {
 
   // ----ウィンドウ系----
 
-  /// ウィンドウの固定を切り替える
-  pinWindow(
-    shortcutActivator: SingleActivator(meta: true, LogicalKeyboardKey.keyP),
-    label: 'Pin window',
-  ),
-
-  /// ウィンドウを表示・非表示を切り替える
-  toggleWindow(
-    shortcutActivator: SingleActivator(
-      LogicalKeyboardKey.comma,
-      shift: true,
-      meta: true,
-    ),
-    label: 'Toggle window',
+  /// Quit the app
+  quit(
+    shortcutActivator: SingleActivator(meta: true, LogicalKeyboardKey.keyQ),
+    label: 'Quit',
   ),
 
   /// データをリフレッシュする

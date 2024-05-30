@@ -19,6 +19,7 @@ enum AppMethodChannel {
 
   openOrClosePanel,
   closeWindow,
+  quit,
 
   /// ウィンドウが右にあれば左端に、左にあれば右端に移動する
   switchHorizen,
