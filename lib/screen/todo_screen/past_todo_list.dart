@@ -10,7 +10,7 @@ class PastTodoList extends HookConsumerWidget {
     return todos.when(
       data: (todos) {
         if (todos.isEmpty) {
-          return const Text('No past todos');
+          return const SizedBox();
         }
         final yesterday = DateTime.now().subtract(const Duration(days: 1));
         final yesterdayStart =

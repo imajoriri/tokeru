@@ -19,22 +19,16 @@ class TodoList extends HookConsumerWidget {
         todos.when(
           data: (todos) {
             if (todos.isEmpty) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextButton(
-                  child: const Text('start todos!'),
-                  onPressed: () async {
-                    await ref.read(todoControllerProvider.notifier).add(0);
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      ref
-                          .read(todoFocusControllerProvider.notifier)
-                          .requestFocus(0);
-                    });
-
-                    await FirebaseAnalytics.instance.logEvent(
-                      name: AnalyticsEventName.addTodo.name,
-                    );
-                  },
+              return Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+                width: double.infinity,
+                child: Text(
+                  'There are no To-Dos for today. If Tokeru can help, please start by clicking the ‘+’ button or pressing Command + N.',
+                  style: context.appTextTheme.bodySmall.copyWith(
+                    color: context.appColors.textSubtle,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               );
             }
@@ -68,7 +62,10 @@ class TodoList extends HookConsumerWidget {
             );
           },
           error: (e, s) => const Text('happen somethings'),
-          loading: () => const CircularProgressIndicator(),
+          loading: () => const Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Text('Loading...'),
+          ),
         ),
       ],
     );
