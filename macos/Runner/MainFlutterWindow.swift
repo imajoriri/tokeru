@@ -61,7 +61,7 @@ class MainFlutterWindow: NSWindow {
     self.isMovableByWindowBackground = true
 
     // 画面がバックグラウンドになった後、5分後に勝手に落ちるのを防ぐ
-    self.isReleasedWhenClosed = false
+//    self.isReleasedWhenClosed = false
 
     setupNotification()
 
@@ -95,11 +95,12 @@ class MainFlutterWindow: NSWindow {
 //    super.resignMain()
 //  }
 //
-//  override func close() {
+  override func close() {
+    NSApplication.shared.terminate(nil)
 //    super.close()
-//    // hideによって、Tokeruを閉じた時に下のウィンドウに再フォーカスされる
+    // hideによって、Tokeruを閉じた時に下のウィンドウに再フォーカスされる
 //    NSApp.hide(self)
-//  }
+  }
 
   var frameWidth: CGFloat {
     return self.frame.width
