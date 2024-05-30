@@ -197,8 +197,6 @@ class _CallbackShortcuts extends ConsumerWidget {
         ShortcutActivatorType.newTodo.shortcutActivator: const NewTodoIntent(),
         ShortcutActivatorType.newTodoBelow.shortcutActivator:
             const NewTodoBelowIntent(),
-        ShortcutActivatorType.pinWindow.shortcutActivator:
-            const PinWindowIntent(),
         ShortcutActivatorType.toggleDone.shortcutActivator:
             const ToggleTodoDoneIntent(),
         ShortcutActivatorType.moveUp.shortcutActivator:
@@ -254,32 +252,14 @@ class _PlatformMenuBar extends ConsumerWidget {
         PlatformMenu(
           label: "",
           menus: [
-            const PlatformMenuItemGroup(
-              members: [
-                PlatformMenuItem(
-                  label: 'About Tokeru(WIP)',
-                ),
-              ],
-            ),
-            const PlatformMenuItemGroup(
-              members: [
-                PlatformMenuItem(
-                  label: 'Settings...(WIP)',
-                ),
-                PlatformMenuItem(
-                  label: 'Share Tokeru(WIP)',
-                ),
-              ],
-            ),
             PlatformMenuItemGroup(
               members: [
                 PlatformMenuItem(
-                  label: 'Show or Hide Tokeru',
-                  shortcut:
-                      ShortcutActivatorType.toggleWindow.shortcutActivator,
+                  label: 'Quit Tokeru',
+                  shortcut: ShortcutActivatorType.quit.shortcutActivator,
                   onSelected: () {
                     channel.invokeMethod(
-                      AppMethodChannel.openOrClosePanel.name,
+                      AppMethodChannel.quit.name,
                     );
                   },
                 ),
@@ -360,20 +340,6 @@ class _PlatformMenuBar extends ConsumerWidget {
         PlatformMenu(
           label: "Window",
           menus: [
-            PlatformMenuItemGroup(
-              members: [
-                PlatformMenuItem(
-                  label: ShortcutActivatorType.pinWindow.label,
-                  onSelected: () {
-                    Actions.maybeInvoke<PinWindowIntent>(
-                      context,
-                      const PinWindowIntent(),
-                    );
-                  },
-                  shortcut: ShortcutActivatorType.pinWindow.shortcutActivator,
-                ),
-              ],
-            ),
             PlatformMenuItemGroup(
               members: [
                 PlatformMenuItem(
