@@ -49,7 +49,7 @@ class MainFlutterWindow: NSWindow {
     self.titlebarAppearsTransparent = true
     self.styleMask.insert(.fullSizeContentView)
     // nonactivatingPanelによってTokeruを開いても下のウィンドウのフォーカスが失われない
-    self.styleMask.insert(.nonactivatingPanel)
+//    self.styleMask.insert(.nonactivatingPanel)
 
 //    self.collectionBehavior = [
 //      // スクリーンのスペースを移動しても表示し続ける
