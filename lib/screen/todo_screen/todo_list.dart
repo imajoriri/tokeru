@@ -103,6 +103,22 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
       return KeyEventResult.ignored;
     });
 
+    useEffect(
+      () {
+        listener() {
+          if (focus.hasFocus) {
+            ref.read(selectedTodoItemControllerProvider.notifier).select(index);
+          }
+        }
+
+        focus.addListener(listener);
+        return () {
+          focus.removeListener(listener);
+        };
+      },
+      [controller],
+    );
+
     return MouseRegion(
       onEnter: (_) => onHover.value = true,
       onExit: (_) => onHover.value = false,
@@ -128,6 +144,8 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
                     focusNode: ref.watch(todoFocusControllerProvider)[index],
                     controller:
                         ref.watch(todoTextEditingControllerProvider(todo.id)),
+                    selected:
+                        ref.watch(selectedTodoItemControllerProvider) == index,
                     onDeleted: () async {
                       final currentFocusIndex = ref
                           .read(todoFocusControllerProvider.notifier)
