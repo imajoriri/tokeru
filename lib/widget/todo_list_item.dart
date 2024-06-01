@@ -11,6 +11,7 @@ class TodoListItem extends HookConsumerWidget {
   const TodoListItem({
     super.key,
     required this.todo,
+    this.selected = false,
     this.readOnly = false,
     this.controller,
     this.focusNode,
@@ -24,6 +25,11 @@ class TodoListItem extends HookConsumerWidget {
   final TextEditingController? controller;
 
   final FocusNode? focusNode;
+
+  /// [Todo]が選択されているかどうか。
+  ///
+  /// この値がtrueの場合、背景色が変わる。
+  final bool selected;
 
   /// [Todo]の編集ができるかどうか。
   final bool readOnly;
@@ -53,22 +59,7 @@ class TodoListItem extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final effectiveController = controller ?? useTextEditingController();
     final effectiveFocusNode = focusNode ?? useFocusNode();
-    final hasFocus = useState(focusNode?.hasFocus ?? false);
     var text = controller?.text ?? '';
-
-    useEffect(
-      () {
-        listener() {
-          hasFocus.value = effectiveFocusNode.hasFocus;
-        }
-
-        effectiveFocusNode.addListener(listener);
-        return () {
-          effectiveFocusNode.removeListener(listener);
-        };
-      },
-      [effectiveFocusNode],
-    );
 
     Timer? debounce;
     useEffect(
@@ -105,7 +96,7 @@ class TodoListItem extends HookConsumerWidget {
           bottom: 0,
           child: Container(
             decoration: BoxDecoration(
-              color: hasFocus.value
+              color: selected
                   ? context.appColors.backgroundPrimaryContainer
                   : Colors.transparent,
               borderRadius: BorderRadius.circular(4),

@@ -12,6 +12,7 @@ import 'package:quick_flutter/controller/just_now_event/just_now_event_controlle
 import 'package:quick_flutter/controller/memo/memo_controller.dart';
 import 'package:quick_flutter/controller/next_event/next_event_controller.dart';
 import 'package:quick_flutter/controller/past_todo/past_todo_controller.dart';
+import 'package:quick_flutter/controller/selected_todo_item/selected_todo_item_controller.dart';
 import 'package:quick_flutter/controller/today_calendar_event/today_calendar_event_controller.dart';
 import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/todo_focus/todo_focus_controller.dart';
