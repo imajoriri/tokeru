@@ -11,7 +11,7 @@ class TodoList extends HookConsumerWidget {
       children: [
         // Title
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8.0),
+          padding: const EdgeInsets.all(16),
           child: Text('Today', style: context.appTextTheme.titleSmall),
         ),
 
