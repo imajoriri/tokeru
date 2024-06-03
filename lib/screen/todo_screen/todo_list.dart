@@ -19,16 +19,34 @@ class TodoList extends HookConsumerWidget {
         todos.when(
           data: (todos) {
             if (todos.isEmpty) {
-              return Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
-                width: double.infinity,
-                child: Text(
-                  'There are no To-Dos for today. If Tokeru can help, please start by clicking the ‘+’ button or pressing Command + N.',
-                  style: context.appTextTheme.bodySmall.copyWith(
-                    color: context.appColors.textSubtle,
+              return GestureDetector(
+                onTap: Actions.handler<NewTodoIntent>(
+                  context,
+                  const NewTodoIntent(),
+                ),
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+                  width: double.infinity,
+                  child: Column(
+                    children: [
+                      Text(
+                        'There are no To-Dos for today.\nPlease start by clicking here or pressing Command + N.',
+                        style: context.appTextTheme.bodySmall.copyWith(
+                          color: context.appColors.textSubtle,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 16),
+                      TextButton(
+                        onPressed: Actions.handler<NewTodoIntent>(
+                          context,
+                          const NewTodoIntent(),
+                        ),
+                        child: const Text('Add To-Do'),
+                      ),
+                    ],
                   ),
-                  textAlign: TextAlign.center,
                 ),
               );
             }
