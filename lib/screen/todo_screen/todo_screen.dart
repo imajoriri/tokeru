@@ -26,6 +26,7 @@ import 'package:quick_flutter/widget/actions/focus_down/focus_down_action.dart';
 import 'package:quick_flutter/widget/actions/focus_up/focus_up_action.dart';
 import 'package:quick_flutter/widget/actions/move_down_todo/move_down_todo_action.dart';
 import 'package:quick_flutter/widget/actions/move_up_todo/move_up_todo_action.dart';
+import 'package:quick_flutter/widget/actions/new_todo.dart/new_todo_action.dart';
 import 'package:quick_flutter/widget/actions/new_todo_below/new_todo_below_action.dart';
 import 'package:quick_flutter/widget/actions/toggle_todo_done/toggle_todo_done_action.dart';
 import 'package:quick_flutter/widget/markdown_text_editing_controller.dart';
