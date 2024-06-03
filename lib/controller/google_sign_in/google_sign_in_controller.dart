@@ -29,9 +29,7 @@ class GoogleSignInController extends _$GoogleSignInController {
   @override
   FutureOr<GoogleSignInState> build() async {
     final googleSignIn = GoogleSignIn(
-      clientId:
-          // TODO: 環境変数に置き換える?
-          '288995585248-jg8691tt5gi3bas6ibkdaql6q7sq2o8m.apps.googleusercontent.com',
+      clientId: '',
       scopes: [
         CalendarApi.calendarEventsReadonlyScope,
         CalendarApi.calendarReadonlyScope,
