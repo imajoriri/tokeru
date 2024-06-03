@@ -9,7 +9,10 @@ class PastTodoList extends HookConsumerWidget {
     for (final item in todoItems) {
       // createdAtの時間を切り捨てた日付を取得
       final date = DateTime(
-          item.createdAt.year, item.createdAt.month, item.createdAt.day);
+        item.createdAt.year,
+        item.createdAt.month,
+        item.createdAt.day,
+      );
       if (!grouped.containsKey(date)) {
         grouped[date] = [];
       }
