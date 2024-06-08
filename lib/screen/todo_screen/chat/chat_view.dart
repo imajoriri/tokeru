@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/controller/chat/chat_controller.dart';
@@ -67,18 +68,20 @@ class _ChatListView extends HookConsumerWidget {
               },
             ),
           ),
-          TextField(
-            controller: textEditingController,
-            maxLines: null,
-          ),
-          TextButton(
-            onPressed: () {
-              ref
-                  .read(provider.notifier)
-                  .addChat(todoId, textEditingController.text);
-              textEditingController.clear();
+          CallbackShortcuts(
+            bindings: <ShortcutActivator, VoidCallback>{
+              const SingleActivator(LogicalKeyboardKey.enter, meta: true): () {
+                if (textEditingController.text.isEmpty) return;
+                ref
+                    .read(provider.notifier)
+                    .addChat(todoId, textEditingController.text);
+                textEditingController.clear();
+              },
             },
-            child: const Text('send'),
+            child: TextField(
+              controller: textEditingController,
+              maxLines: null,
+            ),
           ),
         ],
       ),
