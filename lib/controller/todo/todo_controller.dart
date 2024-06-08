@@ -1,8 +1,8 @@
 import 'dart:async';
-
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:quick_flutter/controller/refresh/refresh_controller.dart';
+import 'package:quick_flutter/controller/show_done_todo/show_done_todo_controller.dart';
 import 'package:quick_flutter/controller/user/user_controller.dart';
 import 'package:quick_flutter/model/todo/todo.dart';
 import 'package:quick_flutter/repository/todo/todo_repository.dart';
@@ -30,7 +30,12 @@ class TodoController extends _$TodoController {
 
     final now = DateTime.now();
     final todayStart = DateTime(now.year, now.month, now.day);
-    final todos = await todoRepository!.fetchTodosAfter(date: todayStart);
+
+    final showDoneTodos = ref.watch(showDoneTodoControllerProvider);
+    final todos = await todoRepository!.fetchTodosAfter(
+      date: todayStart,
+      isDone: showDoneTodos ? null : false,
+    );
     // index順に並び替える
     todos.sort((a, b) => a.index.compareTo(b.index));
     return todos;
@@ -125,9 +130,15 @@ class TodoController extends _$TodoController {
   /// [Todo]のisDoneを更新する。
   ///
   /// [Todo]の状態は更新するが、リストの中から削除はしない。
+  /// - [todoId]: 更新する[Todo]のID
+  /// - [isDone]: 更新するisDoneの値
+  /// - [milliseconds]: デバウンスする時間。この時間内に複数回呼ばれた場合、最後の呼び出しのみが実行される。
+  /// - [onUpdated]: 更新後に実行するコールバック。[showDoneTodoControllerProvider]がfalseの場合のみ実行される。
   Future<void> updateIsDone({
     required String todoId,
     bool isDone = true,
+    int milliseconds = 1200,
+    VoidCallback? onUpdated,
   }) async {
     final index = state.valueOrNull!.indexWhere((e) => e.id == todoId);
     final tmp = [...state.value!];
@@ -141,6 +152,12 @@ class TodoController extends _$TodoController {
       );
     } on Exception catch (e, s) {
       await FirebaseCrashlytics.instance.recordError(e, s);
+    }
+    if (!ref.read(showDoneTodoControllerProvider)) {
+      _filterDoneIsTrueWithDebounce(
+        milliseconds: milliseconds,
+        onDeleted: onUpdated,
+      );
     }
   }
 
@@ -177,7 +194,7 @@ class TodoController extends _$TodoController {
   /// [Todo.isDone]がtrueのものをリストから削除する。
   ///
   /// このメソッドが[milliseconds]以内に複数回呼ばれた場合、最後の呼び出しのみが実行される。
-  Future<void> filterDoneIsTrueWithDebounce({
+  Future<void> _filterDoneIsTrueWithDebounce({
     int milliseconds = 1200,
     VoidCallback? onDeleted,
   }) async {

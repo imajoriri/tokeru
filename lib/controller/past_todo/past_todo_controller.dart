@@ -20,7 +20,10 @@ class PastTodoController extends _$PastTodoController {
 
     final now = DateTime.now();
     final todayStart = DateTime(now.year, now.month, now.day);
-    final todos = await todoRepository.fetchTodosBefore(date: todayStart);
+    final todos = await todoRepository.fetchTodosBefore(
+      date: todayStart,
+      isDone: false,
+    );
     return todos;
   }
 }
