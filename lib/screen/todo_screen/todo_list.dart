@@ -136,7 +136,7 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
           focus.removeListener(listener);
         };
       },
-      [controller],
+      [focus],
     );
 
     return MouseRegion(
