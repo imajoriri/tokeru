@@ -30,14 +30,11 @@ class ToggleTodoDoneAction extends Action<ToggleTodoDoneIntent> {
     if (index != -1) {
       final todo =
           ref.read(todoControllerProvider).valueOrNull?[index] as Todo?;
-      await ref
-          .read(todoControllerProvider.notifier)
-          .updateIsDone(todoId: todo!.id, isDone: !todo.isDone);
-
-      ref.read(todoControllerProvider.notifier).filterDoneIsTrueWithDebounce(
-            // ユーザーのタッチ操作ではないので、長く待つ必要もないので300ms
+      await ref.read(todoControllerProvider.notifier).updateIsDone(
+            todoId: todo!.id,
+            isDone: !todo.isDone,
             milliseconds: 300,
-            onDeleted: () {
+            onUpdated: () {
               // Todoの最後にフォーカスしていた場合は、一つ前のTodoにフォーカスを移す
               // Todo最後以外にフォーカスしていた場合は、削除したTodoの次のTodoにフォーカスを移す
               final nextIndex = focusIsLastTodo ? index - 1 : index;

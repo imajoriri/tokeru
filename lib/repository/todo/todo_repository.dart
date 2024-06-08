@@ -19,9 +19,13 @@ class TodoRepository {
   final String userId;
 
   /// 指定した日付より後に作成されたTodoを取得する
+  ///
+  /// - [date]: 指定日付
+  /// - [isDone]: 完了済みのTodoを取得するかどうか。nullの場合は全てのTodoを取得する
+  /// - [limit]: 取得するTodoの最大数
   Future<List<TodoItem>> fetchTodosAfter({
     required DateTime date,
-    bool isDone = false,
+    bool? isDone,
     int limit = 50,
   }) async {
     final response = await ref
@@ -38,9 +42,13 @@ class TodoRepository {
   }
 
   /// 指定した日付より前に作成されたTodoを取得する
+  ///
+  /// - [date]: 指定日付
+  /// - [isDone]: 完了済みのTodoを取得するかどうか。nullの場合は全てのTodoを取得する
+  /// - [limit]: 取得するTodoの最大数
   Future<List<TodoItem>> fetchTodosBefore({
     required DateTime date,
-    bool isDone = false,
+    bool? isDone,
     int limit = 50,
   }) async {
     final response = await ref
