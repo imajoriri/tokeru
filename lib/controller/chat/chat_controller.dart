@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:quick_flutter/controller/refresh/refresh_controller.dart';
 import 'package:quick_flutter/controller/user/user_controller.dart';
 import 'package:quick_flutter/model/chat/chat.dart';
@@ -38,13 +39,16 @@ class ChatController extends _$ChatController {
       return;
     }
     final repository = ref.read(chatRepositoryProvider(user.value!.id));
-    final chat = await repository.addChat(
-      todoId: todoId,
-      body: body,
-      createdAt: DateTime.now(),
-    );
-
-    // stateを更新する。
-    state = AsyncData([chat, ...state.requireValue]);
+    try {
+      final chat = await repository.addChat(
+        todoId: todoId,
+        body: body,
+        createdAt: DateTime.now(),
+      );
+      // stateを更新する。
+      state = AsyncData([chat, ...state.requireValue]);
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+    }
   }
 }
