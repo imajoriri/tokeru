@@ -7,7 +7,7 @@ part of 'selected_todo_item_controller.dart';
 // **************************************************************************
 
 String _$selectedTodoItemControllerHash() =>
-    r'83dcb8950cbcc849c1ec8f28d86086959e7d3206';
+    r'dc9f943b9996aaba7907334034394c01ae0a84c7';
 
 /// 選択されている[TodoItem]を管理するコントローラー。
 ///
