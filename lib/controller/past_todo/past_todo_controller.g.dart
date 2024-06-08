@@ -7,7 +7,7 @@ part of 'past_todo_controller.dart';
 // **************************************************************************
 
 String _$pastTodoControllerHash() =>
-    r'b9b2f4c453ddf3bc3b0701da7878fcfea86cf057';
+    r'84942fb8539c412a5d42f3b242065d532b23f5de';
 
 /// 昨日以降の[TodoItem]を取得するコントローラー
 ///
