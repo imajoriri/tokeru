@@ -47,7 +47,11 @@ class TodoController extends _$TodoController {
     String title = '',
   }) async {
     try {
-      final todo = await todoRepository!.add(index: index, title: title);
+      final todo = await todoRepository!.add(
+        createdAt: DateTime.now(),
+        index: index,
+        title: title,
+      );
       final tmp = [...state.value!];
       tmp.insert(index, todo);
       state = AsyncData(tmp);
