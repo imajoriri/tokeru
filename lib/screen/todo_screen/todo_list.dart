@@ -125,7 +125,9 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
       () {
         listener() {
           if (focus.hasFocus) {
-            ref.read(selectedTodoItemControllerProvider.notifier).select(index);
+            ref
+                .read(selectedTodoItemIdControllerProvider.notifier)
+                .select(todo.id);
           }
         }
 
@@ -162,8 +164,8 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
                     focusNode: ref.watch(todoFocusControllerProvider)[index],
                     controller:
                         ref.watch(todoTextEditingControllerProvider(todo.id)),
-                    selected:
-                        ref.watch(selectedTodoItemControllerProvider) == index,
+                    selected: ref.watch(selectedTodoItemIdControllerProvider) ==
+                        todo.id,
                     onDeleted: () async {
                       final currentFocusIndex = ref
                           .read(todoFocusControllerProvider.notifier)

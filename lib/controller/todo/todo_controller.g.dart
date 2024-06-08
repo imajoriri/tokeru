@@ -6,7 +6,7 @@ part of 'todo_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$todoControllerHash() => r'6c8fe79825fd9f809529574cf7699bfe2e2d903d';
+String _$todoControllerHash() => r'8a56d38445f96315a1141115f81d1837ce90488d';
 
 /// 今日作成された[TodoItem]を返すController
 ///
