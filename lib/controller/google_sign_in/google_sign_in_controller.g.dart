@@ -7,7 +7,7 @@ part of 'google_sign_in_controller.dart';
 // **************************************************************************
 
 String _$googleSignInControllerHash() =>
-    r'8b0a76f248fe07937661e175b7d2e4f3b61599b7';
+    r'bc50290076e764e24dd00c0a42d033e93c1001da';
 
 /// [GoogleSignIn]を取得するためのコントローラー。
 ///

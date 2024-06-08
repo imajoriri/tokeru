@@ -183,10 +183,6 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
                             todoId: todo.id,
                             isDone: value ?? false,
                           );
-                      ref
-                          .read(todoControllerProvider.notifier)
-                          .filterDoneIsTrueWithDebounce();
-
                       FirebaseAnalytics.instance.logEvent(
                         name: AnalyticsEventName.toggleTodoDone.name,
                       );
