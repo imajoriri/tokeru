@@ -2,7 +2,6 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:logger/logger.dart';
@@ -24,7 +23,6 @@ import 'package:quick_flutter/widget/actions/move_down_todo/move_down_todo_actio
 import 'package:quick_flutter/widget/actions/move_up_todo/move_up_todo_action.dart';
 import 'package:quick_flutter/widget/actions/new_todo.dart/new_todo_action.dart';
 import 'package:quick_flutter/widget/actions/new_todo_below/new_todo_below_action.dart';
-import 'package:quick_flutter/widget/actions/pin_window/pin_window_action.dart';
 import 'package:quick_flutter/widget/actions/reload/reload_action.dart';
 import 'package:quick_flutter/widget/actions/toggle_focus/toggle_focus_action.dart';
 import 'package:quick_flutter/widget/actions/toggle_todo_done/toggle_todo_done_action.dart';
@@ -49,17 +47,11 @@ void main() async {
               builder: (context, ref, child) {
                 final largeWindowKey = GlobalKey();
                 final channel = ref.watch(methodChannelProvider);
-                // final bookmark = ref.watch(bookmarkControllerProvider);
                 ref.watch(hotKeyControllerProvider);
 
                 channel.setMethodCallHandler((call) async {
                   switch (call.method) {
                     case 'inactive':
-                      // if (!bookmark) {
-                      //   channel.invokeMethod(
-                      //     AppMethodChannel.closeWindow.name,
-                      //   );
-                      // }
                       break;
                     case 'active':
                       // 更新が昨日以前の場合は、データを更新する
@@ -74,32 +66,8 @@ void main() async {
 
                 return Material(
                   color: context.appColors.backgroundDefault,
-                  child: NotificationListener<SizeChangedLayoutNotification>(
-                    onNotification: (notification) {
-                      // サイズが変更されたことを検知した時の処理
-                      // ref.read(methodChannelProvider).invokeMethod(
-                      //   AppMethodChannel.setFrameSize.name,
-                      //   {
-                      //     "height":
-                      //         largeWindowKey.currentContext?.size?.height,
-                      //   },
-                      // );
-                      return true;
-                    },
-                    child: SizeChangedLayoutNotifier(
-                      child: _LargeWindow(
-                        key: largeWindowKey,
-                        onBuildCallback: () {
-                          // ref.read(methodChannelProvider).invokeMethod(
-                          //   AppMethodChannel.setFrameSize.name,
-                          //   {
-                          //     "height":
-                          //         largeWindowKey.currentContext?.size?.height,
-                          //   },
-                          // );
-                        },
-                      ),
-                    ),
+                  child: _LargeWindow(
+                    key: largeWindowKey,
                   ),
                 );
               },
@@ -112,23 +80,11 @@ void main() async {
 }
 
 class _LargeWindow extends HookConsumerWidget {
-  const _LargeWindow({Key? key, this.onBuildCallback}) : super(key: key);
-
-  /// ビルド後に呼ばれるコールバック
-  final Function? onBuildCallback;
+  const _LargeWindow({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final screenType = ref.watch(screenTypeControllerProvider);
-    useEffect(
-      () {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          onBuildCallback?.call();
-        });
-        return null;
-      },
-      const [],
-    );
 
     return Padding(
       padding: const EdgeInsets.only(top: 0, left: 4, right: 4),
@@ -214,7 +170,6 @@ class _CallbackShortcuts extends ConsumerWidget {
         dispatcher: _LoggingActionDispatcher(),
         actions: {
           NewTodoIntent: ref.read(newTodoActionProvider),
-          PinWindowIntent: ref.read(pinWindowActionProvider),
           ReloadIntent: ref.read(reloadActionProvider),
           ToggleFocusIntent: ref.read(toggleFocusActionProvider),
         },
