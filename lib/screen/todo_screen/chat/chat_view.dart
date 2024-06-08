@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/controller/chat/chat_controller.dart';
 import 'package:quick_flutter/controller/selected_todo_item/selected_todo_item_controller.dart';
@@ -32,13 +33,16 @@ class ChatView extends ConsumerWidget {
   }
 }
 
-class _ChatListView extends ConsumerWidget {
+class _ChatListView extends HookConsumerWidget {
   const _ChatListView();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final todoId = ref.watch(selectedTodoItemIdControllerProvider);
-    final chats = ref.watch(chatControllerProvider(todoId!)).requireValue;
+    final provider = chatControllerProvider(todoId!);
+    final chats = ref.watch(provider).requireValue;
+
+    final textEditingController = useTextEditingController();
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -63,8 +67,18 @@ class _ChatListView extends ConsumerWidget {
               },
             ),
           ),
-          const TextField(
+          TextField(
+            controller: textEditingController,
             maxLines: null,
+          ),
+          TextButton(
+            onPressed: () {
+              ref
+                  .read(provider.notifier)
+                  .addChat(todoId, textEditingController.text);
+              textEditingController.clear();
+            },
+            child: const Text('send'),
           ),
         ],
       ),
