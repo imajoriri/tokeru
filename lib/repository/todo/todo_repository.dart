@@ -66,12 +66,12 @@ class TodoRepository {
 
   /// [Todo]を追加し、[TodoItem]として返す。
   Future<TodoItem> add({
+    required DateTime createdAt,
     String title = '',
     bool isDone = false,
     int indentLevel = 0,
     int index = 0,
   }) async {
-    final createdAt = DateTime.now();
     final todo = TodoItem.todo(
       id: '',
       title: title,
