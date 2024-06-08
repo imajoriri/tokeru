@@ -21,6 +21,7 @@ import 'package:quick_flutter/controller/todo_text_field_focus/todo_text_field_f
 import 'package:quick_flutter/model/analytics_event/analytics_event_name.dart';
 import 'package:quick_flutter/model/calendar_event/calendar_event.dart';
 import 'package:quick_flutter/model/todo/todo.dart';
+import 'package:quick_flutter/screen/todo_screen/chat/chat_view.dart';
 import 'package:quick_flutter/widget/actions/delete_todo/delete_todo_action.dart';
 import 'package:quick_flutter/widget/actions/focus_down/focus_down_action.dart';
 import 'package:quick_flutter/widget/actions/focus_up/focus_up_action.dart';
@@ -45,21 +46,27 @@ class TodoScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const SingleChildScrollView(
-      child: SizedBox(
-        width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // _TodaySection(),
-            // Divider(),
-            TodoList(),
-            SizedBox(height: 28),
-            PastTodoList(),
-            // _TodoTextField(),
-          ],
+    return const Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Todoリスト
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TodoList(),
+                SizedBox(height: 28),
+                PastTodoList(),
+              ],
+            ),
+          ),
         ),
-      ),
+        VerticalDivider(),
+
+        // Chat
+        Expanded(child: ChatView()),
+      ],
     );
   }
 }
