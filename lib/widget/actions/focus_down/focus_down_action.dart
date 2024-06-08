@@ -3,7 +3,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/todo_focus/todo_focus_controller.dart';
 import 'package:quick_flutter/controller/todo_text_editing_controller/todo_text_editing_controller.dart';
-import 'package:quick_flutter/controller/todo_text_field_focus/todo_text_field_focus_controller.dart';
 import 'package:quick_flutter/widget/actions/custom_action.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -52,12 +51,6 @@ class TodoFocusDownAction extends CustomAction<FocusDownIntent> {
     // 最後の行にカーソルがない場合はフォーカスを移動しない
     if (!isLastLine) {
       return KeyEventResult.ignored;
-    }
-
-    // 一番最後のTodoの場合は、TextFieldにフォーカスを当てる
-    if (currentIndex == ref.read(todoFocusControllerProvider).length - 1) {
-      ref.read(todoTextFieldFocusControllerProvider).requestFocus();
-      return null;
     }
 
     ref.read(todoFocusControllerProvider.notifier).focusNext();
