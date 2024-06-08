@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/controller/chat/chat_controller.dart';
 import 'package:quick_flutter/controller/selected_todo_item/selected_todo_item_controller.dart';
+import 'package:quick_flutter/widget/focus_nodes.dart';
 
 class ChatView extends ConsumerWidget {
   const ChatView({super.key});
@@ -81,6 +82,7 @@ class _ChatListView extends HookConsumerWidget {
             child: TextField(
               controller: textEditingController,
               maxLines: null,
+              focusNode: chatFocusNode,
             ),
           ),
         ],

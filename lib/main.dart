@@ -26,6 +26,7 @@ import 'package:quick_flutter/widget/actions/new_todo.dart/new_todo_action.dart'
 import 'package:quick_flutter/widget/actions/new_todo_below/new_todo_below_action.dart';
 import 'package:quick_flutter/widget/actions/pin_window/pin_window_action.dart';
 import 'package:quick_flutter/widget/actions/reload/reload_action.dart';
+import 'package:quick_flutter/widget/actions/toggle_focus/toggle_focus_action.dart';
 import 'package:quick_flutter/widget/actions/toggle_todo_done/toggle_todo_done_action.dart';
 import 'package:quick_flutter/widget/shortcutkey.dart';
 import 'package:quick_flutter/widget/theme/app_theme.dart';
@@ -206,6 +207,8 @@ class _CallbackShortcuts extends ConsumerWidget {
         ShortcutActivatorType.deleteTodo.shortcutActivator:
             const DeleteTodoIntent(),
         ShortcutActivatorType.reload.shortcutActivator: const ReloadIntent(),
+        ShortcutActivatorType.toggleFocus.shortcutActivator:
+            const ToggleFocusIntent(),
       },
       child: Actions(
         dispatcher: _LoggingActionDispatcher(),
@@ -213,6 +216,7 @@ class _CallbackShortcuts extends ConsumerWidget {
           NewTodoIntent: ref.read(newTodoActionProvider),
           PinWindowIntent: ref.read(pinWindowActionProvider),
           ReloadIntent: ref.read(reloadActionProvider),
+          ToggleFocusIntent: ref.read(toggleFocusActionProvider),
         },
         child: child,
       ),
