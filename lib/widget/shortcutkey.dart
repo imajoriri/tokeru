@@ -62,6 +62,14 @@ enum ShortcutActivatorType {
     label: 'Focus down',
   ),
 
+  /// フォーカスをTodoとChatの間で切り替える
+  toggleFocus(
+    shortcutActivator: SingleActivator(
+      LogicalKeyboardKey.tab,
+    ),
+    label: 'Toggle focus',
+  ),
+
   // ----ウィンドウ系----
 
   /// Quit the app
