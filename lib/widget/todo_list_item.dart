@@ -60,6 +60,7 @@ class TodoListItem extends HookConsumerWidget {
     final effectiveController = controller ?? useTextEditingController();
     final effectiveFocusNode = focusNode ?? useFocusNode();
     var text = controller?.text ?? '';
+    final onHover = useState(false);
 
     Timer? debounce;
     useEffect(
@@ -84,90 +85,108 @@ class TodoListItem extends HookConsumerWidget {
       [controller],
     );
 
-    return Stack(
-      fit: StackFit.passthrough,
-      children: [
-        // TextFieldを囲っているContainerに色を付けると
-        // リビルド時にfocusが外れてしまうため、stackでContainerを分けている
-        Positioned(
-          left: 0,
-          right: 0,
-          top: 0,
-          bottom: 0,
-          child: Container(
-            decoration: BoxDecoration(
-              color: selected
-                  ? context.appColors.backgroundPrimaryContainer
-                  : Colors.transparent,
-              borderRadius: BorderRadius.circular(4),
-            ),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(
-            bottom: 4,
-            top: 4,
-            // indexに応じて左にpaddingを追加する。
-            // また、チェックボックスが微妙に左にずれるため、4px右にずらす。
-            left: 20 * todo.indentLevel.toDouble() + 8,
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Checkbox(
-                value: todo.isDone,
-                onChanged: onToggleDone,
-                focusNode: useFocusNode(
-                  skipTraversal: true,
+    final backgroundColor = selected
+        ? context.appColors.backgroundPrimaryContainer
+        : onHover.value
+            ? Colors.grey[200]
+            : Colors.transparent;
+
+    return MouseRegion(
+      onHover: (event) {
+        onHover.value = true;
+      },
+      onExit: (event) {
+        onHover.value = false;
+      },
+      child: GestureDetector(
+        onTap: () {
+          effectiveFocusNode.requestFocus();
+        },
+        child: Stack(
+          fit: StackFit.passthrough,
+          children: [
+            // TextFieldを囲っているContainerに色を付けると
+            // リビルド時にfocusが外れてしまうため、stackでContainerを分けている
+            Positioned(
+              left: 0,
+              right: 0,
+              top: 0,
+              bottom: 0,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: backgroundColor,
+                  borderRadius: BorderRadius.circular(4),
                 ),
               ),
-              Expanded(
-                child: Focus(
-                  skipTraversal: true,
-                  onKey: (node, event) {
-                    if (event is RawKeyDownEvent) {
-                      // バックスペースキー & カーソルが先頭の場合
-                      if (event.logicalKey == LogicalKeyboardKey.backspace &&
-                          effectiveController.selection.baseOffset == 0 &&
-                          effectiveController.selection.extentOffset == 0) {
-                        // 空文字の場合は削除
-                        if (effectiveController.text.isEmpty) {
-                          onDeleted?.call();
-                          return KeyEventResult.handled;
-                        }
-                      }
-                    }
-                    return KeyEventResult.ignored;
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      bottom: 4,
-                      // チェックボックスとの高さを調整するためのpadding
-                      top: 6,
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                bottom: 4,
+                top: 4,
+                // indexに応じて左にpaddingを追加する。
+                // また、チェックボックスが微妙に左にずれるため、4px右にずらす。
+                left: 20 * todo.indentLevel.toDouble() + 8,
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Checkbox(
+                    value: todo.isDone,
+                    onChanged: onToggleDone,
+                    focusNode: useFocusNode(
+                      skipTraversal: true,
                     ),
-                    child: TextField(
-                      controller: effectiveController,
-                      focusNode: effectiveFocusNode,
-                      style: context.appTextTheme.bodyLarge.copyWith(
-                        color: todo.isDone || readOnly
-                            ? context.appColors.textSubtle
-                            : context.appColors.textDefault,
-                      ),
-                      readOnly: readOnly,
-                      maxLines: null,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Write a Todo or Memo(Shift + Enter)...',
-                        isCollapsed: true,
+                  ),
+                  Expanded(
+                    child: Focus(
+                      skipTraversal: true,
+                      onKey: (node, event) {
+                        if (event is RawKeyDownEvent) {
+                          // バックスペースキー & カーソルが先頭の場合
+                          if (event.logicalKey ==
+                                  LogicalKeyboardKey.backspace &&
+                              effectiveController.selection.baseOffset == 0 &&
+                              effectiveController.selection.extentOffset == 0) {
+                            // 空文字の場合は削除
+                            if (effectiveController.text.isEmpty) {
+                              onDeleted?.call();
+                              return KeyEventResult.handled;
+                            }
+                          }
+                        }
+                        return KeyEventResult.ignored;
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          bottom: 4,
+                          // チェックボックスとの高さを調整するためのpadding
+                          top: 6,
+                        ),
+                        child: TextField(
+                          controller: effectiveController,
+                          focusNode: effectiveFocusNode,
+                          style: context.appTextTheme.bodyLarge.copyWith(
+                            color: todo.isDone || readOnly
+                                ? context.appColors.textSubtle
+                                : context.appColors.textDefault,
+                          ),
+                          readOnly: readOnly,
+                          maxLines: null,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Write a Todo or Memo(Shift + Enter)...',
+                            isCollapsed: true,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
