@@ -14,6 +14,10 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
+Chat _$ChatFromJson(Map<String, dynamic> json) {
+  return _Chat.fromJson(json);
+}
+
 /// @nodoc
 mixin _$Chat {
   String get id => throw _privateConstructorUsedError;
@@ -22,6 +26,7 @@ mixin _$Chat {
   @TimestampConverter()
   DateTime get createdAt => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $ChatCopyWith<Chat> get copyWith => throw _privateConstructorUsedError;
 }
@@ -128,13 +133,16 @@ class __$$ChatImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$ChatImpl implements _Chat {
   const _$ChatImpl(
       {required this.id,
       required this.todoId,
       required this.body,
       @TimestampConverter() required this.createdAt});
+
+  factory _$ChatImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ChatImplFromJson(json);
 
   @override
   final String id;
@@ -163,6 +171,7 @@ class _$ChatImpl implements _Chat {
                 other.createdAt == createdAt));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, todoId, body, createdAt);
 
@@ -171,6 +180,13 @@ class _$ChatImpl implements _Chat {
   @pragma('vm:prefer-inline')
   _$$ChatImplCopyWith<_$ChatImpl> get copyWith =>
       __$$ChatImplCopyWithImpl<_$ChatImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ChatImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _Chat implements Chat {
@@ -179,6 +195,8 @@ abstract class _Chat implements Chat {
       required final String todoId,
       required final String body,
       @TimestampConverter() required final DateTime createdAt}) = _$ChatImpl;
+
+  factory _Chat.fromJson(Map<String, dynamic> json) = _$ChatImpl.fromJson;
 
   @override
   String get id;
