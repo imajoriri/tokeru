@@ -1,4 +1,4 @@
-part of 'todo_screen.dart';
+part of 'todo_view.dart';
 
 class PastTodoList extends HookConsumerWidget {
   const PastTodoList({super.key});

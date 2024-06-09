@@ -10,7 +10,6 @@ import 'package:quick_flutter/controller/todo_focus/todo_focus_controller.dart';
 import 'package:quick_flutter/controller/todo_text_editing_controller/todo_text_editing_controller.dart';
 import 'package:quick_flutter/model/analytics_event/analytics_event_name.dart';
 import 'package:quick_flutter/model/todo/todo.dart';
-import 'package:quick_flutter/screen/todo_screen/chat/chat_view.dart';
 import 'package:quick_flutter/widget/actions/delete_todo/delete_todo_action.dart';
 import 'package:quick_flutter/widget/actions/focus_down/focus_down_action.dart';
 import 'package:quick_flutter/widget/actions/focus_up/focus_up_action.dart';
@@ -25,32 +24,20 @@ import 'package:quick_flutter/widget/todo_list_item.dart';
 part 'todo_list.dart';
 part 'past_todo_list.dart';
 
-class TodoScreen extends ConsumerWidget {
-  const TodoScreen({super.key});
+class TodoView extends StatelessWidget {
+  const TodoView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return const Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Todoリスト
-        Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TodoList(),
-                SizedBox(height: 28),
-                PastTodoList(),
-              ],
-            ),
-          ),
-        ),
-        VerticalDivider(),
-
-        // Chat
-        Expanded(child: ChatView()),
-      ],
+  Widget build(BuildContext context) {
+    return const SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TodoList(),
+          SizedBox(height: 28),
+          PastTodoList(),
+        ],
+      ),
     );
   }
 }
