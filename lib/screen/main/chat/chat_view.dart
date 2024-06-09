@@ -44,7 +44,9 @@ class ChatView extends HookConsumerWidget {
                       final chat = chats[index];
                       return Container(
                         padding: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 8),
+                          vertical: 8,
+                          horizontal: 8,
+                        ),
                         color: Colors.grey[100],
                         child: Text(chat.body),
                       );
