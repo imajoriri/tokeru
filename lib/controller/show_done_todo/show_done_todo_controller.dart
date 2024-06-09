@@ -7,6 +7,6 @@ part 'show_done_todo_controller.g.dart';
 class ShowDoneTodoController extends _$ShowDoneTodoController {
   @override
   bool build() {
-    return true;
+    return false;
   }
 }

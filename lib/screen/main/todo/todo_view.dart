@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:quick_flutter/controller/past_todo/past_todo_controller.dart';
 import 'package:quick_flutter/controller/selected_todo_item/selected_todo_item_controller.dart';
+import 'package:quick_flutter/controller/today_done_todo/today_done_todo_controller.dart';
 import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/todo_focus/todo_focus_controller.dart';
 import 'package:quick_flutter/controller/todo_text_editing_controller/todo_text_editing_controller.dart';
@@ -23,6 +24,7 @@ import 'package:quick_flutter/widget/todo_list_item.dart';
 
 part 'todo_list.dart';
 part 'past_todo_list.dart';
+part 'done_todo_list.dart';
 
 class TodoView extends StatelessWidget {
   const TodoView({super.key});
@@ -34,6 +36,8 @@ class TodoView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TodoList(),
+          SizedBox(height: 28),
+          DoneTodoList(),
           SizedBox(height: 28),
           PastTodoList(),
         ],
