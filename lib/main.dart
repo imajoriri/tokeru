@@ -9,8 +9,6 @@ import 'package:quick_flutter/controller/hot_key/hot_key_controller.dart';
 import 'package:quick_flutter/controller/method_channel/method_channel_controller.dart';
 import 'package:quick_flutter/controller/refresh/refresh_controller.dart';
 import 'package:quick_flutter/controller/screen_type/screen_type_controller.dart';
-import 'package:quick_flutter/controller/todo/todo_controller.dart';
-import 'package:quick_flutter/controller/todo_focus/todo_focus_controller.dart';
 import 'package:quick_flutter/firebase_options.dart';
 import 'package:quick_flutter/model/analytics_event/analytics_event_name.dart';
 import 'package:quick_flutter/screen/main/main_screen.dart';
@@ -88,56 +86,10 @@ class _LargeWindow extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final screenType = ref.watch(screenTypeControllerProvider);
 
-    return Padding(
-      padding: const EdgeInsets.only(top: 0, left: 4, right: 4),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _Header(),
-          Expanded(
-            child: switch (screenType) {
-              ScreenType.todo => const MainScreen(),
-              ScreenType.settings => const SettingsScreen(),
-            },
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _Header extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Row(
-      children: [
-        // 右がわのアイコン
-        Expanded(
-          flex: 1,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              IconButton(
-                tooltip: ShortcutActivatorType.newTodo.longLabel,
-                onPressed: () async {
-                  await ref.read(todoControllerProvider.notifier).add(0);
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    ref
-                        .read(todoFocusControllerProvider.notifier)
-                        .requestFocus(0);
-                  });
-
-                  await FirebaseAnalytics.instance.logEvent(
-                    name: AnalyticsEventName.addTodo.name,
-                  );
-                },
-                icon: const Icon(Icons.add_circle_outline),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
+    return switch (screenType) {
+      ScreenType.todo => const MainScreen(),
+      ScreenType.settings => const SettingsScreen(),
+    };
   }
 }
 
@@ -147,40 +99,44 @@ class _CallbackShortcuts extends ConsumerWidget {
   final Widget child;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Shortcuts(
-      shortcuts: {
-        ShortcutActivatorType.focusUp.shortcutActivator: const FocusUpIntent(),
-        ShortcutActivatorType.focusDown.shortcutActivator:
-            const FocusDownIntent(),
-        ShortcutActivatorType.newTodo.shortcutActivator: const NewTodoIntent(),
-        ShortcutActivatorType.newTodoBelow.shortcutActivator:
-            const NewTodoBelowIntent(),
-        ShortcutActivatorType.toggleDone.shortcutActivator:
-            const ToggleTodoDoneIntent(),
-        ShortcutActivatorType.moveUp.shortcutActivator:
-            const MoveUpTodoIntent(),
-        ShortcutActivatorType.moveDown.shortcutActivator:
-            const MoveDownTodoIntent(),
-        ShortcutActivatorType.deleteTodo.shortcutActivator:
-            const DeleteTodoIntent(),
-        ShortcutActivatorType.reload.shortcutActivator: const ReloadIntent(),
-        ShortcutActivatorType.switchFocusChat.shortcutActivator:
-            const ToggleFocusIntent(),
-        ShortcutActivatorType.switchFocusTodo.shortcutActivator:
-            const ToggleFocusIntent(),
-        ShortcutActivatorType.selectTodoDown.shortcutActivator:
-            const SelectTodoDownIntent(),
-        ShortcutActivatorType.selectTodoUp.shortcutActivator:
-            const SelectTodoUpIntent(),
-      },
-      child: Actions(
-        dispatcher: _LoggingActionDispatcher(),
-        actions: {
-          NewTodoIntent: ref.read(newTodoActionProvider),
-          ReloadIntent: ref.read(reloadActionProvider),
-          ToggleFocusIntent: ref.read(toggleFocusActionProvider),
+    return FocusScope(
+      child: Shortcuts(
+        shortcuts: {
+          ShortcutActivatorType.focusUp.shortcutActivator:
+              const FocusUpIntent(),
+          ShortcutActivatorType.focusDown.shortcutActivator:
+              const FocusDownIntent(),
+          ShortcutActivatorType.newTodo.shortcutActivator:
+              const NewTodoIntent(),
+          ShortcutActivatorType.newTodoBelow.shortcutActivator:
+              const NewTodoBelowIntent(),
+          ShortcutActivatorType.toggleDone.shortcutActivator:
+              const ToggleTodoDoneIntent(),
+          ShortcutActivatorType.moveUp.shortcutActivator:
+              const MoveUpTodoIntent(),
+          ShortcutActivatorType.moveDown.shortcutActivator:
+              const MoveDownTodoIntent(),
+          ShortcutActivatorType.deleteTodo.shortcutActivator:
+              const DeleteTodoIntent(),
+          ShortcutActivatorType.reload.shortcutActivator: const ReloadIntent(),
+          ShortcutActivatorType.switchFocusChat.shortcutActivator:
+              const ToggleFocusIntent(),
+          ShortcutActivatorType.switchFocusTodo.shortcutActivator:
+              const ToggleFocusIntent(),
+          ShortcutActivatorType.selectTodoDown.shortcutActivator:
+              const SelectTodoDownIntent(),
+          ShortcutActivatorType.selectTodoUp.shortcutActivator:
+              const SelectTodoUpIntent(),
         },
-        child: child,
+        child: Actions(
+          dispatcher: _LoggingActionDispatcher(),
+          actions: {
+            NewTodoIntent: ref.read(newTodoActionProvider),
+            ReloadIntent: ref.read(reloadActionProvider),
+            ToggleFocusIntent: ref.read(toggleFocusActionProvider),
+          },
+          child: child,
+        ),
       ),
     );
   }
