@@ -30,6 +30,12 @@ class TodoFocusDownAction extends CustomAction<FocusDownIntent> {
     final focusController = ref.read(todoFocusControllerProvider.notifier);
     final currentIndex = focusController.getFocusIndex();
 
+    // 最後のTodoの場合は無視する。
+    if (currentIndex ==
+        ref.read(todoControllerProvider).valueOrNull!.length - 1) {
+      return KeyEventResult.ignored;
+    }
+
     final currentTodo =
         ref.read(todoControllerProvider).valueOrNull![currentIndex];
     final textEditingController =
