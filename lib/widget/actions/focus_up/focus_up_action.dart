@@ -16,9 +16,6 @@ class FocusUpIntent extends Intent {
 @riverpod
 TodoFocusUpAction todoFocusUpAction(TodoFocusUpActionRef ref) =>
     TodoFocusUpAction(ref);
-@riverpod
-TodoFucusLastAction todoFucusLastAction(TodoFucusLastActionRef ref) =>
-    TodoFucusLastAction(ref);
 
 /// Todoのフォーカスを上に移動する[Action]
 class TodoFocusUpAction extends CustomAction<FocusUpIntent> {
@@ -30,23 +27,15 @@ class TodoFocusUpAction extends CustomAction<FocusUpIntent> {
     final focusController = ref.read(todoFocusControllerProvider.notifier);
     final currentIndex = focusController.getFocusIndex();
 
-    // フォーカスがない場合は、一番下にフォーカスを移動する
-    if (currentIndex == -1) {
-      final todos = ref.read(todoControllerProvider).valueOrNull ?? [];
-      ref
-          .read(todoFocusControllerProvider.notifier)
-          .requestFocus(todos.length - 1);
-      return null;
-    }
-
     // 先頭のTodoにフォーカスがある場合は、フォーカスを移動しない
     if (currentIndex == 0) {
       return KeyEventResult.ignored;
     }
 
-    final todo = ref.read(todoControllerProvider).valueOrNull![currentIndex];
+    final currentTodo =
+        ref.read(todoControllerProvider).valueOrNull![currentIndex];
     final textEditingController =
-        ref.read(todoTextEditingControllerProvider(todo.id));
+        ref.read(todoTextEditingControllerProvider(currentTodo.id));
 
     // 日本語入力などでの変換中は無視する
     if (textEditingController.value.composing.isValid) {
@@ -91,21 +80,5 @@ class TodoFocusUpAction extends CustomAction<FocusUpIntent> {
       extentOffset:
           lastLineOffset <= nextTextLength ? lastLineOffset : nextTextLength,
     );
-  }
-}
-
-/// Todoリストの一番下にフォーカスを移動する[Action]
-class TodoFucusLastAction extends Action<FocusUpIntent> {
-  TodoFucusLastAction(this.ref);
-  final Ref ref;
-
-  @override
-  Object? invoke(covariant FocusUpIntent intent) {
-    final focus = ref.read(todoFocusControllerProvider);
-    if (focus.isEmpty) return null;
-    ref
-        .read(todoFocusControllerProvider.notifier)
-        .requestFocus(focus.length - 1);
-    return null;
   }
 }
