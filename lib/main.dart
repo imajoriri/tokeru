@@ -24,6 +24,8 @@ import 'package:quick_flutter/widget/actions/move_up_todo/move_up_todo_action.da
 import 'package:quick_flutter/widget/actions/new_todo.dart/new_todo_action.dart';
 import 'package:quick_flutter/widget/actions/new_todo_below/new_todo_below_action.dart';
 import 'package:quick_flutter/widget/actions/reload/reload_action.dart';
+import 'package:quick_flutter/widget/actions/select_todo_down/select_todo_down_action.dart';
+import 'package:quick_flutter/widget/actions/select_todo_up/select_todo_up_action.dart';
 import 'package:quick_flutter/widget/actions/toggle_focus/toggle_focus_action.dart';
 import 'package:quick_flutter/widget/actions/toggle_todo_done/toggle_todo_done_action.dart';
 import 'package:quick_flutter/widget/shortcutkey.dart';
@@ -116,7 +118,6 @@ class _Header extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               IconButton(
-                focusNode: FocusNode(skipTraversal: true),
                 tooltip: ShortcutActivatorType.newTodo.longLabel,
                 onPressed: () async {
                   await ref.read(todoControllerProvider.notifier).add(0);
@@ -167,6 +168,10 @@ class _CallbackShortcuts extends ConsumerWidget {
             const ToggleFocusIntent(),
         ShortcutActivatorType.switchFocusTodo.shortcutActivator:
             const ToggleFocusIntent(),
+        ShortcutActivatorType.selectTodoDown.shortcutActivator:
+            const SelectTodoDownIntent(),
+        ShortcutActivatorType.selectTodoUp.shortcutActivator:
+            const SelectTodoUpIntent(),
       },
       child: Actions(
         dispatcher: _LoggingActionDispatcher(),
