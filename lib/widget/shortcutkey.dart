@@ -62,12 +62,30 @@ enum ShortcutActivatorType {
     label: 'Focus down',
   ),
 
-  /// フォーカスをTodoとChatの間で切り替える
-  toggleFocus(
+  /// フォーカスをChatに移動する
+  ///
+  /// ユーザーへの説明のために[switchFocusTodo]と[switchFocusChat]を分けているが、
+  /// 実際の処理は同じ。
+  switchFocusChat(
     shortcutActivator: SingleActivator(
-      LogicalKeyboardKey.tab,
+      meta: true,
+      alt: true,
+      LogicalKeyboardKey.arrowRight,
     ),
-    label: 'Toggle focus',
+    label: 'Focus chat',
+  ),
+
+  /// フォーカスをTodoに移動する
+  ///
+  /// ユーザーへの説明のために[switchFocusTodo]と[switchFocusChat]を分けているが、
+  /// 実際の処理は同じ。
+  switchFocusTodo(
+    shortcutActivator: SingleActivator(
+      meta: true,
+      alt: true,
+      LogicalKeyboardKey.arrowLeft,
+    ),
+    label: 'Focus todo',
   ),
 
   // ----ウィンドウ系----
