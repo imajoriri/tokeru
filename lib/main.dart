@@ -163,7 +163,9 @@ class _CallbackShortcuts extends ConsumerWidget {
         ShortcutActivatorType.deleteTodo.shortcutActivator:
             const DeleteTodoIntent(),
         ShortcutActivatorType.reload.shortcutActivator: const ReloadIntent(),
-        ShortcutActivatorType.toggleFocus.shortcutActivator:
+        ShortcutActivatorType.switchFocusChat.shortcutActivator:
+            const ToggleFocusIntent(),
+        ShortcutActivatorType.switchFocusTodo.shortcutActivator:
             const ToggleFocusIntent(),
       },
       child: Actions(
