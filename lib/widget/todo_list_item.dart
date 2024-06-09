@@ -59,6 +59,7 @@ class TodoListItem extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final effectiveController = controller ?? useTextEditingController();
     final effectiveFocusNode = focusNode ?? useFocusNode();
+    effectiveFocusNode.skipTraversal = readOnly;
     var text = controller?.text ?? '';
     final onHover = useState(false);
 
