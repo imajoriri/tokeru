@@ -9,6 +9,7 @@ class DoneTodoList extends HookConsumerWidget {
     return ListView.builder(
       itemCount: todos.length,
       shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         final todo = todos[index];
         return HookBuilder(
