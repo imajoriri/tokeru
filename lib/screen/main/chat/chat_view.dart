@@ -14,11 +14,10 @@ class ChatView extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final todoId = ref.watch(selectedTodoItemIdControllerProvider);
-    if (todoId == null) {
-      return const SizedBox();
-    }
-    final provider = chatControllerProvider(todoId);
-    final chats = ref.watch(chatControllerProvider(todoId));
+    final provider = chatControllerProvider(null);
+    // 全てのチャットを表示するためコメントアウト。
+    // final provider = chatControllerProvider(todoId);
+    final chats = ref.watch(provider);
     final textEditingController = useTextEditingController();
     return Actions(
       actions: {
@@ -70,9 +69,8 @@ class ChatView extends HookConsumerWidget {
                 const SingleActivator(LogicalKeyboardKey.enter, meta: true):
                     () {
                   if (textEditingController.text.isEmpty) return;
-                  ref
-                      .read(provider.notifier)
-                      .addChat(todoId, textEditingController.text);
+                  ref.read(provider.notifier).addChat(
+                      todoId: todoId, body: textEditingController.text);
                   textEditingController.clear();
                 },
               },

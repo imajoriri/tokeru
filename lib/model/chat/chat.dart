@@ -9,7 +9,7 @@ part 'chat.g.dart';
 class Chat with _$Chat {
   const factory Chat({
     required String id,
-    required String todoId,
+    String? todoId,
     required String body,
     @TimestampConverter() required DateTime createdAt,
   }) = _Chat;

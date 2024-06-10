@@ -6,7 +6,7 @@ part of 'chat_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$chatControllerHash() => r'0a5098349c4addb63987833d1be456e322f45195';
+String _$chatControllerHash() => r'2ec9ab98f1ea4c61347ecf2f80e8b414dfb20fd5';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -31,10 +31,10 @@ class _SystemHash {
 
 abstract class _$ChatController
     extends BuildlessAutoDisposeAsyncNotifier<List<Chat>> {
-  late final String todoId;
+  late final String? todoId;
 
   FutureOr<List<Chat>> build(
-    String todoId,
+    String? todoId,
   );
 }
 
@@ -65,7 +65,7 @@ class ChatControllerFamily extends Family<AsyncValue<List<Chat>>> {
   ///
   /// Copied from [ChatController].
   ChatControllerProvider call(
-    String todoId,
+    String? todoId,
   ) {
     return ChatControllerProvider(
       todoId,
@@ -109,7 +109,7 @@ class ChatControllerProvider
   ///
   /// Copied from [ChatController].
   ChatControllerProvider(
-    String todoId,
+    String? todoId,
   ) : this._internal(
           () => ChatController()..todoId = todoId,
           from: chatControllerProvider,
@@ -134,7 +134,7 @@ class ChatControllerProvider
     required this.todoId,
   }) : super.internal();
 
-  final String todoId;
+  final String? todoId;
 
   @override
   FutureOr<List<Chat>> runNotifierBuild(
@@ -183,7 +183,7 @@ class ChatControllerProvider
 
 mixin ChatControllerRef on AutoDisposeAsyncNotifierProviderRef<List<Chat>> {
   /// The parameter `todoId` of this provider.
-  String get todoId;
+  String? get todoId;
 }
 
 class _ChatControllerProviderElement
@@ -192,7 +192,7 @@ class _ChatControllerProviderElement
   _ChatControllerProviderElement(super.provider);
 
   @override
-  String get todoId => (origin as ChatControllerProvider).todoId;
+  String? get todoId => (origin as ChatControllerProvider).todoId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
