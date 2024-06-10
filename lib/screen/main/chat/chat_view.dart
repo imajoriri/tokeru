@@ -70,7 +70,9 @@ class ChatView extends HookConsumerWidget {
                     () {
                   if (textEditingController.text.isEmpty) return;
                   ref.read(provider.notifier).addChat(
-                      todoId: todoId, body: textEditingController.text);
+                        todoId: todoId,
+                        body: textEditingController.text,
+                      );
                   textEditingController.clear();
                 },
               },
