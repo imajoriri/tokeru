@@ -21,7 +21,7 @@ Chat _$ChatFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Chat {
   String get id => throw _privateConstructorUsedError;
-  String get todoId => throw _privateConstructorUsedError;
+  String? get todoId => throw _privateConstructorUsedError;
   String get body => throw _privateConstructorUsedError;
   @TimestampConverter()
   DateTime get createdAt => throw _privateConstructorUsedError;
@@ -38,7 +38,7 @@ abstract class $ChatCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      String todoId,
+      String? todoId,
       String body,
       @TimestampConverter() DateTime createdAt});
 }
@@ -57,7 +57,7 @@ class _$ChatCopyWithImpl<$Res, $Val extends Chat>
   @override
   $Res call({
     Object? id = null,
-    Object? todoId = null,
+    Object? todoId = freezed,
     Object? body = null,
     Object? createdAt = null,
   }) {
@@ -66,10 +66,10 @@ class _$ChatCopyWithImpl<$Res, $Val extends Chat>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      todoId: null == todoId
+      todoId: freezed == todoId
           ? _value.todoId
           : todoId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       body: null == body
           ? _value.body
           : body // ignore: cast_nullable_to_non_nullable
@@ -91,7 +91,7 @@ abstract class _$$ChatImplCopyWith<$Res> implements $ChatCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      String todoId,
+      String? todoId,
       String body,
       @TimestampConverter() DateTime createdAt});
 }
@@ -107,7 +107,7 @@ class __$$ChatImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? todoId = null,
+    Object? todoId = freezed,
     Object? body = null,
     Object? createdAt = null,
   }) {
@@ -116,10 +116,10 @@ class __$$ChatImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      todoId: null == todoId
+      todoId: freezed == todoId
           ? _value.todoId
           : todoId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       body: null == body
           ? _value.body
           : body // ignore: cast_nullable_to_non_nullable
@@ -137,7 +137,7 @@ class __$$ChatImplCopyWithImpl<$Res>
 class _$ChatImpl implements _Chat {
   const _$ChatImpl(
       {required this.id,
-      required this.todoId,
+      this.todoId,
       required this.body,
       @TimestampConverter() required this.createdAt});
 
@@ -147,7 +147,7 @@ class _$ChatImpl implements _Chat {
   @override
   final String id;
   @override
-  final String todoId;
+  final String? todoId;
   @override
   final String body;
   @override
@@ -192,7 +192,7 @@ class _$ChatImpl implements _Chat {
 abstract class _Chat implements Chat {
   const factory _Chat(
       {required final String id,
-      required final String todoId,
+      final String? todoId,
       required final String body,
       @TimestampConverter() required final DateTime createdAt}) = _$ChatImpl;
 
@@ -201,7 +201,7 @@ abstract class _Chat implements Chat {
   @override
   String get id;
   @override
-  String get todoId;
+  String? get todoId;
   @override
   String get body;
   @override

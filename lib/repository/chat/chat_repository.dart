@@ -18,13 +18,26 @@ class ChatRepository {
     required this.userId,
   });
 
+  /// [todoId]に紐づく[Chat]のリストを取得する。
   Future<List<Chat>> fetchChats(String todoId) async {
-    final response = await ref
+    final doc = ref
         .read(userDocumentProvider(userId))
         .collection('chats')
         .where('todoId', isEqualTo: todoId)
-        .orderBy('createdAt', descending: true)
-        .get();
+        .orderBy('createdAt', descending: true);
+    final response = await doc.get();
+    return (response.docs.map((doc) {
+      return Chat.fromJson(doc.data()..['id'] = doc.id);
+    }).toList());
+  }
+
+  /// 全ての[Chat]のリストを取得する。
+  Future<List<Chat>> fetchAllChats() async {
+    final doc = ref
+        .read(userDocumentProvider(userId))
+        .collection('chats')
+        .orderBy('createdAt', descending: true);
+    final response = await doc.get();
     return (response.docs.map((doc) {
       return Chat.fromJson(doc.data()..['id'] = doc.id);
     }).toList());
@@ -32,7 +45,7 @@ class ChatRepository {
 
   /// [Chat]を追加する。
   Future<Chat> addChat({
-    required String todoId,
+    required String? todoId,
     required String body,
     required DateTime createdAt,
   }) async {

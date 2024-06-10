@@ -17,7 +17,7 @@ const cacheTime = Duration(hours: 5);
 @riverpod
 class ChatController extends _$ChatController {
   @override
-  FutureOr<List<Chat>> build(String todoId) async {
+  FutureOr<List<Chat>> build(String? todoId) async {
     ref.watch(refreshControllerProvider);
     final user = ref.watch(userControllerProvider);
     if (user.hasError || user.valueOrNull == null) {
@@ -29,11 +29,18 @@ class ChatController extends _$ChatController {
     ref.onDispose(timer.cancel);
 
     final repository = ref.watch(chatRepositoryProvider(user.value!.id));
-    return repository.fetchChats(todoId);
+    if (todoId == null) {
+      return repository.fetchAllChats();
+    } else {
+      return repository.fetchChats(todoId);
+    }
   }
 
   /// [Chat]を追加する。
-  Future<void> addChat(String todoId, String body) async {
+  Future<void> addChat({
+    required String body,
+    String? todoId,
+  }) async {
     final user = ref.read(userControllerProvider);
     if (user.hasError || user.valueOrNull == null) {
       return;

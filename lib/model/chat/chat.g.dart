@@ -8,7 +8,7 @@ part of 'chat.dart';
 
 _$ChatImpl _$$ChatImplFromJson(Map<String, dynamic> json) => _$ChatImpl(
       id: json['id'] as String,
-      todoId: json['todoId'] as String,
+      todoId: json['todoId'] as String?,
       body: json['body'] as String,
       createdAt:
           const TimestampConverter().fromJson(json['createdAt'] as Timestamp),
