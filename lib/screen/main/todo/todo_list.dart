@@ -191,7 +191,8 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
                     },
                   ),
                 ),
-              AppDividerItem() => const Text("divider"),
+              AppChatItem() => throw UnimplementedError(),
+              AppDividerItem() => throw UnimplementedError(),
             },
           ),
           // ドラッグ&ドロップのアイコン

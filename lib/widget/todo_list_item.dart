@@ -121,13 +121,7 @@ class TodoListItem extends HookConsumerWidget {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(
-                bottom: 4,
-                top: 4,
-                // indexに応じて左にpaddingを追加する。
-                // また、チェックボックスが微妙に左にずれるため、4px右にずらす。
-                left: 20 * todo.indentLevel.toDouble() + 8,
-              ),
+              padding: const EdgeInsets.only(bottom: 4, top: 4, left: 8),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

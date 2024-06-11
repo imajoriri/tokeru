@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/todo_focus/todo_focus_controller.dart';
-import 'package:quick_flutter/model/app_item/app_item.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'toggle_todo_done_action.g.dart';
@@ -28,8 +27,7 @@ class ToggleTodoDoneAction extends Action<ToggleTodoDoneIntent> {
     final focusIsLastTodo =
         ref.read(todoFocusControllerProvider).length == index + 1;
     if (index != -1) {
-      final todo =
-          ref.read(todoControllerProvider).valueOrNull?[index] as AppTodoItem?;
+      final todo = ref.read(todoControllerProvider).valueOrNull?[index];
       await ref.read(todoControllerProvider.notifier).updateIsDone(
             todoId: todo!.id,
             isDone: !todo.isDone,

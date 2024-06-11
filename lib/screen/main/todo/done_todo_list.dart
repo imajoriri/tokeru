@@ -21,6 +21,7 @@ class DoneTodoList extends HookConsumerWidget {
                   controller: useTextEditingController(text: todo.title),
                   readOnly: true,
                 ),
+              AppChatItem() => throw UnimplementedError(),
               AppDividerItem() => throw UnimplementedError(),
             };
           },

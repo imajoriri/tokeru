@@ -7,12 +7,18 @@ part 'app_item.g.dart';
 
 @Freezed(unionKey: 'type')
 sealed class AppItem with _$AppItem {
+  @FreezedUnionValue('chat')
+  const factory AppItem.chat({
+    required String id,
+    required String message,
+    @TimestampConverter() required DateTime createdAt,
+  }) = AppChatItem;
+
   @FreezedUnionValue('todo')
   const factory AppItem.todo({
     required String id,
     required String title,
     required bool isDone,
-    required int indentLevel,
     required int index,
     @TimestampConverter() required DateTime createdAt,
   }) = AppTodoItem;
@@ -26,4 +32,10 @@ sealed class AppItem with _$AppItem {
 
   factory AppItem.fromJson(Map<String, dynamic> json) =>
       _$AppItemFromJson(json);
+
+  // static type = switch (this) {
+  //       AppChatItem() => 'chat',
+  //       AppTodoItem() => 'todo',
+  //       AppDividerItem() => 'divider',
+  //     };
 }
