@@ -10,7 +10,7 @@ import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/todo_focus/todo_focus_controller.dart';
 import 'package:quick_flutter/controller/todo_text_editing_controller/todo_text_editing_controller.dart';
 import 'package:quick_flutter/model/analytics_event/analytics_event_name.dart';
-import 'package:quick_flutter/model/todo/todo.dart';
+import 'package:quick_flutter/model/app_item/app_item.dart';
 import 'package:quick_flutter/widget/actions/delete_todo/delete_todo_action.dart';
 import 'package:quick_flutter/widget/actions/focus_down/focus_down_action.dart';
 import 'package:quick_flutter/widget/actions/focus_up/focus_up_action.dart';

@@ -1,7 +1,7 @@
 import 'package:quick_flutter/controller/refresh/refresh_controller.dart';
 import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/user/user_controller.dart';
-import 'package:quick_flutter/model/todo/todo.dart';
+import 'package:quick_flutter/model/app_item/app_item.dart';
 import 'package:quick_flutter/repository/todo/todo_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

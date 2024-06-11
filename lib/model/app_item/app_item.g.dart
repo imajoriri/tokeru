@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'todo.dart';
+part of 'app_item.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
@@ -39,8 +39,7 @@ _$AppDividerItemImpl _$$AppDividerItemImplFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$$AppDividerItemImplToJson(
-  _$AppDividerItemImpl instance,
-) =>
+        _$AppDividerItemImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'index': instance.index,

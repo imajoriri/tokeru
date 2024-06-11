@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quick_flutter/model/todo/todo.dart';
+import 'package:quick_flutter/model/app_item/app_item.dart';
 import 'package:quick_flutter/widget/theme/app_theme.dart';
 
 class TodoListItem extends HookConsumerWidget {
