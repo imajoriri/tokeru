@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quick_flutter/controller/chat/chat_controller.dart';
-import 'package:quick_flutter/controller/selected_todo_item/selected_todo_item_controller.dart';
+import 'package:quick_flutter/controller/today_app_item/today_app_item_controller.dart';
+import 'package:quick_flutter/model/app_item/app_item.dart';
 import 'package:quick_flutter/widget/actions/select_todo_down/select_todo_down_action.dart';
 import 'package:quick_flutter/widget/actions/select_todo_up/select_todo_up_action.dart';
 import 'package:quick_flutter/widget/focus_nodes.dart';
@@ -13,11 +13,8 @@ class ChatView extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final todoId = ref.watch(selectedTodoItemIdControllerProvider);
-    final provider = chatControllerProvider(null);
-    // 全てのチャットを表示するためコメントアウト。
-    // final provider = chatControllerProvider(todoId);
-    final chats = ref.watch(provider);
+    final provider = todayAppItemControllerProvider;
+    final appItems = ref.watch(provider);
     final textEditingController = useTextEditingController();
     return Actions(
       actions: {
@@ -29,26 +26,30 @@ class ChatView extends HookConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            chats.when(
-              data: (chats) {
+            appItems.when(
+              data: (appItems) {
                 return Expanded(
                   child: ListView.separated(
-                    itemCount: chats.length,
+                    itemCount: appItems.length,
                     shrinkWrap: true,
                     reverse: true,
                     separatorBuilder: (context, index) {
                       return const SizedBox(height: 8);
                     },
                     itemBuilder: (context, index) {
-                      final chat = chats[index];
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 8,
-                          horizontal: 8,
-                        ),
-                        color: Colors.grey[100],
-                        child: Text(chat.body),
-                      );
+                      final appItem = appItems[index];
+                      return switch (appItem) {
+                        AppTodoItem(:final title) => Text(title),
+                        AppChatItem(:final message) => Container(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 8,
+                              horizontal: 8,
+                            ),
+                            color: Colors.grey[100],
+                            child: Text(message),
+                          ),
+                        AppDividerItem() => throw UnimplementedError(),
+                      };
                     },
                   ),
                 );
@@ -69,10 +70,9 @@ class ChatView extends HookConsumerWidget {
                 const SingleActivator(LogicalKeyboardKey.enter, meta: true):
                     () {
                   if (textEditingController.text.isEmpty) return;
-                  ref.read(provider.notifier).addChat(
-                        todoId: todoId,
-                        body: textEditingController.text,
-                      );
+                  ref
+                      .read(provider.notifier)
+                      .addChat(message: textEditingController.text);
                   textEditingController.clear();
                 },
               },

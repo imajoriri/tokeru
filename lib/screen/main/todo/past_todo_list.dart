@@ -69,6 +69,7 @@ class PastTodoList extends HookConsumerWidget {
                             controller: TextEditingController(text: todo.title),
                             readOnly: true,
                           ),
+                        AppChatItem() => throw UnimplementedError(),
                         AppDividerItem() => throw UnimplementedError(),
                       };
                     }),

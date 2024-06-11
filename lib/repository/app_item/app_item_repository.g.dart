@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'todo_repository.dart';
+part of 'app_item_repository.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$todoRepositoryHash() => r'0f950a6256915bdea0447bfcb02a661ab5c403b3';
+String _$appItemRepositoryHash() => r'10d884deea45ee7f0ea34e2438490be68f195add';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -31,33 +31,33 @@ class _SystemHash {
 
 /// [TodoItem]を扱うRepository
 ///
-/// Copied from [todoRepository].
-@ProviderFor(todoRepository)
-const todoRepositoryProvider = TodoRepositoryFamily();
+/// Copied from [appItemRepository].
+@ProviderFor(appItemRepository)
+const appItemRepositoryProvider = AppItemRepositoryFamily();
 
 /// [TodoItem]を扱うRepository
 ///
-/// Copied from [todoRepository].
-class TodoRepositoryFamily extends Family<TodoRepository> {
+/// Copied from [appItemRepository].
+class AppItemRepositoryFamily extends Family<AppItemRepository> {
   /// [TodoItem]を扱うRepository
   ///
-  /// Copied from [todoRepository].
-  const TodoRepositoryFamily();
+  /// Copied from [appItemRepository].
+  const AppItemRepositoryFamily();
 
   /// [TodoItem]を扱うRepository
   ///
-  /// Copied from [todoRepository].
-  TodoRepositoryProvider call(
+  /// Copied from [appItemRepository].
+  AppItemRepositoryProvider call(
     String userId,
   ) {
-    return TodoRepositoryProvider(
+    return AppItemRepositoryProvider(
       userId,
     );
   }
 
   @override
-  TodoRepositoryProvider getProviderOverride(
-    covariant TodoRepositoryProvider provider,
+  AppItemRepositoryProvider getProviderOverride(
+    covariant AppItemRepositoryProvider provider,
   ) {
     return call(
       provider.userId,
@@ -76,36 +76,36 @@ class TodoRepositoryFamily extends Family<TodoRepository> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'todoRepositoryProvider';
+  String? get name => r'appItemRepositoryProvider';
 }
 
 /// [TodoItem]を扱うRepository
 ///
-/// Copied from [todoRepository].
-class TodoRepositoryProvider extends AutoDisposeProvider<TodoRepository> {
+/// Copied from [appItemRepository].
+class AppItemRepositoryProvider extends AutoDisposeProvider<AppItemRepository> {
   /// [TodoItem]を扱うRepository
   ///
-  /// Copied from [todoRepository].
-  TodoRepositoryProvider(
+  /// Copied from [appItemRepository].
+  AppItemRepositoryProvider(
     String userId,
   ) : this._internal(
-          (ref) => todoRepository(
-            ref as TodoRepositoryRef,
+          (ref) => appItemRepository(
+            ref as AppItemRepositoryRef,
             userId,
           ),
-          from: todoRepositoryProvider,
-          name: r'todoRepositoryProvider',
+          from: appItemRepositoryProvider,
+          name: r'appItemRepositoryProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$todoRepositoryHash,
-          dependencies: TodoRepositoryFamily._dependencies,
+                  : _$appItemRepositoryHash,
+          dependencies: AppItemRepositoryFamily._dependencies,
           allTransitiveDependencies:
-              TodoRepositoryFamily._allTransitiveDependencies,
+              AppItemRepositoryFamily._allTransitiveDependencies,
           userId: userId,
         );
 
-  TodoRepositoryProvider._internal(
+  AppItemRepositoryProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -119,12 +119,12 @@ class TodoRepositoryProvider extends AutoDisposeProvider<TodoRepository> {
 
   @override
   Override overrideWith(
-    TodoRepository Function(TodoRepositoryRef provider) create,
+    AppItemRepository Function(AppItemRepositoryRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
-      override: TodoRepositoryProvider._internal(
-        (ref) => create(ref as TodoRepositoryRef),
+      override: AppItemRepositoryProvider._internal(
+        (ref) => create(ref as AppItemRepositoryRef),
         from: from,
         name: null,
         dependencies: null,
@@ -136,13 +136,13 @@ class TodoRepositoryProvider extends AutoDisposeProvider<TodoRepository> {
   }
 
   @override
-  AutoDisposeProviderElement<TodoRepository> createElement() {
-    return _TodoRepositoryProviderElement(this);
+  AutoDisposeProviderElement<AppItemRepository> createElement() {
+    return _AppItemRepositoryProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is TodoRepositoryProvider && other.userId == userId;
+    return other is AppItemRepositoryProvider && other.userId == userId;
   }
 
   @override
@@ -154,17 +154,18 @@ class TodoRepositoryProvider extends AutoDisposeProvider<TodoRepository> {
   }
 }
 
-mixin TodoRepositoryRef on AutoDisposeProviderRef<TodoRepository> {
+mixin AppItemRepositoryRef on AutoDisposeProviderRef<AppItemRepository> {
   /// The parameter `userId` of this provider.
   String get userId;
 }
 
-class _TodoRepositoryProviderElement
-    extends AutoDisposeProviderElement<TodoRepository> with TodoRepositoryRef {
-  _TodoRepositoryProviderElement(super.provider);
+class _AppItemRepositoryProviderElement
+    extends AutoDisposeProviderElement<AppItemRepository>
+    with AppItemRepositoryRef {
+  _AppItemRepositoryProviderElement(super.provider);
 
   @override
-  String get userId => (origin as TodoRepositoryProvider).userId;
+  String get userId => (origin as AppItemRepositoryProvider).userId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

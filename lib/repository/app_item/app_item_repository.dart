@@ -3,89 +3,98 @@ import 'package:quick_flutter/model/app_item/app_item.dart';
 import 'package:quick_flutter/repository/firebase/firebase_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'todo_repository.g.dart';
+part 'app_item_repository.g.dart';
 
-/// [TodoItem]を扱うRepository
+/// [AppItem]を扱うRepository
 @riverpod
-TodoRepository todoRepository(TodoRepositoryRef ref, String userId) =>
-    TodoRepository(ref: ref, userId: userId);
+AppItemRepository appItemRepository(AppItemRepositoryRef ref, String userId) =>
+    AppItemRepository(ref: ref, userId: userId);
 
-class TodoRepository {
-  TodoRepository({
+class AppItemRepository {
+  AppItemRepository({
     required this.ref,
     required this.userId,
   });
   final Ref ref;
   final String userId;
 
-  /// 指定した日付より後に作成されたTodoを取得する
+  /// 指定した日付より後に作成された[AppItem]を取得する
   ///
-  /// - [date]: 指定日付
-  /// - [isDone]: 完了済みのTodoを取得するかどうか。nullの場合は全てのTodoを取得する
   /// - [limit]: 取得するTodoの最大数
-  Future<List<AppItem>> fetchTodosAfter({
-    required DateTime date,
-    bool? isDone,
+  /// - [start]: この日付より後に作成された[AppItem]を取得する
+  /// - [end]: この日付より前に作成された[AppItem]を取得する
+  /// - [type]: 取得する[AppItem]のタイプ
+  /// - [isDone]: 取得する[AppItem]のisDone
+  Future<List<AppItem>> fetch({
     int limit = 50,
+    DateTime? start,
+    DateTime? end,
+    String? type,
+    bool? isDone,
   }) async {
-    final response = await ref
+    var doc = ref
         .read(userDocumentProvider(userId))
         .collection('todos')
-        .where('isDone', isEqualTo: isDone)
-        .where('createdAt', isGreaterThan: date)
         .orderBy('createdAt', descending: true)
-        .limit(limit)
-        .get();
+        .limit(limit);
+    if (start != null) {
+      doc = doc.where('createdAt', isGreaterThan: start);
+    }
+    if (end != null) {
+      doc = doc.where('createdAt', isLessThan: end);
+    }
+    if (type != null) {
+      doc = doc.where('type', isEqualTo: type);
+    }
+    if (isDone != null) {
+      doc = doc.where('isDone', isEqualTo: isDone);
+    }
+    final response = await doc.get();
     return (response.docs.map((doc) {
       return AppItem.fromJson(doc.data()..['id'] = doc.id);
     }).toList());
   }
 
-  /// 指定した日付より前に作成されたTodoを取得する
-  ///
-  /// - [date]: 指定日付
-  /// - [isDone]: 完了済みのTodoを取得するかどうか。nullの場合は全てのTodoを取得する
-  /// - [limit]: 取得するTodoの最大数
-  Future<List<AppItem>> fetchTodosBefore({
-    required DateTime date,
-    bool? isDone,
-    int limit = 50,
-  }) async {
-    final response = await ref
-        .read(userDocumentProvider(userId))
-        .collection('todos')
-        .where('isDone', isEqualTo: isDone)
-        .where('createdAt', isLessThan: date)
-        .orderBy('createdAt', descending: true)
-        .limit(limit)
-        .get();
-    return (response.docs.map((doc) {
-      return AppItem.fromJson(doc.data()..['id'] = doc.id);
-    }).toList());
-  }
-
-  /// [Todo]を追加し、[TodoItem]として返す。
-  Future<AppItem> add({
+  /// [AppTodoItem]を追加する。
+  Future<AppTodoItem> addTodo({
     required DateTime createdAt,
     String title = '',
     bool isDone = false,
-    int indentLevel = 0,
     int index = 0,
   }) async {
-    final todo = AppItem.todo(
+    final todo = AppTodoItem(
       id: '',
       title: title,
       isDone: isDone,
-      indentLevel: indentLevel,
       index: index,
       createdAt: createdAt,
     );
-    final json = todo.toJson();
+    final res = await _add(todo);
+    return todo.copyWith(id: res.id);
+  }
+
+  /// [AppChatItem]を追加する。
+  Future<AppItem> addChat({
+    required String message,
+    required DateTime createdAt,
+  }) async {
+    final chat = AppItem.chat(
+      id: '',
+      message: message,
+      createdAt: createdAt,
+    );
+    final res = await _add(chat);
+    return chat.copyWith(id: res.id);
+  }
+
+  /// [AppItem]を追加する。
+  Future<AppItem> _add(AppItem item) async {
+    final json = item.toJson();
     final res = await ref
         .read(userDocumentProvider(userId))
         .collection("todos")
         .add(json);
-    return todo.copyWith(id: res.id);
+    return item.copyWith(id: res.id);
   }
 
   /// Todoを更新する
@@ -93,7 +102,6 @@ class TodoRepository {
     required String id,
     String? title,
     bool? isDone,
-    int? indentLevel,
     int? index,
   }) async {
     await ref
@@ -103,7 +111,6 @@ class TodoRepository {
         .update({
       if (title != null) 'title': title,
       if (isDone != null) 'isDone': isDone,
-      if (indentLevel != null) 'indentLevel': indentLevel,
       if (index != null) 'index': index,
     });
   }
@@ -120,7 +127,7 @@ class TodoRepository {
   /// 並び順を更新する
   ///
   /// [todos]の順番で 'index' を一気に更新する
-  Future<void> updateOrder({required List<AppItem> todos}) async {
+  Future<void> updateTodoOrder({required List<AppTodoItem> todos}) async {
     final firestore = ref.read(firestoreProvider);
     final batch = firestore.batch();
 
