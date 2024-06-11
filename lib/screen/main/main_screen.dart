@@ -22,12 +22,13 @@ class MainScreen extends ConsumerWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Todoリスト
-                Expanded(child: TodoView()),
-                VerticalDivider(),
-
                 // Chat
                 Expanded(child: ChatView()),
+
+                VerticalDivider(),
+
+                // Todoリスト
+                Expanded(child: TodoView()),
               ],
             ),
           ),
