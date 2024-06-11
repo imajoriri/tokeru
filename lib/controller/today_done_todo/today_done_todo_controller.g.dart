@@ -7,14 +7,17 @@ part of 'today_done_todo_controller.dart';
 // **************************************************************************
 
 String _$todayDoneTodoControllerHash() =>
-    r'7edd3ae3a7d0897639647162fb50bdb6ebbadff4';
+    r'1034b58b6dba0c870bcc42cf312dc28f07fd6cc6';
 
-/// 今日作成された完了済みの[TodoItem]を返すController
+/// 今日作成された完了済みの[AppTodoItem]を返すController
+///
+/// [todayAppItemControllerProvider]を監視すしているため、[todayAppItemControllerProvider]が更新されると、
+/// このControllerも更新される。
 ///
 /// Copied from [TodayDoneTodoController].
 @ProviderFor(TodayDoneTodoController)
 final todayDoneTodoControllerProvider =
-    AsyncNotifierProvider<TodayDoneTodoController, List<AppItem>>.internal(
+    AsyncNotifierProvider<TodayDoneTodoController, List<AppTodoItem>>.internal(
   TodayDoneTodoController.new,
   name: r'todayDoneTodoControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -24,6 +27,6 @@ final todayDoneTodoControllerProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$TodayDoneTodoController = AsyncNotifier<List<AppItem>>;
+typedef _$TodayDoneTodoController = AsyncNotifier<List<AppTodoItem>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

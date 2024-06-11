@@ -22,7 +22,7 @@ import 'package:quick_flutter/widget/actions/toggle_todo_done/toggle_todo_done_a
 import 'package:quick_flutter/widget/theme/app_theme.dart';
 import 'package:quick_flutter/widget/todo_list_item.dart';
 
-part 'todo_list.dart';
+part 'today_todo_list.dart';
 part 'past_todo_list.dart';
 part 'done_todo_list.dart';
 
@@ -35,11 +35,11 @@ class TodoView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TodoList(),
-          SizedBox(height: 28),
-          DoneTodoList(),
+          TodayTodoList(),
           SizedBox(height: 28),
           PastTodoList(),
+          SizedBox(height: 28),
+          DoneTodoList(),
         ],
       ),
     );
