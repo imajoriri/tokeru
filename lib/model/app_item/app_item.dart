@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:quick_flutter/systems/timestamp_converter.dart';
 
-part 'todo.freezed.dart';
-part 'todo.g.dart';
+part 'app_item.freezed.dart';
+part 'app_item.g.dart';
 
 @Freezed(unionKey: 'type')
 sealed class AppItem with _$AppItem {

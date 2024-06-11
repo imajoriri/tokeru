@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/todo_focus/todo_focus_controller.dart';
-import 'package:quick_flutter/model/todo/todo.dart';
+import 'package:quick_flutter/model/app_item/app_item.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'toggle_todo_done_action.g.dart';

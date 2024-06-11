@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quick_flutter/controller/todo/todo_controller.dart';
-import 'package:quick_flutter/model/todo/todo.dart';
+import 'package:quick_flutter/model/app_item/app_item.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'todo_text_editing_controller.g.dart';
