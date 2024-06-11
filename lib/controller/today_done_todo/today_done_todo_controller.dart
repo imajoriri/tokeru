@@ -11,7 +11,7 @@ part 'today_done_todo_controller.g.dart';
 @Riverpod(keepAlive: true)
 class TodayDoneTodoController extends _$TodayDoneTodoController {
   @override
-  FutureOr<List<TodoItem>> build() async {
+  FutureOr<List<AppItem>> build() async {
     ref.watch(refreshControllerProvider);
     final user = ref.watch(userControllerProvider);
     if (user.hasError || user.valueOrNull == null) {

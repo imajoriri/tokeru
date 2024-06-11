@@ -23,7 +23,7 @@ class TodoRepository {
   /// - [date]: 指定日付
   /// - [isDone]: 完了済みのTodoを取得するかどうか。nullの場合は全てのTodoを取得する
   /// - [limit]: 取得するTodoの最大数
-  Future<List<TodoItem>> fetchTodosAfter({
+  Future<List<AppItem>> fetchTodosAfter({
     required DateTime date,
     bool? isDone,
     int limit = 50,
@@ -37,7 +37,7 @@ class TodoRepository {
         .limit(limit)
         .get();
     return (response.docs.map((doc) {
-      return TodoItem.fromJson(doc.data()..['id'] = doc.id);
+      return AppItem.fromJson(doc.data()..['id'] = doc.id);
     }).toList());
   }
 
@@ -46,7 +46,7 @@ class TodoRepository {
   /// - [date]: 指定日付
   /// - [isDone]: 完了済みのTodoを取得するかどうか。nullの場合は全てのTodoを取得する
   /// - [limit]: 取得するTodoの最大数
-  Future<List<TodoItem>> fetchTodosBefore({
+  Future<List<AppItem>> fetchTodosBefore({
     required DateTime date,
     bool? isDone,
     int limit = 50,
@@ -60,19 +60,19 @@ class TodoRepository {
         .limit(limit)
         .get();
     return (response.docs.map((doc) {
-      return TodoItem.fromJson(doc.data()..['id'] = doc.id);
+      return AppItem.fromJson(doc.data()..['id'] = doc.id);
     }).toList());
   }
 
   /// [Todo]を追加し、[TodoItem]として返す。
-  Future<TodoItem> add({
+  Future<AppItem> add({
     required DateTime createdAt,
     String title = '',
     bool isDone = false,
     int indentLevel = 0,
     int index = 0,
   }) async {
-    final todo = TodoItem.todo(
+    final todo = AppItem.todo(
       id: '',
       title: title,
       isDone: isDone,
@@ -120,7 +120,7 @@ class TodoRepository {
   /// 並び順を更新する
   ///
   /// [todos]の順番で 'index' を一気に更新する
-  Future<void> updateOrder({required List<TodoItem> todos}) async {
+  Future<void> updateOrder({required List<AppItem> todos}) async {
     final firestore = ref.read(firestoreProvider);
     final batch = firestore.batch();
 

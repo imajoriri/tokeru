@@ -29,7 +29,7 @@ class ToggleTodoDoneAction extends Action<ToggleTodoDoneIntent> {
         ref.read(todoFocusControllerProvider).length == index + 1;
     if (index != -1) {
       final todo =
-          ref.read(todoControllerProvider).valueOrNull?[index] as Todo?;
+          ref.read(todoControllerProvider).valueOrNull?[index] as AppTodoItem?;
       await ref.read(todoControllerProvider.notifier).updateIsDone(
             todoId: todo!.id,
             isDone: !todo.isDone,

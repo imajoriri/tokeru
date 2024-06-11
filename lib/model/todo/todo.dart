@@ -6,28 +6,24 @@ part 'todo.freezed.dart';
 part 'todo.g.dart';
 
 @Freezed(unionKey: 'type')
-sealed class TodoItem with _$TodoItem {
+sealed class AppItem with _$AppItem {
   @FreezedUnionValue('todo')
-  const factory TodoItem.todo({
+  const factory AppItem.todo({
     required String id,
     required String title,
     required bool isDone,
     required int indentLevel,
     required int index,
     @TimestampConverter() required DateTime createdAt,
-  }) = Todo;
+  }) = AppTodoItem;
 
   @FreezedUnionValue('divider')
-  const factory TodoItem.divider({
+  const factory AppItem.divider({
     required String id,
     required int index,
     @TimestampConverter() required DateTime createdAt,
-  }) = TodoDivider;
+  }) = AppDividerItem;
 
-  factory TodoItem.fromJson(Map<String, dynamic> json) {
-    if (json['type'] == '' || json['type'] == null) {
-      return Todo.fromJson(json);
-    }
-    return _$TodoItemFromJson(json);
-  }
+  factory AppItem.fromJson(Map<String, dynamic> json) =>
+      _$AppItemFromJson(json);
 }

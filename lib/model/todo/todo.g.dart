@@ -6,7 +6,8 @@ part of 'todo.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$TodoImpl _$$TodoImplFromJson(Map<String, dynamic> json) => _$TodoImpl(
+_$AppTodoItemImpl _$$AppTodoItemImplFromJson(Map<String, dynamic> json) =>
+    _$AppTodoItemImpl(
       id: json['id'] as String,
       title: json['title'] as String,
       isDone: json['isDone'] as bool,
@@ -17,7 +18,7 @@ _$TodoImpl _$$TodoImplFromJson(Map<String, dynamic> json) => _$TodoImpl(
       $type: json['type'] as String?,
     );
 
-Map<String, dynamic> _$$TodoImplToJson(_$TodoImpl instance) =>
+Map<String, dynamic> _$$AppTodoItemImplToJson(_$AppTodoItemImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
@@ -28,8 +29,8 @@ Map<String, dynamic> _$$TodoImplToJson(_$TodoImpl instance) =>
       'type': instance.$type,
     };
 
-_$TodoDividerImpl _$$TodoDividerImplFromJson(Map<String, dynamic> json) =>
-    _$TodoDividerImpl(
+_$AppDividerItemImpl _$$AppDividerItemImplFromJson(Map<String, dynamic> json) =>
+    _$AppDividerItemImpl(
       id: json['id'] as String,
       index: json['index'] as int,
       createdAt:
@@ -37,7 +38,9 @@ _$TodoDividerImpl _$$TodoDividerImplFromJson(Map<String, dynamic> json) =>
       $type: json['type'] as String?,
     );
 
-Map<String, dynamic> _$$TodoDividerImplToJson(_$TodoDividerImpl instance) =>
+Map<String, dynamic> _$$AppDividerItemImplToJson(
+  _$AppDividerItemImpl instance,
+) =>
     <String, dynamic>{
       'id': instance.id,
       'index': instance.index,

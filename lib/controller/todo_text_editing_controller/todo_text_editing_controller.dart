@@ -14,7 +14,7 @@ class TodoTextEditingController extends _$TodoTextEditingController {
     // が生成されてしまうため、ref.readで参照する
     final todos = ref.read(todoControllerProvider);
     final todo = todos.valueOrNull
-        ?.whereType<Todo>()
+        ?.whereType<AppTodoItem>()
         .firstWhere((element) => element.id == todoId);
     final controller = TextEditingController(text: todo?.title ?? '');
     ref.onDispose(() {

@@ -103,7 +103,7 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
   final int index;
 
   /// Todo
-  final TodoItem todo;
+  final AppItem todo;
 
   /// [Todo]の個数
   final int todoLength;
@@ -147,7 +147,7 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
           Padding(
             padding: EdgeInsets.zero,
             child: switch (todo) {
-              Todo() => Actions(
+              AppTodoItem() => Actions(
                   actions: {
                     FocusUpIntent: ref.watch(todoFocusUpActionProvider),
                     FocusDownIntent: ref.watch(todoFocusDownActionProvider),
@@ -160,7 +160,7 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
                       NewTodoBelowIntent: ref.watch(newTodoBelowActionProvider),
                   },
                   child: TodoListItem(
-                    todo: todo as Todo,
+                    todo: todo as AppTodoItem,
                     focusNode: ref.watch(todoFocusControllerProvider)[index],
                     controller:
                         ref.watch(todoTextEditingControllerProvider(todo.id)),
@@ -191,7 +191,7 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
                     },
                   ),
                 ),
-              TodoDivider() => const Text("divider"),
+              AppDividerItem() => const Text("divider"),
             },
           ),
           // ドラッグ&ドロップのアイコン
