@@ -20,7 +20,7 @@ class TodoListItem extends HookConsumerWidget {
     this.onToggleDone,
   });
 
-  final Todo todo;
+  final AppTodoItem todo;
 
   final TextEditingController? controller;
 

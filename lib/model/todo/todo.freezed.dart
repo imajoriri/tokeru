@@ -14,21 +14,21 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-TodoItem _$TodoItemFromJson(Map<String, dynamic> json) {
+AppItem _$AppItemFromJson(Map<String, dynamic> json) {
   switch (json['type']) {
     case 'todo':
-      return Todo.fromJson(json);
+      return AppTodoItem.fromJson(json);
     case 'divider':
-      return TodoDivider.fromJson(json);
+      return AppDividerItem.fromJson(json);
 
     default:
       throw CheckedFromJsonException(
-          json, 'type', 'TodoItem', 'Invalid union type "${json['type']}"!');
+          json, 'type', 'AppItem', 'Invalid union type "${json['type']}"!');
   }
 }
 
 /// @nodoc
-mixin _$TodoItem {
+mixin _$AppItem {
   String get id => throw _privateConstructorUsedError;
   int get index => throw _privateConstructorUsedError;
   @TimestampConverter()
@@ -71,41 +71,40 @@ mixin _$TodoItem {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(Todo value) todo,
-    required TResult Function(TodoDivider value) divider,
+    required TResult Function(AppTodoItem value) todo,
+    required TResult Function(AppDividerItem value) divider,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(Todo value)? todo,
-    TResult? Function(TodoDivider value)? divider,
+    TResult? Function(AppTodoItem value)? todo,
+    TResult? Function(AppDividerItem value)? divider,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(Todo value)? todo,
-    TResult Function(TodoDivider value)? divider,
+    TResult Function(AppTodoItem value)? todo,
+    TResult Function(AppDividerItem value)? divider,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $TodoItemCopyWith<TodoItem> get copyWith =>
-      throw _privateConstructorUsedError;
+  $AppItemCopyWith<AppItem> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $TodoItemCopyWith<$Res> {
-  factory $TodoItemCopyWith(TodoItem value, $Res Function(TodoItem) then) =
-      _$TodoItemCopyWithImpl<$Res, TodoItem>;
+abstract class $AppItemCopyWith<$Res> {
+  factory $AppItemCopyWith(AppItem value, $Res Function(AppItem) then) =
+      _$AppItemCopyWithImpl<$Res, AppItem>;
   @useResult
   $Res call({String id, int index, @TimestampConverter() DateTime createdAt});
 }
 
 /// @nodoc
-class _$TodoItemCopyWithImpl<$Res, $Val extends TodoItem>
-    implements $TodoItemCopyWith<$Res> {
-  _$TodoItemCopyWithImpl(this._value, this._then);
+class _$AppItemCopyWithImpl<$Res, $Val extends AppItem>
+    implements $AppItemCopyWith<$Res> {
+  _$AppItemCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -137,10 +136,11 @@ class _$TodoItemCopyWithImpl<$Res, $Val extends TodoItem>
 }
 
 /// @nodoc
-abstract class _$$TodoImplCopyWith<$Res> implements $TodoItemCopyWith<$Res> {
-  factory _$$TodoImplCopyWith(
-          _$TodoImpl value, $Res Function(_$TodoImpl) then) =
-      __$$TodoImplCopyWithImpl<$Res>;
+abstract class _$$AppTodoItemImplCopyWith<$Res>
+    implements $AppItemCopyWith<$Res> {
+  factory _$$AppTodoItemImplCopyWith(
+          _$AppTodoItemImpl value, $Res Function(_$AppTodoItemImpl) then) =
+      __$$AppTodoItemImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -153,10 +153,11 @@ abstract class _$$TodoImplCopyWith<$Res> implements $TodoItemCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$TodoImplCopyWithImpl<$Res>
-    extends _$TodoItemCopyWithImpl<$Res, _$TodoImpl>
-    implements _$$TodoImplCopyWith<$Res> {
-  __$$TodoImplCopyWithImpl(_$TodoImpl _value, $Res Function(_$TodoImpl) _then)
+class __$$AppTodoItemImplCopyWithImpl<$Res>
+    extends _$AppItemCopyWithImpl<$Res, _$AppTodoItemImpl>
+    implements _$$AppTodoItemImplCopyWith<$Res> {
+  __$$AppTodoItemImplCopyWithImpl(
+      _$AppTodoItemImpl _value, $Res Function(_$AppTodoItemImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -169,7 +170,7 @@ class __$$TodoImplCopyWithImpl<$Res>
     Object? index = null,
     Object? createdAt = null,
   }) {
-    return _then(_$TodoImpl(
+    return _then(_$AppTodoItemImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -200,8 +201,8 @@ class __$$TodoImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$TodoImpl implements Todo {
-  const _$TodoImpl(
+class _$AppTodoItemImpl implements AppTodoItem {
+  const _$AppTodoItemImpl(
       {required this.id,
       required this.title,
       required this.isDone,
@@ -211,8 +212,8 @@ class _$TodoImpl implements Todo {
       final String? $type})
       : $type = $type ?? 'todo';
 
-  factory _$TodoImpl.fromJson(Map<String, dynamic> json) =>
-      _$$TodoImplFromJson(json);
+  factory _$AppTodoItemImpl.fromJson(Map<String, dynamic> json) =>
+      _$$AppTodoItemImplFromJson(json);
 
   @override
   final String id;
@@ -233,14 +234,14 @@ class _$TodoImpl implements Todo {
 
   @override
   String toString() {
-    return 'TodoItem.todo(id: $id, title: $title, isDone: $isDone, indentLevel: $indentLevel, index: $index, createdAt: $createdAt)';
+    return 'AppItem.todo(id: $id, title: $title, isDone: $isDone, indentLevel: $indentLevel, index: $index, createdAt: $createdAt)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$TodoImpl &&
+            other is _$AppTodoItemImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.isDone, isDone) || other.isDone == isDone) &&
@@ -259,8 +260,8 @@ class _$TodoImpl implements Todo {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$TodoImplCopyWith<_$TodoImpl> get copyWith =>
-      __$$TodoImplCopyWithImpl<_$TodoImpl>(this, _$identity);
+  _$$AppTodoItemImplCopyWith<_$AppTodoItemImpl> get copyWith =>
+      __$$AppTodoItemImplCopyWithImpl<_$AppTodoItemImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -313,8 +314,8 @@ class _$TodoImpl implements Todo {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(Todo value) todo,
-    required TResult Function(TodoDivider value) divider,
+    required TResult Function(AppTodoItem value) todo,
+    required TResult Function(AppDividerItem value) divider,
   }) {
     return todo(this);
   }
@@ -322,8 +323,8 @@ class _$TodoImpl implements Todo {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(Todo value)? todo,
-    TResult? Function(TodoDivider value)? divider,
+    TResult? Function(AppTodoItem value)? todo,
+    TResult? Function(AppDividerItem value)? divider,
   }) {
     return todo?.call(this);
   }
@@ -331,8 +332,8 @@ class _$TodoImpl implements Todo {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(Todo value)? todo,
-    TResult Function(TodoDivider value)? divider,
+    TResult Function(AppTodoItem value)? todo,
+    TResult Function(AppDividerItem value)? divider,
     required TResult orElse(),
   }) {
     if (todo != null) {
@@ -343,22 +344,24 @@ class _$TodoImpl implements Todo {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$TodoImplToJson(
+    return _$$AppTodoItemImplToJson(
       this,
     );
   }
 }
 
-abstract class Todo implements TodoItem {
-  const factory Todo(
-      {required final String id,
-      required final String title,
-      required final bool isDone,
-      required final int indentLevel,
-      required final int index,
-      @TimestampConverter() required final DateTime createdAt}) = _$TodoImpl;
+abstract class AppTodoItem implements AppItem {
+  const factory AppTodoItem(
+          {required final String id,
+          required final String title,
+          required final bool isDone,
+          required final int indentLevel,
+          required final int index,
+          @TimestampConverter() required final DateTime createdAt}) =
+      _$AppTodoItemImpl;
 
-  factory Todo.fromJson(Map<String, dynamic> json) = _$TodoImpl.fromJson;
+  factory AppTodoItem.fromJson(Map<String, dynamic> json) =
+      _$AppTodoItemImpl.fromJson;
 
   @override
   String get id;
@@ -372,27 +375,27 @@ abstract class Todo implements TodoItem {
   DateTime get createdAt;
   @override
   @JsonKey(ignore: true)
-  _$$TodoImplCopyWith<_$TodoImpl> get copyWith =>
+  _$$AppTodoItemImplCopyWith<_$AppTodoItemImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$TodoDividerImplCopyWith<$Res>
-    implements $TodoItemCopyWith<$Res> {
-  factory _$$TodoDividerImplCopyWith(
-          _$TodoDividerImpl value, $Res Function(_$TodoDividerImpl) then) =
-      __$$TodoDividerImplCopyWithImpl<$Res>;
+abstract class _$$AppDividerItemImplCopyWith<$Res>
+    implements $AppItemCopyWith<$Res> {
+  factory _$$AppDividerItemImplCopyWith(_$AppDividerItemImpl value,
+          $Res Function(_$AppDividerItemImpl) then) =
+      __$$AppDividerItemImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String id, int index, @TimestampConverter() DateTime createdAt});
 }
 
 /// @nodoc
-class __$$TodoDividerImplCopyWithImpl<$Res>
-    extends _$TodoItemCopyWithImpl<$Res, _$TodoDividerImpl>
-    implements _$$TodoDividerImplCopyWith<$Res> {
-  __$$TodoDividerImplCopyWithImpl(
-      _$TodoDividerImpl _value, $Res Function(_$TodoDividerImpl) _then)
+class __$$AppDividerItemImplCopyWithImpl<$Res>
+    extends _$AppItemCopyWithImpl<$Res, _$AppDividerItemImpl>
+    implements _$$AppDividerItemImplCopyWith<$Res> {
+  __$$AppDividerItemImplCopyWithImpl(
+      _$AppDividerItemImpl _value, $Res Function(_$AppDividerItemImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -402,7 +405,7 @@ class __$$TodoDividerImplCopyWithImpl<$Res>
     Object? index = null,
     Object? createdAt = null,
   }) {
-    return _then(_$TodoDividerImpl(
+    return _then(_$AppDividerItemImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -421,16 +424,16 @@ class __$$TodoDividerImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$TodoDividerImpl implements TodoDivider {
-  const _$TodoDividerImpl(
+class _$AppDividerItemImpl implements AppDividerItem {
+  const _$AppDividerItemImpl(
       {required this.id,
       required this.index,
       @TimestampConverter() required this.createdAt,
       final String? $type})
       : $type = $type ?? 'divider';
 
-  factory _$TodoDividerImpl.fromJson(Map<String, dynamic> json) =>
-      _$$TodoDividerImplFromJson(json);
+  factory _$AppDividerItemImpl.fromJson(Map<String, dynamic> json) =>
+      _$$AppDividerItemImplFromJson(json);
 
   @override
   final String id;
@@ -445,14 +448,14 @@ class _$TodoDividerImpl implements TodoDivider {
 
   @override
   String toString() {
-    return 'TodoItem.divider(id: $id, index: $index, createdAt: $createdAt)';
+    return 'AppItem.divider(id: $id, index: $index, createdAt: $createdAt)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$TodoDividerImpl &&
+            other is _$AppDividerItemImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.index, index) || other.index == index) &&
             (identical(other.createdAt, createdAt) ||
@@ -466,8 +469,9 @@ class _$TodoDividerImpl implements TodoDivider {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$TodoDividerImplCopyWith<_$TodoDividerImpl> get copyWith =>
-      __$$TodoDividerImplCopyWithImpl<_$TodoDividerImpl>(this, _$identity);
+  _$$AppDividerItemImplCopyWith<_$AppDividerItemImpl> get copyWith =>
+      __$$AppDividerItemImplCopyWithImpl<_$AppDividerItemImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -520,8 +524,8 @@ class _$TodoDividerImpl implements TodoDivider {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(Todo value) todo,
-    required TResult Function(TodoDivider value) divider,
+    required TResult Function(AppTodoItem value) todo,
+    required TResult Function(AppDividerItem value) divider,
   }) {
     return divider(this);
   }
@@ -529,8 +533,8 @@ class _$TodoDividerImpl implements TodoDivider {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(Todo value)? todo,
-    TResult? Function(TodoDivider value)? divider,
+    TResult? Function(AppTodoItem value)? todo,
+    TResult? Function(AppDividerItem value)? divider,
   }) {
     return divider?.call(this);
   }
@@ -538,8 +542,8 @@ class _$TodoDividerImpl implements TodoDivider {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(Todo value)? todo,
-    TResult Function(TodoDivider value)? divider,
+    TResult Function(AppTodoItem value)? todo,
+    TResult Function(AppDividerItem value)? divider,
     required TResult orElse(),
   }) {
     if (divider != null) {
@@ -550,21 +554,21 @@ class _$TodoDividerImpl implements TodoDivider {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$TodoDividerImplToJson(
+    return _$$AppDividerItemImplToJson(
       this,
     );
   }
 }
 
-abstract class TodoDivider implements TodoItem {
-  const factory TodoDivider(
+abstract class AppDividerItem implements AppItem {
+  const factory AppDividerItem(
           {required final String id,
           required final int index,
           @TimestampConverter() required final DateTime createdAt}) =
-      _$TodoDividerImpl;
+      _$AppDividerItemImpl;
 
-  factory TodoDivider.fromJson(Map<String, dynamic> json) =
-      _$TodoDividerImpl.fromJson;
+  factory AppDividerItem.fromJson(Map<String, dynamic> json) =
+      _$AppDividerItemImpl.fromJson;
 
   @override
   String get id;
@@ -575,6 +579,6 @@ abstract class TodoDivider implements TodoItem {
   DateTime get createdAt;
   @override
   @JsonKey(ignore: true)
-  _$$TodoDividerImplCopyWith<_$TodoDividerImpl> get copyWith =>
+  _$$AppDividerItemImplCopyWith<_$AppDividerItemImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

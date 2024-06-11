@@ -20,7 +20,7 @@ class TodoController extends _$TodoController {
   Timer? _updateOrderDebounce;
 
   @override
-  FutureOr<List<TodoItem>> build() async {
+  FutureOr<List<AppItem>> build() async {
     ref.watch(refreshControllerProvider);
     final user = ref.watch(userControllerProvider);
     if (user.hasError || user.valueOrNull == null) {
@@ -61,7 +61,7 @@ class TodoController extends _$TodoController {
   }
 
   /// [Todo]のインデントを追加する
-  Future<void> addIndent(Todo todo) async {
+  Future<void> addIndent(AppTodoItem todo) async {
     try {
       todoRepository!.update(
         id: todo.id,
@@ -73,13 +73,13 @@ class TodoController extends _$TodoController {
     final tmp = [...state.value!];
     final index = tmp.indexWhere((element) => element.id == todo.id);
     // todoがTodoクラスなので、tmp[index]もTodoでキャストして良い。
-    final tmpTodo = tmp[index] as Todo;
+    final tmpTodo = tmp[index] as AppTodoItem;
     tmp[index] = tmpTodo.copyWith(indentLevel: tmpTodo.indentLevel + 1);
     state = AsyncData(tmp);
   }
 
   /// [Todo]のインデントを削除する
-  Future<void> minusIndent(Todo todo) async {
+  Future<void> minusIndent(AppTodoItem todo) async {
     try {
       todoRepository!.update(
         id: todo.id,
@@ -91,13 +91,13 @@ class TodoController extends _$TodoController {
     final tmp = [...state.value!];
     final index = tmp.indexWhere((element) => element.id == todo.id);
     // todoがTodoクラスなので、tmp[index]もTodoでキャストして良い。
-    final tmpTodo = tmp[index] as Todo;
+    final tmpTodo = tmp[index] as AppTodoItem;
     tmp[index] = tmpTodo.copyWith(indentLevel: tmpTodo.indentLevel - 1);
     state = AsyncData(tmp);
   }
 
   /// [TodoItem]を削除する
-  Future<void> delete(TodoItem todo) async {
+  Future<void> delete(AppItem todo) async {
     try {
       todoRepository!.delete(id: todo.id);
     } on Exception catch (e, s) {
@@ -114,7 +114,8 @@ class TodoController extends _$TodoController {
     required String title,
   }) async {
     final index = state.valueOrNull!.indexWhere((e) => e.id == todoId);
-    final todo = (state.valueOrNull![index] as Todo).copyWith(title: title);
+    final todo =
+        (state.valueOrNull![index] as AppTodoItem).copyWith(title: title);
     try {
       await todoRepository!.update(
         id: todo.id,
@@ -146,7 +147,7 @@ class TodoController extends _$TodoController {
   }) async {
     final index = state.valueOrNull!.indexWhere((e) => e.id == todoId);
     final tmp = [...state.value!];
-    final todo = (state.value![index] as Todo).copyWith(isDone: isDone);
+    final todo = (state.value![index] as AppTodoItem).copyWith(isDone: isDone);
     tmp[index] = todo;
     state = AsyncData(tmp);
     try {
@@ -207,7 +208,9 @@ class TodoController extends _$TodoController {
 
     _deleteDonesDebounce =
         Timer(Duration(milliseconds: milliseconds), () async {
-      final tmp = [...state.value!.whereType<Todo>().where((e) => !e.isDone)];
+      final tmp = [
+        ...state.value!.whereType<AppTodoItem>().where((e) => !e.isDone),
+      ];
       state = AsyncData(tmp);
       onDeleted?.call();
     });

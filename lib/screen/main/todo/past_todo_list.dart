@@ -4,8 +4,8 @@ class PastTodoList extends HookConsumerWidget {
   const PastTodoList({super.key});
 
   /// 日付けごとにグルーピングするメソッド
-  Map<DateTime, List<TodoItem>> groupByDate(List<TodoItem> todoItems) {
-    final grouped = <DateTime, List<TodoItem>>{};
+  Map<DateTime, List<AppItem>> groupByDate(List<AppItem> todoItems) {
+    final grouped = <DateTime, List<AppItem>>{};
     for (final item in todoItems) {
       // createdAtの時間を切り捨てた日付を取得
       final date = DateTime(
@@ -64,12 +64,12 @@ class PastTodoList extends HookConsumerWidget {
                     children: List.generate(todos.length, (index) {
                       final todo = todos[index];
                       return switch (todo) {
-                        Todo() => TodoListItem(
+                        AppTodoItem() => TodoListItem(
                             todo: todo,
                             controller: TextEditingController(text: todo.title),
                             readOnly: true,
                           ),
-                        TodoDivider() => throw UnimplementedError(),
+                        AppDividerItem() => throw UnimplementedError(),
                       };
                     }),
                   ),

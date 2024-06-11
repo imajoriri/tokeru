@@ -10,7 +10,7 @@ part 'past_todo_controller.g.dart';
 @riverpod
 class PastTodoController extends _$PastTodoController {
   @override
-  FutureOr<List<TodoItem>> build() async {
+  FutureOr<List<AppItem>> build() async {
     ref.watch(refreshControllerProvider);
     final user = ref.watch(userControllerProvider);
     if (user.hasError || user.valueOrNull == null) {
