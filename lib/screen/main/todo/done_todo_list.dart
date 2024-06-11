@@ -15,15 +15,10 @@ class DoneTodoList extends HookConsumerWidget {
         return HookBuilder(
           key: ValueKey(todo.id),
           builder: (context) {
-            return switch (todo) {
-              AppTodoItem() => TodoListItem(
-                  todo: todo,
-                  controller: useTextEditingController(text: todo.title),
-                  readOnly: true,
-                ),
-              AppChatItem() => throw UnimplementedError(),
-              AppDividerItem() => throw UnimplementedError(),
-            };
+            return TodoListItem(
+              todo: todo,
+              controller: useTextEditingController(text: todo.title),
+            );
           },
         );
       },

@@ -34,50 +34,69 @@ class PastTodoList extends HookConsumerWidget {
         final now = DateTime.now();
         final today = DateTime(now.year, now.month, now.day);
 
-        return ListTileTheme.merge(
-          dense: true,
-          contentPadding: const EdgeInsets.only(left: 12),
-          horizontalTitleGap: 4,
-          child: ExpansionTile(
-            title: Text('Past Todos', style: context.appTextTheme.titleSmall),
-            controlAffinity: ListTileControlAffinity.leading,
-            expandedCrossAxisAlignment: CrossAxisAlignment.start,
-            children: groupByDate(todos).entries.map((entry) {
-              final date = entry.key;
-              final todos = entry.value;
-              if (todos.isEmpty) {
-                return const SizedBox();
-              }
-              // 今日との差分を取得
-              final diff = today.difference(date).inDays;
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Text(
-                      "${DateFormat.yMMMd().format(date)} ($diff days ago)",
-                      style: context.appTextTheme.titleSmall,
-                    ),
+        return Column(
+          children: groupByDate(todos).entries.map((entry) {
+            final date = entry.key;
+            final todos = entry.value;
+            if (todos.isEmpty) {
+              return const SizedBox();
+            }
+            // 今日との差分を取得
+            final diff = today.difference(date).inDays;
+            final title = diff == 1
+                ? 'Yesterday'
+                : '${DateFormat.yMMMd().format(date)} ($diff days ago)';
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text(
+                    title,
+                    style: context.appTextTheme.titleSmall,
                   ),
-                  Column(
-                    children: List.generate(todos.length, (index) {
-                      final todo = todos[index];
-                      return switch (todo) {
-                        AppTodoItem() => TodoListItem(
-                            todo: todo,
-                            controller: TextEditingController(text: todo.title),
-                            readOnly: true,
-                          ),
-                        AppChatItem() => throw UnimplementedError(),
-                        AppDividerItem() => throw UnimplementedError(),
-                      };
-                    }),
-                  ),
-                ],
-              );
-            }).toList(),
-          ),
+                ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    final todo = todos[index];
+                    return switch (todo) {
+                      AppTodoItem() => HookBuilder(
+                          builder: (context) {
+                            return TodoListItem(
+                              todo: todo,
+                              controller:
+                                  useTextEditingController(text: todo.title),
+                              onUpdatedTitle: (value) => ref
+                                  .read(pastTodoControllerProvider.notifier)
+                                  .updateTodoTitle(
+                                    todoId: todo.id,
+                                    title: value,
+                                  ),
+                              onToggleDone: (value) {
+                                ref
+                                    .read(pastTodoControllerProvider.notifier)
+                                    .updateIsDone(
+                                      todoId: todo.id,
+                                      isDone: value ?? false,
+                                    );
+                                FirebaseAnalytics.instance.logEvent(
+                                  name: AnalyticsEventName.toggleTodoDone.name,
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      AppChatItem() => throw UnimplementedError(),
+                      AppDividerItem() => throw UnimplementedError(),
+                    };
+                  },
+                  itemCount: todos.length,
+                ),
+              ],
+            );
+          }).toList(),
         );
       },
       error: (e, s) => const Text('happen somethings'),

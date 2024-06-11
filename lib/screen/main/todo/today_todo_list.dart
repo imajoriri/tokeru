@@ -1,56 +1,59 @@
 part of 'todo_view.dart';
 
-class TodoList extends HookConsumerWidget {
-  const TodoList({super.key});
+class TodayTodoList extends HookConsumerWidget {
+  const TodayTodoList({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final todos = ref.watch(todoControllerProvider);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Title
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: Text('Today', style: context.appTextTheme.titleSmall),
-        ),
-
-        // TodoList
-        todos.when(
-          data: (todos) {
-            if (todos.isEmpty) {
-              return GestureDetector(
-                onTap: Actions.handler<NewTodoIntent>(
-                  context,
-                  const NewTodoIntent(),
-                ),
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
-                  width: double.infinity,
-                  child: Column(
-                    children: [
-                      Text(
-                        'There are no To-Dos for today.\nPlease start by clicking here or pressing Command + N.',
-                        style: context.appTextTheme.bodySmall.copyWith(
-                          color: context.appColors.textSubtle,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 16),
-                      TextButton(
-                        onPressed: Actions.handler<NewTodoIntent>(
-                          context,
-                          const NewTodoIntent(),
-                        ),
-                        child: const Text('Add To-Do'),
-                      ),
-                    ],
+    return todos.when(
+      data: (todos) {
+        if (todos.isEmpty) {
+          return GestureDetector(
+            onTap: Actions.handler<NewTodoIntent>(
+              context,
+              const NewTodoIntent(),
+            ),
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+              width: double.infinity,
+              child: Column(
+                children: [
+                  Text(
+                    'There are no To-Dos for today.\nPlease start by clicking here or pressing Command + N.',
+                    style: context.appTextTheme.bodySmall.copyWith(
+                      color: context.appColors.textSubtle,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                ),
-              );
-            }
-            return Padding(
+                  const SizedBox(height: 16),
+                  TextButton(
+                    onPressed: Actions.handler<NewTodoIntent>(
+                      context,
+                      const NewTodoIntent(),
+                    ),
+                    child: const Text('Add To-Do'),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // title
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                "Today's To-Dos",
+                style: context.appTextTheme.titleSmall,
+              ),
+            ),
+
+            // TodoList
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: ReorderableListView.builder(
                 buildDefaultDragHandles: false,
@@ -77,15 +80,15 @@ class TodoList extends HookConsumerWidget {
                   );
                 },
               ),
-            );
-          },
-          error: (e, s) => const Text('happen somethings'),
-          loading: () => const Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Text('Loading...'),
-          ),
-        ),
-      ],
+            ),
+          ],
+        );
+      },
+      error: (e, s) => const Text('Error'),
+      loading: () => const Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Text('Loading...'),
+      ),
     );
   }
 }
@@ -164,8 +167,6 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
                     focusNode: ref.watch(todoFocusControllerProvider)[index],
                     controller:
                         ref.watch(todoTextEditingControllerProvider(todo.id)),
-                    selected: ref.watch(selectedTodoItemIdControllerProvider) ==
-                        todo.id,
                     onDeleted: () async {
                       final currentFocusIndex = ref
                           .read(todoFocusControllerProvider.notifier)
@@ -177,7 +178,7 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
                           .read(todoFocusControllerProvider.notifier)
                           .requestFocus(currentFocusIndex - 1);
                     },
-                    onUpdate: (value) => ref
+                    onUpdatedTitle: (value) => ref
                         .read(todoControllerProvider.notifier)
                         .updateTodoTitle(todoId: todo.id, title: value),
                     onToggleDone: (value) {

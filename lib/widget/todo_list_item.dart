@@ -11,12 +11,10 @@ class TodoListItem extends HookConsumerWidget {
   const TodoListItem({
     super.key,
     required this.todo,
-    this.selected = false,
-    this.readOnly = false,
     this.controller,
     this.focusNode,
     this.onDeleted,
-    this.onUpdate,
+    this.onUpdatedTitle,
     this.onToggleDone,
   });
 
@@ -26,27 +24,23 @@ class TodoListItem extends HookConsumerWidget {
 
   final FocusNode? focusNode;
 
-  /// [Todo]が選択されているかどうか。
-  ///
-  /// この値がtrueの場合、背景色が変わる。
-  final bool selected;
-
-  /// [Todo]の編集ができるかどうか。
-  final bool readOnly;
-
-  /// [Todo]の削除時に呼ばれるコールバック
+  /// [AppTodoItem]の削除時に呼ばれるコールバック
   ///
   /// このメソッドは以下のタイミングで呼ばれる。
-  /// - [Todo]のタイトルが空文字の時に、バックスペースキーが押された時
+  /// - [AppTodoItem]のタイトルが空文字の時に、バックスペースキーが押された時
   final VoidCallback? onDeleted;
 
-  /// [Todo]のタイトルを更新するコールバック。
+  /// [AppTodoItem]のタイトルを更新するコールバック。
+  ///
+  /// nullの場合、[TextField]はreadOnlyになる。
   ///
   /// このメソッドは以下のタイミングで呼ばれる。
   /// - [TextField]の内容が変更された時
-  final void Function(String)? onUpdate;
+  final void Function(String)? onUpdatedTitle;
 
-  /// [Todo]のチェックを切り替えるコールバック。
+  /// [AppTodoItem]のチェックを切り替えるコールバック。
+  ///
+  /// nullの場合、[Checkbox]はDisabledになる。
   ///
   /// このメソッドは以下のタイミングで呼ばれる。
   /// - [Checkbox]がタップされた時
@@ -57,11 +51,28 @@ class TodoListItem extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final readOnly = onUpdatedTitle == null;
     final effectiveController = controller ?? useTextEditingController();
     final effectiveFocusNode = focusNode ?? useFocusNode();
     effectiveFocusNode.skipTraversal = readOnly;
     var text = controller?.text ?? '';
+    final hasFocus = useState(effectiveFocusNode.hasFocus);
     final onHover = useState(false);
+
+    // focusが変化したら、hasFocusを更新する
+    useEffect(
+      () {
+        void listener() {
+          hasFocus.value = effectiveFocusNode.hasFocus;
+        }
+
+        effectiveFocusNode.addListener(listener);
+        return () {
+          effectiveFocusNode.removeListener(listener);
+        };
+      },
+      [effectiveFocusNode],
+    );
 
     Timer? debounce;
     useEffect(
@@ -73,7 +84,7 @@ class TodoListItem extends HookConsumerWidget {
 
           debounce = Timer(debounceDuration, () {
             if (text != effectiveController.text) {
-              onUpdate?.call(effectiveController.text);
+              onUpdatedTitle?.call(effectiveController.text);
             }
             text = effectiveController.text;
           });
@@ -86,7 +97,7 @@ class TodoListItem extends HookConsumerWidget {
       [controller],
     );
 
-    final backgroundColor = selected
+    final backgroundColor = hasFocus.value && !readOnly
         ? context.appColors.backgroundPrimaryContainer
         : onHover.value
             ? Colors.grey[200]

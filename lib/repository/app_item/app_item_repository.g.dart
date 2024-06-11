@@ -29,22 +29,22 @@ class _SystemHash {
   }
 }
 
-/// [TodoItem]を扱うRepository
+/// [AppItem]を扱うRepository
 ///
 /// Copied from [appItemRepository].
 @ProviderFor(appItemRepository)
 const appItemRepositoryProvider = AppItemRepositoryFamily();
 
-/// [TodoItem]を扱うRepository
+/// [AppItem]を扱うRepository
 ///
 /// Copied from [appItemRepository].
 class AppItemRepositoryFamily extends Family<AppItemRepository> {
-  /// [TodoItem]を扱うRepository
+  /// [AppItem]を扱うRepository
   ///
   /// Copied from [appItemRepository].
   const AppItemRepositoryFamily();
 
-  /// [TodoItem]を扱うRepository
+  /// [AppItem]を扱うRepository
   ///
   /// Copied from [appItemRepository].
   AppItemRepositoryProvider call(
@@ -79,11 +79,11 @@ class AppItemRepositoryFamily extends Family<AppItemRepository> {
   String? get name => r'appItemRepositoryProvider';
 }
 
-/// [TodoItem]を扱うRepository
+/// [AppItem]を扱うRepository
 ///
 /// Copied from [appItemRepository].
 class AppItemRepositoryProvider extends AutoDisposeProvider<AppItemRepository> {
-  /// [TodoItem]を扱うRepository
+  /// [AppItem]を扱うRepository
   ///
   /// Copied from [appItemRepository].
   AppItemRepositoryProvider(

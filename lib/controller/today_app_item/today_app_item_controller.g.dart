@@ -7,9 +7,11 @@ part of 'today_app_item_controller.dart';
 // **************************************************************************
 
 String _$todayAppItemControllerHash() =>
-    r'bd45c63c1054af7d4a8256322e566ba4e76e71b7';
+    r'28fc349aeb82e24232d4788d9eaadea1298503b7';
 
-/// See also [TodayAppItemController].
+/// 今日作成された[AppItem]を返すController。
+///
+/// Copied from [TodayAppItemController].
 @ProviderFor(TodayAppItemController)
 final todayAppItemControllerProvider =
     AsyncNotifierProvider<TodayAppItemController, List<AppItem>>.internal(
