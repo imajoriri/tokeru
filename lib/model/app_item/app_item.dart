@@ -32,10 +32,4 @@ sealed class AppItem with _$AppItem {
 
   factory AppItem.fromJson(Map<String, dynamic> json) =>
       _$AppItemFromJson(json);
-
-  // static type = switch (this) {
-  //       AppChatItem() => 'chat',
-  //       AppTodoItem() => 'todo',
-  //       AppDividerItem() => 'divider',
-  //     };
 }

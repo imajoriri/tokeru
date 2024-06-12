@@ -7,7 +7,7 @@ part of 'todo_span_controller.dart';
 // **************************************************************************
 
 String _$todoSpanControllerHash() =>
-    r'ed9a322eeb881fd93fdc1d7d3d5ff4640dcf6081';
+    r'957cf39b87bce80eb0e68d070463330b2549bdd5';
 
 /// See also [TodoSpanController].
 @ProviderFor(TodoSpanController)
