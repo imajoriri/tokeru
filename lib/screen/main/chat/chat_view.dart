@@ -22,28 +22,38 @@ class ChatView extends HookConsumerWidget {
           appItems.when(
             data: (appItems) {
               return Expanded(
-                child: ListView.separated(
-                  itemCount: appItems.length,
-                  shrinkWrap: true,
-                  reverse: true,
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(height: 8);
+                child: NotificationListener<ScrollNotification>(
+                  onNotification: (notification) {
+                    if (notification.metrics.extentAfter < 300) {
+                      ref
+                          .read(todayAppItemControllerProvider.notifier)
+                          .fetchNext();
+                    }
+                    return false;
                   },
-                  itemBuilder: (context, index) {
-                    final appItem = appItems[index];
-                    return switch (appItem) {
-                      AppTodoItem(:final title) => Text(title),
-                      AppChatItem(:final message) => Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 8,
-                            horizontal: 8,
+                  child: ListView.separated(
+                    itemCount: appItems.length,
+                    shrinkWrap: true,
+                    reverse: true,
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(height: 8);
+                    },
+                    itemBuilder: (context, index) {
+                      final appItem = appItems[index];
+                      return switch (appItem) {
+                        AppTodoItem(:final title) => Text(title),
+                        AppChatItem(:final message) => Container(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 8,
+                              horizontal: 8,
+                            ),
+                            color: Colors.grey[100],
+                            child: Text(message),
                           ),
-                          color: Colors.grey[100],
-                          child: Text(message),
-                        ),
-                      AppDividerItem() => throw UnimplementedError(),
-                    };
-                  },
+                        AppDividerItem() => throw UnimplementedError(),
+                      };
+                    },
+                  ),
                 ),
               );
             },
