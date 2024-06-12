@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/widget/actions/custom_action.dart';
+import 'package:quick_flutter/widget/focus_nodes.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'toggle_focus_action.g.dart';
@@ -20,7 +21,11 @@ class ToggleFocusAction extends CustomAction<ToggleFocusIntent> {
 
   @override
   Object? invoke(covariant ToggleFocusIntent intent) async {
-    // TODO: ここでフォーカスを切り替える
-    return KeyEventResult.ignored;
+    if (todoViewFocusNode.hasFocus) {
+      chatFocusNode.requestFocus();
+    } else {
+      todoViewFocusNode.requestFocus();
+    }
+    return null;
   }
 }

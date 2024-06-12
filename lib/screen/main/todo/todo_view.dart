@@ -10,6 +10,7 @@ import 'package:quick_flutter/controller/todo_focus/todo_focus_controller.dart';
 import 'package:quick_flutter/model/analytics_event/analytics_event_name.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
 import 'package:quick_flutter/widget/actions/new_todo.dart/new_todo_action.dart';
+import 'package:quick_flutter/widget/focus_nodes.dart';
 import 'package:quick_flutter/widget/theme/app_theme.dart';
 import 'package:quick_flutter/widget/todo_list_item.dart';
 
@@ -22,16 +23,19 @@ class TodoView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TodayTodoList(),
-          SizedBox(height: 28),
-          PastTodoList(),
-          SizedBox(height: 28),
-          DoneTodoList(),
-        ],
+    return FocusScope(
+      node: todoViewFocusNode,
+      child: const SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TodayTodoList(),
+            SizedBox(height: 28),
+            PastTodoList(),
+            SizedBox(height: 28),
+            DoneTodoList(),
+          ],
+        ),
       ),
     );
   }
