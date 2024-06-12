@@ -2,14 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/controller/method_channel/method_channel_controller.dart';
 import 'package:quick_flutter/controller/url/url_controller.dart';
-import 'package:quick_flutter/widget/actions/delete_todo/delete_todo_action.dart';
-import 'package:quick_flutter/widget/actions/move_down_todo/move_down_todo_action.dart';
-import 'package:quick_flutter/widget/actions/move_up_todo/move_up_todo_action.dart';
 import 'package:quick_flutter/widget/actions/new_todo.dart/new_todo_action.dart';
 import 'package:quick_flutter/widget/actions/reload/reload_action.dart';
-import 'package:quick_flutter/widget/actions/select_todo_down/select_todo_down_action.dart';
-import 'package:quick_flutter/widget/actions/select_todo_up/select_todo_up_action.dart';
-import 'package:quick_flutter/widget/actions/toggle_todo_done/toggle_todo_done_action.dart';
 import 'package:quick_flutter/widget/shortcutkey.dart';
 
 /// [PlatformMenuBar]の中でRefを使うためにラップしたWidgetクラス
@@ -61,23 +55,12 @@ class AppPlatformMenuBar extends ConsumerWidget {
                 PlatformMenuItem(
                   label: ShortcutActivatorType.toggleDone.label,
                   shortcut: ShortcutActivatorType.toggleDone.shortcutActivator,
-                  onSelected: () {
-                    Actions.maybeInvoke<ToggleTodoDoneIntent>(
-                      context,
-                      const ToggleTodoDoneIntent(),
-                    );
-                  },
                 ),
                 // Todoを削除
                 PlatformMenuItem(
                   label: ShortcutActivatorType.deleteTodo.label,
                   shortcut: ShortcutActivatorType.deleteTodo.shortcutActivator,
-                  onSelected: () {
-                    Actions.maybeInvoke<DeleteTodoIntent>(
-                      context,
-                      const DeleteTodoIntent(),
-                    );
-                  },
+                  onSelected: () {},
                 ),
               ],
             ),
@@ -87,54 +70,13 @@ class AppPlatformMenuBar extends ConsumerWidget {
                 PlatformMenuItem(
                   label: ShortcutActivatorType.moveUp.label,
                   shortcut: ShortcutActivatorType.moveUp.shortcutActivator,
-                  onSelected: () => Actions.maybeInvoke<MoveUpTodoIntent>(
-                    context,
-                    const MoveUpTodoIntent(),
-                  ),
+                  onSelected: () {},
                 ),
                 // 下へ移動
                 PlatformMenuItem(
                   label: ShortcutActivatorType.moveDown.label,
                   shortcut: ShortcutActivatorType.moveDown.shortcutActivator,
-                  onSelected: () {
-                    Actions.maybeInvoke<MoveDownTodoIntent>(
-                      context,
-                      const MoveDownTodoIntent(),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ],
-        ),
-
-        // window
-        PlatformMenu(
-          label: "Chat",
-          menus: [
-            PlatformMenuItemGroup(
-              members: [
-                PlatformMenuItem(
-                  label: ShortcutActivatorType.selectTodoUp.label,
-                  onSelected: () {
-                    Actions.maybeInvoke<SelectTodoUpIntent>(
-                      context,
-                      const SelectTodoUpIntent(),
-                    );
-                  },
-                  shortcut:
-                      ShortcutActivatorType.selectTodoUp.shortcutActivator,
-                ),
-                PlatformMenuItem(
-                  label: ShortcutActivatorType.selectTodoDown.label,
-                  onSelected: () {
-                    Actions.maybeInvoke<SelectTodoDownIntent>(
-                      context,
-                      const SelectTodoDownIntent(),
-                    );
-                  },
-                  shortcut:
-                      ShortcutActivatorType.selectTodoDown.shortcutActivator,
+                  onSelected: () {},
                 ),
               ],
             ),

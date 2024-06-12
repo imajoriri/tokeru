@@ -6,6 +6,6 @@ part 'todo_span_controller.g.dart';
 class TodoSpanController extends _$TodoSpanController {
   @override
   int build() {
-    return 3;
+    return 10;
   }
 }

@@ -13,18 +13,9 @@ import 'package:quick_flutter/firebase_options.dart';
 import 'package:quick_flutter/model/analytics_event/analytics_event_name.dart';
 import 'package:quick_flutter/screen/main/main_screen.dart';
 import 'package:quick_flutter/screen/settings/settings_screen.dart';
-import 'package:quick_flutter/widget/actions/delete_todo/delete_todo_action.dart';
-import 'package:quick_flutter/widget/actions/focus_down/focus_down_action.dart';
-import 'package:quick_flutter/widget/actions/focus_up/focus_up_action.dart';
-import 'package:quick_flutter/widget/actions/move_down_todo/move_down_todo_action.dart';
-import 'package:quick_flutter/widget/actions/move_up_todo/move_up_todo_action.dart';
 import 'package:quick_flutter/widget/actions/new_todo.dart/new_todo_action.dart';
-import 'package:quick_flutter/widget/actions/new_todo_below/new_todo_below_action.dart';
 import 'package:quick_flutter/widget/actions/reload/reload_action.dart';
-import 'package:quick_flutter/widget/actions/select_todo_down/select_todo_down_action.dart';
-import 'package:quick_flutter/widget/actions/select_todo_up/select_todo_up_action.dart';
 import 'package:quick_flutter/widget/actions/toggle_focus/toggle_focus_action.dart';
-import 'package:quick_flutter/widget/actions/toggle_todo_done/toggle_todo_done_action.dart';
 import 'package:quick_flutter/widget/app_platform_menu_bar.dart';
 import 'package:quick_flutter/widget/shortcutkey.dart';
 import 'package:quick_flutter/widget/theme/app_theme.dart';
@@ -102,31 +93,13 @@ class _CallbackShortcuts extends ConsumerWidget {
     return FocusScope(
       child: Shortcuts(
         shortcuts: {
-          ShortcutActivatorType.focusUp.shortcutActivator:
-              const FocusUpIntent(),
-          ShortcutActivatorType.focusDown.shortcutActivator:
-              const FocusDownIntent(),
           ShortcutActivatorType.newTodo.shortcutActivator:
               const NewTodoIntent(),
-          ShortcutActivatorType.newTodoBelow.shortcutActivator:
-              const NewTodoBelowIntent(),
-          ShortcutActivatorType.toggleDone.shortcutActivator:
-              const ToggleTodoDoneIntent(),
-          ShortcutActivatorType.moveUp.shortcutActivator:
-              const MoveUpTodoIntent(),
-          ShortcutActivatorType.moveDown.shortcutActivator:
-              const MoveDownTodoIntent(),
-          ShortcutActivatorType.deleteTodo.shortcutActivator:
-              const DeleteTodoIntent(),
           ShortcutActivatorType.reload.shortcutActivator: const ReloadIntent(),
           ShortcutActivatorType.switchFocusChat.shortcutActivator:
               const ToggleFocusIntent(),
           ShortcutActivatorType.switchFocusTodo.shortcutActivator:
               const ToggleFocusIntent(),
-          ShortcutActivatorType.selectTodoDown.shortcutActivator:
-              const SelectTodoDownIntent(),
-          ShortcutActivatorType.selectTodoUp.shortcutActivator:
-              const SelectTodoUpIntent(),
         },
         child: Actions(
           dispatcher: _LoggingActionDispatcher(),
