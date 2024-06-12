@@ -85,6 +85,12 @@ class PastTodoList extends HookConsumerWidget {
                                   name: AnalyticsEventName.toggleTodoDone.name,
                                 );
                               },
+                              focusDown: () {
+                                FocusScope.of(context).nextFocus();
+                              },
+                              focusUp: () {
+                                FocusScope.of(context).previousFocus();
+                              },
                             );
                           },
                         ),

@@ -76,7 +76,6 @@ class TodayTodoList extends HookConsumerWidget {
                     key: key,
                     todo: todos[index],
                     index: index,
-                    todoLength: todos.length,
                   );
                 },
               ),
@@ -99,126 +98,84 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
     super.key,
     required this.todo,
     required this.index,
-    required this.todoLength,
   });
 
   /// リストのindex
   final int index;
 
   /// Todo
-  final AppItem todo;
-
-  /// [Todo]の個数
-  final int todoLength;
+  final AppTodoItem todo;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final onHover = useState(false);
-    // 日本語入力などでの変換中は無視するためのフラグ
-    final isValid = useState(false);
-    final focus = ref.watch(todoFocusControllerProvider)[index];
-    final controller = ref.watch(todoTextEditingControllerProvider(todo.id));
-
-    focus.onKey = ((node, event) {
-      isValid.value = controller.value.composing.isValid;
-      return KeyEventResult.ignored;
-    });
-
-    useEffect(
-      () {
-        listener() {
-          if (focus.hasFocus) {
-            ref
-                .read(selectedTodoItemIdControllerProvider.notifier)
-                .select(todo.id);
-          }
-        }
-
-        focus.addListener(listener);
-        return () {
-          focus.removeListener(listener);
-        };
+    return TodoListItem(
+      todo: todo,
+      index: index,
+      focusNode: ref.watch(todoFocusControllerProvider)[index],
+      controller: useTextEditingController(text: todo.title),
+      onDeleted: () async {
+        final currentFocusIndex =
+            ref.read(todoFocusControllerProvider.notifier).getFocusIndex();
+        await ref.read(todoControllerProvider.notifier).delete(todo);
+        ref
+            .read(todoFocusControllerProvider.notifier)
+            .requestFocus(currentFocusIndex - 1);
       },
-      [focus],
-    );
-
-    return MouseRegion(
-      onEnter: (_) => onHover.value = true,
-      onExit: (_) => onHover.value = false,
-      child: Stack(
-        children: [
-          Padding(
-            padding: EdgeInsets.zero,
-            child: switch (todo) {
-              AppTodoItem() => Actions(
-                  actions: {
-                    FocusUpIntent: ref.watch(todoFocusUpActionProvider),
-                    FocusDownIntent: ref.watch(todoFocusDownActionProvider),
-                    ToggleTodoDoneIntent:
-                        ref.watch(toggleTodoDoneActionProvider),
-                    MoveUpTodoIntent: ref.watch(moveUpTodoActionProvider),
-                    MoveDownTodoIntent: ref.watch(moveDownTodoActionProvider),
-                    DeleteTodoIntent: ref.watch(deleteTodoActionProvider),
-                    if (!isValid.value)
-                      NewTodoBelowIntent: ref.watch(newTodoBelowActionProvider),
-                  },
-                  child: TodoListItem(
-                    todo: todo as AppTodoItem,
-                    focusNode: ref.watch(todoFocusControllerProvider)[index],
-                    controller:
-                        ref.watch(todoTextEditingControllerProvider(todo.id)),
-                    onDeleted: () async {
-                      final currentFocusIndex = ref
-                          .read(todoFocusControllerProvider.notifier)
-                          .getFocusIndex();
-                      await ref
-                          .read(todoControllerProvider.notifier)
-                          .delete(todo);
-                      ref
-                          .read(todoFocusControllerProvider.notifier)
-                          .requestFocus(currentFocusIndex - 1);
-                    },
-                    onUpdatedTitle: (value) => ref
-                        .read(todoControllerProvider.notifier)
-                        .updateTodoTitle(todoId: todo.id, title: value),
-                    onToggleDone: (value) {
-                      ref.read(todoControllerProvider.notifier).updateIsDone(
-                            todoId: todo.id,
-                            isDone: value ?? false,
-                          );
-                      FirebaseAnalytics.instance.logEvent(
-                        name: AnalyticsEventName.toggleTodoDone.name,
-                      );
-                    },
-                  ),
-                ),
-              AppChatItem() => throw UnimplementedError(),
-              AppDividerItem() => throw UnimplementedError(),
-            },
-          ),
-          // ドラッグ&ドロップのアイコン
-          if (onHover.value)
-            Positioned.directional(
-              textDirection: Directionality.of(context),
-              top: 0,
-              bottom: 0,
-              end: 8,
-              child: Align(
-                alignment: AlignmentDirectional.centerEnd,
-                child: ReorderableDragStartListener(
-                  index: index,
-                  child: const MouseRegion(
-                    cursor: SystemMouseCursors.grab,
-                    child: Icon(
-                      Icons.drag_indicator_outlined,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-        ],
-      ),
+      onUpdatedTitle: (value) => ref
+          .read(todoControllerProvider.notifier)
+          .updateTodoTitle(todoId: todo.id, title: value),
+      onToggleDone: (value) {
+        ref.read(todoControllerProvider.notifier).updateIsDone(
+              todoId: todo.id,
+              isDone: value ?? false,
+            );
+        FirebaseAnalytics.instance.logEvent(
+          name: AnalyticsEventName.toggleTodoDone.name,
+        );
+      },
+      focusDown: () {
+        FocusScope.of(context).nextFocus();
+      },
+      focusUp: () {
+        FocusScope.of(context).previousFocus();
+      },
+      onNewTodoBelow: () async {
+        FocusManager.instance.primaryFocus?.unfocus();
+        final index =
+            ref.read(todoFocusControllerProvider.notifier).getFocusIndex();
+        await ref.read(todoControllerProvider.notifier).add(index + 1);
+        await ref.read(todoControllerProvider.notifier).updateCurrentOrder();
+        ref.read(todoFocusControllerProvider)[index + 1].requestFocus();
+      },
+      // 一番上のTodoは上に移動できない
+      onSortUp: index != 0
+          ? () {
+              final focusController =
+                  ref.read(todoFocusControllerProvider.notifier);
+              focusController.removeFocus();
+              ref
+                  .read(todoControllerProvider.notifier)
+                  .reorder(index, index - 1);
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                focusController.requestFocus(index - 1);
+              });
+            }
+          : null,
+      // 一番下のTodoは下に移動できない
+      onSortDown:
+          index != ref.read(todoControllerProvider).valueOrNull!.length - 1
+              ? () {
+                  final focusController =
+                      ref.read(todoFocusControllerProvider.notifier);
+                  focusController.removeFocus();
+                  ref
+                      .read(todoControllerProvider.notifier)
+                      .reorder(index, index + 1);
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    focusController.requestFocus(index + 1);
+                  });
+                }
+              : null,
     );
   }
 }

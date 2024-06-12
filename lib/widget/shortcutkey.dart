@@ -62,26 +62,6 @@ enum ShortcutActivatorType {
     label: 'Focus down',
   ),
 
-  /// 選択されているTodoをFocusはしないまま、1つ上に移動する。
-  selectTodoUp(
-    shortcutActivator: SingleActivator(
-      meta: true,
-      alt: true,
-      LogicalKeyboardKey.arrowUp,
-    ),
-    label: 'Move up selected todo',
-  ),
-
-  /// 選択されているTodoをFocusはしないまま、1つ下に移動する。
-  selectTodoDown(
-    shortcutActivator: SingleActivator(
-      meta: true,
-      alt: true,
-      LogicalKeyboardKey.arrowDown,
-    ),
-    label: 'Move down selected todo',
-  ),
-
   /// フォーカスをChatに移動する
   ///
   /// ユーザーへの説明のために[switchFocusTodo]と[switchFocusChat]を分けているが、

@@ -11,14 +11,25 @@ class TodoListItem extends HookConsumerWidget {
   const TodoListItem({
     super.key,
     required this.todo,
+    this.index,
     this.controller,
     this.focusNode,
     this.onDeleted,
     this.onUpdatedTitle,
     this.onToggleDone,
+    this.focusDown,
+    this.focusUp,
+    this.onNewTodoBelow,
+    this.onSortUp,
+    this.onSortDown,
   });
 
   final AppTodoItem todo;
+
+  /// [AppTodoItem]のリストのIndex。
+  ///
+  /// nullの場合、ドラッグアンドドロップのアイコンが表示されない。
+  final int? index;
 
   final TextEditingController? controller;
 
@@ -46,8 +57,29 @@ class TodoListItem extends HookConsumerWidget {
   /// - [Checkbox]がタップされた時
   final void Function(bool?)? onToggleDone;
 
+  /// 下の[TodoListItem]にフォーカスを移動するコールバック。
+  final VoidCallback? focusDown;
+
+  /// 上の[TodoListItem]にフォーカスを移動するコールバック。
+  final VoidCallback? focusUp;
+
+  /// Enterを押した際に呼ばれるコールバック。
+  ///
+  /// 現在のTodoの下に新しいTodoを追加することを想定している。
+  final VoidCallback? onNewTodoBelow;
+
+  /// 現在のTodoのソートを1つ上に移動するコールバック。
+  ///
+  /// nullの場合、上に移動できない。
+  final Function()? onSortUp;
+
+  /// 現在のTodoのソートを1つ下に移動するコールバック。
+  ///
+  /// nullの場合、下に移動できない。
+  final Function()? onSortDown;
+
   /// debouce用のDuration
-  static const debounceDuration = Duration(milliseconds: 400);
+  static const _debounceDuration = Duration(milliseconds: 400);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -58,6 +90,13 @@ class TodoListItem extends HookConsumerWidget {
     var text = controller?.text ?? '';
     final hasFocus = useState(effectiveFocusNode.hasFocus);
     final onHover = useState(false);
+
+    // 日本語入力などでの変換中は無視するためのフラグ
+    final isValid = useState(false);
+    effectiveFocusNode.onKey = ((node, event) {
+      isValid.value = effectiveController.value.composing.isValid;
+      return KeyEventResult.ignored;
+    });
 
     // focusが変化したら、hasFocusを更新する
     useEffect(
@@ -82,7 +121,7 @@ class TodoListItem extends HookConsumerWidget {
             debounce?.cancel();
           }
 
-          debounce = Timer(debounceDuration, () {
+          debounce = Timer(_debounceDuration, () {
             if (text != effectiveController.text) {
               onUpdatedTitle?.call(effectiveController.text);
             }
@@ -103,94 +142,139 @@ class TodoListItem extends HookConsumerWidget {
             ? Colors.grey[200]
             : Colors.transparent;
 
-    return MouseRegion(
-      onHover: (event) {
-        onHover.value = true;
+    return CallbackShortcuts(
+      bindings: <ShortcutActivator, VoidCallback>{
+        if (onToggleDone != null)
+          const SingleActivator(meta: true, LogicalKeyboardKey.keyK): () {
+            onToggleDone!(!todo.isDone);
+          },
+        if (onDeleted != null)
+          const SingleActivator(meta: true, LogicalKeyboardKey.keyD):
+              onDeleted!,
+        if (focusUp != null)
+          const SingleActivator(LogicalKeyboardKey.arrowUp): focusUp!,
+        if (focusDown != null)
+          const SingleActivator(LogicalKeyboardKey.arrowDown): focusDown!,
+        if (onNewTodoBelow != null && !isValid.value)
+          const SingleActivator(LogicalKeyboardKey.enter): onNewTodoBelow!,
+        if (onSortUp != null)
+          const SingleActivator(meta: true, LogicalKeyboardKey.arrowUp):
+              onSortUp!,
+        if (onSortDown != null)
+          const SingleActivator(meta: true, LogicalKeyboardKey.arrowDown):
+              onSortDown!,
       },
-      onExit: (event) {
-        onHover.value = false;
-      },
-      child: GestureDetector(
-        onTap: () {
-          effectiveFocusNode.requestFocus();
+      child: MouseRegion(
+        onHover: (event) {
+          onHover.value = true;
         },
-        child: Stack(
-          fit: StackFit.passthrough,
-          children: [
-            // TextFieldを囲っているContainerに色を付けると
-            // リビルド時にfocusが外れてしまうため、stackでContainerを分けている
-            Positioned(
-              left: 0,
-              right: 0,
-              top: 0,
-              bottom: 0,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: backgroundColor,
-                  borderRadius: BorderRadius.circular(4),
+        onExit: (event) {
+          onHover.value = false;
+        },
+        child: GestureDetector(
+          onTap: () {
+            effectiveFocusNode.requestFocus();
+          },
+          child: Stack(
+            fit: StackFit.passthrough,
+            children: [
+              // TextFieldを囲っているContainerに色を付けると
+              // リビルド時にfocusが外れてしまうため、stackでContainerを分けている
+              Positioned(
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: backgroundColor,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 4, top: 4, left: 8),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Checkbox(
-                    value: todo.isDone,
-                    onChanged: onToggleDone,
-                    focusNode: useFocusNode(
-                      skipTraversal: true,
+              Padding(
+                padding: const EdgeInsets.only(bottom: 4, top: 4, left: 8),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Checkbox(
+                      value: todo.isDone,
+                      onChanged: onToggleDone,
+                      focusNode: useFocusNode(
+                        skipTraversal: true,
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: Focus(
-                      skipTraversal: true,
-                      onKey: (node, event) {
-                        if (event is RawKeyDownEvent) {
-                          // バックスペースキー & カーソルが先頭の場合
-                          if (event.logicalKey ==
-                                  LogicalKeyboardKey.backspace &&
-                              effectiveController.selection.baseOffset == 0 &&
-                              effectiveController.selection.extentOffset == 0) {
-                            // 空文字の場合は削除
-                            if (effectiveController.text.isEmpty) {
-                              onDeleted?.call();
-                              return KeyEventResult.handled;
+                    Expanded(
+                      child: Focus(
+                        skipTraversal: true,
+                        onKey: (node, event) {
+                          if (event is RawKeyDownEvent) {
+                            // バックスペースキー & カーソルが先頭の場合
+                            if (event.logicalKey ==
+                                    LogicalKeyboardKey.backspace &&
+                                effectiveController.selection.baseOffset == 0 &&
+                                effectiveController.selection.extentOffset ==
+                                    0) {
+                              // 空文字の場合は削除
+                              if (effectiveController.text.isEmpty) {
+                                onDeleted?.call();
+                                return KeyEventResult.handled;
+                              }
                             }
                           }
-                        }
-                        return KeyEventResult.ignored;
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          bottom: 4,
-                          // チェックボックスとの高さを調整するためのpadding
-                          top: 6,
-                        ),
-                        child: TextField(
-                          controller: effectiveController,
-                          focusNode: effectiveFocusNode,
-                          style: context.appTextTheme.bodyLarge.copyWith(
-                            color: todo.isDone || readOnly
-                                ? context.appColors.textSubtle
-                                : context.appColors.textDefault,
+                          return KeyEventResult.ignored;
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: 4,
+                            // チェックボックスとの高さを調整するためのpadding
+                            top: 6,
                           ),
-                          readOnly: readOnly,
-                          maxLines: null,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Write a Todo or Memo(Shift + Enter)...',
-                            isCollapsed: true,
+                          child: TextField(
+                            controller: effectiveController,
+                            focusNode: effectiveFocusNode,
+                            style: context.appTextTheme.bodyLarge.copyWith(
+                              color: todo.isDone || readOnly
+                                  ? context.appColors.textSubtle
+                                  : context.appColors.textDefault,
+                            ),
+                            readOnly: readOnly,
+                            maxLines: 1,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              hintText:
+                                  'Write a Todo or Memo(Shift + Enter)...',
+                              isCollapsed: true,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+              if (onHover.value && index != null)
+                Positioned.directional(
+                  textDirection: Directionality.of(context),
+                  top: 0,
+                  bottom: 0,
+                  end: 8,
+                  child: Align(
+                    alignment: AlignmentDirectional.centerEnd,
+                    child: ReorderableDragStartListener(
+                      index: index!,
+                      child: const MouseRegion(
+                        cursor: SystemMouseCursors.grab,
+                        child: Icon(
+                          Icons.drag_indicator_outlined,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
