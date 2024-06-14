@@ -71,11 +71,100 @@ class TodayTodoList extends HookConsumerWidget {
                       .reorder(oldIndex, newIndex);
                 },
                 itemBuilder: (context, index) {
-                  final key = Key(todos[index].id);
-                  return _ReorderableTodoListItem(
+                  final key = ValueKey(todos[index].id);
+                  final todo = todos[index];
+                  return HookBuilder(
                     key: key,
-                    todo: todos[index],
-                    index: index,
+                    builder: (context) {
+                      return TodoListItem(
+                        todo: todo,
+                        index: index,
+                        focusNode:
+                            ref.watch(todoFocusControllerProvider)[index],
+                        controller: useTextEditingController(text: todo.title),
+                        onDeleted: () async {
+                          final currentFocusIndex = ref
+                              .read(todoFocusControllerProvider.notifier)
+                              .getFocusIndex();
+                          await ref
+                              .read(todoControllerProvider.notifier)
+                              .delete(todo);
+                          ref
+                              .read(todoFocusControllerProvider.notifier)
+                              .requestFocus(currentFocusIndex - 1);
+                        },
+                        onUpdatedTitle: (value) => ref
+                            .read(todoControllerProvider.notifier)
+                            .updateTodoTitle(todoId: todo.id, title: value),
+                        onToggleDone: (value) {
+                          ref
+                              .read(todoControllerProvider.notifier)
+                              .updateIsDone(
+                                todoId: todo.id,
+                                isDone: value ?? false,
+                              );
+                          FirebaseAnalytics.instance.logEvent(
+                            name: AnalyticsEventName.toggleTodoDone.name,
+                          );
+                        },
+                        focusDown: () {
+                          FocusScope.of(context).nextFocus();
+                        },
+                        focusUp: () {
+                          FocusScope.of(context).previousFocus();
+                        },
+                        onNewTodoBelow: () async {
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          final index = ref
+                              .read(todoFocusControllerProvider.notifier)
+                              .getFocusIndex();
+                          await ref
+                              .read(todoControllerProvider.notifier)
+                              .add(index + 1);
+                          await ref
+                              .read(todoControllerProvider.notifier)
+                              .updateCurrentOrder();
+                          ref
+                              .read(todoFocusControllerProvider)[index + 1]
+                              .requestFocus();
+                        },
+                        // 一番上のTodoは上に移動できない
+                        onSortUp: index != 0
+                            ? () {
+                                final focusController = ref
+                                    .read(todoFocusControllerProvider.notifier);
+                                focusController.removeFocus();
+                                ref
+                                    .read(todoControllerProvider.notifier)
+                                    .reorder(index, index - 1);
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  focusController.requestFocus(index - 1);
+                                });
+                              }
+                            : null,
+                        // 一番下のTodoは下に移動できない
+                        onSortDown: index !=
+                                ref
+                                        .read(todoControllerProvider)
+                                        .valueOrNull!
+                                        .length -
+                                    1
+                            ? () {
+                                final focusController = ref
+                                    .read(todoFocusControllerProvider.notifier);
+                                focusController.removeFocus();
+                                ref
+                                    .read(todoControllerProvider.notifier)
+                                    .reorder(index, index + 1);
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  focusController.requestFocus(index + 1);
+                                });
+                              }
+                            : null,
+                      );
+                    },
                   );
                 },
               ),
@@ -128,7 +217,14 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
         ref.read(todoControllerProvider.notifier).updateIsDone(
               todoId: todo.id,
               isDone: value ?? false,
+              onUpdated: () {
+                // WidgetsBinding.instance.addPostFrameCallback((_) {
+                // FocusScope.of(context).requestFocus();
+                // FocusScope.of(context).children.toList()[index].requestFocus();
+                // });
+              },
             );
+        FocusScope.of(context).nextFocus();
         FirebaseAnalytics.instance.logEvent(
           name: AnalyticsEventName.toggleTodoDone.name,
         );

@@ -30,6 +30,8 @@ class TodoController extends _$TodoController with AppTodoItemsNotifierMixin {
       isDone: false,
     );
     final todos = appItems.whereType<AppTodoItem>().toList();
+    // sort
+    todos.sort((a, b) => a.index.compareTo(b.index));
     return todos;
   }
 

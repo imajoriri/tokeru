@@ -97,22 +97,15 @@ class AppItemRepository {
     return item.copyWith(id: res.id);
   }
 
-  /// Todoを更新する
-  Future<void> update({
-    required String id,
-    String? title,
-    bool? isDone,
-    int? index,
+  Future<void> update<T extends AppItem>({
+    required T item,
   }) async {
+    final json = item.toJson();
     await ref
         .read(userDocumentProvider(userId))
         .collection("todos")
-        .doc(id)
-        .update({
-      if (title != null) 'title': title,
-      if (isDone != null) 'isDone': isDone,
-      if (index != null) 'index': index,
-    });
+        .doc(item.id)
+        .update(json);
   }
 
   /// Todoを削除する

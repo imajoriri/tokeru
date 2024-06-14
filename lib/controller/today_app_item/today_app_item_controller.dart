@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:quick_flutter/controller/refresh/refresh_controller.dart';
 import 'package:quick_flutter/controller/user/user_controller.dart';
@@ -49,16 +50,10 @@ class TodayAppItemController extends _$TodayAppItemController {
       return;
     }
 
-    final user = ref.read(userControllerProvider);
-    if (user.valueOrNull == null) {
-      assert(false, 'user is null');
-      return;
-    }
-
     state = const AsyncLoading<List<AppItem>>().copyWithPrevious(state);
-
     state = await AsyncValue.guard(() async {
-      final repository = ref.read(appItemRepositoryProvider(user.value!.id));
+      final user = ref.read(userControllerProvider).requireValue;
+      final repository = ref.read(appItemRepositoryProvider(user.id));
       final last = state.value!.last;
       final todos = await repository.fetch(
         end: last.createdAt,
@@ -75,12 +70,8 @@ class TodayAppItemController extends _$TodayAppItemController {
   Future<void> addChat({
     required String message,
   }) async {
-    final user = ref.read(userControllerProvider);
-    if (user.valueOrNull == null) {
-      assert(false, 'user is null');
-      return;
-    }
-    final repository = ref.read(appItemRepositoryProvider(user.value!.id));
+    final user = ref.read(userControllerProvider).requireValue;
+    final repository = ref.read(appItemRepositoryProvider(user.id));
     try {
       final chat = await repository.addChat(
         message: message,
@@ -88,6 +79,39 @@ class TodayAppItemController extends _$TodayAppItemController {
       );
       final tmp = [...state.value!];
       tmp.insert(0, chat);
+      state = AsyncData(tmp);
+    } on Exception catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+    }
+  }
+
+  /// [AppChatItem]を[AppTodoItem]に変換する
+  ///
+  /// Chatのmessageをtitleに変換する。
+  Future<void> convertToTodo({
+    required String chatId,
+  }) async {
+    final user = ref.read(userControllerProvider).requireValue;
+    final chat = state.value!.firstWhereOrNull((e) => e.id == chatId);
+    if (chat == null || chat is! AppChatItem) {
+      assert(false, 'chat is null or not AppChatItem');
+      return;
+    }
+    final convertedTodo = AppTodoItem(
+      id: chat.id,
+      title: chat.message,
+      isDone: false,
+      index: 0,
+      createdAt: chat.createdAt,
+    );
+    final repository = ref.read(appItemRepositoryProvider(user.id));
+    try {
+      await repository.update(item: convertedTodo);
+      final tmp = [...state.value!];
+      final index = tmp.indexWhere((element) => element.id == chat.id);
+      if (index != -1) {
+        tmp[index] = convertedTodo;
+      }
       state = AsyncData(tmp);
     } on Exception catch (e, s) {
       await FirebaseCrashlytics.instance.recordError(e, s);

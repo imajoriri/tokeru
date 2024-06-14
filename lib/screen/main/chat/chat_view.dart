@@ -42,13 +42,27 @@ class ChatView extends HookConsumerWidget {
                       final appItem = appItems[index];
                       return switch (appItem) {
                         AppTodoItem(:final title) => Text(title),
-                        AppChatItem(:final message) => Container(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 8,
-                              horizontal: 8,
-                            ),
-                            color: Colors.grey[100],
-                            child: Text(message),
+                        AppChatItem(:final message) => Row(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 8,
+                                    horizontal: 8,
+                                  ),
+                                  color: Colors.grey[100],
+                                  child: Text(message),
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  ref
+                                      .read(provider.notifier)
+                                      .convertToTodo(chatId: appItem.id);
+                                },
+                                icon: const Icon(Icons.check),
+                              ),
+                            ],
                           ),
                         AppDividerItem() => throw UnimplementedError(),
                       };
