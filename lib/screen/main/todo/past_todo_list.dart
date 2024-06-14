@@ -63,6 +63,7 @@ class PastTodoList extends HookConsumerWidget {
                     final todo = todos[index];
                     return switch (todo) {
                       AppTodoItem() => HookBuilder(
+                          key: ValueKey(todo.id),
                           builder: (context) {
                             return TodoListItem(
                               todo: todo,
@@ -74,7 +75,7 @@ class PastTodoList extends HookConsumerWidget {
                                     todoId: todo.id,
                                     title: value,
                                   ),
-                              onToggleDone: (value) {
+                              onToggleDone: (value) async {
                                 ref
                                     .read(pastTodoControllerProvider.notifier)
                                     .updateIsDone(

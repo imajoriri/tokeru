@@ -28,10 +28,7 @@ mixin AppTodoItemsNotifierMixin<T> on AsyncNotifier<List<AppTodoItem>> {
     }
     final repository = ref.read(appItemRepositoryProvider(user.value!.id));
     try {
-      await repository.update(
-        id: todo.id,
-        title: todo.title,
-      );
+      await repository.update(item: todo);
     } on Exception catch (e, s) {
       await FirebaseCrashlytics.instance.recordError(e, s);
     }
@@ -125,10 +122,7 @@ mixin AppTodoItemsNotifierMixin<T> on AsyncNotifier<List<AppTodoItem>> {
     tmp[index] = todo;
     state = AsyncData(tmp);
     try {
-      await repository.update(
-        id: todo.id,
-        isDone: isDone,
-      );
+      await repository.update(item: todo);
     } on Exception catch (e, s) {
       await FirebaseCrashlytics.instance.recordError(e, s);
     }
