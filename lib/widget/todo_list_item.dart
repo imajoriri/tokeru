@@ -239,7 +239,7 @@ class TodoListItem extends HookConsumerWidget {
                                   : context.appColors.textDefault,
                             ),
                             readOnly: readOnly,
-                            maxLines: 1,
+                            maxLines: null,
                             decoration: const InputDecoration(
                               border: InputBorder.none,
                               hintText:
