@@ -40,6 +40,11 @@ class TodayTodoList extends HookConsumerWidget {
           );
         }
 
+        final totalMinutes = todos
+            .map((todo) => todo.minutes)
+            .where((minutes) => minutes != null)
+            .fold<int>(0, (prev, minutes) => prev + minutes!);
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -47,7 +52,7 @@ class TodayTodoList extends HookConsumerWidget {
             Padding(
               padding: const EdgeInsets.all(16),
               child: Text(
-                "Today's To-Dos",
+                "Today's To-Dos ($totalMinutes min)",
                 style: context.appTextTheme.titleSmall,
               ),
             ),
@@ -81,7 +86,8 @@ class TodayTodoList extends HookConsumerWidget {
                         index: index,
                         focusNode:
                             ref.watch(todoFocusControllerProvider)[index],
-                        controller: useTextEditingController(text: todo.title),
+                        controller:
+                            useTodoTextEditingController(text: todo.title),
                         onDeleted: () async {
                           final currentFocusIndex = ref
                               .read(todoFocusControllerProvider.notifier)
