@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:quick_flutter/systems/regexp.dart';
 
 /// Todo用のTextEditingController。
 class TodoTextEditingController extends TextEditingController {
@@ -31,7 +32,7 @@ class TodoTextEditingController extends TextEditingController {
     // 「@10min」のような箇所だけを青色にしたTextSpanに変換する
     final spans = <TextSpan>[];
     value.text.splitMapJoin(
-      RegExp(r'@(\d+)min'),
+      timeRegExp,
       onMatch: (m) {
         spans.add(
           TextSpan(

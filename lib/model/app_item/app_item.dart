@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:quick_flutter/systems/regexp.dart';
 import 'package:quick_flutter/systems/timestamp_converter.dart';
 
 part 'app_item.freezed.dart';
@@ -38,7 +39,7 @@ sealed class AppItem with _$AppItem {
 extension AppTodoItemExtension on AppTodoItem {
   /// 「@10min」のようなテキストから、分数を取得する
   int? get minutes {
-    final match = RegExp(r'@(\d+)min').firstMatch(title);
+    final match = timeRegExp.firstMatch(title);
     if (match == null) {
       return null;
     }
