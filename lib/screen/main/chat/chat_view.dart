@@ -51,7 +51,7 @@ class ChatView extends HookConsumerWidget {
                                     horizontal: 8,
                                   ),
                                   color: Colors.grey[100],
-                                  child: Text(message),
+                                  child: SelectableText(message),
                                 ),
                               ),
                               IconButton(

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:quick_flutter/controller/mixin/app_todo_items_notifer_mixin.dart';
 import 'package:quick_flutter/controller/refresh/refresh_controller.dart';
+import 'package:quick_flutter/controller/today_app_item/today_app_item_controller.dart';
 import 'package:quick_flutter/controller/user/user_controller.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
 import 'package:quick_flutter/repository/app_item/app_item_repository.dart';
@@ -21,6 +22,17 @@ class TodoController extends _$TodoController with AppTodoItemsNotifierMixin {
     if (user.hasError || user.valueOrNull == null) {
       return [];
     }
+
+    ref.listen(todayAppItemControllerProvider, (previous, next) {
+      // [AppTodoItem]の数が変わった場合は再取得する。
+      final previousTodo =
+          previous?.valueOrNull?.whereType<AppTodoItem>().toList();
+      final nextTodo = next.valueOrNull?.whereType<AppTodoItem>().toList();
+      if (previousTodo?.length != nextTodo?.length) {
+        ref.invalidateSelf();
+      }
+    });
+
     final repository = ref.read(appItemRepositoryProvider(user.value!.id));
     final now = DateTime.now();
     final todayStart = DateTime(now.year, now.month, now.day);
