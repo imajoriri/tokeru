@@ -33,3 +33,15 @@ sealed class AppItem with _$AppItem {
   factory AppItem.fromJson(Map<String, dynamic> json) =>
       _$AppItemFromJson(json);
 }
+
+/// AppTodoItemに関する拡張メソッド
+extension AppTodoItemExtension on AppTodoItem {
+  /// 「@10min」のようなテキストから、分数を取得する
+  int? get minutes {
+    final match = RegExp(r'@(\d+)min').firstMatch(title);
+    if (match == null) {
+      return null;
+    }
+    return int.tryParse(match.group(1) ?? '');
+  }
+}
