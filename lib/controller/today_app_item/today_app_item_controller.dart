@@ -26,10 +26,7 @@ class TodayAppItemController extends _$TodayAppItemController {
     }
 
     final repository = ref.read(appItemRepositoryProvider(user.value!.id));
-    final now = DateTime.now();
-    final todayStart = DateTime(now.year, now.month, now.day);
     final todos = await repository.fetch(
-      start: todayStart.subtract(const Duration(days: 1)),
       limit: initialPerPage,
     );
     return todos;
