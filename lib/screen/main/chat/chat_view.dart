@@ -54,14 +54,6 @@ class ChatView extends HookConsumerWidget {
                                   child: SelectableText(message),
                                 ),
                               ),
-                              IconButton(
-                                onPressed: () {
-                                  ref
-                                      .read(provider.notifier)
-                                      .convertToTodo(chatId: appItem.id);
-                                },
-                                icon: const Icon(Icons.check),
-                              ),
                             ],
                           ),
                         AppDividerItem() => throw UnimplementedError(),
