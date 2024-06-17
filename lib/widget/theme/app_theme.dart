@@ -15,12 +15,12 @@ class AppTheme {
       textSuccess: const Color(0xff218011),
       backgroundDefault: const Color(0xffFBFBFB),
       backgroundSubtle: const Color(0xffF4F4F4),
-      backgroundPrimaryContainer: const Color(0xffF6EDFF),
-      backgroundPrimaryActionEnabled: const Color(0xff4F378B),
-      backgroundPrimaryActionDisabled: const Color(0xff21005D),
-      backgroundPrimaryActionHovered: const Color(0xff381E72),
-      eventInProgress: const Color(0xff218011),
-      eventStop: const Color(0xffC20B2A),
+      backgroundHovered: const Color(0xffF4F4F4),
+      backgroundSelected: const Color(0xffF6EDFF),
+      borderDefault: const Color(0xffE0E0E0),
+      borderSubtle: const Color(0xffF4F4F4),
+      iconDefault: const Color(0xff757575),
+      iconHovered: const Color(0xff5C5C5C),
     );
 
     return defaultTheme.copyWith(
@@ -88,12 +88,12 @@ class AppTheme {
       textSuccess: const Color(0xff218011),
       backgroundDefault: const Color(0xffFBFBFB),
       backgroundSubtle: const Color(0xffF4F4F4),
-      backgroundPrimaryContainer: const Color(0xffF6EDFF),
-      backgroundPrimaryActionEnabled: const Color(0xff4F378B),
-      backgroundPrimaryActionDisabled: const Color(0xff21005D),
-      backgroundPrimaryActionHovered: const Color(0xff381E72),
-      eventInProgress: const Color(0xff218011),
-      eventStop: const Color(0xffC20B2A),
+      backgroundHovered: const Color(0xffF4F4F4),
+      backgroundSelected: const Color(0xffF6EDFF),
+      borderDefault: const Color(0xffE0E0E0),
+      borderSubtle: const Color(0xffF4F4F4),
+      iconDefault: const Color(0xff757575),
+      iconHovered: const Color(0xff5C5C5C),
     );
 
     return defaultTheme.copyWith(

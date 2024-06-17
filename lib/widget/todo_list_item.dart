@@ -137,7 +137,7 @@ class TodoListItem extends HookConsumerWidget {
     );
 
     final backgroundColor = hasFocus.value && !readOnly
-        ? context.appColors.backgroundPrimaryContainer
+        ? context.appColors.backgroundSelected
         : onHover.value
             ? Colors.grey[200]
             : Colors.transparent;

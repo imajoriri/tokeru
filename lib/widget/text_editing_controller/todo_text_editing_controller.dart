@@ -26,7 +26,10 @@ class TodoTextEditingController extends TextEditingController {
     // 編集中のテキストの範囲が範囲外の場合は、通常のTextSpanを返す
     if (!composingRegionOutOfRange) {
       return super.buildTextSpan(
-          context: context, style: style, withComposing: withComposing);
+        context: context,
+        style: style,
+        withComposing: withComposing,
+      );
     }
 
     // 「@10min」のような箇所だけを青色にしたTextSpanに変換する

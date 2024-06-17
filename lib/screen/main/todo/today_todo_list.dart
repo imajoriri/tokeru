@@ -50,10 +50,31 @@ class TodayTodoList extends HookConsumerWidget {
           children: [
             // title
             Padding(
-              padding: const EdgeInsets.all(16),
-              child: Text(
-                "Today's To-Dos ($totalMinutes min)",
-                style: context.appTextTheme.titleSmall,
+              padding: const EdgeInsets.fromLTRB(24, 24, 24, 4),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Today's To-Dos ($totalMinutes min)",
+                    style: context.appTextTheme.titleSmall,
+                  ),
+                  IconButtonSmall(
+                    icon: const Icon(Icons.add),
+                    tooltip: ShortcutActivatorType.newTodo.longLabel,
+                    onPressed: () async {
+                      await ref.read(todoControllerProvider.notifier).add(0);
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        ref
+                            .read(todoFocusControllerProvider.notifier)
+                            .requestFocus(0);
+                      });
+
+                      await FirebaseAnalytics.instance.logEvent(
+                        name: AnalyticsEventName.addTodo.name,
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
 
@@ -188,9 +209,9 @@ class TodayTodoList extends HookConsumerWidget {
 }
 
 /// [ReorderableListView]の中で使う[Todo]のリスト
+// ignore: unused_element
 class _ReorderableTodoListItem extends HookConsumerWidget {
   const _ReorderableTodoListItem({
-    super.key,
     required this.todo,
     required this.index,
   });
