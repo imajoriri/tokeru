@@ -27,11 +27,13 @@ class TodayTodoList extends HookConsumerWidget {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),
-                  TextButton(
-                    onPressed: Actions.handler<NewTodoIntent>(
-                      context,
-                      const NewTodoIntent(),
-                    ),
+                  TextButtonSmall(
+                    onPressed: () {
+                      Actions.handler<NewTodoIntent>(
+                        context,
+                        const NewTodoIntent(),
+                      );
+                    },
                     child: const Text('Add To-Do'),
                   ),
                 ],

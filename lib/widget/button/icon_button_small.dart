@@ -32,7 +32,7 @@ class IconButtonSmall extends HookConsumerWidget {
           },
           actions: {
             ActivateIntent: CallbackAction<ActivateIntent>(
-              onInvoke: (ActivateIntent intent) => onPressed(),
+              onInvoke: (intent) => onPressed(),
             ),
           },
           mouseCursor: SystemMouseCursors.click,
