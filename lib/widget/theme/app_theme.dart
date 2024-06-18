@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:quick_flutter/systems/color.dart';
 import 'package:quick_flutter/widget/theme/app_color_theme_extension.dart';
+import 'package:quick_flutter/widget/theme/app_spacing_theme_extension.dart';
 import 'package:quick_flutter/widget/theme/app_text_theme_extension.dart';
 
 class AppTheme {
+  static final spacing = () {
+    return AppSpacingExtension(
+      none: 0,
+      smallX: 4,
+      small: 8,
+      medium: 16,
+      large: 24,
+    );
+  }();
+
   static final light = () {
     final defaultTheme = ThemeData.light();
 
@@ -17,6 +28,7 @@ class AppTheme {
       backgroundSubtle: const Color(0xffF4F4F4),
       backgroundHovered: const Color(0xffF4F4F4),
       backgroundSelected: const Color(0xffF6EDFF),
+      backgroundChecked: const Color(0xffC2C2C2),
       borderDefault: const Color(0xffE0E0E0),
       borderSubtle: const Color(0xffF4F4F4),
       iconDefault: const Color(0xff757575),
@@ -32,6 +44,7 @@ class AppTheme {
       ),
       extensions: [
         colorExt,
+        spacing,
         AppTextThemeExtension(
           displayLarge: TextStyle(fontSize: 57, color: colorExt.textDefault),
           displayMedium: TextStyle(fontSize: 45, color: colorExt.textDefault),
@@ -90,6 +103,7 @@ class AppTheme {
       backgroundSubtle: const Color(0xffF4F4F4),
       backgroundHovered: const Color(0xffF4F4F4),
       backgroundSelected: const Color(0xffF6EDFF),
+      backgroundChecked: const Color(0xffC2C2C2),
       borderDefault: const Color(0xffE0E0E0),
       borderSubtle: const Color(0xffF4F4F4),
       iconDefault: const Color(0xff757575),
@@ -105,6 +119,7 @@ class AppTheme {
       ),
       extensions: [
         colorExt,
+        spacing,
         AppTextThemeExtension(
           displayLarge: TextStyle(fontSize: 57, color: colorExt.textDefault),
           displayMedium: TextStyle(fontSize: 45, color: colorExt.textDefault),
@@ -146,5 +161,9 @@ extension AppThemeExtension on BuildContext {
 
   AppColorsExtension get appColors {
     return Theme.of(this).extension<AppColorsExtension>()!;
+  }
+
+  AppSpacingExtension get appSpacing {
+    return Theme.of(this).extension<AppSpacingExtension>()!;
   }
 }

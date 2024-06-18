@@ -55,7 +55,7 @@ class TodayTodoList extends HookConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Today's To-Dos ($totalMinutes min)",
+                    "Today's To-Dos @${totalMinutes}min",
                     style: context.appTextTheme.titleSmall,
                   ),
                   IconButtonSmall(
@@ -80,7 +80,7 @@ class TodayTodoList extends HookConsumerWidget {
 
             // TodoList
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 12),
               child: ReorderableListView.builder(
                 buildDefaultDragHandles: false,
                 physics: const NeverScrollableScrollPhysics(),
@@ -244,12 +244,6 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
         ref.read(todoControllerProvider.notifier).updateIsDone(
               todoId: todo.id,
               isDone: value ?? false,
-              onUpdated: () {
-                // WidgetsBinding.instance.addPostFrameCallback((_) {
-                // FocusScope.of(context).requestFocus();
-                // FocusScope.of(context).children.toList()[index].requestFocus();
-                // });
-              },
             );
         FocusScope.of(context).nextFocus();
         FirebaseAnalytics.instance.logEvent(

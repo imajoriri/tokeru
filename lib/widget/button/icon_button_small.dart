@@ -37,12 +37,12 @@ class IconButtonSmall extends HookConsumerWidget {
           },
           mouseCursor: SystemMouseCursors.click,
           child: Container(
-            padding: const EdgeInsets.all(4),
+            padding: EdgeInsets.all(context.appSpacing.smallX),
             decoration: BoxDecoration(
               color: hover.value || focus.value
                   ? context.appColors.backgroundHovered
                   : Colors.transparent,
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(8),
             ),
             child: IconTheme.merge(
               child: icon,

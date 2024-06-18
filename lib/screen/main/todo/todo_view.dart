@@ -28,17 +28,19 @@ class TodoView extends StatelessWidget {
   Widget build(BuildContext context) {
     return FocusScope(
       node: todoViewFocusNode,
-      child: const SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TodayTodoList(),
-            SizedBox(height: 28),
-            PastTodoList(),
-            SizedBox(height: 28),
-            DoneTodoList(),
-          ],
-        ),
+      child: CustomScrollView(
+        semanticChildCount: 3,
+        slivers: [
+          SliverList(
+            delegate: SliverChildListDelegate([const TodayTodoList()]),
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate([const DoneTodoList()]),
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate([const PastTodoList()]),
+          ),
+        ],
       ),
     );
   }
