@@ -139,8 +139,17 @@ class TodoListItem extends HookConsumerWidget {
     final backgroundColor = hasFocus.value && !readOnly
         ? context.appColors.backgroundSelected
         : onHover.value
-            ? Colors.grey[200]
+            ? context.appColors.backgroundHovered
             : Colors.transparent;
+
+    late final Color textFieldColor;
+    if (todo.isDone) {
+      textFieldColor = context.appColors.textSubtle;
+    } else if (readOnly) {
+      textFieldColor = context.appColors.textDisabled;
+    } else {
+      textFieldColor = context.appColors.textDefault;
+    }
 
     return CallbackShortcuts(
       bindings: <ShortcutActivator, VoidCallback>{
@@ -188,7 +197,7 @@ class TodoListItem extends HookConsumerWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     color: backgroundColor,
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                 ),
               ),
@@ -202,6 +211,19 @@ class TodoListItem extends HookConsumerWidget {
                       onChanged: onToggleDone,
                       focusNode: useFocusNode(
                         skipTraversal: true,
+                      ),
+                      // リップルエフェクトをなくす対応。
+                      splashRadius: 0,
+                      fillColor: MaterialStateProperty.resolveWith(
+                        (states) {
+                          if (states.contains(MaterialState.selected)) {
+                            return context.appColors.backgroundChecked;
+                          }
+                          if (states.contains(MaterialState.disabled)) {
+                            return context.appColors.backgroundChecked;
+                          }
+                          return null;
+                        },
                       ),
                     ),
                     Expanded(
@@ -228,15 +250,13 @@ class TodoListItem extends HookConsumerWidget {
                           padding: const EdgeInsets.only(
                             bottom: 4,
                             // チェックボックスとの高さを調整するためのpadding
-                            top: 6,
+                            top: 8,
                           ),
                           child: TextField(
                             controller: effectiveController,
                             focusNode: effectiveFocusNode,
-                            style: context.appTextTheme.bodyLarge.copyWith(
-                              color: todo.isDone || readOnly
-                                  ? context.appColors.textSubtle
-                                  : context.appColors.textDefault,
+                            style: context.appTextTheme.bodyMedium.copyWith(
+                              color: textFieldColor,
                             ),
                             readOnly: readOnly,
                             maxLines: null,

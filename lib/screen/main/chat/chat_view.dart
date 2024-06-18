@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/controller/today_app_item/today_app_item_controller.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
 import 'package:quick_flutter/widget/focus_nodes.dart';
+import 'package:quick_flutter/widget/theme/app_theme.dart';
 
 class ChatView extends HookConsumerWidget {
   const ChatView({super.key});
@@ -41,7 +42,10 @@ class ChatView extends HookConsumerWidget {
                     itemBuilder: (context, index) {
                       final appItem = appItems[index];
                       return switch (appItem) {
-                        AppTodoItem(:final title) => Text(title),
+                        AppTodoItem(:final title) => Text(
+                            title,
+                            style: context.appTextTheme.bodySmall,
+                          ),
                         AppChatItem(:final message) => Row(
                             children: [
                               Expanded(
@@ -51,7 +55,10 @@ class ChatView extends HookConsumerWidget {
                                     horizontal: 8,
                                   ),
                                   color: Colors.grey[100],
-                                  child: SelectableText(message),
+                                  child: SelectableText(
+                                    message,
+                                    style: context.appTextTheme.bodySmall,
+                                  ),
                                 ),
                               ),
                             ],

@@ -50,7 +50,7 @@ class PastTodoList extends HookConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.fromLTRB(24, 24, 24, 4),
                   child: Text(
                     title,
                     style: context.appTextTheme.titleSmall,
@@ -59,6 +59,7 @@ class PastTodoList extends HookConsumerWidget {
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
                   itemBuilder: (context, index) {
                     final todo = todos[index];
                     return switch (todo) {
