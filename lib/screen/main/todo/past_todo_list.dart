@@ -106,7 +106,10 @@ class PastTodoList extends HookConsumerWidget {
         );
       },
       error: (e, s) => const Text('happen somethings'),
-      loading: () => const CircularProgressIndicator(),
+      loading: () => const Padding(
+        padding: EdgeInsets.all(8.0),
+        child: CupertinoActivityIndicator(),
+      ),
     );
   }
 }

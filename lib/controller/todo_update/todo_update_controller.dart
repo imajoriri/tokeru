@@ -17,16 +17,14 @@ part 'todo_update_controller.g.dart';
 @riverpod
 Future<void> todoUpdateController(
   TodoUpdateControllerRef ref, {
-  required AppTodoItem todo,
+  // NOTE: 本来はAppTodoItemを受け取るべきだが、生成されたコードは受け取れないため、AppItemに変更している。
+  // https://github.com/rrousselGit/riverpod/issues/2273
+  required AppItem todo,
 }) async {
-  // TodayAppItemControllerも更新する。
-  ref.read(todayAppItemControllerProvider.notifier).updateTodo(todo: todo);
-
-  // TodoControllerも更新する。
-  ref.read(todoControllerProvider.notifier).updateTodo(todo: todo);
-
-  // PastTodoControllerも更新する。
-  ref.read(pastTodoControllerProvider.notifier).updateTodo(todo: todo);
+  if (todo is! AppTodoItem) {
+    assert(false, 'todo is not AppTodoItem');
+    return;
+  }
 
   final user = ref.read(userControllerProvider);
   if (user.valueOrNull == null) {
@@ -39,4 +37,13 @@ Future<void> todoUpdateController(
   } on Exception catch (e, s) {
     await FirebaseCrashlytics.instance.recordError(e, s);
   }
+
+  // TodayAppItemControllerも更新する。
+  ref.read(todayAppItemControllerProvider.notifier).updateTodo(todo: todo);
+
+  // TodoControllerも更新する。
+  ref.read(todoControllerProvider.notifier).updateTodo(todo: todo);
+
+  // PastTodoControllerも更新する。
+  ref.read(pastTodoControllerProvider.notifier).updateTodo(todo: todo);
 }

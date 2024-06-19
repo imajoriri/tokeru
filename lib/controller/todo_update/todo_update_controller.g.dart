@@ -7,7 +7,7 @@ part of 'todo_update_controller.dart';
 // **************************************************************************
 
 String _$todoUpdateControllerHash() =>
-    r'a4d975a080a7d2845a49d68ad23e1248a1477d24';
+    r'cc0b5afe64bac7d4e7cef40ebaeeeaeef1085102';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -65,7 +65,7 @@ class TodoUpdateControllerFamily extends Family<AsyncValue<void>> {
   ///
   /// Copied from [todoUpdateController].
   TodoUpdateControllerProvider call({
-    required InvalidType todo,
+    required AppItem todo,
   }) {
     return TodoUpdateControllerProvider(
       todo: todo,
@@ -112,7 +112,7 @@ class TodoUpdateControllerProvider extends AutoDisposeFutureProvider<void> {
   ///
   /// Copied from [todoUpdateController].
   TodoUpdateControllerProvider({
-    required InvalidType todo,
+    required AppItem todo,
   }) : this._internal(
           (ref) => todoUpdateController(
             ref as TodoUpdateControllerRef,
@@ -140,7 +140,7 @@ class TodoUpdateControllerProvider extends AutoDisposeFutureProvider<void> {
     required this.todo,
   }) : super.internal();
 
-  final InvalidType todo;
+  final AppItem todo;
 
   @override
   Override overrideWith(
@@ -181,7 +181,7 @@ class TodoUpdateControllerProvider extends AutoDisposeFutureProvider<void> {
 
 mixin TodoUpdateControllerRef on AutoDisposeFutureProviderRef<void> {
   /// The parameter `todo` of this provider.
-  InvalidType get todo;
+  AppItem get todo;
 }
 
 class _TodoUpdateControllerProviderElement
@@ -190,7 +190,7 @@ class _TodoUpdateControllerProviderElement
   _TodoUpdateControllerProviderElement(super.provider);
 
   @override
-  InvalidType get todo => (origin as TodoUpdateControllerProvider).todo;
+  AppItem get todo => (origin as TodoUpdateControllerProvider).todo;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

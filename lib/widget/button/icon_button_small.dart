@@ -24,6 +24,7 @@ class IconButtonSmall extends HookConsumerWidget {
     return Tooltip(
       message: tooltip,
       child: GestureDetector(
+        onTap: onPressed,
         child: FocusableActionDetector(
           onShowHoverHighlight: (value) => hover.value = value,
           onShowFocusHighlight: (value) => focus.value = value,

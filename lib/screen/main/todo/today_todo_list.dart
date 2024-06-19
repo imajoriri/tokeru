@@ -64,7 +64,6 @@ class TodayTodoList extends HookConsumerWidget {
                     icon: const Icon(Icons.add),
                     tooltip: ShortcutActivatorType.newTodo.longLabel,
                     onPressed: () async {
-                      // await ref.read(todoControllerProvider.notifier).add(0);
                       await ref.read(
                         todoAddControllerProvider(index: 0, title: '').future,
                       );
@@ -119,7 +118,8 @@ class TodayTodoList extends HookConsumerWidget {
                               .read(todoFocusControllerProvider.notifier)
                               .getFocusIndex();
                           await ref.read(
-                            todoDeleteControllerProvider(todo: todo).future,
+                            todoDeleteControllerProvider(todoId: todo.id)
+                                .future,
                           );
                           ref
                               .read(todoFocusControllerProvider.notifier)
@@ -243,7 +243,7 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
       onDeleted: () async {
         final currentFocusIndex =
             ref.read(todoFocusControllerProvider.notifier).getFocusIndex();
-        await ref.read(todoDeleteControllerProvider(todo: todo).future);
+        await ref.read(todoDeleteControllerProvider(todoId: todo.id).future);
         ref
             .read(todoFocusControllerProvider.notifier)
             .requestFocus(currentFocusIndex - 1);
