@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quick_flutter/controller/todo/todo_controller.dart';
+import 'package:quick_flutter/controller/todo_add/todo_add_controller.dart';
 import 'package:quick_flutter/controller/todo_focus/todo_focus_controller.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -22,7 +22,9 @@ class NewTodoAction extends Action<NewTodoIntent> {
   @override
   Object? invoke(covariant NewTodoIntent intent) async {
     FocusManager.instance.primaryFocus?.unfocus();
-    await ref.read(todoControllerProvider.notifier).add(0);
+    await ref.read(
+      todoAddControllerProvider(index: 0, title: '').future,
+    );
     // Todo追加直後はWidgetが描画されていないため、
     // 1フレーム後にフォーカスを要求する。
     WidgetsBinding.instance.addPostFrameCallback((_) {
