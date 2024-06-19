@@ -17,17 +17,8 @@ part 'todo_delete_controller.g.dart';
 @riverpod
 Future<void> todoDeleteController(
   TodoDeleteControllerRef ref, {
-  required AppTodoItem todo,
+  required String todoId,
 }) async {
-  // TodayAppItemControllerも更新する。
-  ref.read(todayAppItemControllerProvider.notifier).deleteTodo(todoId: todo.id);
-
-  // TodoControllerも更新する。
-  ref.read(todoControllerProvider.notifier).deleteTodo(todoId: todo.id);
-
-  // PastTodoControllerも更新する。
-  ref.read(pastTodoControllerProvider.notifier).deleteTodo(todoId: todo.id);
-
   final user = ref.read(userControllerProvider);
   if (user.valueOrNull == null) {
     assert(false, 'user is null');
@@ -35,8 +26,16 @@ Future<void> todoDeleteController(
   }
   final repository = ref.read(appItemRepositoryProvider(user.value!.id));
   try {
-    repository.delete(id: todo.id);
+    await repository.delete(id: todoId);
   } on Exception catch (e, s) {
     await FirebaseCrashlytics.instance.recordError(e, s);
   }
+  // TodayAppItemControllerも更新する。
+  ref.read(todayAppItemControllerProvider.notifier).deleteTodo(todoId: todoId);
+
+  // TodoControllerも更新する。
+  ref.read(todoControllerProvider.notifier).deleteTodo(todoId: todoId);
+
+  // PastTodoControllerも更新する。
+  ref.read(pastTodoControllerProvider.notifier).deleteTodo(todoId: todoId);
 }

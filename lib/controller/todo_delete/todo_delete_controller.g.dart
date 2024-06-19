@@ -7,7 +7,7 @@ part of 'todo_delete_controller.dart';
 // **************************************************************************
 
 String _$todoDeleteControllerHash() =>
-    r'17f8c98e58c1a457c92bc8e6d776cd60ed1e1f01';
+    r'716f5c2751382ada57947ac4379df96158c755c9';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -65,10 +65,10 @@ class TodoDeleteControllerFamily extends Family<AsyncValue<void>> {
   ///
   /// Copied from [todoDeleteController].
   TodoDeleteControllerProvider call({
-    required InvalidType todo,
+    required String todoId,
   }) {
     return TodoDeleteControllerProvider(
-      todo: todo,
+      todoId: todoId,
     );
   }
 
@@ -77,7 +77,7 @@ class TodoDeleteControllerFamily extends Family<AsyncValue<void>> {
     covariant TodoDeleteControllerProvider provider,
   ) {
     return call(
-      todo: provider.todo,
+      todoId: provider.todoId,
     );
   }
 
@@ -112,11 +112,11 @@ class TodoDeleteControllerProvider extends AutoDisposeFutureProvider<void> {
   ///
   /// Copied from [todoDeleteController].
   TodoDeleteControllerProvider({
-    required InvalidType todo,
+    required String todoId,
   }) : this._internal(
           (ref) => todoDeleteController(
             ref as TodoDeleteControllerRef,
-            todo: todo,
+            todoId: todoId,
           ),
           from: todoDeleteControllerProvider,
           name: r'todoDeleteControllerProvider',
@@ -127,7 +127,7 @@ class TodoDeleteControllerProvider extends AutoDisposeFutureProvider<void> {
           dependencies: TodoDeleteControllerFamily._dependencies,
           allTransitiveDependencies:
               TodoDeleteControllerFamily._allTransitiveDependencies,
-          todo: todo,
+          todoId: todoId,
         );
 
   TodoDeleteControllerProvider._internal(
@@ -137,10 +137,10 @@ class TodoDeleteControllerProvider extends AutoDisposeFutureProvider<void> {
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.todo,
+    required this.todoId,
   }) : super.internal();
 
-  final InvalidType todo;
+  final String todoId;
 
   @override
   Override overrideWith(
@@ -155,7 +155,7 @@ class TodoDeleteControllerProvider extends AutoDisposeFutureProvider<void> {
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        todo: todo,
+        todoId: todoId,
       ),
     );
   }
@@ -167,21 +167,21 @@ class TodoDeleteControllerProvider extends AutoDisposeFutureProvider<void> {
 
   @override
   bool operator ==(Object other) {
-    return other is TodoDeleteControllerProvider && other.todo == todo;
+    return other is TodoDeleteControllerProvider && other.todoId == todoId;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, todo.hashCode);
+    hash = _SystemHash.combine(hash, todoId.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
 mixin TodoDeleteControllerRef on AutoDisposeFutureProviderRef<void> {
-  /// The parameter `todo` of this provider.
-  InvalidType get todo;
+  /// The parameter `todoId` of this provider.
+  String get todoId;
 }
 
 class _TodoDeleteControllerProviderElement
@@ -190,7 +190,7 @@ class _TodoDeleteControllerProviderElement
   _TodoDeleteControllerProviderElement(super.provider);
 
   @override
-  InvalidType get todo => (origin as TodoDeleteControllerProvider).todo;
+  String get todoId => (origin as TodoDeleteControllerProvider).todoId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
