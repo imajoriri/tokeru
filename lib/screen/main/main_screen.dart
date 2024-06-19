@@ -14,7 +14,9 @@ class MainScreen extends ConsumerWidget {
         // Chat
         Expanded(child: ChatView()),
 
-        VerticalDivider(),
+        VerticalDivider(
+          width: 1,
+        ),
 
         // Todoリスト
         Expanded(child: TodoView()),
