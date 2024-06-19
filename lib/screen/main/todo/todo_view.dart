@@ -16,7 +16,7 @@ import 'package:quick_flutter/widget/focus_nodes.dart';
 import 'package:quick_flutter/widget/shortcutkey.dart';
 import 'package:quick_flutter/widget/text_editing_controller/todo_text_editing_controller.dart';
 import 'package:quick_flutter/widget/theme/app_theme.dart';
-import 'package:quick_flutter/widget/todo_list_item.dart';
+import 'package:quick_flutter/widget/list_item/todo_list_item.dart';
 
 part 'today_todo_list.dart';
 part 'past_todo_list.dart';
