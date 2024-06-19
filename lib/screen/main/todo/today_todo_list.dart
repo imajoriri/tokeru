@@ -64,7 +64,10 @@ class TodayTodoList extends HookConsumerWidget {
                     icon: const Icon(Icons.add),
                     tooltip: ShortcutActivatorType.newTodo.longLabel,
                     onPressed: () async {
-                      await ref.read(todoControllerProvider.notifier).add(0);
+                      // await ref.read(todoControllerProvider.notifier).add(0);
+                      await ref.read(
+                        todoAddControllerProvider(index: 0, title: '').future,
+                      );
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         ref
                             .read(todoFocusControllerProvider.notifier)
@@ -115,23 +118,26 @@ class TodayTodoList extends HookConsumerWidget {
                           final currentFocusIndex = ref
                               .read(todoFocusControllerProvider.notifier)
                               .getFocusIndex();
-                          await ref
-                              .read(todoControllerProvider.notifier)
-                              .delete(todo);
+                          await ref.read(
+                            todoDeleteControllerProvider(todo: todo).future,
+                          );
                           ref
                               .read(todoFocusControllerProvider.notifier)
                               .requestFocus(currentFocusIndex - 1);
                         },
-                        onUpdatedTitle: (value) => ref
-                            .read(todoControllerProvider.notifier)
-                            .updateTodoTitle(todoId: todo.id, title: value),
+                        onUpdatedTitle: (value) {
+                          ref.read(
+                            todoUpdateControllerProvider(
+                              todo: todo.copyWith(title: value),
+                            ).future,
+                          );
+                        },
                         onToggleDone: (value) {
-                          ref
-                              .read(todoControllerProvider.notifier)
-                              .updateIsDone(
-                                todoId: todo.id,
-                                isDone: value ?? false,
-                              );
+                          ref.read(
+                            todoUpdateControllerProvider(
+                              todo: todo.copyWith(isDone: value ?? false),
+                            ).future,
+                          );
                           FirebaseAnalytics.instance.logEvent(
                             name: AnalyticsEventName.toggleTodoDone.name,
                           );
@@ -147,9 +153,12 @@ class TodayTodoList extends HookConsumerWidget {
                           final index = ref
                               .read(todoFocusControllerProvider.notifier)
                               .getFocusIndex();
-                          await ref
-                              .read(todoControllerProvider.notifier)
-                              .add(index + 1);
+                          await ref.read(
+                            todoAddControllerProvider(
+                              index: index + 1,
+                              title: '',
+                            ).future,
+                          );
                           await ref
                               .read(todoControllerProvider.notifier)
                               .updateCurrentOrder();
@@ -234,19 +243,22 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
       onDeleted: () async {
         final currentFocusIndex =
             ref.read(todoFocusControllerProvider.notifier).getFocusIndex();
-        await ref.read(todoControllerProvider.notifier).delete(todo);
+        await ref.read(todoDeleteControllerProvider(todo: todo).future);
         ref
             .read(todoFocusControllerProvider.notifier)
             .requestFocus(currentFocusIndex - 1);
       },
-      onUpdatedTitle: (value) => ref
-          .read(todoControllerProvider.notifier)
-          .updateTodoTitle(todoId: todo.id, title: value),
+      onUpdatedTitle: (value) => ref.read(
+        todoUpdateControllerProvider(
+          todo: todo.copyWith(title: value),
+        ).future,
+      ),
       onToggleDone: (value) {
-        ref.read(todoControllerProvider.notifier).updateIsDone(
-              todoId: todo.id,
-              isDone: value ?? false,
-            );
+        ref.read(
+          todoUpdateControllerProvider(
+            todo: todo.copyWith(isDone: value ?? false),
+          ).future,
+        );
         FocusScope.of(context).nextFocus();
         FirebaseAnalytics.instance.logEvent(
           name: AnalyticsEventName.toggleTodoDone.name,
@@ -262,7 +274,9 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
         FocusManager.instance.primaryFocus?.unfocus();
         final index =
             ref.read(todoFocusControllerProvider.notifier).getFocusIndex();
-        await ref.read(todoControllerProvider.notifier).add(index + 1);
+        await ref.read(
+          todoAddControllerProvider(index: index + 1, title: '').future,
+        );
         await ref.read(todoControllerProvider.notifier).updateCurrentOrder();
         ref.read(todoFocusControllerProvider)[index + 1].requestFocus();
       },

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/controller/today_app_item/today_app_item_controller.dart';
+import 'package:quick_flutter/controller/todo_update/todo_update_controller.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
 import 'package:quick_flutter/widget/focus_nodes.dart';
 import 'package:quick_flutter/widget/list_item/chat_list_item.dart';
@@ -37,7 +38,16 @@ class ChatView extends HookConsumerWidget {
                   itemBuilder: (context, index) {
                     final appItem = appItems[index];
                     return switch (appItem) {
-                      AppTodoItem() => ChatListItem.todo(todo: appItem),
+                      AppTodoItem() => ChatListItem.todo(
+                          todo: appItem,
+                          onChangedCheck: (value) {
+                            ref.read(
+                              todoUpdateControllerProvider(
+                                todo: appItem.copyWith(isDone: value ?? false),
+                              ).future,
+                            );
+                          },
+                        ),
                       AppChatItem() => ChatListItem.chat(chat: appItem),
                       AppDividerItem() => throw UnimplementedError(),
                     };

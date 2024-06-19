@@ -12,7 +12,7 @@ part 'today_app_item_controller.g.dart';
 @Riverpod(keepAlive: true)
 class TodayAppItemController extends _$TodayAppItemController {
   /// 1ページあたりの取得数。
-  final initialPerPage = 20;
+  final initialPerPage = 50;
 
   /// 次の[AppItem]があるかどうか。
   bool hasNext = true;
@@ -61,6 +61,52 @@ class TodayAppItemController extends _$TodayAppItemController {
       }
       return [...value, ...todos];
     });
+  }
+
+  /// [AppTodoItem]を更新する。
+  ///
+  /// 存在しない場合は、何もしない。
+  void updateTodo({
+    required AppTodoItem todo,
+  }) async {
+    final oldTodo = state.valueOrNull?.firstWhereOrNull((e) => e.id == todo.id);
+    if (oldTodo == null) {
+      return;
+    }
+
+    state = AsyncData(
+      state.valueOrNull!.map((e) {
+        if (e.id == todo.id) {
+          return todo;
+        }
+        return e;
+      }).toList(),
+    );
+  }
+
+  /// [AppTodoItem]を削除する
+  ///
+  /// [AppTodoItem]が存在しない場合は何もしない。
+  void deleteTodo({
+    required String todoId,
+  }) async {
+    final oldTodo = state.valueOrNull?.firstWhereOrNull((e) => e.id == todoId);
+    if (oldTodo == null) {
+      return;
+    }
+
+    state = AsyncData(
+      state.valueOrNull!.where((e) => e.id != todoId).toList(),
+    );
+  }
+
+  /// [AppTodoItem]を先頭に追加する
+  void addTodo({
+    required AppTodoItem todo,
+  }) {
+    final tmp = [...state.valueOrNull!];
+    tmp.insert(0, todo);
+    state = AsyncData(tmp);
   }
 
   /// [AppChatItem]を追加する

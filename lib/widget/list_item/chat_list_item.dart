@@ -5,15 +5,25 @@ import 'package:quick_flutter/model/app_item/app_item.dart';
 import 'package:quick_flutter/widget/theme/app_theme.dart';
 
 class ChatListItem extends HookWidget {
-  final AppItem app;
-
-  const ChatListItem._({required this.app});
+  const ChatListItem._({
+    required this.app,
+    this.onChangedCheck,
+  });
 
   factory ChatListItem.chat({required AppChatItem chat}) =>
       ChatListItem._(app: chat);
 
-  factory ChatListItem.todo({required AppTodoItem todo}) =>
-      ChatListItem._(app: todo);
+  factory ChatListItem.todo({
+    required AppTodoItem todo,
+    required void Function(bool?)? onChangedCheck,
+  }) =>
+      ChatListItem._(
+        app: todo,
+        onChangedCheck: onChangedCheck,
+      );
+
+  final AppItem app;
+  final void Function(bool?)? onChangedCheck;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +52,7 @@ class ChatListItem extends HookWidget {
                     child: CupertinoCheckbox(
                       value: isDone,
                       activeColor: context.appColors.backgroundChecked,
-                      onChanged: (value) {},
+                      onChanged: onChangedCheck!,
                     ),
                   ),
                 ),

@@ -70,19 +70,17 @@ class PastTodoList extends HookConsumerWidget {
                               todo: todo,
                               controller:
                                   useTextEditingController(text: todo.title),
-                              onUpdatedTitle: (value) => ref
-                                  .read(pastTodoControllerProvider.notifier)
-                                  .updateTodoTitle(
-                                    todoId: todo.id,
-                                    title: value,
-                                  ),
+                              onUpdatedTitle: (value) => ref.read(
+                                todoUpdateControllerProvider(
+                                  todo: todo.copyWith(title: value),
+                                ).future,
+                              ),
                               onToggleDone: (value) async {
-                                ref
-                                    .read(pastTodoControllerProvider.notifier)
-                                    .updateIsDone(
-                                      todoId: todo.id,
-                                      isDone: value ?? false,
-                                    );
+                                ref.read(
+                                  todoUpdateControllerProvider(
+                                    todo: todo.copyWith(isDone: value!),
+                                  ).future,
+                                );
                                 FirebaseAnalytics.instance.logEvent(
                                   name: AnalyticsEventName.toggleTodoDone.name,
                                 );
