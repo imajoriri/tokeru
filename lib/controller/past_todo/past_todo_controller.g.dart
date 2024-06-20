@@ -7,14 +7,14 @@ part of 'past_todo_controller.dart';
 // **************************************************************************
 
 String _$pastTodoControllerHash() =>
-    r'b9b2f4c453ddf3bc3b0701da7878fcfea86cf057';
+    r'e297559d7fa0786ed45b740c2c4af627d5f3f2a7';
 
 /// 昨日以降の[TodoItem]を取得するコントローラー
 ///
 /// Copied from [PastTodoController].
 @ProviderFor(PastTodoController)
-final pastTodoControllerProvider = AutoDisposeAsyncNotifierProvider<
-    PastTodoController, List<TodoItem>>.internal(
+final pastTodoControllerProvider =
+    AsyncNotifierProvider<PastTodoController, List<AppTodoItem>>.internal(
   PastTodoController.new,
   name: r'pastTodoControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -24,6 +24,6 @@ final pastTodoControllerProvider = AutoDisposeAsyncNotifierProvider<
   allTransitiveDependencies: null,
 );
 
-typedef _$PastTodoController = AutoDisposeAsyncNotifier<List<TodoItem>>;
+typedef _$PastTodoController = AsyncNotifier<List<AppTodoItem>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

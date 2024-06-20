@@ -1,17 +1,19 @@
-import 'package:quick_flutter/controller/mixin/app_todo_items_notifer_mixin.dart';
 import 'package:quick_flutter/controller/refresh/refresh_controller.dart';
+import 'package:quick_flutter/controller/today_app_item/today_app_item_controller.dart';
+import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/user/user_controller.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
 import 'package:quick_flutter/repository/app_item/app_item_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'todo_controller.g.dart';
+part 'today_done_todo_controller.g.dart';
 
-/// 今日作成された[AppTodoItem]を返すController
+/// 今日作成された完了済みの[AppTodoItem]を返すController
 ///
-/// ユーザーがログインしていない場合は空を返す。
+/// [todayAppItemControllerProvider]を監視すしているため、[todayAppItemControllerProvider]が更新されると、
+/// このControllerも更新される。
 @Riverpod(keepAlive: true)
-class TodoController extends _$TodoController with AppTodoItemsNotifierMixin {
+class TodayDoneTodoController extends _$TodayDoneTodoController {
   @override
   FutureOr<List<AppTodoItem>> build() async {
     ref.watch(refreshControllerProvider);
@@ -19,17 +21,23 @@ class TodoController extends _$TodoController with AppTodoItemsNotifierMixin {
     if (user.hasError || user.valueOrNull == null) {
       return [];
     }
+
+    // todoControllerの数が変わったら、このControllerも更新される。
+    ref.listen(todoControllerProvider, (previous, next) {
+      if (previous?.valueOrNull?.length != next.valueOrNull?.length) {
+        ref.invalidateSelf();
+      }
+    });
+
     final repository = ref.read(appItemRepositoryProvider(user.value!.id));
     final now = DateTime.now();
     final todayStart = DateTime(now.year, now.month, now.day);
     final appItems = await repository.fetch(
       start: todayStart,
       type: 'todo',
-      isDone: false,
+      isDone: true,
     );
     final todos = appItems.whereType<AppTodoItem>().toList();
-    // sort
-    todos.sort((a, b) => a.index.compareTo(b.index));
     return todos;
   }
 }
