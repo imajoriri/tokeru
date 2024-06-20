@@ -37,20 +37,31 @@ class ChatView extends HookConsumerWidget {
                   reverse: true,
                   itemBuilder: (context, index) {
                     final appItem = appItems[index];
-                    // ignore: unnecessary_cast
-                    final nextAppItem = appItems[index + 1] as AppItem?;
-                    // 次のAppItemが日付が変わるかどうか。
-                    final isNextDay = nextAppItem != null &&
-                        appItem.createdAt.day != nextAppItem.createdAt.day;
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (isNextDay)
-                          DayDividerItem(
-                            year: appItem.createdAt.year,
-                            month: appItem.createdAt.month,
-                            day: appItem.createdAt.day,
-                          ),
+                        Builder(
+                          builder: (context) {
+                            if (index == appItems.length - 1) {
+                              return const SizedBox.shrink();
+                            }
+                            // ignore: unnecessary_cast
+                            final nextAppItem = appItems[index + 1] as AppItem?;
+                            // 次のAppItemが日付が変わるかどうか。
+                            final isNextDay = nextAppItem != null &&
+                                appItem.createdAt.day !=
+                                    nextAppItem.createdAt.day;
+                            if (isNextDay) {
+                              return DayDividerItem(
+                                year: appItem.createdAt.year,
+                                month: appItem.createdAt.month,
+                                day: appItem.createdAt.day,
+                              );
+                            } else {
+                              return const SizedBox.shrink();
+                            }
+                          },
+                        ),
                         switch (appItem) {
                           AppTodoItem() => ChatListItem.todo(
                               todo: appItem,
