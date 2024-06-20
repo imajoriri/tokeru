@@ -6,6 +6,9 @@ class DoneTodoList extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final todos = ref.watch(todayDoneTodoControllerProvider).valueOrNull ?? [];
+    if (todos.isEmpty) {
+      return const SizedBox();
+    }
     final totalMinutes = todos
         .map((todo) => todo.minutes)
         .where((minutes) => minutes != null)
