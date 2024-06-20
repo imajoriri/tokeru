@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -5,6 +6,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/controller/today_app_item/today_app_item_controller.dart';
 import 'package:quick_flutter/controller/todo_update/todo_update_controller.dart';
+import 'package:quick_flutter/model/analytics_event/analytics_event_name.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
 import 'package:quick_flutter/widget/focus_nodes.dart';
 import 'package:quick_flutter/widget/list_item/chat_list_item.dart';
@@ -143,6 +145,9 @@ class _ChatTextField extends HookConsumerWidget {
                 .read(provider.notifier)
                 .addChat(message: textEditingController.text);
             textEditingController.clear();
+            FirebaseAnalytics.instance.logEvent(
+              name: AnalyticsEventName.addChat.name,
+            );
           },
         },
         child: Focus(
@@ -181,6 +186,9 @@ class _ChatTextField extends HookConsumerWidget {
                               .read(provider.notifier)
                               .addChat(message: textEditingController.text);
                           textEditingController.clear();
+                          FirebaseAnalytics.instance.logEvent(
+                            name: AnalyticsEventName.addChat.name,
+                          );
                         }
                       : null,
                 ),
