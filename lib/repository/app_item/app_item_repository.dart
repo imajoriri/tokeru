@@ -74,17 +74,16 @@ class AppItemRepository {
   }
 
   /// [AppChatItem]を追加する。
-  Future<AppItem> addChat({
-    required String message,
-    required DateTime createdAt,
+  Future<AppChatItem> addChat({
+    required AppChatItem chat,
   }) async {
-    final chat = AppItem.chat(
-      id: '',
-      message: message,
-      createdAt: createdAt,
-    );
-    final res = await _add(chat);
-    return chat.copyWith(id: res.id);
+    final json = chat.toJson()..remove('id');
+    await ref
+        .read(userDocumentProvider(userId))
+        .collection("todos")
+        .doc(chat.id)
+        .set(json);
+    return chat;
   }
 
   /// [AppItem]を追加する。
