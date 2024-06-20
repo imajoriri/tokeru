@@ -38,9 +38,12 @@ class ChatListItem extends HookWidget {
             : context.appColors.backgroundDefault,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
         child: switch (app) {
-          AppChatItem(:final message) => SelectableText(
-              message,
-              style: context.appTextTheme.bodyMedium,
+          AppChatItem(:final message) => SizedBox(
+              width: double.infinity,
+              child: SelectableText(
+                message,
+                style: context.appTextTheme.bodyMedium,
+              ),
             ),
           AppTodoItem(:final title, :final isDone) => Row(
               children: [
