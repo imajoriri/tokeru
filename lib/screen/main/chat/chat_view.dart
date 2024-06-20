@@ -247,7 +247,8 @@ class _SendButton extends HookWidget {
         mouseCursor: onPressed != null
             ? SystemMouseCursors.click
             : SystemMouseCursors.basic,
-        child: Container(
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
           padding: EdgeInsets.symmetric(
             vertical: context.appSpacing.smallX,
             horizontal: context.appSpacing.medium,
