@@ -22,8 +22,12 @@ class TodayDoneTodoController extends _$TodayDoneTodoController {
       return [];
     }
 
-    // todoControllerを監視する。
-    ref.watch(todoControllerProvider);
+    // todoControllerの数が変わったら、このControllerも更新される。
+    ref.listen(todoControllerProvider, (previous, next) {
+      if (previous?.valueOrNull?.length != next.valueOrNull?.length) {
+        ref.invalidateSelf();
+      }
+    });
 
     final repository = ref.read(appItemRepositoryProvider(user.value!.id));
     final now = DateTime.now();
