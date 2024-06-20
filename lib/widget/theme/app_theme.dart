@@ -31,6 +31,7 @@ class AppTheme {
       backgroundChecked: const Color(0xffC2C2C2),
       borderDefault: const Color(0xffE0E0E0),
       borderSubtle: const Color(0xffF4F4F4),
+      borderStrong: const Color(0xff9E9E9E),
       iconDefault: const Color(0xff757575),
       iconHovered: const Color(0xff5C5C5C),
     );
@@ -106,6 +107,7 @@ class AppTheme {
       backgroundChecked: const Color(0xffC2C2C2),
       borderDefault: const Color(0xffE0E0E0),
       borderSubtle: const Color(0xffF4F4F4),
+      borderStrong: const Color(0xff9E9E9E),
       iconDefault: const Color(0xff757575),
       iconHovered: const Color(0xff5C5C5C),
     );
