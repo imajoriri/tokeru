@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
   AppColorsExtension({
+    required this.primary,
+    required this.primaryHovered,
+    required this.primaryContainer,
     required this.textDefault,
     required this.textSubtle,
     required this.textDisabled,
@@ -9,13 +12,21 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     required this.textSuccess,
     required this.backgroundDefault,
     required this.backgroundSubtle,
-    required this.backgroundPrimaryContainer,
-    required this.backgroundPrimaryActionEnabled,
-    required this.backgroundPrimaryActionDisabled,
-    required this.backgroundPrimaryActionHovered,
-    required this.eventInProgress,
-    required this.eventStop,
+    required this.backgroundHovered,
+    required this.backgroundDisabled,
+    required this.backgroundSelected,
+    required this.backgroundChecked,
+    required this.borderDefault,
+    required this.borderSubtle,
+    required this.borderStrong,
+    required this.iconDefault,
+    required this.iconHovered,
   });
+
+  // Primary
+  final Color primary;
+  final Color primaryHovered;
+  final Color primaryContainer;
 
   // Text
   final Color textDefault;
@@ -27,32 +38,50 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
   // background
   final Color backgroundDefault;
   final Color backgroundSubtle;
-  final Color backgroundPrimaryContainer;
+  final Color backgroundHovered;
+  final Color backgroundDisabled;
+  final Color backgroundSelected;
+  final Color backgroundChecked;
 
-  // background/primary-action
-  final Color backgroundPrimaryActionEnabled;
-  final Color backgroundPrimaryActionDisabled;
-  final Color backgroundPrimaryActionHovered;
+  // border
+  final Color borderDefault;
+  final Color borderSubtle;
+  final Color borderStrong;
 
-  final Color eventInProgress;
-  final Color eventStop;
+  // icon
+  final Color iconDefault;
+  final Color iconHovered;
+
   @override
   ThemeExtension<AppColorsExtension> copyWith({
+    Color? primary,
+    Color? primaryHovered,
+    Color? primaryContainer,
+    // Text
     Color? textDefault,
     Color? textSubtle,
     Color? textDisabled,
     Color? textDanger,
     Color? textSuccess,
+    // background
     Color? backgroundDefault,
     Color? backgroundSubtle,
-    Color? backgroundPrimaryContainer,
-    Color? backgroundPrimaryActionEnabled,
-    Color? backgroundPrimaryActionDisabled,
-    Color? backgroundPrimaryActionHovered,
-    Color? eventInProgress,
-    Color? eventStop,
+    Color? backgroundHovered,
+    Color? backgroundDisabled,
+    Color? backgroundSelected,
+    Color? backgroundChecked,
+    // border
+    Color? borderDefault,
+    Color? borderSubtle,
+    Color? borderStrong,
+    // icon
+    Color? iconDefault,
+    Color? iconHovered,
   }) {
     return AppColorsExtension(
+      primary: primary ?? this.primary,
+      primaryHovered: primaryHovered ?? this.primaryHovered,
+      primaryContainer: primaryContainer ?? this.primaryContainer,
       textDefault: textDefault ?? this.textDefault,
       textSubtle: textSubtle ?? this.textSubtle,
       textDisabled: textDisabled ?? this.textDisabled,
@@ -60,16 +89,15 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
       textSuccess: textSuccess ?? this.textSuccess,
       backgroundDefault: backgroundDefault ?? this.backgroundDefault,
       backgroundSubtle: backgroundSubtle ?? this.backgroundSubtle,
-      backgroundPrimaryContainer:
-          backgroundPrimaryContainer ?? this.backgroundPrimaryContainer,
-      backgroundPrimaryActionEnabled:
-          backgroundPrimaryActionEnabled ?? this.backgroundPrimaryActionEnabled,
-      backgroundPrimaryActionDisabled: backgroundPrimaryActionDisabled ??
-          this.backgroundPrimaryActionDisabled,
-      backgroundPrimaryActionHovered:
-          backgroundPrimaryActionHovered ?? this.backgroundPrimaryActionHovered,
-      eventInProgress: eventInProgress ?? this.eventInProgress,
-      eventStop: eventStop ?? this.eventStop,
+      backgroundHovered: backgroundHovered ?? this.backgroundHovered,
+      backgroundDisabled: backgroundDisabled ?? this.backgroundDisabled,
+      backgroundSelected: backgroundSelected ?? this.backgroundSelected,
+      backgroundChecked: backgroundChecked ?? this.backgroundChecked,
+      borderDefault: borderDefault ?? this.borderDefault,
+      borderSubtle: borderSubtle ?? this.borderSubtle,
+      borderStrong: borderStrong ?? this.borderStrong,
+      iconDefault: iconDefault ?? this.iconDefault,
+      iconHovered: iconHovered ?? this.iconHovered,
     );
   }
 
@@ -83,6 +111,10 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     }
 
     return AppColorsExtension(
+      primary: Color.lerp(primary, other.primary, t)!,
+      primaryHovered: Color.lerp(primaryHovered, other.primaryHovered, t)!,
+      primaryContainer:
+          Color.lerp(primaryContainer, other.primaryContainer, t)!,
       textDefault: Color.lerp(textDefault, other.textDefault, t)!,
       textSubtle: Color.lerp(textSubtle, other.textSubtle, t)!,
       textDisabled: Color.lerp(textDisabled, other.textDisabled, t)!,
@@ -90,30 +122,21 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
       textSuccess: Color.lerp(textSuccess, other.textSuccess, t)!,
       backgroundDefault:
           Color.lerp(backgroundDefault, other.backgroundDefault, t)!,
+      backgroundHovered:
+          Color.lerp(backgroundHovered, other.backgroundHovered, t)!,
+      backgroundDisabled:
+          Color.lerp(backgroundDisabled, other.backgroundDisabled, t)!,
       backgroundSubtle:
           Color.lerp(backgroundSubtle, other.backgroundSubtle, t)!,
-      backgroundPrimaryContainer: Color.lerp(
-        backgroundPrimaryContainer,
-        other.backgroundPrimaryContainer,
-        t,
-      )!,
-      backgroundPrimaryActionEnabled: Color.lerp(
-        backgroundPrimaryActionEnabled,
-        other.backgroundPrimaryActionEnabled,
-        t,
-      )!,
-      backgroundPrimaryActionDisabled: Color.lerp(
-        backgroundPrimaryActionDisabled,
-        other.backgroundPrimaryActionDisabled,
-        t,
-      )!,
-      backgroundPrimaryActionHovered: Color.lerp(
-        backgroundPrimaryActionHovered,
-        other.backgroundPrimaryActionHovered,
-        t,
-      )!,
-      eventInProgress: Color.lerp(eventInProgress, other.eventInProgress, t)!,
-      eventStop: Color.lerp(eventStop, other.eventStop, t)!,
+      backgroundSelected:
+          Color.lerp(backgroundSelected, other.backgroundSelected, t)!,
+      backgroundChecked:
+          Color.lerp(backgroundChecked, other.backgroundChecked, t)!,
+      borderDefault: Color.lerp(borderDefault, other.borderDefault, t)!,
+      borderSubtle: Color.lerp(borderSubtle, other.borderSubtle, t)!,
+      borderStrong: Color.lerp(borderStrong, other.borderStrong, t)!,
+      iconDefault: Color.lerp(iconDefault, other.iconDefault, t)!,
+      iconHovered: Color.lerp(iconHovered, other.iconHovered, t)!,
     );
   }
 }

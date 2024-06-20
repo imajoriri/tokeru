@@ -1,13 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:quick_flutter/systems/color.dart';
 import 'package:quick_flutter/widget/theme/app_color_theme_extension.dart';
+import 'package:quick_flutter/widget/theme/app_spacing_theme_extension.dart';
 import 'package:quick_flutter/widget/theme/app_text_theme_extension.dart';
 
 class AppTheme {
-  static final light = () {
-    final defaultTheme = ThemeData.light();
+  static final spacing = () {
+    return AppSpacingExtension(
+      none: 0,
+      smallX: 4,
+      small: 8,
+      medium: 16,
+      large: 24,
+    );
+  }();
 
-    final colorExt = AppColorsExtension(
+  static final color = () {
+    return AppColorsExtension(
+      primary: const Color(0xff4DB0FF),
+      primaryHovered: const Color(0xff4DB0FF).withOpacity(0.8),
+      primaryContainer: Colors.white,
       textDefault: const Color(0xff1F1F1F),
       textSubtle: const Color(0xff5C5C5C),
       textDisabled: const Color(0xff9E9E9E),
@@ -15,13 +27,22 @@ class AppTheme {
       textSuccess: const Color(0xff218011),
       backgroundDefault: const Color(0xffFBFBFB),
       backgroundSubtle: const Color(0xffF4F4F4),
-      backgroundPrimaryContainer: const Color(0xffF6EDFF),
-      backgroundPrimaryActionEnabled: const Color(0xff4F378B),
-      backgroundPrimaryActionDisabled: const Color(0xff21005D),
-      backgroundPrimaryActionHovered: const Color(0xff381E72),
-      eventInProgress: const Color(0xff218011),
-      eventStop: const Color(0xffC20B2A),
+      backgroundHovered: const Color(0xffF4F4F4),
+      backgroundDisabled: const Color(0xffE0E0E0),
+      backgroundSelected: const Color(0xffF6EDFF),
+      backgroundChecked: const Color(0xffC2C2C2),
+      borderDefault: const Color(0xffE0E0E0),
+      borderSubtle: const Color(0xffF4F4F4),
+      borderStrong: const Color(0xffC2C2C2),
+      iconDefault: const Color(0xff757575),
+      iconHovered: const Color(0xff5C5C5C),
     );
+  }();
+
+  static final light = () {
+    final defaultTheme = ThemeData.light();
+
+    final colorExt = color;
 
     return defaultTheme.copyWith(
       colorScheme: ColorScheme.fromSeed(
@@ -32,6 +53,7 @@ class AppTheme {
       ),
       extensions: [
         colorExt,
+        spacing,
         AppTextThemeExtension(
           displayLarge: TextStyle(fontSize: 57, color: colorExt.textDefault),
           displayMedium: TextStyle(fontSize: 45, color: colorExt.textDefault),
@@ -80,21 +102,7 @@ class AppTheme {
   static final dark = () {
     final defaultTheme = ThemeData.dark();
 
-    final colorExt = AppColorsExtension(
-      textDefault: Colors.white,
-      textSubtle: const Color(0xff5C5C5C),
-      textDisabled: const Color(0xff9E9E9E),
-      textDanger: const Color(0xffC20B2A),
-      textSuccess: const Color(0xff218011),
-      backgroundDefault: const Color(0xffFBFBFB),
-      backgroundSubtle: const Color(0xffF4F4F4),
-      backgroundPrimaryContainer: const Color(0xffF6EDFF),
-      backgroundPrimaryActionEnabled: const Color(0xff4F378B),
-      backgroundPrimaryActionDisabled: const Color(0xff21005D),
-      backgroundPrimaryActionHovered: const Color(0xff381E72),
-      eventInProgress: const Color(0xff218011),
-      eventStop: const Color(0xffC20B2A),
-    );
+    final colorExt = color;
 
     return defaultTheme.copyWith(
       colorScheme: ColorScheme.fromSeed(
@@ -105,6 +113,7 @@ class AppTheme {
       ),
       extensions: [
         colorExt,
+        spacing,
         AppTextThemeExtension(
           displayLarge: TextStyle(fontSize: 57, color: colorExt.textDefault),
           displayMedium: TextStyle(fontSize: 45, color: colorExt.textDefault),
@@ -146,5 +155,9 @@ extension AppThemeExtension on BuildContext {
 
   AppColorsExtension get appColors {
     return Theme.of(this).extension<AppColorsExtension>()!;
+  }
+
+  AppSpacingExtension get appSpacing {
+    return Theme.of(this).extension<AppSpacingExtension>()!;
   }
 }
