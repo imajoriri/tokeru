@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
   AppColorsExtension({
+    required this.primary,
+    required this.primaryHovered,
+    required this.primaryContainer,
     required this.textDefault,
     required this.textSubtle,
     required this.textDisabled,
@@ -10,6 +13,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     required this.backgroundDefault,
     required this.backgroundSubtle,
     required this.backgroundHovered,
+    required this.backgroundDisabled,
     required this.backgroundSelected,
     required this.backgroundChecked,
     required this.borderDefault,
@@ -18,6 +22,11 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     required this.iconDefault,
     required this.iconHovered,
   });
+
+  // Primary
+  final Color primary;
+  final Color primaryHovered;
+  final Color primaryContainer;
 
   // Text
   final Color textDefault;
@@ -30,6 +39,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
   final Color backgroundDefault;
   final Color backgroundSubtle;
   final Color backgroundHovered;
+  final Color backgroundDisabled;
   final Color backgroundSelected;
   final Color backgroundChecked;
 
@@ -44,6 +54,10 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
 
   @override
   ThemeExtension<AppColorsExtension> copyWith({
+    Color? primary,
+    Color? primaryHovered,
+    Color? primaryContainer,
+    // Text
     Color? textDefault,
     Color? textSubtle,
     Color? textDisabled,
@@ -53,6 +67,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     Color? backgroundDefault,
     Color? backgroundSubtle,
     Color? backgroundHovered,
+    Color? backgroundDisabled,
     Color? backgroundSelected,
     Color? backgroundChecked,
     // border
@@ -64,6 +79,9 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     Color? iconHovered,
   }) {
     return AppColorsExtension(
+      primary: primary ?? this.primary,
+      primaryHovered: primaryHovered ?? this.primaryHovered,
+      primaryContainer: primaryContainer ?? this.primaryContainer,
       textDefault: textDefault ?? this.textDefault,
       textSubtle: textSubtle ?? this.textSubtle,
       textDisabled: textDisabled ?? this.textDisabled,
@@ -72,6 +90,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
       backgroundDefault: backgroundDefault ?? this.backgroundDefault,
       backgroundSubtle: backgroundSubtle ?? this.backgroundSubtle,
       backgroundHovered: backgroundHovered ?? this.backgroundHovered,
+      backgroundDisabled: backgroundDisabled ?? this.backgroundDisabled,
       backgroundSelected: backgroundSelected ?? this.backgroundSelected,
       backgroundChecked: backgroundChecked ?? this.backgroundChecked,
       borderDefault: borderDefault ?? this.borderDefault,
@@ -92,6 +111,10 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     }
 
     return AppColorsExtension(
+      primary: Color.lerp(primary, other.primary, t)!,
+      primaryHovered: Color.lerp(primaryHovered, other.primaryHovered, t)!,
+      primaryContainer:
+          Color.lerp(primaryContainer, other.primaryContainer, t)!,
       textDefault: Color.lerp(textDefault, other.textDefault, t)!,
       textSubtle: Color.lerp(textSubtle, other.textSubtle, t)!,
       textDisabled: Color.lerp(textDisabled, other.textDisabled, t)!,
@@ -101,6 +124,8 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
           Color.lerp(backgroundDefault, other.backgroundDefault, t)!,
       backgroundHovered:
           Color.lerp(backgroundHovered, other.backgroundHovered, t)!,
+      backgroundDisabled:
+          Color.lerp(backgroundDisabled, other.backgroundDisabled, t)!,
       backgroundSubtle:
           Color.lerp(backgroundSubtle, other.backgroundSubtle, t)!,
       backgroundSelected:

@@ -42,9 +42,9 @@ class TodoView extends StatelessWidget {
           SliverList(
             delegate: SliverChildListDelegate([const DoneTodoList()]),
           ),
-          SliverList(
-            delegate: SliverChildListDelegate([const PastTodoList()]),
-          ),
+          // SliverList(
+          //   delegate: SliverChildListDelegate([const PastTodoList()]),
+          // ),
         ],
       ),
     );

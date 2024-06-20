@@ -15,10 +15,11 @@ class AppTheme {
     );
   }();
 
-  static final light = () {
-    final defaultTheme = ThemeData.light();
-
-    final colorExt = AppColorsExtension(
+  static final color = () {
+    return AppColorsExtension(
+      primary: const Color(0xff4DB0FF),
+      primaryHovered: const Color(0xff4DB0FF).withOpacity(0.8),
+      primaryContainer: Colors.white,
       textDefault: const Color(0xff1F1F1F),
       textSubtle: const Color(0xff5C5C5C),
       textDisabled: const Color(0xff9E9E9E),
@@ -27,6 +28,7 @@ class AppTheme {
       backgroundDefault: const Color(0xffFBFBFB),
       backgroundSubtle: const Color(0xffF4F4F4),
       backgroundHovered: const Color(0xffF4F4F4),
+      backgroundDisabled: const Color(0xffE0E0E0),
       backgroundSelected: const Color(0xffF6EDFF),
       backgroundChecked: const Color(0xffC2C2C2),
       borderDefault: const Color(0xffE0E0E0),
@@ -35,6 +37,12 @@ class AppTheme {
       iconDefault: const Color(0xff757575),
       iconHovered: const Color(0xff5C5C5C),
     );
+  }();
+
+  static final light = () {
+    final defaultTheme = ThemeData.light();
+
+    final colorExt = color;
 
     return defaultTheme.copyWith(
       colorScheme: ColorScheme.fromSeed(
@@ -94,23 +102,7 @@ class AppTheme {
   static final dark = () {
     final defaultTheme = ThemeData.dark();
 
-    final colorExt = AppColorsExtension(
-      textDefault: Colors.white,
-      textSubtle: const Color(0xff5C5C5C),
-      textDisabled: const Color(0xff9E9E9E),
-      textDanger: const Color(0xffC20B2A),
-      textSuccess: const Color(0xff218011),
-      backgroundDefault: const Color(0xffFBFBFB),
-      backgroundSubtle: const Color(0xffF4F4F4),
-      backgroundHovered: const Color(0xffF4F4F4),
-      backgroundSelected: const Color(0xffF6EDFF),
-      backgroundChecked: const Color(0xffC2C2C2),
-      borderDefault: const Color(0xffE0E0E0),
-      borderSubtle: const Color(0xffF4F4F4),
-      borderStrong: const Color(0xff9E9E9E),
-      iconDefault: const Color(0xff757575),
-      iconHovered: const Color(0xff5C5C5C),
-    );
+    final colorExt = color;
 
     return defaultTheme.copyWith(
       colorScheme: ColorScheme.fromSeed(

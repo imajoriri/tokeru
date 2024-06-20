@@ -103,6 +103,11 @@ class _ChatTextField extends HookConsumerWidget {
     final provider = todayAppItemControllerProvider;
     final textEditingController = useTextEditingController();
     final hasFocus = useState(false);
+    final canSubmit = useState(false);
+
+    textEditingController.addListener(() {
+      canSubmit.value = textEditingController.text.isNotEmpty;
+    });
 
     final animationController =
         useAnimationController(duration: const Duration(milliseconds: 150));
@@ -154,6 +159,17 @@ class _ChatTextField extends HookConsumerWidget {
                     ),
                   ),
                 ),
+                _SendButton(
+                  onPressed: canSubmit.value
+                      ? () {
+                          if (textEditingController.text.isEmpty) return;
+                          ref
+                              .read(provider.notifier)
+                              .addChat(message: textEditingController.text);
+                          textEditingController.clear();
+                        }
+                      : null,
+                ),
               ],
             ),
           ),
@@ -178,6 +194,66 @@ class _ChatTextField extends HookConsumerWidget {
           child: child,
         );
       },
+    );
+  }
+}
+
+/// チャットを送信するためのButton。
+class _SendButton extends HookWidget {
+  final void Function()? onPressed;
+
+  const _SendButton({
+    this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final hover = useState(false);
+    final focus = useState(false);
+    Color getBackgroundColor(BuildContext context) {
+      if (onPressed == null) {
+        return context.appColors.backgroundDisabled;
+      }
+      if (hover.value || focus.value) {
+        return context.appColors.primaryHovered;
+      }
+      return context.appColors.primary;
+    }
+
+    return GestureDetector(
+      onTap: onPressed,
+      child: FocusableActionDetector(
+        onShowHoverHighlight: (value) => hover.value = value,
+        onShowFocusHighlight: (value) => focus.value = value,
+        shortcuts: {
+          LogicalKeySet(LogicalKeyboardKey.enter): const ActivateIntent(),
+        },
+        actions: {
+          ActivateIntent: CallbackAction<ActivateIntent>(
+            onInvoke: (intent) => onPressed?.call(),
+          ),
+        },
+        mouseCursor: onPressed != null
+            ? SystemMouseCursors.click
+            : SystemMouseCursors.basic,
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            vertical: context.appSpacing.smallX,
+            horizontal: context.appSpacing.medium,
+          ),
+          decoration: BoxDecoration(
+            color: getBackgroundColor(context),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: IconTheme.merge(
+            child: const Icon(Icons.send),
+            data: IconThemeData(
+              size: 20,
+              color: context.appColors.primaryContainer,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
