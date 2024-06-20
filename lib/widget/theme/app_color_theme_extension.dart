@@ -14,6 +14,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     required this.backgroundChecked,
     required this.borderDefault,
     required this.borderSubtle,
+    required this.borderStrong,
     required this.iconDefault,
     required this.iconHovered,
   });
@@ -35,6 +36,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
   // border
   final Color borderDefault;
   final Color borderSubtle;
+  final Color borderStrong;
 
   // icon
   final Color iconDefault;
@@ -56,6 +58,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     // border
     Color? borderDefault,
     Color? borderSubtle,
+    Color? borderStrong,
     // icon
     Color? iconDefault,
     Color? iconHovered,
@@ -73,6 +76,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
       backgroundChecked: backgroundChecked ?? this.backgroundChecked,
       borderDefault: borderDefault ?? this.borderDefault,
       borderSubtle: borderSubtle ?? this.borderSubtle,
+      borderStrong: borderStrong ?? this.borderStrong,
       iconDefault: iconDefault ?? this.iconDefault,
       iconHovered: iconHovered ?? this.iconHovered,
     );
@@ -105,6 +109,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
           Color.lerp(backgroundChecked, other.backgroundChecked, t)!,
       borderDefault: Color.lerp(borderDefault, other.borderDefault, t)!,
       borderSubtle: Color.lerp(borderSubtle, other.borderSubtle, t)!,
+      borderStrong: Color.lerp(borderStrong, other.borderStrong, t)!,
       iconDefault: Color.lerp(iconDefault, other.iconDefault, t)!,
       iconHovered: Color.lerp(iconHovered, other.iconHovered, t)!,
     );

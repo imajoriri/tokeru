@@ -16,7 +16,6 @@ class ChatView extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = todayAppItemControllerProvider;
     final appItems = ref.watch(provider);
-    final textEditingController = useTextEditingController();
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -59,7 +58,8 @@ class ChatView extends HookConsumerWidget {
                                 ref.read(
                                   todoUpdateControllerProvider(
                                     todo: appItem.copyWith(
-                                        isDone: value ?? false),
+                                      isDone: value ?? false,
+                                    ),
                                   ).future,
                                 );
                               },
@@ -85,23 +85,99 @@ class ChatView extends HookConsumerWidget {
             );
           },
         ),
-        CallbackShortcuts(
-          bindings: <ShortcutActivator, VoidCallback>{
-            const SingleActivator(LogicalKeyboardKey.enter, meta: true): () {
-              if (textEditingController.text.isEmpty) return;
-              ref
-                  .read(provider.notifier)
-                  .addChat(message: textEditingController.text);
-              textEditingController.clear();
-            },
-          },
-          child: TextField(
-            controller: textEditingController,
-            maxLines: null,
-            focusNode: chatFocusNode,
-          ),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: _ChatTextField(),
         ),
       ],
+    );
+  }
+}
+
+/// チャットのTextField。
+class _ChatTextField extends HookConsumerWidget {
+  const _ChatTextField();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final provider = todayAppItemControllerProvider;
+    final textEditingController = useTextEditingController();
+    final hasFocus = useState(false);
+
+    final animationController =
+        useAnimationController(duration: const Duration(milliseconds: 150));
+    final colorTween = ColorTween(
+      begin: context.appColors.borderDefault,
+      end: context.appColors.borderStrong,
+    );
+    final shadowColorTween = ColorTween(
+      begin: Colors.transparent,
+      end: context.appColors.borderStrong.withOpacity(0.2),
+    );
+
+    return AnimatedBuilder(
+      animation: animationController,
+      child: CallbackShortcuts(
+        bindings: <ShortcutActivator, VoidCallback>{
+          const SingleActivator(LogicalKeyboardKey.enter, meta: true): () {
+            if (textEditingController.text.isEmpty) return;
+            ref
+                .read(provider.notifier)
+                .addChat(message: textEditingController.text);
+            textEditingController.clear();
+          },
+        },
+        child: Focus(
+          onFocusChange: (value) {
+            hasFocus.value = chatFocusNode.hasFocus;
+            if (value) {
+              animationController.forward();
+            } else {
+              animationController.reverse();
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: textEditingController,
+                    maxLines: null,
+                    focusNode: chatFocusNode,
+                    style: context.appTextTheme.bodyMedium,
+                    cursorColor: Colors.black,
+                    decoration: const InputDecoration(
+                      isDense: true,
+                      border: InputBorder.none,
+                      hintText: 'Type a message',
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      builder: (context, child) {
+        return Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: colorTween.evaluate(animationController)!,
+            ),
+            borderRadius: BorderRadius.circular(4),
+            color: context.appColors.backgroundDefault,
+            boxShadow: [
+              BoxShadow(
+                color: shadowColorTween.evaluate(animationController)!,
+                offset: const Offset(1, 1),
+                blurRadius: 2,
+              ),
+            ],
+          ),
+          child: child,
+        );
+      },
     );
   }
 }
