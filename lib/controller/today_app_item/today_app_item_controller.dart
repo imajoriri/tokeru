@@ -48,10 +48,10 @@ class TodayAppItemController extends _$TodayAppItemController {
     }
 
     state = const AsyncLoading<List<AppItem>>().copyWithPrevious(state);
-    state = await AsyncValue.guard(() async {
+    try {
       final user = ref.read(userControllerProvider).requireValue;
       final repository = ref.read(appItemRepositoryProvider(user.id));
-      final last = state.value!.last;
+      final last = value.last;
       final todos = await repository.fetch(
         end: last.createdAt,
         limit: initialPerPage,
@@ -59,8 +59,10 @@ class TodayAppItemController extends _$TodayAppItemController {
       if (todos.isEmpty) {
         hasNext = false;
       }
-      return [...value, ...todos];
-    });
+      state = AsyncData([...value, ...todos]);
+    } on Exception catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+    }
   }
 
   /// [AppTodoItem]を更新する。
