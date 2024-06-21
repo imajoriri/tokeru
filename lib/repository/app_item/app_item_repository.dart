@@ -1,6 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
 import 'package:quick_flutter/repository/firebase/firebase_provider.dart';
+import 'package:quick_flutter/systems/timestamp_converter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'app_item_repository.g.dart';
@@ -35,6 +36,7 @@ class AppItemRepository {
     var doc = ref
         .read(userDocumentProvider(userId))
         .collection('todos')
+        .where('type', isNotEqualTo: null)
         .orderBy('createdAt', descending: true)
         .limit(limit);
     if (start != null) {
@@ -51,6 +53,15 @@ class AppItemRepository {
     }
     final response = await doc.get();
     return (response.docs.map((doc) {
+      // typeがない場合はAppChatItemとして扱う
+      if (!doc.data().containsKey('type')) {
+        return AppChatItem(
+          id: doc.id,
+          message: '',
+          createdAt:
+              const TimestampConverter().fromJson(doc.data()['createdAt']),
+        );
+      }
       return AppItem.fromJson(doc.data()..['id'] = doc.id);
     }).toList());
   }
