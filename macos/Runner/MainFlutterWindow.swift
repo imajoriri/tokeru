@@ -11,7 +11,7 @@ class MainFlutterWindow: NSWindow {
   /// ウィンドウのサイズと位置を設定する
   func setDefaultWindow() {
     // ウィンドウのサイズを設定
-    let windowSize = NSSize(width: 600, height: 500)
+    let windowSize = NSSize(width: 1000, height: 800)
 
     // スクリーンのサイズを取得
     // `NSScreen.screens.first`はアプリを最初に開いた画面
