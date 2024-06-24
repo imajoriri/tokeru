@@ -93,7 +93,7 @@ class TodoListItem extends HookConsumerWidget {
 
     // 日本語入力などでの変換中は無視するためのフラグ
     final isValid = useState(false);
-    effectiveFocusNode.onKey = ((node, event) {
+    effectiveFocusNode.onKeyEvent = ((node, event) {
       isValid.value = effectiveController.value.composing.isValid;
       return KeyEventResult.ignored;
     });
@@ -214,12 +214,12 @@ class TodoListItem extends HookConsumerWidget {
                       ),
                       // リップルエフェクトをなくす対応。
                       splashRadius: 0,
-                      fillColor: MaterialStateProperty.resolveWith(
+                      fillColor: WidgetStateProperty.resolveWith(
                         (states) {
-                          if (states.contains(MaterialState.selected)) {
+                          if (states.contains(WidgetState.selected)) {
                             return context.appColors.backgroundChecked;
                           }
-                          if (states.contains(MaterialState.disabled)) {
+                          if (states.contains(WidgetState.disabled)) {
                             return context.appColors.backgroundChecked;
                           }
                           return null;
@@ -229,8 +229,8 @@ class TodoListItem extends HookConsumerWidget {
                     Expanded(
                       child: Focus(
                         skipTraversal: true,
-                        onKey: (node, event) {
-                          if (event is RawKeyDownEvent) {
+                        onKeyEvent: (node, event) {
+                          if (event is KeyDownEvent) {
                             // バックスペースキー & カーソルが先頭の場合
                             if (event.logicalKey ==
                                     LogicalKeyboardKey.backspace &&
