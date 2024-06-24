@@ -160,9 +160,9 @@ class TodoListItem extends HookConsumerWidget {
         if (onDeleted != null)
           const SingleActivator(meta: true, LogicalKeyboardKey.keyD):
               onDeleted!,
-        if (focusUp != null)
+        if (focusUp != null && !isValid.value)
           const SingleActivator(LogicalKeyboardKey.arrowUp): focusUp!,
-        if (focusDown != null)
+        if (focusDown != null && !isValid.value)
           const SingleActivator(LogicalKeyboardKey.arrowDown): focusDown!,
         if (onNewTodoBelow != null && !isValid.value)
           const SingleActivator(LogicalKeyboardKey.enter): onNewTodoBelow!,

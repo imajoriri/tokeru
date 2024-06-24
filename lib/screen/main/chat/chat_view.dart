@@ -40,6 +40,7 @@ class ChatView extends HookConsumerWidget {
                   reverse: true,
                   itemBuilder: (context, index) {
                     final appItem = appItems[index];
+                    final isLast = index == 0;
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -81,6 +82,7 @@ class ChatView extends HookConsumerWidget {
                           AppChatItem() => ChatListItem.chat(chat: appItem),
                           AppDividerItem() => throw UnimplementedError(),
                         },
+                        if (isLast) const SizedBox(height: 16),
                       ],
                     );
                   },
@@ -101,7 +103,7 @@ class ChatView extends HookConsumerWidget {
           },
         ),
         const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
           child: _ChatTextField(),
         ),
       ],
