@@ -214,12 +214,12 @@ class TodoListItem extends HookConsumerWidget {
                       ),
                       // リップルエフェクトをなくす対応。
                       splashRadius: 0,
-                      fillColor: WidgetStateProperty.resolveWith(
+                      fillColor: MaterialStateProperty.resolveWith(
                         (states) {
-                          if (states.contains(WidgetState.selected)) {
+                          if (states.contains(MaterialState.selected)) {
                             return context.appColors.backgroundChecked;
                           }
-                          if (states.contains(WidgetState.disabled)) {
+                          if (states.contains(MaterialState.disabled)) {
                             return context.appColors.backgroundChecked;
                           }
                           return null;
