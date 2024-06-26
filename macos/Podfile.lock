@@ -5,12 +5,11 @@ PODS:
   - AppAuth/Core (1.7.5)
   - AppAuth/ExternalUserAgent (1.7.5):
     - AppAuth/Core
-  - cloud_firestore (4.15.8):
+  - cloud_firestore (4.17.5):
     - Firebase/CoreOnly (~> 10.25.0)
     - Firebase/Firestore (~> 10.25.0)
     - firebase_core
     - FlutterMacOS
-    - nanopb (< 2.30910.0, >= 2.30908.0)
   - desktop_window (0.0.1):
     - FlutterMacOS
   - Firebase/Analytics (10.25.0):
@@ -32,11 +31,11 @@ PODS:
   - Firebase/Messaging (10.25.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 10.25.0)
-  - firebase_analytics (10.8.9):
+  - firebase_analytics (10.10.7):
     - Firebase/Analytics (= 10.25.0)
     - firebase_core
     - FlutterMacOS
-  - firebase_auth (4.17.8):
+  - firebase_auth (4.20.0):
     - Firebase/Auth (~> 10.25.0)
     - Firebase/CoreOnly (~> 10.25.0)
     - firebase_core
@@ -44,7 +43,7 @@ PODS:
   - firebase_core (2.32.0):
     - Firebase/CoreOnly (~> 10.25.0)
     - FlutterMacOS
-  - firebase_crashlytics (3.4.18):
+  - firebase_crashlytics (3.5.7):
     - Firebase/CoreOnly (~> 10.25.0)
     - Firebase/Crashlytics (~> 10.25.0)
     - firebase_core
@@ -317,13 +316,13 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   AppAuth: 501c04eda8a8d11f179dbe8637b7a91bb7e5d2fa
-  cloud_firestore: 6c737d66d10e0dd4fd94d18887b184b213e5cefd
+  cloud_firestore: c037b5acdf0be76bc426c05d978be2090f094219
   desktop_window: fb7c4f12c1129f947ac482296b6f14059d57a3c3
   Firebase: 0312a2352584f782ea56f66d91606891d4607f06
-  firebase_analytics: 397d4130402ec746f992f32f07535ae5b350ce7b
-  firebase_auth: 415ecd815bf965b4957d13dd184fce1128637e5a
+  firebase_analytics: 47e1f6453c222417b323ca53b1793f1a9ef395f6
+  firebase_auth: e102811c55546b05d1db96ae9af577090e4fb687
   firebase_core: b5b8b60dad71f93132bbaa21e8d1379367d824f0
-  firebase_crashlytics: 4eac6c2174137be3d085c67c6e2347a020df379b
+  firebase_crashlytics: 633b73bfae67c0c94148241da3afef6413d1063d
   FirebaseAnalytics: ec00fe8b93b41dc6fe4a28784b8e51da0647a248
   FirebaseAppCheckInterop: 5315f40293191bfec04b2cfab0215760e441540a
   FirebaseAuth: c0f93dcc570c9da2bffb576969d793e95c344fbb
@@ -357,8 +356,8 @@ SPEC CHECKSUMS:
   nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
-  shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
-  url_launcher_macos: d2691c7dd33ed713bf3544850a623080ec693d95
+  shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
+  url_launcher_macos: 5f437abeda8c85500ceb03f5c1938a8c5a705399
 
 PODFILE CHECKSUM: 702e3d9c0e68032826ce36c0ad50f92b06ab22e0
 
