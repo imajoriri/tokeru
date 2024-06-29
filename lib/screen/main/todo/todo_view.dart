@@ -14,8 +14,8 @@ import 'package:quick_flutter/controller/todo_update/todo_update_controller.dart
 import 'package:quick_flutter/model/analytics_event/analytics_event_name.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
 import 'package:quick_flutter/widget/actions/new_todo.dart/new_todo_action.dart';
-import 'package:quick_flutter/widget/button/icon_button_small.dart';
-import 'package:quick_flutter/widget/button/text_button_small.dart';
+import 'package:quick_flutter/widget/button/icon_button.dart';
+import 'package:quick_flutter/widget/button/text_button.dart';
 import 'package:quick_flutter/widget/focus_nodes.dart';
 import 'package:quick_flutter/widget/shortcutkey.dart';
 import 'package:quick_flutter/widget/text_editing_controller/todo_text_editing_controller.dart';
