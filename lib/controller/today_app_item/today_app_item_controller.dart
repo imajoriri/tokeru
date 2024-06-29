@@ -115,18 +115,16 @@ class TodayAppItemController extends _$TodayAppItemController {
   Future<void> addChat({
     required String message,
   }) async {
-    final tmpChat = AppChatItem(
+    final chat = AppChatItem(
       id: DateTime.now().toIso8601String(),
       message: message,
       createdAt: DateTime.now(),
     );
-    state = AsyncData([tmpChat, ...state.value!]);
+    state = AsyncData([chat, ...state.value!]);
     final user = ref.read(userControllerProvider).requireValue;
     final repository = ref.read(appItemRepositoryProvider(user.id));
     try {
-      await repository.addChat(
-        chat: tmpChat,
-      );
+      await repository.add(chat);
     } on Exception catch (e, s) {
       await FirebaseCrashlytics.instance.recordError(e, s);
     }

@@ -264,7 +264,6 @@ class TodoListItem extends HookConsumerWidget {
 
 class _DraggableWidget extends StatelessWidget {
   const _DraggableWidget({
-    super.key,
     required this.index,
   });
 

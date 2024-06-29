@@ -117,6 +117,27 @@ class ChatView extends HookConsumerWidget {
 class _ChatTextField extends HookConsumerWidget {
   const _ChatTextField();
 
+  Future<void> send({
+    required TextEditingController textEditingController,
+    required WidgetRef ref,
+    required bool todoMode,
+  }) async {
+    if (textEditingController.text.isEmpty) return;
+
+    if (todoMode) {
+      final titles = textEditingController.text.split('\n');
+      // TODO: 複数のTodoを追加する。
+      return;
+    }
+
+    final provider = todayAppItemControllerProvider;
+    ref.read(provider.notifier).addChat(message: textEditingController.text);
+    textEditingController.clear();
+    FirebaseAnalytics.instance.logEvent(
+      name: AnalyticsEventName.addChat.name,
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = todayAppItemControllerProvider;
@@ -200,16 +221,11 @@ class _ChatTextField extends HookConsumerWidget {
                     const Spacer(),
                     _SendButton(
                       onPressed: canSubmit.value
-                          ? () {
-                              if (textEditingController.text.isEmpty) return;
-                              ref
-                                  .read(provider.notifier)
-                                  .addChat(message: textEditingController.text);
-                              textEditingController.clear();
-                              FirebaseAnalytics.instance.logEvent(
-                                name: AnalyticsEventName.addChat.name,
-                              );
-                            }
+                          ? () => send(
+                                textEditingController: textEditingController,
+                                ref: ref,
+                                todoMode: todoMode.value,
+                              )
                           : null,
                     ),
                   ],
