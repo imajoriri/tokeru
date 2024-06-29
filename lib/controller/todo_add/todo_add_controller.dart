@@ -28,12 +28,15 @@ Future<void> todoAddController(
     return;
   }
   final repository = ref.read(appItemRepositoryProvider(user.value!.id));
+  final todo = AppTodoItem(
+    id: DateTime.now().toIso8601String(),
+    title: title,
+    isDone: false,
+    index: index,
+    createdAt: DateTime.now(),
+  );
   try {
-    final todo = await repository.addTodo(
-      createdAt: DateTime.now(),
-      index: index,
-      title: title,
-    );
+    await repository.add(todo);
     ref.read(todayAppItemControllerProvider.notifier).addTodo(todo: todo);
     ref.read(todoControllerProvider.notifier).addTodo(todo: todo, index: index);
   } on Exception catch (e, s) {
