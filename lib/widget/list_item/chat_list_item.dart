@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
@@ -39,33 +38,67 @@ class ChatListItem extends HookWidget {
             : context.appColors.backgroundDefault,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
         child: switch (app) {
-          AppChatItem(:final message) => SizedBox(
-              width: double.infinity,
-              child: SelectableText(
-                message,
-                style: context.appTextTheme.bodyMedium,
-              ),
-            ),
-          AppTodoItem(:final title, :final isDone) => Row(
-              children: [
-                CheckButton(checked: isDone, onPressed: onChangedCheck!),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: SelectableText(
-                    title,
-                    style: context.appTextTheme.bodyMedium.copyWith(
-                      decoration: isDone ? TextDecoration.lineThrough : null,
-                      color: isDone
-                          ? context.appColors.textSubtle
-                          : context.appColors.textDefault,
-                    ),
-                  ),
-                ),
-              ],
+          AppChatItem(:final message) => _Chat(message: message),
+          AppTodoItem(:final title, :final isDone) => _Todo(
+              isDone: isDone,
+              onChangedCheck: onChangedCheck,
+              title: title,
             ),
           AppDividerItem() => throw UnimplementedError(),
         },
       ),
+    );
+  }
+}
+
+class _Chat extends StatelessWidget {
+  const _Chat({
+    required this.message,
+  });
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: SelectableText(
+        message,
+        style: context.appTextTheme.bodyMedium,
+      ),
+    );
+  }
+}
+
+class _Todo extends StatelessWidget {
+  const _Todo({
+    required this.isDone,
+    required this.onChangedCheck,
+    required this.title,
+  });
+
+  final bool isDone;
+  final void Function(bool? p1)? onChangedCheck;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        CheckButton(checked: isDone, onPressed: onChangedCheck!),
+        const SizedBox(width: 8),
+        Expanded(
+          child: SelectableText(
+            title,
+            style: context.appTextTheme.bodyMedium.copyWith(
+              decoration: isDone ? TextDecoration.lineThrough : null,
+              color: isDone
+                  ? context.appColors.textSubtle
+                  : context.appColors.textDefault,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
