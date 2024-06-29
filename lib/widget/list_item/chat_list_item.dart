@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
+import 'package:quick_flutter/widget/button/check_button.dart';
 import 'package:quick_flutter/widget/theme/app_theme.dart';
 
 class ChatListItem extends HookWidget {
@@ -47,18 +48,7 @@ class ChatListItem extends HookWidget {
             ),
           AppTodoItem(:final title, :final isDone) => Row(
               children: [
-                SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    child: CupertinoCheckbox(
-                      value: isDone,
-                      activeColor: context.appColors.backgroundChecked,
-                      onChanged: onChangedCheck!,
-                    ),
-                  ),
-                ),
+                CheckButton(checked: isDone, onPressed: onChangedCheck!),
                 const SizedBox(width: 8),
                 Expanded(
                   child: SelectableText(

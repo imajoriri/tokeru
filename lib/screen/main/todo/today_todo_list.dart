@@ -60,7 +60,7 @@ class TodayTodoList extends HookConsumerWidget {
                     "Today's To-Dos @${totalMinutes}min",
                     style: context.appTextTheme.titleSmall,
                   ),
-                  IconButtonSmall(
+                  AppIconButton.medium(
                     icon: const Icon(Icons.add),
                     tooltip: ShortcutActivatorType.newTodo.longLabel,
                     onPressed: () async {

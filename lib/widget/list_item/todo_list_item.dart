@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
+import 'package:quick_flutter/widget/button/check_button.dart';
 import 'package:quick_flutter/widget/theme/app_theme.dart';
 
 class TodoListItem extends HookConsumerWidget {
@@ -202,30 +203,15 @@ class TodoListItem extends HookConsumerWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(bottom: 4, top: 4, left: 8),
+                padding: const EdgeInsets.only(bottom: 10, top: 10, left: 8),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Checkbox(
-                      value: todo.isDone,
-                      onChanged: onToggleDone,
-                      focusNode: useFocusNode(
-                        skipTraversal: true,
-                      ),
-                      // リップルエフェクトをなくす対応。
-                      splashRadius: 0,
-                      fillColor: MaterialStateProperty.resolveWith(
-                        (states) {
-                          if (states.contains(MaterialState.selected)) {
-                            return context.appColors.backgroundChecked;
-                          }
-                          if (states.contains(MaterialState.disabled)) {
-                            return context.appColors.backgroundChecked;
-                          }
-                          return null;
-                        },
-                      ),
+                    CheckButton(
+                      onPressed: onToggleDone,
+                      checked: todo.isDone,
                     ),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: Focus(
                         skipTraversal: true,
@@ -246,26 +232,19 @@ class TodoListItem extends HookConsumerWidget {
                           }
                           return KeyEventResult.ignored;
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            bottom: 4,
-                            // チェックボックスとの高さを調整するためのpadding
-                            top: 8,
+                        child: TextField(
+                          controller: effectiveController,
+                          focusNode: effectiveFocusNode,
+                          style: context.appTextTheme.bodyMedium.copyWith(
+                            color: textFieldColor,
                           ),
-                          child: TextField(
-                            controller: effectiveController,
-                            focusNode: effectiveFocusNode,
-                            style: context.appTextTheme.bodyMedium.copyWith(
-                              color: textFieldColor,
-                            ),
-                            readOnly: readOnly,
-                            maxLines: null,
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              hintText:
-                                  'Write a Todo or Memo(Shift + Enter)...',
-                              isCollapsed: true,
-                            ),
+                          cursorHeight: 16,
+                          readOnly: readOnly,
+                          maxLines: null,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'New Todo',
+                            isCollapsed: true,
                           ),
                         ),
                       ),
@@ -274,26 +253,40 @@ class TodoListItem extends HookConsumerWidget {
                 ),
               ),
               if (onHover.value && index != null)
-                Positioned.directional(
-                  textDirection: Directionality.of(context),
-                  top: 0,
-                  bottom: 0,
-                  end: 8,
-                  child: Align(
-                    alignment: AlignmentDirectional.centerEnd,
-                    child: ReorderableDragStartListener(
-                      index: index!,
-                      child: const MouseRegion(
-                        cursor: SystemMouseCursors.grab,
-                        child: Icon(
-                          Icons.drag_indicator_outlined,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                _DraggableWidget(index: index),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DraggableWidget extends StatelessWidget {
+  const _DraggableWidget({
+    super.key,
+    required this.index,
+  });
+
+  final int? index;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned.directional(
+      textDirection: Directionality.of(context),
+      top: 0,
+      bottom: 0,
+      end: 8,
+      child: Align(
+        alignment: AlignmentDirectional.centerEnd,
+        child: ReorderableDragStartListener(
+          index: index!,
+          child: const MouseRegion(
+            cursor: SystemMouseCursors.grab,
+            child: Icon(
+              Icons.drag_indicator_outlined,
+              color: Colors.grey,
+            ),
           ),
         ),
       ),
