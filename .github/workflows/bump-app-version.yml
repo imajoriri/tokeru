@@ -50,7 +50,7 @@ jobs:
         run: |
           gh pr create \
             --title "update pubspec version" \
-            --repo snkrdunk/snkrdunk_flutter \
+            --repo imajoriri/tokeru \
             --body "This PR incrementally updates pubspec version" \
             --base develop \
             --head feature/update-pubspec-${{ steps.timestamp.outputs.timestamp }} \
