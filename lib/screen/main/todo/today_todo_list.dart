@@ -9,37 +9,7 @@ class TodayTodoList extends HookConsumerWidget {
     return todos.when(
       data: (todos) {
         if (todos.isEmpty) {
-          return GestureDetector(
-            onTap: Actions.handler<NewTodoIntent>(
-              context,
-              const NewTodoIntent(),
-            ),
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
-              width: double.infinity,
-              child: Column(
-                children: [
-                  Text(
-                    'There are no To-Dos for today.\nPlease start by clicking here or pressing Command + N.',
-                    style: context.appTextTheme.bodySmall.copyWith(
-                      color: context.appColors.textSubtle,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 16),
-                  TextButtonSmall(
-                    onPressed: () {
-                      Actions.handler<NewTodoIntent>(
-                        context,
-                        const NewTodoIntent(),
-                      );
-                    },
-                    child: const Text('Add To-Do'),
-                  ),
-                ],
-              ),
-            ),
-          );
+          return const _EmptyState();
         }
 
         final totalMinutes = todos
@@ -51,39 +21,7 @@ class TodayTodoList extends HookConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // title
-            Padding(
-              padding: const EdgeInsets.fromLTRB(24, 24, 24, 4),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Today's To-Dos @${totalMinutes}min",
-                    style: context.appTextTheme.titleSmall,
-                  ),
-                  AppIconButton.medium(
-                    icon: const Icon(Icons.add),
-                    tooltip: ShortcutActivatorType.newTodo.longLabel,
-                    onPressed: () async {
-                      await ref.read(
-                        todoAddControllerProvider(
-                          titles: [''],
-                          indexType: TodoAddIndexType.first,
-                        ).future,
-                      );
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        ref
-                            .read(todoFocusControllerProvider.notifier)
-                            .requestFocus(0);
-                      });
-
-                      await FirebaseAnalytics.instance.logEvent(
-                        name: AnalyticsEventName.addTodo.name,
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
+            _Header(totalMinutes: totalMinutes),
 
             // TodoList
             Padding(
@@ -109,6 +47,26 @@ class TodayTodoList extends HookConsumerWidget {
                   return HookBuilder(
                     key: key,
                     builder: (context) {
+                      // return Row(
+                      //   children: [
+                      //     CheckButton(
+                      //         checked: todo.isDone,
+                      //         onPressed: (value) {
+                      //           ref.read(
+                      //             todoUpdateControllerProvider(
+                      //               todo: todo.copyWith(isDone: value ?? false),
+                      //             ).future,
+                      //           );
+                      //         }),
+                      //     const SizedBox(width: 8),
+                      //     Expanded(
+                      //       child: SelectableText(
+                      //         todo.title,
+
+                      //       ),
+                      //     ),
+                      //   ],
+                      // );
                       return TodoListItem(
                         todo: todo,
                         index: index,
@@ -207,6 +165,88 @@ class TodayTodoList extends HookConsumerWidget {
       loading: () => const Padding(
         padding: EdgeInsets.all(16.0),
         child: Text('Loading...'),
+      ),
+    );
+  }
+}
+
+class _EmptyState extends StatelessWidget {
+  const _EmptyState();
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: Actions.handler<NewTodoIntent>(
+        context,
+        const NewTodoIntent(),
+      ),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+        width: double.infinity,
+        child: Column(
+          children: [
+            Text(
+              'There are no To-Dos for today.\nPlease start by clicking here or pressing Command + N.',
+              style: context.appTextTheme.bodySmall.copyWith(
+                color: context.appColors.textSubtle,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            TextButtonSmall(
+              onPressed: () {
+                Actions.handler<NewTodoIntent>(
+                  context,
+                  const NewTodoIntent(),
+                );
+              },
+              child: const Text('Add To-Do'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _Header extends ConsumerWidget {
+  const _Header({
+    required this.totalMinutes,
+  });
+
+  final int totalMinutes;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 24, 24, 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "Today's To-Dos @${totalMinutes}min",
+            style: context.appTextTheme.titleSmall,
+          ),
+          AppIconButton.medium(
+            icon: const Icon(Icons.add),
+            tooltip: ShortcutActivatorType.newTodo.longLabel,
+            onPressed: () async {
+              await ref.read(
+                todoAddControllerProvider(
+                  titles: [''],
+                  indexType: TodoAddIndexType.first,
+                ).future,
+              );
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                ref.read(todoFocusControllerProvider.notifier).requestFocus(0);
+              });
+
+              await FirebaseAnalytics.instance.logEvent(
+                name: AnalyticsEventName.addTodo.name,
+              );
+            },
+          ),
+        ],
       ),
     );
   }

@@ -181,38 +181,31 @@ class TodoListItem extends HookConsumerWidget {
         onExit: (event) {
           onHover.value = false;
         },
-        child: GestureDetector(
-          onTap: () {
-            effectiveFocusNode.requestFocus();
-          },
-          child: Stack(
-            fit: StackFit.passthrough,
-            children: [
-              // TextFieldを囲っているContainerに色を付けると
-              // リビルド時にfocusが外れてしまうため、stackでContainerを分けている
-              Positioned(
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: backgroundColor,
-                    borderRadius: BorderRadius.circular(8),
+        child: Stack(
+          fit: StackFit.passthrough,
+          children: [
+            // TextFieldを囲っているContainerに色を付けると
+            // リビルド時にfocusが外れてしまうため、stackでContainerを分けている
+            _Background(backgroundColor: backgroundColor),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10, top: 10, left: 8),
+                  child: CheckButton(
+                    onPressed: onToggleDone,
+                    checked: todo.isDone,
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10, top: 10, left: 8),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CheckButton(
-                      onPressed: onToggleDone,
-                      checked: todo.isDone,
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
+                const SizedBox(width: 8),
+                Expanded(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      effectiveFocusNode.requestFocus();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Focus(
                         skipTraversal: true,
                         onKeyEvent: (node, event) {
@@ -249,13 +242,36 @@ class TodoListItem extends HookConsumerWidget {
                         ),
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-              if (onHover.value && index != null)
-                _DraggableWidget(index: index),
-            ],
-          ),
+              ],
+            ),
+            if (onHover.value && index != null) _DraggableWidget(index: index),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _Background extends StatelessWidget {
+  const _Background({
+    required this.backgroundColor,
+  });
+
+  final Color backgroundColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+      child: Container(
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(8),
         ),
       ),
     );
