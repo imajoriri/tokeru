@@ -7,13 +7,13 @@ on:
       - "*"
 
 jobs:
-  analyze:
+  bump:
     runs-on: ubuntu-22.04
 
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: develop
+          ref: main
 
       - name: Setup Java environment
         uses: actions/setup-java@v3.11.0
@@ -21,8 +21,7 @@ jobs:
           distribution: "zulu"
           java-version: "12.x"
 
-      - name: Install dependencies
-        uses: ./.github/actions/install_dependencies
+      - uses: ./.github/actions/install_flutter_dependencies
 
       - name: Get current date and time
         id: timestamp
