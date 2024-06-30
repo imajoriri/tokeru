@@ -12,7 +12,7 @@ mixin AppTodoItemsNotifierMixin<T> on AsyncNotifier<List<AppTodoItem>> {
   Timer? _deleteDonesDebounce;
   Timer? _updateOrderDebounce;
 
-  /// [AppTodoItem]を[index]に追加する
+  /// [AppTodoItem]を追加する。
   void addTodo({
     required AppTodoItem todo,
   }) {

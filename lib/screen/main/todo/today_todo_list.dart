@@ -66,7 +66,8 @@ class TodayTodoList extends HookConsumerWidget {
                     onPressed: () async {
                       await ref.read(
                         todoAddControllerProvider(
-                          todos: [(index: 0, title: '')],
+                          titles: [''],
+                          indexType: TodoAddIndexType.first,
                         ).future,
                       );
                       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -152,17 +153,12 @@ class TodayTodoList extends HookConsumerWidget {
                         },
                         onNewTodoBelow: () async {
                           FocusManager.instance.primaryFocus?.unfocus();
-                          final index = ref
-                              .read(todoFocusControllerProvider.notifier)
-                              .getFocusIndex();
                           await ref.read(
                             todoAddControllerProvider(
-                              todos: [(index: index + 1, title: '')],
+                              titles: [''],
+                              indexType: TodoAddIndexType.current,
                             ).future,
                           );
-                          await ref
-                              .read(todoControllerProvider.notifier)
-                              .updateCurrentOrder();
                           ref
                               .read(todoFocusControllerProvider)[index + 1]
                               .requestFocus();
@@ -216,102 +212,6 @@ class TodayTodoList extends HookConsumerWidget {
         padding: EdgeInsets.all(16.0),
         child: Text('Loading...'),
       ),
-    );
-  }
-}
-
-/// [ReorderableListView]の中で使う[Todo]のリスト
-// ignore: unused_element
-class _ReorderableTodoListItem extends HookConsumerWidget {
-  const _ReorderableTodoListItem({
-    required this.todo,
-    required this.index,
-  });
-
-  /// リストのindex
-  final int index;
-
-  /// Todo
-  final AppTodoItem todo;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return TodoListItem(
-      todo: todo,
-      index: index,
-      focusNode: ref.watch(todoFocusControllerProvider)[index],
-      controller: useTextEditingController(text: todo.title),
-      onDeleted: () async {
-        final currentFocusIndex =
-            ref.read(todoFocusControllerProvider.notifier).getFocusIndex();
-        await ref.read(todoDeleteControllerProvider(todoId: todo.id).future);
-        ref
-            .read(todoFocusControllerProvider.notifier)
-            .requestFocus(currentFocusIndex - 1);
-      },
-      onUpdatedTitle: (value) => ref.read(
-        todoUpdateControllerProvider(
-          todo: todo.copyWith(title: value),
-        ).future,
-      ),
-      onToggleDone: (value) {
-        ref.read(
-          todoUpdateControllerProvider(
-            todo: todo.copyWith(isDone: value ?? false),
-          ).future,
-        );
-        FocusScope.of(context).nextFocus();
-        FirebaseAnalytics.instance.logEvent(
-          name: AnalyticsEventName.toggleTodoDone.name,
-        );
-      },
-      focusDown: () {
-        FocusScope.of(context).nextFocus();
-      },
-      focusUp: () {
-        FocusScope.of(context).previousFocus();
-      },
-      onNewTodoBelow: () async {
-        FocusManager.instance.primaryFocus?.unfocus();
-        final index =
-            ref.read(todoFocusControllerProvider.notifier).getFocusIndex();
-        await ref.read(
-          todoAddControllerProvider(
-            todos: [(index: index + 1, title: '')],
-          ).future,
-        );
-        await ref.read(todoControllerProvider.notifier).updateCurrentOrder();
-        ref.read(todoFocusControllerProvider)[index + 1].requestFocus();
-      },
-      // 一番上のTodoは上に移動できない
-      onSortUp: index != 0
-          ? () {
-              final focusController =
-                  ref.read(todoFocusControllerProvider.notifier);
-              focusController.removeFocus();
-              ref
-                  .read(todoControllerProvider.notifier)
-                  .reorder(index, index - 1);
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                focusController.requestFocus(index - 1);
-              });
-            }
-          : null,
-      // 一番下のTodoは下に移動できない
-      onSortDown:
-          index != ref.read(todoControllerProvider).valueOrNull!.length - 1
-              ? () {
-                  final focusController =
-                      ref.read(todoFocusControllerProvider.notifier);
-                  focusController.removeFocus();
-                  ref
-                      .read(todoControllerProvider.notifier)
-                      .reorder(index, index + 1);
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    focusController.requestFocus(index + 1);
-                  });
-                }
-              : null,
     );
   }
 }
