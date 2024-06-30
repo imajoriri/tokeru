@@ -52,8 +52,8 @@ jobs:
             --title "update pubspec version" \
             --repo imajoriri/tokeru \
             --body "This PR incrementally updates pubspec version" \
-            --base develop \
+            --base main \
             --head feature/update-pubspec-${{ steps.timestamp.outputs.timestamp }} \
-            --reviewer daisukeueta,hitotsu01ki,imajoriri,hsylife
+            --reviewer imajoriri
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
