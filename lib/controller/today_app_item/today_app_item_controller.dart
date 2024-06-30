@@ -5,6 +5,7 @@ import 'package:quick_flutter/controller/user/user_controller.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
 import 'package:quick_flutter/repository/app_item/app_item_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:uuid/uuid.dart';
 
 part 'today_app_item_controller.g.dart';
 
@@ -116,7 +117,7 @@ class TodayAppItemController extends _$TodayAppItemController {
     required String message,
   }) async {
     final chat = AppChatItem(
-      id: DateTime.now().toIso8601String(),
+      id: const Uuid().v4(),
       message: message,
       createdAt: DateTime.now(),
     );
