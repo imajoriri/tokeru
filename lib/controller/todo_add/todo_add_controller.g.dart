@@ -6,7 +6,7 @@ part of 'todo_add_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$todoAddControllerHash() => r'd598131115fa9872369bb34e668c9c8f07a92af3';
+String _$todoAddControllerHash() => r'2d095c91333105aa87723c1e562ea5c31aff7519';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -76,12 +76,10 @@ class TodoAddControllerFamily extends Family<AsyncValue<void>> {
   ///
   /// Copied from [todoAddController].
   TodoAddControllerProvider call({
-    required int index,
-    required String title,
+    required List<({int index, String title})> todos,
   }) {
     return TodoAddControllerProvider(
-      index: index,
-      title: title,
+      todos: todos,
     );
   }
 
@@ -90,8 +88,7 @@ class TodoAddControllerFamily extends Family<AsyncValue<void>> {
     covariant TodoAddControllerProvider provider,
   ) {
     return call(
-      index: provider.index,
-      title: provider.title,
+      todos: provider.todos,
     );
   }
 
@@ -132,13 +129,11 @@ class TodoAddControllerProvider extends AutoDisposeFutureProvider<void> {
   ///
   /// Copied from [todoAddController].
   TodoAddControllerProvider({
-    required int index,
-    required String title,
+    required List<({int index, String title})> todos,
   }) : this._internal(
           (ref) => todoAddController(
             ref as TodoAddControllerRef,
-            index: index,
-            title: title,
+            todos: todos,
           ),
           from: todoAddControllerProvider,
           name: r'todoAddControllerProvider',
@@ -149,8 +144,7 @@ class TodoAddControllerProvider extends AutoDisposeFutureProvider<void> {
           dependencies: TodoAddControllerFamily._dependencies,
           allTransitiveDependencies:
               TodoAddControllerFamily._allTransitiveDependencies,
-          index: index,
-          title: title,
+          todos: todos,
         );
 
   TodoAddControllerProvider._internal(
@@ -160,12 +154,10 @@ class TodoAddControllerProvider extends AutoDisposeFutureProvider<void> {
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.index,
-    required this.title,
+    required this.todos,
   }) : super.internal();
 
-  final int index;
-  final String title;
+  final List<({int index, String title})> todos;
 
   @override
   Override overrideWith(
@@ -180,8 +172,7 @@ class TodoAddControllerProvider extends AutoDisposeFutureProvider<void> {
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        index: index,
-        title: title,
+        todos: todos,
       ),
     );
   }
@@ -193,27 +184,21 @@ class TodoAddControllerProvider extends AutoDisposeFutureProvider<void> {
 
   @override
   bool operator ==(Object other) {
-    return other is TodoAddControllerProvider &&
-        other.index == index &&
-        other.title == title;
+    return other is TodoAddControllerProvider && other.todos == todos;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, index.hashCode);
-    hash = _SystemHash.combine(hash, title.hashCode);
+    hash = _SystemHash.combine(hash, todos.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
 mixin TodoAddControllerRef on AutoDisposeFutureProviderRef<void> {
-  /// The parameter `index` of this provider.
-  int get index;
-
-  /// The parameter `title` of this provider.
-  String get title;
+  /// The parameter `todos` of this provider.
+  List<({int index, String title})> get todos;
 }
 
 class _TodoAddControllerProviderElement
@@ -221,9 +206,8 @@ class _TodoAddControllerProviderElement
   _TodoAddControllerProviderElement(super.provider);
 
   @override
-  int get index => (origin as TodoAddControllerProvider).index;
-  @override
-  String get title => (origin as TodoAddControllerProvider).title;
+  List<({int index, String title})> get todos =>
+      (origin as TodoAddControllerProvider).todos;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -7,7 +7,7 @@ part of 'todo_update_controller.dart';
 // **************************************************************************
 
 String _$todoUpdateControllerHash() =>
-    r'cc0b5afe64bac7d4e7cef40ebaeeeaeef1085102';
+    r'be5a7b196c2640f00ba7725db9f39c9bb3e52381';
 
 /// Copied from Dart SDK
 class _SystemHash {
