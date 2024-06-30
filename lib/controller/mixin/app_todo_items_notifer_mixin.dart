@@ -15,10 +15,13 @@ mixin AppTodoItemsNotifierMixin<T> on AsyncNotifier<List<AppTodoItem>> {
   /// [AppTodoItem]を[index]に追加する
   void addTodo({
     required AppTodoItem todo,
-    required int index,
   }) {
+    final index = todo.index;
+    // todoのindexから、実際の配列のindexを計算する
+    final indexInList =
+        index > state.valueOrNull!.length ? state.valueOrNull!.length : index;
     final tmp = [...state.valueOrNull!];
-    tmp.insert(index, todo);
+    tmp.insert(indexInList, todo);
     state = AsyncData(tmp);
   }
 

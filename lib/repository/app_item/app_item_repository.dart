@@ -79,6 +79,23 @@ class AppItemRepository {
     return item;
   }
 
+  /// [AppItem]を複数追加する。
+  Future<void> addAll(List<AppItem> items) async {
+    final firestore = ref.read(firestoreProvider);
+    final batch = firestore.batch();
+    for (final item in items) {
+      final json = item.toJson();
+      batch.set(
+        ref
+            .read(userDocumentProvider(userId))
+            .collection(_collectionName)
+            .doc(item.id),
+        json,
+      );
+    }
+    await batch.commit();
+  }
+
   Future<void> update<T extends AppItem>({
     required T item,
   }) async {

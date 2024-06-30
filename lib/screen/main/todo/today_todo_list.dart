@@ -65,7 +65,9 @@ class TodayTodoList extends HookConsumerWidget {
                     tooltip: ShortcutActivatorType.newTodo.longLabel,
                     onPressed: () async {
                       await ref.read(
-                        todoAddControllerProvider(index: 0, title: '').future,
+                        todoAddControllerProvider(
+                          todos: [(index: 0, title: '')],
+                        ).future,
                       );
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         ref
@@ -155,8 +157,7 @@ class TodayTodoList extends HookConsumerWidget {
                               .getFocusIndex();
                           await ref.read(
                             todoAddControllerProvider(
-                              index: index + 1,
-                              title: '',
+                              todos: [(index: index + 1, title: '')],
                             ).future,
                           );
                           await ref
@@ -275,7 +276,9 @@ class _ReorderableTodoListItem extends HookConsumerWidget {
         final index =
             ref.read(todoFocusControllerProvider.notifier).getFocusIndex();
         await ref.read(
-          todoAddControllerProvider(index: index + 1, title: '').future,
+          todoAddControllerProvider(
+            todos: [(index: index + 1, title: '')],
+          ).future,
         );
         await ref.read(todoControllerProvider.notifier).updateCurrentOrder();
         ref.read(todoFocusControllerProvider)[index + 1].requestFocus();

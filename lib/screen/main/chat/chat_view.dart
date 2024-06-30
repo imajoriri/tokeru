@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/controller/today_app_item/today_app_item_controller.dart';
+import 'package:quick_flutter/controller/todo/todo_controller.dart';
+import 'package:quick_flutter/controller/todo_add/todo_add_controller.dart';
 import 'package:quick_flutter/controller/todo_update/todo_update_controller.dart';
 import 'package:quick_flutter/model/analytics_event/analytics_event_name.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
@@ -124,9 +126,24 @@ class _ChatTextField extends HookConsumerWidget {
   }) async {
     if (textEditingController.text.isEmpty) return;
 
+    // Todoモードの場合、改行でTodoを複数作成する。
     if (todoMode) {
       final titles = textEditingController.text.split('\n');
-      // TODO: 複数のTodoを追加する。
+      final lastIndex =
+          ref.read(todoControllerProvider).valueOrNull?.last.index ?? 0;
+      await ref.read(
+        todoAddControllerProvider(
+          todos: [
+            for (var i = 0; i < titles.length; i++)
+              (
+                // index: TodoControllerの最後のindex + 1
+                index: lastIndex + i + 1,
+                title: titles[i],
+              ),
+          ],
+        ).future,
+      );
+      textEditingController.clear();
       return;
     }
 
