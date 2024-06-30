@@ -24,7 +24,8 @@ class NewTodoAction extends Action<NewTodoIntent> {
     FocusManager.instance.primaryFocus?.unfocus();
     await ref.read(
       todoAddControllerProvider(
-        todos: [(index: 0, title: '')],
+        titles: [''],
+        indexType: TodoAddIndexType.first,
       ).future,
     );
     // Todo追加直後はWidgetが描画されていないため、

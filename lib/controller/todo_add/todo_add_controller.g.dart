@@ -6,7 +6,7 @@ part of 'todo_add_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$todoAddControllerHash() => r'2d095c91333105aa87723c1e562ea5c31aff7519';
+String _$todoAddControllerHash() => r'325892c3b2612811333529222ae5b28518170e0a';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,8 +29,11 @@ class _SystemHash {
   }
 }
 
-/// [AppTodoItem]の追加を行うController。
+/// [AppTodoItem]を複数追加を行うController。
 ///
+/// 複数の[Todo]を一度に追加するために、Recordを受け取っている。
+///
+/// todos:
 /// - index: [TodoController]に追加する位置
 /// - title: 追加する[AppTodoItem]のタイトル
 ///
@@ -42,8 +45,11 @@ class _SystemHash {
 @ProviderFor(todoAddController)
 const todoAddControllerProvider = TodoAddControllerFamily();
 
-/// [AppTodoItem]の追加を行うController。
+/// [AppTodoItem]を複数追加を行うController。
 ///
+/// 複数の[Todo]を一度に追加するために、Recordを受け取っている。
+///
+/// todos:
 /// - index: [TodoController]に追加する位置
 /// - title: 追加する[AppTodoItem]のタイトル
 ///
@@ -53,8 +59,11 @@ const todoAddControllerProvider = TodoAddControllerFamily();
 ///
 /// Copied from [todoAddController].
 class TodoAddControllerFamily extends Family<AsyncValue<void>> {
-  /// [AppTodoItem]の追加を行うController。
+  /// [AppTodoItem]を複数追加を行うController。
   ///
+  /// 複数の[Todo]を一度に追加するために、Recordを受け取っている。
+  ///
+  /// todos:
   /// - index: [TodoController]に追加する位置
   /// - title: 追加する[AppTodoItem]のタイトル
   ///
@@ -65,8 +74,11 @@ class TodoAddControllerFamily extends Family<AsyncValue<void>> {
   /// Copied from [todoAddController].
   const TodoAddControllerFamily();
 
-  /// [AppTodoItem]の追加を行うController。
+  /// [AppTodoItem]を複数追加を行うController。
   ///
+  /// 複数の[Todo]を一度に追加するために、Recordを受け取っている。
+  ///
+  /// todos:
   /// - index: [TodoController]に追加する位置
   /// - title: 追加する[AppTodoItem]のタイトル
   ///
@@ -76,10 +88,12 @@ class TodoAddControllerFamily extends Family<AsyncValue<void>> {
   ///
   /// Copied from [todoAddController].
   TodoAddControllerProvider call({
-    required List<({int index, String title})> todos,
+    required List<String> titles,
+    required TodoAddIndexType indexType,
   }) {
     return TodoAddControllerProvider(
-      todos: todos,
+      titles: titles,
+      indexType: indexType,
     );
   }
 
@@ -88,7 +102,8 @@ class TodoAddControllerFamily extends Family<AsyncValue<void>> {
     covariant TodoAddControllerProvider provider,
   ) {
     return call(
-      todos: provider.todos,
+      titles: provider.titles,
+      indexType: provider.indexType,
     );
   }
 
@@ -107,8 +122,11 @@ class TodoAddControllerFamily extends Family<AsyncValue<void>> {
   String? get name => r'todoAddControllerProvider';
 }
 
-/// [AppTodoItem]の追加を行うController。
+/// [AppTodoItem]を複数追加を行うController。
 ///
+/// 複数の[Todo]を一度に追加するために、Recordを受け取っている。
+///
+/// todos:
 /// - index: [TodoController]に追加する位置
 /// - title: 追加する[AppTodoItem]のタイトル
 ///
@@ -118,8 +136,11 @@ class TodoAddControllerFamily extends Family<AsyncValue<void>> {
 ///
 /// Copied from [todoAddController].
 class TodoAddControllerProvider extends AutoDisposeFutureProvider<void> {
-  /// [AppTodoItem]の追加を行うController。
+  /// [AppTodoItem]を複数追加を行うController。
   ///
+  /// 複数の[Todo]を一度に追加するために、Recordを受け取っている。
+  ///
+  /// todos:
   /// - index: [TodoController]に追加する位置
   /// - title: 追加する[AppTodoItem]のタイトル
   ///
@@ -129,11 +150,13 @@ class TodoAddControllerProvider extends AutoDisposeFutureProvider<void> {
   ///
   /// Copied from [todoAddController].
   TodoAddControllerProvider({
-    required List<({int index, String title})> todos,
+    required List<String> titles,
+    required TodoAddIndexType indexType,
   }) : this._internal(
           (ref) => todoAddController(
             ref as TodoAddControllerRef,
-            todos: todos,
+            titles: titles,
+            indexType: indexType,
           ),
           from: todoAddControllerProvider,
           name: r'todoAddControllerProvider',
@@ -144,7 +167,8 @@ class TodoAddControllerProvider extends AutoDisposeFutureProvider<void> {
           dependencies: TodoAddControllerFamily._dependencies,
           allTransitiveDependencies:
               TodoAddControllerFamily._allTransitiveDependencies,
-          todos: todos,
+          titles: titles,
+          indexType: indexType,
         );
 
   TodoAddControllerProvider._internal(
@@ -154,10 +178,12 @@ class TodoAddControllerProvider extends AutoDisposeFutureProvider<void> {
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.todos,
+    required this.titles,
+    required this.indexType,
   }) : super.internal();
 
-  final List<({int index, String title})> todos;
+  final List<String> titles;
+  final TodoAddIndexType indexType;
 
   @override
   Override overrideWith(
@@ -172,7 +198,8 @@ class TodoAddControllerProvider extends AutoDisposeFutureProvider<void> {
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        todos: todos,
+        titles: titles,
+        indexType: indexType,
       ),
     );
   }
@@ -184,21 +211,27 @@ class TodoAddControllerProvider extends AutoDisposeFutureProvider<void> {
 
   @override
   bool operator ==(Object other) {
-    return other is TodoAddControllerProvider && other.todos == todos;
+    return other is TodoAddControllerProvider &&
+        other.titles == titles &&
+        other.indexType == indexType;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, todos.hashCode);
+    hash = _SystemHash.combine(hash, titles.hashCode);
+    hash = _SystemHash.combine(hash, indexType.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
 mixin TodoAddControllerRef on AutoDisposeFutureProviderRef<void> {
-  /// The parameter `todos` of this provider.
-  List<({int index, String title})> get todos;
+  /// The parameter `titles` of this provider.
+  List<String> get titles;
+
+  /// The parameter `indexType` of this provider.
+  TodoAddIndexType get indexType;
 }
 
 class _TodoAddControllerProviderElement
@@ -206,8 +239,10 @@ class _TodoAddControllerProviderElement
   _TodoAddControllerProviderElement(super.provider);
 
   @override
-  List<({int index, String title})> get todos =>
-      (origin as TodoAddControllerProvider).todos;
+  List<String> get titles => (origin as TodoAddControllerProvider).titles;
+  @override
+  TodoAddIndexType get indexType =>
+      (origin as TodoAddControllerProvider).indexType;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

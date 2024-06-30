@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/controller/today_app_item/today_app_item_controller.dart';
-import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/todo_add/todo_add_controller.dart';
 import 'package:quick_flutter/controller/todo_update/todo_update_controller.dart';
 import 'package:quick_flutter/model/analytics_event/analytics_event_name.dart';
@@ -119,7 +118,7 @@ class ChatView extends HookConsumerWidget {
 class _ChatTextField extends HookConsumerWidget {
   const _ChatTextField();
 
-  Future<void> send({
+  Future<void> _send({
     required TextEditingController textEditingController,
     required WidgetRef ref,
     required bool todoMode,
@@ -129,18 +128,10 @@ class _ChatTextField extends HookConsumerWidget {
     // Todoモードの場合、改行でTodoを複数作成する。
     if (todoMode) {
       final titles = textEditingController.text.split('\n');
-      final lastIndex =
-          ref.read(todoControllerProvider).valueOrNull?.last.index ?? 0;
       await ref.read(
         todoAddControllerProvider(
-          todos: [
-            for (var i = 0; i < titles.length; i++)
-              (
-                // index: TodoControllerの最後のindex + 1
-                index: lastIndex + i + 1,
-                title: titles[i],
-              ),
-          ],
+          titles: titles,
+          indexType: TodoAddIndexType.last,
         ).future,
       );
       textEditingController.clear();
@@ -157,7 +148,6 @@ class _ChatTextField extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider = todayAppItemControllerProvider;
     final textEditingController = useTextEditingController();
     final hasFocus = useState(false);
     final canSubmit = useState(false);
@@ -182,16 +172,12 @@ class _ChatTextField extends HookConsumerWidget {
       animation: animationController,
       child: CallbackShortcuts(
         bindings: <ShortcutActivator, VoidCallback>{
-          const SingleActivator(LogicalKeyboardKey.enter, meta: true): () {
-            if (textEditingController.text.isEmpty) return;
-            ref
-                .read(provider.notifier)
-                .addChat(message: textEditingController.text);
-            textEditingController.clear();
-            FirebaseAnalytics.instance.logEvent(
-              name: AnalyticsEventName.addChat.name,
-            );
-          },
+          const SingleActivator(LogicalKeyboardKey.enter, meta: true): () =>
+              _send(
+                textEditingController: textEditingController,
+                ref: ref,
+                todoMode: todoMode.value,
+              ),
         },
         child: Focus(
           onFocusChange: (value) {
@@ -238,7 +224,7 @@ class _ChatTextField extends HookConsumerWidget {
                     const Spacer(),
                     _SendButton(
                       onPressed: canSubmit.value
-                          ? () => send(
+                          ? () => _send(
                                 textEditingController: textEditingController,
                                 ref: ref,
                                 todoMode: todoMode.value,
