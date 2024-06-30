@@ -1,0 +1,59 @@
+name: bump-app-version
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  bump:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Java environment
+        uses: actions/setup-java@v3.11.0
+        with:
+          distribution: "zulu"
+          java-version: "12.x"
+
+      - uses: ./.github/actions/install_flutter_dependencies
+
+      - name: Get current date and time
+        id: timestamp
+        run: |
+          echo "timestamp=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_OUTPUT
+
+      - name: Create new feature branch
+        run: |
+          git checkout -b feature/update-pubspec-${{ steps.timestamp.outputs.timestamp }}
+
+      - name: Install cider
+        run: flutter pub global activate cider
+
+      - name: Increment patch version
+        run: flutter pub global run cider bump patch
+
+      - name: Commit and Push to new feature branch
+        run: |
+          git config user.name "GitHub Action"
+          git config user.email "github-action@github.com"
+          git add pubspec.yaml
+          git commit -m "Update pubspec.yaml"
+          git push origin feature/update-pubspec-${{ steps.timestamp.outputs.timestamp }}
+
+      - name: create Pull Request to flutter-repo
+        run: |
+          gh pr create \
+            --title "update pubspec version" \
+            --repo imajoriri/tokeru \
+            --body "This PR incrementally updates pubspec version" \
+            --base main \
+            --head feature/update-pubspec-${{ steps.timestamp.outputs.timestamp }} \
+            --reviewer imajoriri
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
