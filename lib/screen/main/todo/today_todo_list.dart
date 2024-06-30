@@ -152,16 +152,12 @@ class TodayTodoList extends HookConsumerWidget {
                           FocusScope.of(context).previousFocus();
                         },
                         onNewTodoBelow: () async {
-                          FocusManager.instance.primaryFocus?.unfocus();
                           await ref.read(
                             todoAddControllerProvider(
                               titles: [''],
                               indexType: TodoAddIndexType.current,
                             ).future,
                           );
-                          ref
-                              .read(todoFocusControllerProvider)[index + 1]
-                              .requestFocus();
                         },
                         // 一番上のTodoは上に移動できない
                         onSortUp: index != 0

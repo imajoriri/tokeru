@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/material.dart';
 import 'package:quick_flutter/controller/today_app_item/today_app_item_controller.dart';
 import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/todo_focus/todo_focus_controller.dart';
@@ -48,6 +49,10 @@ Future<void> todoAddController(
     return;
   }
 
+  // フォーカスを移動した時に2つのフォーカスが存在することがあるため、
+  // 一度全てのフォーカスを外す。
+  FocusManager.instance.primaryFocus?.unfocus();
+
   // 受け取ったtitlesの中で先頭に追加するTodoのIndexを取得する。
   final firstIndex = switch (indexType) {
     TodoAddIndexType.first => 0,
@@ -62,7 +67,7 @@ Future<void> todoAddController(
           id: const Uuid().v4(),
           title: e,
           isDone: false,
-          index: firstIndex + index,
+          index: firstIndex + index + 1,
           createdAt: DateTime.now(),
         ),
       )
@@ -82,5 +87,11 @@ Future<void> todoAddController(
     await ref.read(todoControllerProvider.notifier).updateCurrentOrder();
   } on Exception catch (e, s) {
     await FirebaseCrashlytics.instance.recordError(e, s);
+  }
+
+  if (indexType == TodoAddIndexType.current) {
+    // フォーカスが存在していると
+    FocusManager.instance.primaryFocus?.unfocus();
+    ref.read(todoFocusControllerProvider)[items.last.index].requestFocus();
   }
 }
