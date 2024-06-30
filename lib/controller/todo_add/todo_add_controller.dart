@@ -1,10 +1,12 @@
 import 'package:collection/collection.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:quick_flutter/controller/today_app_item/today_app_item_controller.dart';
 import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/todo_focus/todo_focus_controller.dart';
 import 'package:quick_flutter/controller/user/user_controller.dart';
+import 'package:quick_flutter/model/analytics_event/analytics_event_name.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
 import 'package:quick_flutter/repository/app_item/app_item_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -94,4 +96,8 @@ Future<void> todoAddController(
     FocusManager.instance.primaryFocus?.unfocus();
     ref.read(todoFocusControllerProvider)[items.last.index].requestFocus();
   }
+
+  FirebaseAnalytics.instance.logEvent(
+    name: AnalyticsEventName.addTodo.name,
+  );
 }
