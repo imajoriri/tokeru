@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
 import 'package:quick_flutter/widget/button/check_button.dart';
 import 'package:quick_flutter/widget/theme/app_theme.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ChatListItem extends HookWidget {
   const ChatListItem._({
@@ -62,9 +64,18 @@ class _Chat extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      child: SelectableText(
-        message,
+      child: Linkify(
+        onOpen: (link) async {
+          if (!await launchUrl(Uri.parse(link.url))) {
+            throw Exception('Could not launch ${link.url}');
+          }
+        },
+        options: const LinkifyOptions(humanize: false),
+        text: message,
         style: context.appTextTheme.bodyMedium,
+        linkStyle: context.appTextTheme.bodyMedium.copyWith(
+          color: context.appColors.textLink,
+        ),
       ),
     );
   }
@@ -88,7 +99,7 @@ class _Todo extends StatelessWidget {
         CheckButton(checked: isDone, onPressed: onChangedCheck!),
         const SizedBox(width: 8),
         Expanded(
-          child: SelectableText(
+          child: Text(
             title,
             style: context.appTextTheme.bodyMedium.copyWith(
               decoration: isDone ? TextDecoration.lineThrough : null,
