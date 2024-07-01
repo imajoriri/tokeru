@@ -9,37 +9,7 @@ class TodayTodoList extends HookConsumerWidget {
     return todos.when(
       data: (todos) {
         if (todos.isEmpty) {
-          return GestureDetector(
-            onTap: Actions.handler<NewTodoIntent>(
-              context,
-              const NewTodoIntent(),
-            ),
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
-              width: double.infinity,
-              child: Column(
-                children: [
-                  Text(
-                    'There are no To-Dos for today.\nPlease start by clicking here or pressing Command + N.',
-                    style: context.appTextTheme.bodySmall.copyWith(
-                      color: context.appColors.textSubtle,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 16),
-                  TextButtonSmall(
-                    onPressed: () {
-                      Actions.handler<NewTodoIntent>(
-                        context,
-                        const NewTodoIntent(),
-                      );
-                    },
-                    child: const Text('Add To-Do'),
-                  ),
-                ],
-              ),
-            ),
-          );
+          return const _EmptyState();
         }
 
         final totalMinutes = todos
@@ -51,36 +21,7 @@ class TodayTodoList extends HookConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // title
-            Padding(
-              padding: const EdgeInsets.fromLTRB(24, 24, 24, 4),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Today's To-Dos @${totalMinutes}min",
-                    style: context.appTextTheme.titleSmall,
-                  ),
-                  IconButtonSmall(
-                    icon: const Icon(Icons.add),
-                    tooltip: ShortcutActivatorType.newTodo.longLabel,
-                    onPressed: () async {
-                      await ref.read(
-                        todoAddControllerProvider(index: 0, title: '').future,
-                      );
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        ref
-                            .read(todoFocusControllerProvider.notifier)
-                            .requestFocus(0);
-                      });
-
-                      await FirebaseAnalytics.instance.logEvent(
-                        name: AnalyticsEventName.addTodo.name,
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
+            _Header(totalMinutes: totalMinutes),
 
             // TodoList
             Padding(
@@ -106,6 +47,26 @@ class TodayTodoList extends HookConsumerWidget {
                   return HookBuilder(
                     key: key,
                     builder: (context) {
+                      // return Row(
+                      //   children: [
+                      //     CheckButton(
+                      //         checked: todo.isDone,
+                      //         onPressed: (value) {
+                      //           ref.read(
+                      //             todoUpdateControllerProvider(
+                      //               todo: todo.copyWith(isDone: value ?? false),
+                      //             ).future,
+                      //           );
+                      //         }),
+                      //     const SizedBox(width: 8),
+                      //     Expanded(
+                      //       child: SelectableText(
+                      //         todo.title,
+
+                      //       ),
+                      //     ),
+                      //   ],
+                      // );
                       return TodoListItem(
                         todo: todo,
                         index: index,
@@ -149,22 +110,12 @@ class TodayTodoList extends HookConsumerWidget {
                           FocusScope.of(context).previousFocus();
                         },
                         onNewTodoBelow: () async {
-                          FocusManager.instance.primaryFocus?.unfocus();
-                          final index = ref
-                              .read(todoFocusControllerProvider.notifier)
-                              .getFocusIndex();
                           await ref.read(
                             todoAddControllerProvider(
-                              index: index + 1,
-                              title: '',
+                              titles: [''],
+                              indexType: TodoAddIndexType.current,
                             ).future,
                           );
-                          await ref
-                              .read(todoControllerProvider.notifier)
-                              .updateCurrentOrder();
-                          ref
-                              .read(todoFocusControllerProvider)[index + 1]
-                              .requestFocus();
                         },
                         // 一番上のTodoは上に移動できない
                         onSortUp: index != 0
@@ -219,96 +170,84 @@ class TodayTodoList extends HookConsumerWidget {
   }
 }
 
-/// [ReorderableListView]の中で使う[Todo]のリスト
-// ignore: unused_element
-class _ReorderableTodoListItem extends HookConsumerWidget {
-  const _ReorderableTodoListItem({
-    required this.todo,
-    required this.index,
+class _EmptyState extends StatelessWidget {
+  const _EmptyState();
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: Actions.handler<NewTodoIntent>(
+        context,
+        const NewTodoIntent(),
+      ),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+        width: double.infinity,
+        child: Column(
+          children: [
+            Text(
+              'There are no To-Dos for today.\nPlease start by clicking here or pressing Command + N.',
+              style: context.appTextTheme.bodySmall.copyWith(
+                color: context.appColors.textSubtle,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            TextButtonSmall(
+              onPressed: () {
+                Actions.handler<NewTodoIntent>(
+                  context,
+                  const NewTodoIntent(),
+                );
+              },
+              child: const Text('Add To-Do'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _Header extends ConsumerWidget {
+  const _Header({
+    required this.totalMinutes,
   });
 
-  /// リストのindex
-  final int index;
-
-  /// Todo
-  final AppTodoItem todo;
+  final int totalMinutes;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return TodoListItem(
-      todo: todo,
-      index: index,
-      focusNode: ref.watch(todoFocusControllerProvider)[index],
-      controller: useTextEditingController(text: todo.title),
-      onDeleted: () async {
-        final currentFocusIndex =
-            ref.read(todoFocusControllerProvider.notifier).getFocusIndex();
-        await ref.read(todoDeleteControllerProvider(todoId: todo.id).future);
-        ref
-            .read(todoFocusControllerProvider.notifier)
-            .requestFocus(currentFocusIndex - 1);
-      },
-      onUpdatedTitle: (value) => ref.read(
-        todoUpdateControllerProvider(
-          todo: todo.copyWith(title: value),
-        ).future,
-      ),
-      onToggleDone: (value) {
-        ref.read(
-          todoUpdateControllerProvider(
-            todo: todo.copyWith(isDone: value ?? false),
-          ).future,
-        );
-        FocusScope.of(context).nextFocus();
-        FirebaseAnalytics.instance.logEvent(
-          name: AnalyticsEventName.toggleTodoDone.name,
-        );
-      },
-      focusDown: () {
-        FocusScope.of(context).nextFocus();
-      },
-      focusUp: () {
-        FocusScope.of(context).previousFocus();
-      },
-      onNewTodoBelow: () async {
-        FocusManager.instance.primaryFocus?.unfocus();
-        final index =
-            ref.read(todoFocusControllerProvider.notifier).getFocusIndex();
-        await ref.read(
-          todoAddControllerProvider(index: index + 1, title: '').future,
-        );
-        await ref.read(todoControllerProvider.notifier).updateCurrentOrder();
-        ref.read(todoFocusControllerProvider)[index + 1].requestFocus();
-      },
-      // 一番上のTodoは上に移動できない
-      onSortUp: index != 0
-          ? () {
-              final focusController =
-                  ref.read(todoFocusControllerProvider.notifier);
-              focusController.removeFocus();
-              ref
-                  .read(todoControllerProvider.notifier)
-                  .reorder(index, index - 1);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 24, 24, 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "Today's To-Dos @${totalMinutes}min",
+            style: context.appTextTheme.titleSmall,
+          ),
+          AppIconButton.medium(
+            icon: const Icon(Icons.add),
+            tooltip: ShortcutActivatorType.newTodo.longLabel,
+            onPressed: () async {
+              await ref.read(
+                todoAddControllerProvider(
+                  titles: [''],
+                  indexType: TodoAddIndexType.first,
+                ).future,
+              );
               WidgetsBinding.instance.addPostFrameCallback((_) {
-                focusController.requestFocus(index - 1);
+                ref.read(todoFocusControllerProvider.notifier).requestFocus(0);
               });
-            }
-          : null,
-      // 一番下のTodoは下に移動できない
-      onSortDown:
-          index != ref.read(todoControllerProvider).valueOrNull!.length - 1
-              ? () {
-                  final focusController =
-                      ref.read(todoFocusControllerProvider.notifier);
-                  focusController.removeFocus();
-                  ref
-                      .read(todoControllerProvider.notifier)
-                      .reorder(index, index + 1);
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    focusController.requestFocus(index + 1);
-                  });
-                }
-              : null,
+
+              await FirebaseAnalytics.instance.logEvent(
+                name: AnalyticsEventName.addTodo.name,
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }

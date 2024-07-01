@@ -5,6 +5,7 @@ import 'package:quick_flutter/controller/user/user_controller.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
 import 'package:quick_flutter/repository/app_item/app_item_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:uuid/uuid.dart';
 
 part 'today_app_item_controller.g.dart';
 
@@ -115,18 +116,16 @@ class TodayAppItemController extends _$TodayAppItemController {
   Future<void> addChat({
     required String message,
   }) async {
-    final tmpChat = AppChatItem(
-      id: DateTime.now().toIso8601String(),
+    final chat = AppChatItem(
+      id: const Uuid().v4(),
       message: message,
       createdAt: DateTime.now(),
     );
-    state = AsyncData([tmpChat, ...state.value!]);
+    state = AsyncData([chat, ...state.value!]);
     final user = ref.read(userControllerProvider).requireValue;
     final repository = ref.read(appItemRepositoryProvider(user.id));
     try {
-      await repository.addChat(
-        chat: tmpChat,
-      );
+      await repository.add(chat);
     } on Exception catch (e, s) {
       await FirebaseCrashlytics.instance.recordError(e, s);
     }

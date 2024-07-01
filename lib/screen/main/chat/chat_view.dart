@@ -5,10 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/controller/today_app_item/today_app_item_controller.dart';
+import 'package:quick_flutter/controller/todo_add/todo_add_controller.dart';
 import 'package:quick_flutter/controller/todo_update/todo_update_controller.dart';
 import 'package:quick_flutter/model/analytics_event/analytics_event_name.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
 import 'package:quick_flutter/widget/focus_nodes.dart';
+import 'package:quick_flutter/widget/button/check_button.dart';
 import 'package:quick_flutter/widget/list_item/chat_list_item.dart';
 import 'package:quick_flutter/widget/theme/app_theme.dart';
 
@@ -19,6 +21,7 @@ class ChatView extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = todayAppItemControllerProvider;
     final appItems = ref.watch(provider);
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -115,12 +118,40 @@ class ChatView extends HookConsumerWidget {
 class _ChatTextField extends HookConsumerWidget {
   const _ChatTextField();
 
+  Future<void> _send({
+    required TextEditingController textEditingController,
+    required WidgetRef ref,
+    required bool todoMode,
+  }) async {
+    if (textEditingController.text.isEmpty) return;
+
+    // Todoモードの場合、改行でTodoを複数作成する。
+    if (todoMode) {
+      final titles = textEditingController.text.split('\n');
+      await ref.read(
+        todoAddControllerProvider(
+          titles: titles,
+          indexType: TodoAddIndexType.last,
+        ).future,
+      );
+      textEditingController.clear();
+      return;
+    }
+
+    final provider = todayAppItemControllerProvider;
+    ref.read(provider.notifier).addChat(message: textEditingController.text);
+    textEditingController.clear();
+    FirebaseAnalytics.instance.logEvent(
+      name: AnalyticsEventName.addChat.name,
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider = todayAppItemControllerProvider;
     final textEditingController = useTextEditingController();
     final hasFocus = useState(false);
     final canSubmit = useState(false);
+    final todoMode = useState(false);
 
     textEditingController.addListener(() {
       canSubmit.value = textEditingController.text.isNotEmpty;
@@ -141,16 +172,12 @@ class _ChatTextField extends HookConsumerWidget {
       animation: animationController,
       child: CallbackShortcuts(
         bindings: <ShortcutActivator, VoidCallback>{
-          const SingleActivator(LogicalKeyboardKey.enter, meta: true): () {
-            if (textEditingController.text.isEmpty) return;
-            ref
-                .read(provider.notifier)
-                .addChat(message: textEditingController.text);
-            textEditingController.clear();
-            FirebaseAnalytics.instance.logEvent(
-              name: AnalyticsEventName.addChat.name,
-            );
-          },
+          const SingleActivator(LogicalKeyboardKey.enter, meta: true): () =>
+              _send(
+                textEditingController: textEditingController,
+                ref: ref,
+                todoMode: todoMode.value,
+              ),
         },
         child: Focus(
           onFocusChange: (value) {
@@ -163,36 +190,48 @@ class _ChatTextField extends HookConsumerWidget {
           },
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            child: Row(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Expanded(
-                  child: TextField(
-                    controller: textEditingController,
-                    maxLines: null,
-                    focusNode: chatFocusNode,
-                    style: context.appTextTheme.bodyMedium,
-                    cursorColor: Colors.black,
-                    decoration: const InputDecoration(
-                      isDense: true,
-                      border: InputBorder.none,
-                      hintText: 'Talk to myself',
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: textEditingController,
+                        maxLines: null,
+                        focusNode: chatFocusNode,
+                        style: context.appTextTheme.bodyMedium,
+                        cursorColor: Colors.black,
+                        decoration: const InputDecoration(
+                          isDense: true,
+                          border: InputBorder.none,
+                          hintText: 'Talk to myself',
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-                _SendButton(
-                  onPressed: canSubmit.value
-                      ? () {
-                          if (textEditingController.text.isEmpty) return;
-                          ref
-                              .read(provider.notifier)
-                              .addChat(message: textEditingController.text);
-                          textEditingController.clear();
-                          FirebaseAnalytics.instance.logEvent(
-                            name: AnalyticsEventName.addChat.name,
-                          );
-                        }
-                      : null,
+                Row(
+                  children: [
+                    CheckButton(
+                      onPressed: (_) async {
+                        todoMode.value = !todoMode.value;
+                      },
+                      checked: todoMode.value,
+                      uncheckedColor: context.appColors.iconSubtle,
+                      checkedColor: context.appColors.primary,
+                    ),
+                    const Spacer(),
+                    _SendButton(
+                      onPressed: canSubmit.value
+                          ? () => _send(
+                                textEditingController: textEditingController,
+                                ref: ref,
+                                todoMode: todoMode.value,
+                              )
+                          : null,
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -264,7 +303,7 @@ class _SendButton extends HookWidget {
           duration: const Duration(milliseconds: 150),
           padding: EdgeInsets.symmetric(
             vertical: context.appSpacing.smallX,
-            horizontal: context.appSpacing.medium,
+            horizontal: context.appSpacing.small,
           ),
           decoration: BoxDecoration(
             color: getBackgroundColor(context),
@@ -273,7 +312,7 @@ class _SendButton extends HookWidget {
           child: IconTheme.merge(
             child: const Icon(Icons.send),
             data: IconThemeData(
-              size: 20,
+              size: 16,
               color: context.appColors.primaryContainer,
             ),
           ),

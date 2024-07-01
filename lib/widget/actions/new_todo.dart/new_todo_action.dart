@@ -23,7 +23,10 @@ class NewTodoAction extends Action<NewTodoIntent> {
   Object? invoke(covariant NewTodoIntent intent) async {
     FocusManager.instance.primaryFocus?.unfocus();
     await ref.read(
-      todoAddControllerProvider(index: 0, title: '').future,
+      todoAddControllerProvider(
+        titles: [''],
+        indexType: TodoAddIndexType.first,
+      ).future,
     );
     // Todo追加直後はWidgetが描画されていないため、
     // 1フレーム後にフォーカスを要求する。

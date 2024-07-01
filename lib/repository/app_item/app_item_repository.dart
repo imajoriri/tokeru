@@ -6,6 +6,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'app_item_repository.g.dart';
 
+const _collectionName = 'todos';
+
 /// [AppItem]を扱うRepository
 @riverpod
 AppItemRepository appItemRepository(AppItemRepositoryRef ref, String userId) =>
@@ -35,7 +37,7 @@ class AppItemRepository {
   }) async {
     var doc = ref
         .read(userDocumentProvider(userId))
-        .collection('todos')
+        .collection(_collectionName)
         .where('type', isNotEqualTo: null)
         .orderBy('createdAt', descending: true)
         .limit(limit);
@@ -66,45 +68,32 @@ class AppItemRepository {
     }).toList());
   }
 
-  /// [AppTodoItem]を追加する。
-  Future<AppTodoItem> addTodo({
-    required DateTime createdAt,
-    String title = '',
-    bool isDone = false,
-    int index = 0,
-  }) async {
-    final todo = AppTodoItem(
-      id: '',
-      title: title,
-      isDone: isDone,
-      index: index,
-      createdAt: createdAt,
-    );
-    final res = await _add(todo);
-    return todo.copyWith(id: res.id);
-  }
-
-  /// [AppChatItem]を追加する。
-  Future<AppChatItem> addChat({
-    required AppChatItem chat,
-  }) async {
-    final json = chat.toJson()..remove('id');
+  /// [AppItem]を追加する。
+  Future<AppItem> add(AppItem item) async {
+    final json = item.toJson();
     await ref
         .read(userDocumentProvider(userId))
-        .collection("todos")
-        .doc(chat.id)
+        .collection(_collectionName)
+        .doc(item.id)
         .set(json);
-    return chat;
+    return item;
   }
 
-  /// [AppItem]を追加する。
-  Future<AppItem> _add(AppItem item) async {
-    final json = item.toJson();
-    final res = await ref
-        .read(userDocumentProvider(userId))
-        .collection("todos")
-        .add(json);
-    return item.copyWith(id: res.id);
+  /// [AppItem]を複数追加する。
+  Future<void> addAll(List<AppItem> items) async {
+    final firestore = ref.read(firestoreProvider);
+    final batch = firestore.batch();
+    for (final item in items) {
+      final json = item.toJson();
+      batch.set(
+        ref
+            .read(userDocumentProvider(userId))
+            .collection(_collectionName)
+            .doc(item.id),
+        json,
+      );
+    }
+    await batch.commit();
   }
 
   Future<void> update<T extends AppItem>({
@@ -113,7 +102,7 @@ class AppItemRepository {
     final json = item.toJson();
     await ref
         .read(userDocumentProvider(userId))
-        .collection("todos")
+        .collection(_collectionName)
         .doc(item.id)
         .update(json);
   }
@@ -122,7 +111,7 @@ class AppItemRepository {
   Future<void> delete({required String id}) async {
     await ref
         .read(userDocumentProvider(userId))
-        .collection("todos")
+        .collection(_collectionName)
         .doc(id)
         .delete();
   }
@@ -138,7 +127,7 @@ class AppItemRepository {
       batch.update(
           ref
               .read(userDocumentProvider(userId))
-              .collection("todos")
+              .collection(_collectionName)
               .doc(todo.id),
           {
             'index': todo.index,
