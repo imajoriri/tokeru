@@ -47,26 +47,6 @@ class TodayTodoList extends HookConsumerWidget {
                   return HookBuilder(
                     key: key,
                     builder: (context) {
-                      // return Row(
-                      //   children: [
-                      //     CheckButton(
-                      //         checked: todo.isDone,
-                      //         onPressed: (value) {
-                      //           ref.read(
-                      //             todoUpdateControllerProvider(
-                      //               todo: todo.copyWith(isDone: value ?? false),
-                      //             ).future,
-                      //           );
-                      //         }),
-                      //     const SizedBox(width: 8),
-                      //     Expanded(
-                      //       child: SelectableText(
-                      //         todo.title,
-
-                      //       ),
-                      //     ),
-                      //   ],
-                      // );
                       return TodoListItem(
                         todo: todo,
                         index: index,
