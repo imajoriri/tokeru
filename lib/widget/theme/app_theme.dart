@@ -25,6 +25,7 @@ class AppTheme {
       textDisabled: const Color(0xff9E9E9E),
       textDanger: const Color(0xffC20B2A),
       textSuccess: const Color(0xff218011),
+      textLink: const Color(0xff0091FF),
       backgroundDefault: const Color(0xffFBFBFB),
       backgroundSubtle: const Color(0xffF4F4F4),
       backgroundHovered: const Color(0xffF4F4F4),
