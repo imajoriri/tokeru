@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
+import 'package:quick_flutter/widget/button/check_button.dart';
 import 'package:quick_flutter/widget/theme/app_theme.dart';
 
 class TodoListItem extends HookConsumerWidget {
@@ -180,53 +181,31 @@ class TodoListItem extends HookConsumerWidget {
         onExit: (event) {
           onHover.value = false;
         },
-        child: GestureDetector(
-          onTap: () {
-            effectiveFocusNode.requestFocus();
-          },
-          child: Stack(
-            fit: StackFit.passthrough,
-            children: [
-              // TextFieldを囲っているContainerに色を付けると
-              // リビルド時にfocusが外れてしまうため、stackでContainerを分けている
-              Positioned(
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: backgroundColor,
-                    borderRadius: BorderRadius.circular(8),
+        child: Stack(
+          fit: StackFit.passthrough,
+          children: [
+            // TextFieldを囲っているContainerに色を付けると
+            // リビルド時にfocusが外れてしまうため、stackでContainerを分けている
+            _Background(backgroundColor: backgroundColor),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10, top: 10, left: 8),
+                  child: CheckButton(
+                    onPressed: onToggleDone,
+                    checked: todo.isDone,
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 4, top: 4, left: 8),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Checkbox(
-                      value: todo.isDone,
-                      onChanged: onToggleDone,
-                      focusNode: useFocusNode(
-                        skipTraversal: true,
-                      ),
-                      // リップルエフェクトをなくす対応。
-                      splashRadius: 0,
-                      fillColor: MaterialStateProperty.resolveWith(
-                        (states) {
-                          if (states.contains(MaterialState.selected)) {
-                            return context.appColors.backgroundChecked;
-                          }
-                          if (states.contains(MaterialState.disabled)) {
-                            return context.appColors.backgroundChecked;
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    Expanded(
+                const SizedBox(width: 8),
+                Expanded(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      effectiveFocusNode.requestFocus();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Focus(
                         skipTraversal: true,
                         onKeyEvent: (node, event) {
@@ -246,54 +225,83 @@ class TodoListItem extends HookConsumerWidget {
                           }
                           return KeyEventResult.ignored;
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            bottom: 4,
-                            // チェックボックスとの高さを調整するためのpadding
-                            top: 8,
+                        child: TextField(
+                          controller: effectiveController,
+                          focusNode: effectiveFocusNode,
+                          style: context.appTextTheme.bodyMedium.copyWith(
+                            color: textFieldColor,
                           ),
-                          child: TextField(
-                            controller: effectiveController,
-                            focusNode: effectiveFocusNode,
-                            style: context.appTextTheme.bodyMedium.copyWith(
-                              color: textFieldColor,
-                            ),
-                            readOnly: readOnly,
-                            maxLines: null,
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              hintText:
-                                  'Write a Todo or Memo(Shift + Enter)...',
-                              isCollapsed: true,
-                            ),
+                          cursorHeight: 16,
+                          readOnly: readOnly,
+                          maxLines: null,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'New Todo',
+                            isCollapsed: true,
                           ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              if (onHover.value && index != null)
-                Positioned.directional(
-                  textDirection: Directionality.of(context),
-                  top: 0,
-                  bottom: 0,
-                  end: 8,
-                  child: Align(
-                    alignment: AlignmentDirectional.centerEnd,
-                    child: ReorderableDragStartListener(
-                      index: index!,
-                      child: const MouseRegion(
-                        cursor: SystemMouseCursors.grab,
-                        child: Icon(
-                          Icons.drag_indicator_outlined,
-                          color: Colors.grey,
                         ),
                       ),
                     ),
                   ),
                 ),
-            ],
+              ],
+            ),
+            if (onHover.value && index != null) _DraggableWidget(index: index),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _Background extends StatelessWidget {
+  const _Background({
+    required this.backgroundColor,
+  });
+
+  final Color backgroundColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+      child: Container(
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
+    );
+  }
+}
+
+class _DraggableWidget extends StatelessWidget {
+  const _DraggableWidget({
+    required this.index,
+  });
+
+  final int? index;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned.directional(
+      textDirection: Directionality.of(context),
+      top: 0,
+      bottom: 0,
+      end: 8,
+      child: Align(
+        alignment: AlignmentDirectional.centerEnd,
+        child: ReorderableDragStartListener(
+          index: index!,
+          child: const MouseRegion(
+            cursor: SystemMouseCursors.grab,
+            child: Icon(
+              Icons.drag_indicator_outlined,
+              color: Colors.grey,
+            ),
           ),
         ),
       ),

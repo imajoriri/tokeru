@@ -26,6 +26,21 @@ Future<void> todoUpdateController(
     return;
   }
 
+  // 以下のエラーの対策
+  // Providers are not allowed to modify other providers during their initialization.
+  await ref.read(todayAppItemControllerProvider.future);
+  await ref.read(todoControllerProvider.future);
+  await ref.read(pastTodoControllerProvider.future);
+
+  // TodayAppItemControllerも更新する。
+  ref.read(todayAppItemControllerProvider.notifier).updateTodo(todo: todo);
+
+  // TodoControllerも更新する。
+  ref.read(todoControllerProvider.notifier).updateTodo(todo: todo);
+
+  // PastTodoControllerも更新する。
+  ref.read(pastTodoControllerProvider.notifier).updateTodo(todo: todo);
+
   final user = ref.read(userControllerProvider);
   if (user.valueOrNull == null) {
     assert(false, 'user is null');
@@ -37,13 +52,4 @@ Future<void> todoUpdateController(
   } on Exception catch (e, s) {
     await FirebaseCrashlytics.instance.recordError(e, s);
   }
-
-  // TodayAppItemControllerも更新する。
-  ref.read(todayAppItemControllerProvider.notifier).updateTodo(todo: todo);
-
-  // TodoControllerも更新する。
-  ref.read(todoControllerProvider.notifier).updateTodo(todo: todo);
-
-  // PastTodoControllerも更新する。
-  ref.read(pastTodoControllerProvider.notifier).updateTodo(todo: todo);
 }

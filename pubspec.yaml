@@ -23,6 +23,7 @@ dependencies:
   intl: ^0.18.0
   desktop_window: ^0.4.0
   logger: ^2.0.2+1
+  uuid: ^4.4.0
 
   # firebase
   firebase_auth: ^4.17.4

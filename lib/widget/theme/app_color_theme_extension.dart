@@ -20,6 +20,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     required this.borderSubtle,
     required this.borderStrong,
     required this.iconDefault,
+    required this.iconSubtle,
     required this.iconHovered,
   });
 
@@ -50,6 +51,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
 
   // icon
   final Color iconDefault;
+  final Color iconSubtle;
   final Color iconHovered;
 
   @override
@@ -77,6 +79,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     // icon
     Color? iconDefault,
     Color? iconHovered,
+    Color? iconSubtle,
   }) {
     return AppColorsExtension(
       primary: primary ?? this.primary,
@@ -97,6 +100,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
       borderSubtle: borderSubtle ?? this.borderSubtle,
       borderStrong: borderStrong ?? this.borderStrong,
       iconDefault: iconDefault ?? this.iconDefault,
+      iconSubtle: iconSubtle ?? this.iconSubtle,
       iconHovered: iconHovered ?? this.iconHovered,
     );
   }
@@ -136,6 +140,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
       borderSubtle: Color.lerp(borderSubtle, other.borderSubtle, t)!,
       borderStrong: Color.lerp(borderStrong, other.borderStrong, t)!,
       iconDefault: Color.lerp(iconDefault, other.iconDefault, t)!,
+      iconSubtle: Color.lerp(iconSubtle, other.iconSubtle, t)!,
       iconHovered: Color.lerp(iconHovered, other.iconHovered, t)!,
     );
   }

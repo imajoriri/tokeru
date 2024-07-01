@@ -28,7 +28,7 @@ _$AppTodoItemImpl _$$AppTodoItemImplFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
       title: json['title'] as String,
       isDone: json['isDone'] as bool,
-      index: json['index'] as int,
+      index: (json['index'] as num).toInt(),
       createdAt:
           const TimestampConverter().fromJson(json['createdAt'] as Timestamp),
       $type: json['type'] as String?,
@@ -47,7 +47,7 @@ Map<String, dynamic> _$$AppTodoItemImplToJson(_$AppTodoItemImpl instance) =>
 _$AppDividerItemImpl _$$AppDividerItemImplFromJson(Map<String, dynamic> json) =>
     _$AppDividerItemImpl(
       id: json['id'] as String,
-      index: json['index'] as int,
+      index: (json['index'] as num).toInt(),
       createdAt:
           const TimestampConverter().fromJson(json['createdAt'] as Timestamp),
       $type: json['type'] as String?,
