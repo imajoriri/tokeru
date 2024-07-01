@@ -10,6 +10,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     required this.textDisabled,
     required this.textDanger,
     required this.textSuccess,
+    required this.textLink,
     required this.backgroundDefault,
     required this.backgroundSubtle,
     required this.backgroundHovered,
@@ -35,6 +36,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
   final Color textDisabled;
   final Color textDanger;
   final Color textSuccess;
+  final Color textLink;
 
   // background
   final Color backgroundDefault;
@@ -65,6 +67,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     Color? textDisabled,
     Color? textDanger,
     Color? textSuccess,
+    Color? textLink,
     // background
     Color? backgroundDefault,
     Color? backgroundSubtle,
@@ -90,6 +93,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
       textDisabled: textDisabled ?? this.textDisabled,
       textDanger: textDanger ?? this.textDanger,
       textSuccess: textSuccess ?? this.textSuccess,
+      textLink: textLink ?? this.textLink,
       backgroundDefault: backgroundDefault ?? this.backgroundDefault,
       backgroundSubtle: backgroundSubtle ?? this.backgroundSubtle,
       backgroundHovered: backgroundHovered ?? this.backgroundHovered,
@@ -124,6 +128,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
       textDisabled: Color.lerp(textDisabled, other.textDisabled, t)!,
       textDanger: Color.lerp(textDanger, other.textDanger, t)!,
       textSuccess: Color.lerp(textSuccess, other.textSuccess, t)!,
+      textLink: Color.lerp(textLink, other.textLink, t)!,
       backgroundDefault:
           Color.lerp(backgroundDefault, other.backgroundDefault, t)!,
       backgroundHovered:
