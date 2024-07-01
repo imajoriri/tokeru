@@ -2,6 +2,10 @@ name: Upload App Store Connect(No TestFlight)
 
 on:
   workflow_dispatch:
+  # mainにマージされた時に走らせる
+  push:
+    branches:
+      - main
 
 env:
   CERT_KEY: ${{ secrets.CERT_KEY }}
