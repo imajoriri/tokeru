@@ -7,7 +7,7 @@ part of 'today_app_item_controller.dart';
 // **************************************************************************
 
 String _$todayAppItemControllerHash() =>
-    r'9f7ba34da48015df7094cb1ea97704db2091f1fd';
+    r'2f5f4f2611d9f07dd6a0106031d769e62bbe372c';
 
 /// 今日作成された[AppItem]を返すController。
 ///
