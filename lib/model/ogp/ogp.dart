@@ -9,12 +9,4 @@ class Ogp {
     required this.description,
     required this.imageUrl,
   });
-
-  factory Ogp.fromJson(Map<String, dynamic> json) {
-    return Ogp(
-      title: json['title'],
-      description: json['description'],
-      imageUrl: json['imageUrl'],
-    );
-  }
 }
