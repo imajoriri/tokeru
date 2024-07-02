@@ -17,6 +17,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     required this.backgroundDisabled,
     required this.backgroundSelected,
     required this.backgroundChecked,
+    required this.backgroundSkeleton,
     required this.borderDefault,
     required this.borderSubtle,
     required this.borderStrong,
@@ -45,6 +46,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
   final Color backgroundDisabled;
   final Color backgroundSelected;
   final Color backgroundChecked;
+  final Color backgroundSkeleton;
 
   // border
   final Color borderDefault;
@@ -75,6 +77,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     Color? backgroundDisabled,
     Color? backgroundSelected,
     Color? backgroundChecked,
+    Color? backgroundSkeleton,
     // border
     Color? borderDefault,
     Color? borderSubtle,
@@ -100,6 +103,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
       backgroundDisabled: backgroundDisabled ?? this.backgroundDisabled,
       backgroundSelected: backgroundSelected ?? this.backgroundSelected,
       backgroundChecked: backgroundChecked ?? this.backgroundChecked,
+      backgroundSkeleton: backgroundSkeleton ?? this.backgroundSkeleton,
       borderDefault: borderDefault ?? this.borderDefault,
       borderSubtle: borderSubtle ?? this.borderSubtle,
       borderStrong: borderStrong ?? this.borderStrong,
@@ -141,6 +145,8 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
           Color.lerp(backgroundSelected, other.backgroundSelected, t)!,
       backgroundChecked:
           Color.lerp(backgroundChecked, other.backgroundChecked, t)!,
+      backgroundSkeleton:
+          Color.lerp(backgroundSkeleton, other.backgroundSkeleton, t)!,
       borderDefault: Color.lerp(borderDefault, other.borderDefault, t)!,
       borderSubtle: Color.lerp(borderSubtle, other.borderSubtle, t)!,
       borderStrong: Color.lerp(borderStrong, other.borderStrong, t)!,

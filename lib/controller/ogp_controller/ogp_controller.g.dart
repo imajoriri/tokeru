@@ -6,7 +6,7 @@ part of 'ogp_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$ogpControllerHash() => r'9fcffd293685e136f2c495a99b4a1356a5b3d203';
+String _$ogpControllerHash() => r'5d82e482c47835ef3d066bc39018dd154a4fc98b';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-abstract class _$OgpController extends BuildlessAutoDisposeAsyncNotifier<Ogp> {
+abstract class _$OgpController extends BuildlessAsyncNotifier<Ogp> {
   late final String url;
 
   FutureOr<Ogp> build({
@@ -39,20 +39,28 @@ abstract class _$OgpController extends BuildlessAutoDisposeAsyncNotifier<Ogp> {
 
 /// OGP情報を取得するコントローラー。
 ///
+/// 表示のたびにAPIを叩くのは非効率なので、keepAliveをtrueにしている。
+///
 /// Copied from [OgpController].
 @ProviderFor(OgpController)
 const ogpControllerProvider = OgpControllerFamily();
 
 /// OGP情報を取得するコントローラー。
 ///
+/// 表示のたびにAPIを叩くのは非効率なので、keepAliveをtrueにしている。
+///
 /// Copied from [OgpController].
 class OgpControllerFamily extends Family<AsyncValue<Ogp>> {
   /// OGP情報を取得するコントローラー。
+  ///
+  /// 表示のたびにAPIを叩くのは非効率なので、keepAliveをtrueにしている。
   ///
   /// Copied from [OgpController].
   const OgpControllerFamily();
 
   /// OGP情報を取得するコントローラー。
+  ///
+  /// 表示のたびにAPIを叩くのは非効率なので、keepAliveをtrueにしている。
   ///
   /// Copied from [OgpController].
   OgpControllerProvider call({
@@ -89,10 +97,14 @@ class OgpControllerFamily extends Family<AsyncValue<Ogp>> {
 
 /// OGP情報を取得するコントローラー。
 ///
+/// 表示のたびにAPIを叩くのは非効率なので、keepAliveをtrueにしている。
+///
 /// Copied from [OgpController].
 class OgpControllerProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<OgpController, Ogp> {
+    extends AsyncNotifierProviderImpl<OgpController, Ogp> {
   /// OGP情報を取得するコントローラー。
+  ///
+  /// 表示のたびにAPIを叩くのは非効率なので、keepAliveをtrueにしている。
   ///
   /// Copied from [OgpController].
   OgpControllerProvider({
@@ -149,7 +161,7 @@ class OgpControllerProvider
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<OgpController, Ogp> createElement() {
+  AsyncNotifierProviderElement<OgpController, Ogp> createElement() {
     return _OgpControllerProviderElement(this);
   }
 
@@ -167,13 +179,13 @@ class OgpControllerProvider
   }
 }
 
-mixin OgpControllerRef on AutoDisposeAsyncNotifierProviderRef<Ogp> {
+mixin OgpControllerRef on AsyncNotifierProviderRef<Ogp> {
   /// The parameter `url` of this provider.
   String get url;
 }
 
 class _OgpControllerProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<OgpController, Ogp>
+    extends AsyncNotifierProviderElement<OgpController, Ogp>
     with OgpControllerRef {
   _OgpControllerProviderElement(super.provider);
 

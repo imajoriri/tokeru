@@ -32,6 +32,7 @@ class AppTheme {
       backgroundDisabled: const Color(0xffE0E0E0),
       backgroundSelected: const Color(0xffF6EDFF),
       backgroundChecked: const Color(0xffC2C2C2),
+      backgroundSkeleton: const Color(0xffE0E0E0),
       borderDefault: const Color(0xffE0E0E0),
       borderSubtle: const Color(0xffF4F4F4),
       borderStrong: const Color(0xffC2C2C2),

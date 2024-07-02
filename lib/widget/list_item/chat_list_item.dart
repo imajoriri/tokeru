@@ -10,10 +10,17 @@ class ChatListItem extends HookWidget {
   const ChatListItem._({
     required this.app,
     this.onChangedCheck,
+    this.bottomWidget,
   });
 
-  factory ChatListItem.chat({required AppChatItem chat}) =>
-      ChatListItem._(app: chat);
+  factory ChatListItem.chat({
+    required AppChatItem chat,
+    Widget? bottomWidget,
+  }) =>
+      ChatListItem._(
+        app: chat,
+        bottomWidget: bottomWidget,
+      );
 
   factory ChatListItem.todo({
     required AppTodoItem todo,
@@ -25,7 +32,12 @@ class ChatListItem extends HookWidget {
       );
 
   final AppItem app;
+
+  /// チェックボックスの状態が変更されたときのコールバック。
   final void Function(bool?)? onChangedCheck;
+
+  /// Widget下部に表示するWidget。
+  final Widget? bottomWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +52,10 @@ class ChatListItem extends HookWidget {
             : context.appColors.backgroundDefault,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
         child: switch (app) {
-          AppChatItem(:final message) => _Chat(message: message),
+          AppChatItem(:final message) => _Chat(
+              message: message,
+              bottomWidget: bottomWidget,
+            ),
           AppTodoItem(:final title, :final isDone) => _Todo(
               isDone: isDone,
               onChangedCheck: onChangedCheck,
@@ -56,26 +71,39 @@ class ChatListItem extends HookWidget {
 class _Chat extends StatelessWidget {
   const _Chat({
     required this.message,
+    this.bottomWidget,
   });
 
   final String message;
+  final Widget? bottomWidget;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      child: Linkify(
-        onOpen: (link) async {
-          if (!await launchUrl(Uri.parse(link.url))) {
-            throw Exception('Could not launch ${link.url}');
-          }
-        },
-        options: const LinkifyOptions(humanize: false),
-        text: message,
-        style: context.appTextTheme.bodyMedium,
-        linkStyle: context.appTextTheme.bodyMedium.copyWith(
-          color: context.appColors.textLink,
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Linkify(
+            onOpen: (link) async {
+              if (!await launchUrl(Uri.parse(link.url))) {
+                throw Exception('Could not launch ${link.url}');
+              }
+            },
+            options: const LinkifyOptions(humanize: false),
+            text: message,
+            style: context.appTextTheme.bodyMedium,
+            linkStyle: context.appTextTheme.bodyMedium.copyWith(
+              color: context.appColors.textLink,
+              decoration: TextDecoration.none,
+            ),
+          ),
+          if (bottomWidget != null) ...[
+            SizedBox(height: context.appSpacing.small),
+            bottomWidget!,
+            SizedBox(height: context.appSpacing.small),
+          ],
+        ],
       ),
     );
   }
