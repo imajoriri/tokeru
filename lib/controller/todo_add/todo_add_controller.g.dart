@@ -6,7 +6,7 @@ part of 'todo_add_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$todoAddControllerHash() => r'325892c3b2612811333529222ae5b28518170e0a';
+String _$todoAddControllerHash() => r'44978540e16450bc3e508f961f91ed8d66e55c1e';
 
 /// Copied from Dart SDK
 class _SystemHash {
