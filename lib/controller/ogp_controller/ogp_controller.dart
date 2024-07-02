@@ -11,7 +11,9 @@ part 'ogp_controller.g.dart';
 final _dio = Dio();
 
 /// OGP情報を取得するコントローラー。
-@riverpod
+///
+/// 表示のたびにAPIを叩くのは非効率なので、keepAliveをtrueにしている。
+@Riverpod(keepAlive: true)
 class OgpController extends _$OgpController {
   @override
   FutureOr<Ogp> build({required String url}) async {
@@ -41,6 +43,7 @@ class OgpController extends _$OgpController {
       }
     });
     return Ogp(
+      url: url,
       title: title,
       description: description,
       imageUrl: imageUrl,
