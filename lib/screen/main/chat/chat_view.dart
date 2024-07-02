@@ -4,15 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:quick_flutter/controller/ogp_controller/ogp_controller.dart';
 import 'package:quick_flutter/controller/today_app_item/today_app_item_controller.dart';
 import 'package:quick_flutter/controller/todo_add/todo_add_controller.dart';
 import 'package:quick_flutter/controller/todo_update/todo_update_controller.dart';
 import 'package:quick_flutter/model/analytics_event/analytics_event_name.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
+import 'package:quick_flutter/widget/card/url_preview_card.dart';
 import 'package:quick_flutter/widget/focus_nodes.dart';
 import 'package:quick_flutter/widget/button/check_button.dart';
 import 'package:quick_flutter/widget/list_item/chat_list_item.dart';
 import 'package:quick_flutter/widget/theme/app_theme.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ChatView extends HookConsumerWidget {
   const ChatView({super.key});
@@ -84,7 +87,8 @@ class ChatView extends HookConsumerWidget {
                                   );
                                 },
                               ),
-                            AppChatItem() => ChatListItem.chat(chat: appItem),
+                            AppChatItem() =>
+                              _ChatListItemChat(appItem: appItem),
                             AppDividerItem() => throw UnimplementedError(),
                           },
                           if (isLast) const SizedBox(height: 16),
@@ -113,6 +117,53 @@ class ChatView extends HookConsumerWidget {
           child: _ChatTextField(),
         ),
       ],
+    );
+  }
+}
+
+class _ChatListItemChat extends ConsumerWidget {
+  const _ChatListItemChat({
+    required this.appItem,
+  });
+
+  final AppChatItem appItem;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final links = appItem.links;
+    return ChatListItem.chat(
+      chat: appItem,
+      bottomWidget: ListView.separated(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (context, index) {
+          final uri = links[index];
+          final asyncValue =
+              ref.watch(ogpControllerProvider(url: uri.toString()));
+          return asyncValue.when(
+            data: (ogp) {
+              return UrlPreviewCard(
+                ogp: ogp,
+                onTap: () async {
+                  if (await canLaunchUrl(uri)) {
+                    await launchUrl(uri);
+                  }
+                },
+              );
+            },
+            loading: () {
+              return const UrlPreviewCard.loading();
+            },
+            error: (error, _) {
+              return const SizedBox.shrink();
+            },
+          );
+        },
+        separatorBuilder: (context, index) {
+          return SizedBox(height: context.appSpacing.small);
+        },
+        itemCount: links.length,
+      ),
     );
   }
 }
@@ -205,10 +256,12 @@ class _ChatTextField extends HookConsumerWidget {
                         focusNode: chatFocusNode,
                         style: context.appTextTheme.bodyMedium,
                         cursorColor: Colors.black,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           isDense: true,
                           border: InputBorder.none,
-                          hintText: 'Talk to myself',
+                          hintText: todoMode.value
+                              ? 'New todo list'
+                              : 'Talk to myself',
                         ),
                       ),
                     ),
