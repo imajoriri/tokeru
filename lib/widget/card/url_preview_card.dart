@@ -1,10 +1,9 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:quick_flutter/model/ogp/ogp.dart';
 import 'package:quick_flutter/widget/skeleton/skeleton_card.dart';
 import 'package:quick_flutter/widget/skeleton/skeleton_text.dart';
 import 'package:quick_flutter/widget/theme/app_theme.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 /// ogp の 画像の横幅
 const double _ogpImageWidth = 120;
@@ -67,22 +66,20 @@ class UrlPreviewCard extends StatelessWidget {
                 ),
               ),
               SizedBox(width: context.appSpacing.medium),
-              Container(
-                decoration: BoxDecoration(
-                  color: context.appColors.borderDefault,
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: FadeInImage.memoryNetwork(
-                    image: ogp.imageUrl,
-                    placeholder: kTransparentImage,
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: CachedNetworkImage(
+                  imageUrl: ogp.imageUrl,
+                  width: _ogpImageWidth,
+                  height: _ogpImageHeight,
+                  fadeInDuration: const Duration(milliseconds: 150),
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => Container(
+                    color: context.appColors.backgroundSkeleton,
                     width: _ogpImageWidth,
                     height: _ogpImageHeight,
-                    fit: BoxFit.cover,
-                    placeholderColor: context.appColors.backgroundSkeleton,
-                    fadeInDuration: const Duration(milliseconds: 150),
                   ),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
               ),
             ],
