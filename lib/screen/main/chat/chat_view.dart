@@ -140,23 +140,29 @@ class _ChatListItemChat extends ConsumerWidget {
           final uri = links[index];
           final asyncValue =
               ref.watch(ogpControllerProvider(url: uri.toString()));
-          return asyncValue.when(
-            data: (ogp) {
-              return UrlPreviewCard(
-                ogp: ogp,
-                onTap: () async {
-                  if (await canLaunchUrl(uri)) {
-                    await launchUrl(uri);
-                  }
-                },
-              );
+          return AnimatedSwitcher(
+            duration: const Duration(milliseconds: 150),
+            transitionBuilder: (Widget child, Animation<double> animation) {
+              return FadeTransition(opacity: animation, child: child);
             },
-            loading: () {
-              return const UrlPreviewCard.loading();
-            },
-            error: (error, _) {
-              return const SizedBox.shrink();
-            },
+            child: asyncValue.when(
+              data: (ogp) {
+                return UrlPreviewCard(
+                  ogp: ogp,
+                  onTap: () async {
+                    if (await canLaunchUrl(uri)) {
+                      await launchUrl(uri);
+                    }
+                  },
+                );
+              },
+              loading: () {
+                return const UrlPreviewCard.loading();
+              },
+              error: (error, _) {
+                return const SizedBox.shrink();
+              },
+            ),
           );
         },
         separatorBuilder: (context, index) {
