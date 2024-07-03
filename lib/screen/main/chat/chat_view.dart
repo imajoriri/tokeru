@@ -40,62 +40,58 @@ class ChatView extends HookConsumerWidget {
                   }
                   return false;
                 },
-                child: SelectionArea(
-                  child: ListView.builder(
-                    itemCount: appItems.length,
-                    shrinkWrap: true,
-                    reverse: true,
-                    itemBuilder: (context, index) {
-                      final appItem = appItems[index];
-                      final isLast = index == 0;
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Builder(
-                            builder: (context) {
-                              if (index == appItems.length - 1) {
-                                return const SizedBox.shrink();
-                              }
-                              // ignore: unnecessary_cast
-                              final nextAppItem =
-                                  appItems[index + 1] as AppItem?;
-                              // 次のAppItemが日付が変わるかどうか。
-                              final isNextDay = nextAppItem != null &&
-                                  appItem.createdAt.day !=
-                                      nextAppItem.createdAt.day;
-                              if (isNextDay) {
-                                return DayDividerItem(
-                                  year: appItem.createdAt.year,
-                                  month: appItem.createdAt.month,
-                                  day: appItem.createdAt.day,
-                                );
-                              } else {
-                                return const SizedBox.shrink();
-                              }
-                            },
-                          ),
-                          switch (appItem) {
-                            AppTodoItem() => ChatListItem.todo(
-                                todo: appItem,
-                                onChangedCheck: (value) {
-                                  ref.read(
-                                    todoUpdateControllerProvider(
-                                      todo: appItem.copyWith(
-                                        isDone: value ?? false,
-                                      ),
-                                    ).future,
-                                  );
-                                },
-                              ),
-                            AppChatItem() =>
-                              _ChatListItemChat(appItem: appItem),
-                            AppDividerItem() => throw UnimplementedError(),
+                child: ListView.builder(
+                  itemCount: appItems.length,
+                  shrinkWrap: true,
+                  reverse: true,
+                  itemBuilder: (context, index) {
+                    final appItem = appItems[index];
+                    final isLast = index == 0;
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Builder(
+                          builder: (context) {
+                            if (index == appItems.length - 1) {
+                              return const SizedBox.shrink();
+                            }
+                            // ignore: unnecessary_cast
+                            final nextAppItem = appItems[index + 1] as AppItem?;
+                            // 次のAppItemが日付が変わるかどうか。
+                            final isNextDay = nextAppItem != null &&
+                                appItem.createdAt.day !=
+                                    nextAppItem.createdAt.day;
+                            if (isNextDay) {
+                              return DayDividerItem(
+                                year: appItem.createdAt.year,
+                                month: appItem.createdAt.month,
+                                day: appItem.createdAt.day,
+                              );
+                            } else {
+                              return const SizedBox.shrink();
+                            }
                           },
-                          if (isLast) const SizedBox(height: 16),
-                        ],
-                      );
-                    },
-                  ),
+                        ),
+                        switch (appItem) {
+                          AppTodoItem() => ChatListItem.todo(
+                              todo: appItem,
+                              onChangedCheck: (value) {
+                                ref.read(
+                                  todoUpdateControllerProvider(
+                                    todo: appItem.copyWith(
+                                      isDone: value ?? false,
+                                    ),
+                                  ).future,
+                                );
+                              },
+                            ),
+                          AppChatItem() => _ChatListItemChat(appItem: appItem),
+                          AppDividerItem() => throw UnimplementedError(),
+                        },
+                        if (isLast) const SizedBox(height: 16),
+                      ],
+                    );
+                  },
                 ),
               ),
             );
@@ -140,23 +136,27 @@ class _ChatListItemChat extends ConsumerWidget {
           final uri = links[index];
           final asyncValue =
               ref.watch(ogpControllerProvider(url: uri.toString()));
-          return asyncValue.when(
-            data: (ogp) {
-              return UrlPreviewCard(
-                ogp: ogp,
-                onTap: () async {
-                  if (await canLaunchUrl(uri)) {
-                    await launchUrl(uri);
-                  }
-                },
-              );
-            },
-            loading: () {
-              return const UrlPreviewCard.loading();
-            },
-            error: (error, _) {
-              return const SizedBox.shrink();
-            },
+          return AnimatedSwitcher(
+            duration: const Duration(milliseconds: 150),
+            child: asyncValue.when(
+              data: (ogp) {
+                return UrlPreviewCard(
+                  key: UniqueKey(),
+                  ogp: ogp,
+                  onTap: () async {
+                    if (await canLaunchUrl(uri)) {
+                      await launchUrl(uri);
+                    }
+                  },
+                );
+              },
+              loading: () {
+                return const UrlPreviewCard.loading();
+              },
+              error: (error, _) {
+                return const SizedBox.shrink();
+              },
+            ),
           );
         },
         separatorBuilder: (context, index) {

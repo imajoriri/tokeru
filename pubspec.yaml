@@ -27,6 +27,7 @@ dependencies:
   flutter_linkify: ^6.0.0
   dio: ^5.4.3+1
   html: ^0.15.4
+  transparent_image: ^2.0.1
 
   # firebase
   firebase_auth: ^4.17.4

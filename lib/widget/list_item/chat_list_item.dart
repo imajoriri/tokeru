@@ -79,31 +79,33 @@ class _Chat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Linkify(
-            onOpen: (link) async {
-              if (!await launchUrl(Uri.parse(link.url))) {
-                throw Exception('Could not launch ${link.url}');
-              }
-            },
-            options: const LinkifyOptions(humanize: false),
-            text: message,
-            style: context.appTextTheme.bodyMedium,
-            linkStyle: context.appTextTheme.bodyMedium.copyWith(
-              color: context.appColors.textLink,
-              decoration: TextDecoration.none,
+    return SelectionArea(
+      child: SizedBox(
+        width: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Linkify(
+              onOpen: (link) async {
+                if (!await launchUrl(Uri.parse(link.url))) {
+                  throw Exception('Could not launch ${link.url}');
+                }
+              },
+              options: const LinkifyOptions(humanize: false),
+              text: message,
+              style: context.appTextTheme.bodyMedium,
+              linkStyle: context.appTextTheme.bodyMedium.copyWith(
+                color: context.appColors.textLink,
+                decoration: TextDecoration.none,
+              ),
             ),
-          ),
-          if (bottomWidget != null) ...[
-            SizedBox(height: context.appSpacing.small),
-            bottomWidget!,
-            SizedBox(height: context.appSpacing.small),
+            if (bottomWidget != null) ...[
+              SizedBox(height: context.appSpacing.small),
+              bottomWidget!,
+              SizedBox(height: context.appSpacing.small),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }
