@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:quick_flutter/model/ogp/ogp.dart';
 import 'package:quick_flutter/widget/skeleton/skeleton_card.dart';
 import 'package:quick_flutter/widget/skeleton/skeleton_text.dart';
 import 'package:quick_flutter/widget/theme/app_theme.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 /// ogp の 画像の横幅
 const double _ogpImageWidth = 120;
@@ -65,15 +67,22 @@ class UrlPreviewCard extends StatelessWidget {
                 ),
               ),
               SizedBox(width: context.appSpacing.medium),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: Image.network(
-                  ogp.imageUrl,
-                  width: _ogpImageWidth,
-                  height: _ogpImageHeight,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) =>
-                      const SizedBox.shrink(),
+              Container(
+                decoration: BoxDecoration(
+                  color: context.appColors.borderDefault,
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: FadeInImage.memoryNetwork(
+                    image: ogp.imageUrl,
+                    placeholder: kTransparentImage,
+                    width: _ogpImageWidth,
+                    height: _ogpImageHeight,
+                    fit: BoxFit.cover,
+                    placeholderColor: context.appColors.backgroundSkeleton,
+                    fadeInDuration: const Duration(milliseconds: 150),
+                  ),
                 ),
               ),
             ],
