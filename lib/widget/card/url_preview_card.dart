@@ -73,6 +73,7 @@ class UrlPreviewCard extends StatelessWidget {
                   width: _ogpImageWidth,
                   height: _ogpImageHeight,
                   fadeInDuration: const Duration(milliseconds: 150),
+                  fadeOutDuration: const Duration(milliseconds: 150),
                   fit: BoxFit.cover,
                   placeholder: (context, url) => Container(
                     color: context.appColors.backgroundSkeleton,
