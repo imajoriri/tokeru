@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:quick_flutter/controller/refresh/refresh_controller.dart';
 import 'package:quick_flutter/model/ogp/ogp.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:html/parser.dart' as html_parser;
@@ -17,6 +18,8 @@ final _dio = Dio();
 class OgpController extends _$OgpController {
   @override
   FutureOr<Ogp> build({required String url}) async {
+    ref.watch(refreshControllerProvider);
+
     final response = await _dio.get(url);
 
     // レスポンスが200以外の場合は例外を投げる

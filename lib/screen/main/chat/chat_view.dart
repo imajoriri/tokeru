@@ -129,41 +129,43 @@ class _ChatListItemChat extends ConsumerWidget {
     final links = appItem.links;
     return ChatListItem.chat(
       chat: appItem,
-      bottomWidget: ListView.separated(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (context, index) {
-          final uri = links[index];
-          final asyncValue =
-              ref.watch(ogpControllerProvider(url: uri.toString()));
-          return AnimatedSwitcher(
-            duration: const Duration(milliseconds: 150),
-            child: asyncValue.when(
-              data: (ogp) {
-                return UrlPreviewCard(
-                  key: UniqueKey(),
-                  ogp: ogp,
-                  onTap: () async {
-                    if (await canLaunchUrl(uri)) {
-                      await launchUrl(uri);
-                    }
-                  },
+      bottomWidget: links.isEmpty
+          ? null
+          : ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                final uri = links[index];
+                final asyncValue =
+                    ref.watch(ogpControllerProvider(url: uri.toString()));
+                return AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 150),
+                  child: asyncValue.when(
+                    data: (ogp) {
+                      return UrlPreviewCard(
+                        key: UniqueKey(),
+                        ogp: ogp,
+                        onTap: () async {
+                          if (await canLaunchUrl(uri)) {
+                            await launchUrl(uri);
+                          }
+                        },
+                      );
+                    },
+                    loading: () {
+                      return const UrlPreviewCard.loading();
+                    },
+                    error: (error, _) {
+                      return const SizedBox.shrink();
+                    },
+                  ),
                 );
               },
-              loading: () {
-                return const UrlPreviewCard.loading();
+              separatorBuilder: (context, index) {
+                return SizedBox(height: context.appSpacing.small);
               },
-              error: (error, _) {
-                return const SizedBox.shrink();
-              },
+              itemCount: links.length,
             ),
-          );
-        },
-        separatorBuilder: (context, index) {
-          return SizedBox(height: context.appSpacing.small);
-        },
-        itemCount: links.length,
-      ),
     );
   }
 }
