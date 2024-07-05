@@ -41,13 +41,11 @@ class ChatListItem extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final focus = useState(false);
     final hover = useState(false);
     return FocusableActionDetector(
-      onShowFocusHighlight: (value) => focus.value = value,
       onShowHoverHighlight: (value) => hover.value = value,
       child: Container(
-        color: hover.value || focus.value
+        color: hover.value
             ? context.appColors.backgroundHovered
             : context.appColors.backgroundDefault,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
@@ -80,6 +78,7 @@ class _Chat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SelectionArea(
+      // focusNode: FocusNode(skipTraversal: true),
       child: SizedBox(
         width: double.infinity,
         child: Column(
