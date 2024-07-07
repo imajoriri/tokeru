@@ -6,11 +6,11 @@ part of 'hotkey_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$hotkeyRepositoryHash() => r'7087ef05be86118460005217eaef5492f24eb983';
+String _$hotkeyRepositoryHash() => r'822c76da28135700cc06dd4e7804211acd1648d2';
 
 /// See also [hotkeyRepository].
 @ProviderFor(hotkeyRepository)
-final hotkeyRepositoryProvider = AutoDisposeProvider<HotkeyRepository>.internal(
+final hotkeyRepositoryProvider = Provider<HotkeyRepository>.internal(
   hotkeyRepository,
   name: r'hotkeyRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -20,6 +20,6 @@ final hotkeyRepositoryProvider = AutoDisposeProvider<HotkeyRepository>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef HotkeyRepositoryRef = AutoDisposeProviderRef<HotkeyRepository>;
+typedef HotkeyRepositoryRef = ProviderRef<HotkeyRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

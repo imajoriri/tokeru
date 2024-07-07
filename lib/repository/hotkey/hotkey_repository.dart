@@ -4,7 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'hotkey_repository.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 HotkeyRepository hotkeyRepository(HotkeyRepositoryRef ref) =>
     HotkeyRepository(ref: ref);
 
