@@ -34,24 +34,24 @@ class MainScreen extends ConsumerWidget {
           color: context.appColors.textSubtle,
         ),
       ),
-      body: Row(
+      body: const Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Chat
-          const Expanded(child: ChatView()),
+          Expanded(child: ChatView()),
 
-          Container(
-            width: 3,
-            height: double.infinity,
-            margin: EdgeInsets.symmetric(vertical: context.appSpacing.small),
-            decoration: BoxDecoration(
-              color: context.appColors.borderDefault,
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
+          // Container(
+          //   width: 3,
+          //   height: double.infinity,
+          //   margin: EdgeInsets.symmetric(vertical: context.appSpacing.small),
+          //   decoration: BoxDecoration(
+          //     color: context.appColors.borderDefault,
+          //     borderRadius: BorderRadius.circular(10),
+          //   ),
+          // ),
 
-          // Todoリスト
-          const Expanded(child: TodoView()),
+          // // Todoリスト
+          // const Expanded(child: TodoView()),
         ],
       ),
     );
