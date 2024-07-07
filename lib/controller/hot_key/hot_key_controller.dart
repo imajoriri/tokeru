@@ -17,7 +17,7 @@ class HotKeyState with _$HotKeyState {
 }
 
 /// アプリを起動するためのホットキーを登録するController
-@riverpod
+@Riverpod(keepAlive: true)
 class HotKeyController extends _$HotKeyController {
   @override
   Future<HotKeyState> build() async {
