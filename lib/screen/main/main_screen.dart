@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/controller/url/url_controller.dart';
 import 'package:quick_flutter/screen/main/chat/chat_view.dart';
-import 'package:quick_flutter/screen/main/todo/todo_view.dart';
 import 'package:quick_flutter/widget/theme/app_theme.dart';
 
 class MainScreen extends ConsumerWidget {
@@ -34,24 +33,24 @@ class MainScreen extends ConsumerWidget {
           color: context.appColors.textSubtle,
         ),
       ),
-      body: Row(
+      body: const Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Chat
-          const Expanded(child: ChatView()),
+          Expanded(child: ChatView()),
 
-          Container(
-            width: 3,
-            height: double.infinity,
-            margin: EdgeInsets.symmetric(vertical: context.appSpacing.small),
-            decoration: BoxDecoration(
-              color: context.appColors.borderDefault,
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
+          // Container(
+          //   width: 3,
+          //   height: double.infinity,
+          //   margin: EdgeInsets.symmetric(vertical: context.appSpacing.small),
+          //   decoration: BoxDecoration(
+          //     color: context.appColors.borderDefault,
+          //     borderRadius: BorderRadius.circular(10),
+          //   ),
+          // ),
 
-          // Todoリスト
-          const Expanded(child: TodoView()),
+          // // Todoリスト
+          // const Expanded(child: TodoView()),
         ],
       ),
     );
