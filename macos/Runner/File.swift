@@ -44,9 +44,6 @@ class FloatingPanel: NSPanel {
     // Keep the panel around after closing since I expect the user to open/close it often
     self.isReleasedWhenClosed = false
 
-    // Activate this if you want the window to hide once it is no longer focused
-    self.hidesOnDeactivate = true
-
     // Hide the traffic icons (standard close, minimize, maximize buttons)
     self.standardWindowButton(.closeButton)?.isHidden = true
     self.standardWindowButton(.miniaturizeButton)?.isHidden = true
@@ -68,10 +65,6 @@ class FloatingPanel: NSPanel {
     super.resignMain()
     close()
   }
-
-//  override func close() {
-//    super.close()
-//  }
 
   func setHandler() {
     // Flutter側でのイベントを受け取る
