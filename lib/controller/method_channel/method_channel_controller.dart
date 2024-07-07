@@ -6,22 +6,10 @@ final methodChannelProvider = Provider<MethodChannel>((ref) {
 });
 
 enum AppMethodChannel {
-  /// メインウィンドウを左に移動
-  windowToLeft,
-
-  /// メインウィンドウを右に移動
-  windowToRight,
-
-  alwaysFloatingOn,
-  alwaysFloatingOff,
-
-  setFrameSize,
-
-  openOrClosePanel,
-  closeWindow,
+  /// アプリを終了する。
   quit,
 
-  /// ウィンドウが右にあれば左端に、左にあれば右端に移動する
-  switchHorizen,
+  /// パネルを開く。
+  openPanel,
   ;
 }

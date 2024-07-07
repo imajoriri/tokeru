@@ -78,7 +78,7 @@ class HotKeyController extends _$HotKeyController {
 
   Future<void> _keyDownHandler(HotKey hotKey) async {
     final channel = ref.read(methodChannelProvider);
-    channel.invokeMethod(AppMethodChannel.openOrClosePanel.name);
+    channel.invokeMethod(AppMethodChannel.openPanel.name);
   }
 
   /// Hotkeyを解除・更新する

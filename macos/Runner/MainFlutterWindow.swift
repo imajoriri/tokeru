@@ -37,33 +37,14 @@ class MainFlutterWindow: NSWindow {
 
     self.setDefaultWindow()
 
-//    self.level = .floating
-
-    // 左上のボタンを操作
-//    self.standardWindowButton(.miniaturizeButton)?.isHidden = true
-//    self.standardWindowButton(.zoomButton)?.isHidden = true
-//    self.standardWindowButton(.closeButton)?.isHidden = true
-
     // タイトルを非表示にする
     self.titleVisibility = .hidden
     self.titlebarAppearsTransparent = true
     self.styleMask.insert(.fullSizeContentView)
-    // nonactivatingPanelによってTokeruを開いても下のウィンドウのフォーカスが失われない
-//    self.styleMask.insert(.nonactivatingPanel)
-
-//    self.collectionBehavior = [
-//      // スクリーンのスペースを移動しても表示し続ける
-//      .canJoinAllSpaces
-//    ]
 
     // 画面どこを持っても移動できるようにする
     self.isMovable = true
     self.isMovableByWindowBackground = true
-
-    // 画面がバックグラウンドになった後、5分後に勝手に落ちるのを防ぐ
-//    self.isReleasedWhenClosed = false
-
-    setupNotification()
 
     channel = FlutterMethodChannel(name: "quick.flutter/panel", binaryMessenger: flutterViewController.engine.binaryMessenger)
     setHandler(channel: channel)
@@ -71,87 +52,16 @@ class MainFlutterWindow: NSWindow {
     super.awakeFromNib()
   }
 
-  private func setupNotification() {
-    NotificationCenter.default.addObserver(self, selector: #selector(handleDidBecomeKeyNotification(_:)), name: NSWindow.didBecomeKeyNotification, object: self)
-    NotificationCenter.default.addObserver(self, selector: #selector(handleDidResignKeyNotification(_:)), name: NSWindow.didResignKeyNotification, object: self)
-  }
-
-  deinit {
-    NotificationCenter.default.removeObserver(self)
-  }
-
-  // ウィンドウがキーウィンドウになった時の処理を行う
-  @objc private func handleDidBecomeKeyNotification(_ notification: Notification) {
-    channel.invokeMethod("active", arguments: nil)
-  }
-
-  // ウィンドウが非アクティブになった時の処理
-  @objc private func handleDidResignKeyNotification(_ notification: Notification) {
-    channel.invokeMethod("inactive", arguments: nil)
-  }
-
-//  override func resignMain() {
-//    // ここでclose()を呼ばないことで、外部をタップしても閉じない
-//    super.resignMain()
-//  }
-//
-  override func close() {
-    NSApplication.shared.terminate(nil)
-//    super.close()
-    // hideによって、Tokeruを閉じた時に下のウィンドウに再フォーカスされる
-//    NSApp.hide(self)
-  }
-
-  var frameWidth: CGFloat {
-    return self.frame.width
-  }
-
-  var frameHeight: CGFloat {
-    return self.frame.height
-  }
-
-  /// ウィンドウ左下を基準とした縦のポジション
-  var positionY: CGFloat {
-    return self.frame.origin.y
-  }
-
-  /// ウィンドウ左下を基準とした横のポジション
-  var positionX: CGFloat {
-    return self.frame.origin.x
-  }
-
-  /// window移動のアニメーションのduration
-  var windowAnimationDuration: Double {
-    return 0.4
-  }
-
-  /// window移動のアニメーション定義
-  var windowAnimation: CAMediaTimingFunction {
-    // easeOutExpo
-    return CAMediaTimingFunction(controlPoints: 0.19, 1.0, 0.22, 1.0);
-  }
 
   func setHandler(channel: FlutterMethodChannel) {
     // Flutter側でのイベントを受け取る
     channel.setMethodCallHandler { (call, result) in
       switch call.method {
-      case "openOrClosePanel":
-        self.openOrCloseWindow()
-        return
       case "closeWindow":
         self.closeWindow()
         return
-      case "setFrameSize":
-        self.setFrameSize(call: call)
-        return
-      case "switchHorizen":
-        self.switchHorizen()
-        return
-      case "windowToLeft":
-        self.windowToLeft()
-        return
-      case "windowToRight":
-        self.windowToRight()
+      case "openPanel":
+        self.openPanel()
         return
       case "quit":
         self.quit()
@@ -162,29 +72,19 @@ class MainFlutterWindow: NSWindow {
     }
   }
 
-  /// ウィンドウが右にあれば左端に、左にあれば右端に移動する
-  func switchHorizen() {
-    if let screen = NSScreen.main?.visibleFrame {
-      // ウィンドウが今、画面の右にるかどうか
-      let isRight = self.positionX > screen.midX
-      if isRight {
-        self.windowToLeft()
-      } else {
-        self.windowToRight()
-      }
-    }
-  }
+  func openPanel() {
+    flutterEngine.run(withEntrypoint: "panel");
+    let flutterViewController = FlutterViewController(engine: flutterEngine, nibName: nil, bundle: nil)
 
-  /// ウィンドウの表示状態を切り替えます。
-  ///
-  /// ウィンドウが表示されている場合は閉じ、表示されていない場合は開きます。
-  func openOrCloseWindow() {
-    if self.isVisible {
-      self.close()
-    } else {
-      self.makeKeyAndOrderFront(nil)
-      NSApp.activate(ignoringOtherApps: true)
-    }
+    var newEntryPanel = FloatingPanel(contentRect: NSRect(x: 0, y: 0, width: 1200, height: 600), backing: .buffered, defer: false)
+
+    newEntryPanel.title = "Floating Panel Title"
+    newEntryPanel.contentView = flutterViewController.view
+    newEntryPanel.contentViewController = flutterViewController
+    RegisterGeneratedPlugins(registry: flutterViewController)
+
+    newEntryPanel.orderFront(nil)
+    newEntryPanel.makeKey()
   }
 
   /// ウィンドウをcloseする
@@ -198,64 +98,56 @@ class MainFlutterWindow: NSWindow {
   func quit() {
     NSApplication.shared.terminate(nil)
   }
+}
 
-  /// windowのサイズを変える
-  ///
-  /// ウィンドウが画面下にあれば上に大きくor小さくなり、
-  /// 画面上にあれば下に大きくorちいさくなる。
-  func setFrameSize(call: FlutterMethodCall) {
-    if let args = call.arguments as? [String: Any] {
-      let width = (args["width"] as? Int) ?? Int(self.frameWidth)
-      let height = (args["height"] as? Int) ?? Int(self.frameHeight)
-      let frame = NSRect(origin: NSPoint(x: self.positionX, y: self.positionY + (self.frameHeight - CGFloat(height))),
-                         size: NSSize(width: width, height: height))
-      self.animator().setFrame(frame, display: true, animate: true)
+class FloatingPanel: NSPanel {
+  init(contentRect: NSRect, backing: NSWindow.BackingStoreType, defer flag: Bool) {
+    super.init(contentRect: contentRect, styleMask: [.nonactivatingPanel, .titled, .resizable, .closable, .fullSizeContentView], backing: backing, defer: flag)
 
-      // ウィンドウの位置によって上が伸びるか下が伸びるかのコードだが、
-      // 使わないのでコメントアウトするが、いつか使うかもなのでコードを残しておく
-//      let screenHeight = NSScreen.main?.frame.height ?? 1080
-//      // ウィンドウの上部から画面上部までの距離
-//      let distanceToTop = screenHeight - (self.positionY + self.frameHeight)
-//      // ウィンドウの下部から画面下部までの距離
-//      let distanceToBottom = self.positionY
-//      if distanceToTop < distanceToBottom {
-//        // NSPointは左下を基準とするため、Frameサイズ変更時に上を固定するためにframeHeight - CGFloat(height)を足している
-//        let frame = NSRect(origin: NSPoint(x: self.positionX, y: self.positionY + (self.frameHeight - CGFloat(height))),
-//                           size: NSSize(width: width, height: height))
-//        self.animator().setFrame(frame, display: true, animate: true)
-//      } else {
-//        let frame = NSRect(origin: NSPoint(x: self.positionX, y: self.positionY),
-//                           size: NSSize(width: width, height: height)
-//        )
-//        self.animator().setFrame(frame, display: true, animate: true)
-//      }
+    // Set this if you want the panel to remember its size/position
+    //        self.setFrameAutosaveName("a unique name")
 
-    } else {
-      print(FlutterError(code: "INVALID_ARGUMENT", message: "Width or height is not provided", details: nil))
-    }
+    // Allow the pannel to be on top of almost all other windows
+    self.isFloatingPanel = true
+    self.level = .floating
+
+    // Allow the pannel to appear in a fullscreen space
+    self.collectionBehavior.insert(.fullScreenAuxiliary)
+
+    // While we may set a title for the window, don't show it
+    self.titleVisibility = .hidden
+    self.titlebarAppearsTransparent = true
+
+    // Since there is no titlebar make the window moveable by click-dragging on the background
+    self.isMovableByWindowBackground = true
+
+    // Keep the panel around after closing since I expect the user to open/close it often
+    self.isReleasedWhenClosed = false
+
+    // Activate this if you want the window to hide once it is no longer focused
+    //                self.hidesOnDeactivate = true
+
+    // Hide the traffic icons (standard close, minimize, maximize buttons)
+    self.standardWindowButton(.closeButton)?.isHidden = true
+    self.standardWindowButton(.miniaturizeButton)?.isHidden = true
+    self.standardWindowButton(.zoomButton)?.isHidden = true
   }
 
-  func windowToLeft() {
-    // 現在の高さのまま、左へ移動する
-    let frame = NSRect(origin: NSPoint(x: 0, y: self.positionY), size: NSSize(width: self.frameWidth, height: self.frameHeight))
-    NSAnimationContext.runAnimationGroup({ context in
-      context.duration = self.windowAnimationDuration
-      context.timingFunction = self.windowAnimation
-      self.animator().setFrame(frame, display: true, animate: true)
-    })
+  // `canBecomeKey` and `canBecomeMain` are required so that text inputs inside the panel can receive focus
+//    return true
+//  }
+
+  override var canBecomeMain: Bool {
+    return true
   }
 
-  func windowToRight() {
-    // 現在の高さのまま右へ移動
-    if let screen = NSScreen.main?.visibleFrame {
-      let newTopLeftPoint = NSPoint(x: screen.maxX - self.frameWidth, y: self.positionY)
-      let frame = NSRect(origin: newTopLeftPoint, size: NSSize(width: self.frameWidth, height: self.frameHeight))
-      self.animator().setFrame(frame, display: true, animate: true)
-      NSAnimationContext.runAnimationGroup({ context in
-        context.duration = self.windowAnimationDuration
-        context.timingFunction = self.windowAnimation
-        self.animator().setFrame(frame, display: true, animate: true)
-      })
-    }
+  override func resignMain() {
+    super.resignMain()
+    close()
   }
+
+  override func close() {
+    super.close()
+  }
+
 }

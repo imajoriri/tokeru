@@ -20,6 +20,19 @@ import 'package:quick_flutter/widget/app_platform_menu_bar.dart';
 import 'package:quick_flutter/widget/shortcutkey.dart';
 import 'package:quick_flutter/widget/theme/app_theme.dart';
 
+@pragma('vm:entry-point')
+void panel() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(
+    AppMaterialApp(
+      home: const Material(child: Text("fuga")),
+    ),
+  );
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
