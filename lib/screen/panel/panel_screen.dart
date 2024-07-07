@@ -18,7 +18,9 @@ class PanelScreen extends HookConsumerWidget {
   });
 
   Future<void> _send(
-      TextEditingController textEditingConroller, WidgetRef ref) async {
+    TextEditingController textEditingConroller,
+    WidgetRef ref,
+  ) async {
     // TODO: リファクタ
     final chat = AppChatItem(
       id: const Uuid().v4(),
