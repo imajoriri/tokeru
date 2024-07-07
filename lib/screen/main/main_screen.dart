@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/controller/url/url_controller.dart';
 import 'package:quick_flutter/screen/main/chat/chat_view.dart';
-import 'package:quick_flutter/screen/main/todo/todo_view.dart';
 import 'package:quick_flutter/widget/theme/app_theme.dart';
 
 class MainScreen extends ConsumerWidget {
