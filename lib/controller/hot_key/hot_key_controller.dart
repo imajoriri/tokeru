@@ -21,6 +21,8 @@ class HotKeyState with _$HotKeyState {
 class HotKeyController extends _$HotKeyController {
   @override
   Future<HotKeyState> build() async {
+    await hotKeyManager.unregisterAll();
+
     final (:keyId, :modifiers) =
         await ref.watch(hotkeyRepositoryProvider).fetchHotkey();
     final hotKey = HotKey(
