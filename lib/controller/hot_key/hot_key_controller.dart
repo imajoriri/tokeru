@@ -1,8 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
-import 'package:quick_flutter/controller/method_channel/method_channel_controller.dart';
 import 'package:quick_flutter/repository/hotkey/hotkey_repository.dart';
+import 'package:quick_flutter/utils/method_channel.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'hot_key_controller.g.dart';
@@ -77,8 +77,7 @@ class HotKeyController extends _$HotKeyController {
   }
 
   Future<void> _keyDownHandler(HotKey hotKey) async {
-    final channel = ref.read(methodChannelProvider);
-    channel.invokeMethod(AppMethodChannel.openPanel.name);
+    mainMethodChannel.openPanel();
   }
 
   /// Hotkeyを解除・更新する

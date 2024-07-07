@@ -6,13 +6,14 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:logger/logger.dart';
 import 'package:quick_flutter/controller/hot_key/hot_key_controller.dart';
-import 'package:quick_flutter/controller/method_channel/method_channel_controller.dart';
 import 'package:quick_flutter/controller/refresh/refresh_controller.dart';
 import 'package:quick_flutter/controller/screen_type/screen_type_controller.dart';
 import 'package:quick_flutter/firebase_options.dart';
 import 'package:quick_flutter/model/analytics_event/analytics_event_name.dart';
 import 'package:quick_flutter/screen/main/main_screen.dart';
+import 'package:quick_flutter/screen/panel/panel_screen.dart';
 import 'package:quick_flutter/screen/settings/settings_screen.dart';
+import 'package:quick_flutter/utils/method_channel.dart';
 import 'package:quick_flutter/widget/actions/new_todo.dart/new_todo_action.dart';
 import 'package:quick_flutter/widget/actions/reload/reload_action.dart';
 import 'package:quick_flutter/widget/actions/toggle_focus/toggle_focus_action.dart';
@@ -28,7 +29,9 @@ void panel() async {
   );
   runApp(
     AppMaterialApp(
-      home: const Material(child: Text("fuga")),
+      home: const Material(
+        child: PnaleScreen(),
+      ),
     ),
   );
 }
@@ -50,22 +53,11 @@ void main() async {
             child: Consumer(
               builder: (context, ref, child) {
                 final largeWindowKey = GlobalKey();
-                final channel = ref.watch(methodChannelProvider);
                 ref.watch(hotKeyControllerProvider);
-
-                channel.setMethodCallHandler((call) async {
-                  switch (call.method) {
-                    case 'inactive':
-                      break;
-                    case 'active':
-                      // 更新が昨日以前の場合は、データを更新する
-                      if (ref
-                          .read(refreshControllerProvider.notifier)
-                          .isPast()) {
-                        ref.invalidate(refreshControllerProvider);
-                      }
+                mainMethodChannel.addListnerActive((_) async {
+                  if (ref.read(refreshControllerProvider.notifier).isPast()) {
+                    ref.invalidate(refreshControllerProvider);
                   }
-                  return null;
                 });
 
                 return Material(
