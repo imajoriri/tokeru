@@ -43,7 +43,6 @@ jobs:
 
       - name: "Install codemagic-cli-tools"
         run: |
-          pip hash codemagic-cli-tools --algorithm sha256
           pip3 install codemagic-cli-tools --break-system-packages
 
       - name: "Install the Apple certificate"
