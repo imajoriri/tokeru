@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quick_flutter/controller/method_channel/method_channel_controller.dart';
 import 'package:quick_flutter/controller/url/url_controller.dart';
+import 'package:quick_flutter/utils/method_channel.dart';
 import 'package:quick_flutter/widget/actions/new_todo.dart/new_todo_action.dart';
 import 'package:quick_flutter/widget/actions/reload/reload_action.dart';
 import 'package:quick_flutter/widget/shortcutkey.dart';
@@ -12,7 +12,6 @@ class AppPlatformMenuBar extends ConsumerWidget {
   final Widget child;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final channel = ref.watch(methodChannelProvider);
     return PlatformMenuBar(
       menus: [
         PlatformMenu(
@@ -24,9 +23,7 @@ class AppPlatformMenuBar extends ConsumerWidget {
                   label: 'Quit Tokeru',
                   shortcut: ShortcutActivatorType.quit.shortcutActivator,
                   onSelected: () {
-                    channel.invokeMethod(
-                      AppMethodChannel.quit.name,
-                    );
+                    mainMethodChannel.quit();
                   },
                 ),
               ],
