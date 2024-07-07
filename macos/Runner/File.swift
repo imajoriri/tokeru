@@ -25,6 +25,7 @@ class FloatingPanel: NSPanel {
                backing: .buffered,
                defer: false
     )
+    self.flutterViewController = flutterViewController
 
     // Set this if you want the panel to remember its size/position
     self.setFrameAutosaveName("a unique name")
@@ -44,7 +45,7 @@ class FloatingPanel: NSPanel {
     self.isReleasedWhenClosed = false
 
     // Activate this if you want the window to hide once it is no longer focused
-    //                self.hidesOnDeactivate = true
+    self.hidesOnDeactivate = true
 
     // Hide the traffic icons (standard close, minimize, maximize buttons)
     self.standardWindowButton(.closeButton)?.isHidden = true
@@ -59,14 +60,18 @@ class FloatingPanel: NSPanel {
     return true
   }
 
+  override var canBecomeKey: Bool {
+      return true
+  }
+
   override func resignMain() {
     super.resignMain()
     close()
   }
 
-  override func close() {
-    super.close()
-  }
+//  override func close() {
+//    super.close()
+//  }
 
   func setHandler() {
     // Flutter側でのイベントを受け取る
