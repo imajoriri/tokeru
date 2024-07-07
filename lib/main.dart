@@ -21,9 +21,12 @@ void panel() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(
-    AppMaterialApp(
-      home: const Material(
-        child: PnaleScreen(),
+    ProviderScope(
+      observers: [_AppObserver()],
+      child: AppMaterialApp(
+        home: const Material(
+          child: PanelScreen(),
+        ),
       ),
     ),
   );
