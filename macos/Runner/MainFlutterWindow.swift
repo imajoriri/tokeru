@@ -5,8 +5,10 @@ import SwiftUI
 import Firebase
 
 class MainFlutterWindow: NSWindow {
-  var channel: FlutterMethodChannel!
+  var flutterViewController: FlutterViewController!
+  var channelMethod: FlutterMethodChannel!
   lazy var flutterEngine = FlutterEngine(name: "my flutter engine", project: nil)
+  var panel: FloatingPanel!
 
   /// ウィンドウのサイズと位置を設定する
   func setDefaultWindow() {
@@ -46,20 +48,38 @@ class MainFlutterWindow: NSWindow {
     self.isMovable = true
     self.isMovableByWindowBackground = true
 
-    channel = FlutterMethodChannel(name: "quick.flutter/panel", binaryMessenger: flutterViewController.engine.binaryMessenger)
-    setHandler(channel: channel)
+    channelMethod = FlutterMethodChannel(name: "quick.flutter/window", binaryMessenger: flutterViewController.engine.binaryMessenger)
+    setupNotification()
+    setHandler()
+    createPanel()
 
     super.awakeFromNib()
   }
 
+  private func setupNotification() {
+    NotificationCenter.default.addObserver(self, selector: #selector(handleDidBecomeKeyNotification(_:)), name: NSWindow.didBecomeKeyNotification, object: self)
+    NotificationCenter.default.addObserver(self, selector: #selector(handleDidResignKeyNotification(_:)), name: NSWindow.didResignKeyNotification, object: self)
+  }
 
-  func setHandler(channel: FlutterMethodChannel) {
+  deinit {
+    NotificationCenter.default.removeObserver(self)
+  }
+
+  // ウィンドウがキーウィンドウになった時の処理を行う
+  @objc private func handleDidBecomeKeyNotification(_ notification: Notification) {
+    channelMethod.invokeMethod("active", arguments: nil)
+  }
+
+  // ウィンドウが非アクティブになった時の処理
+  @objc private func handleDidResignKeyNotification(_ notification: Notification) {
+    channelMethod.invokeMethod("inactive", arguments: nil)
+  }
+
+
+  func setHandler() {
     // Flutter側でのイベントを受け取る
-    channel.setMethodCallHandler { (call, result) in
+    channelMethod.setMethodCallHandler { (call, result) in
       switch call.method {
-      case "closeWindow":
-        self.closeWindow()
-        return
       case "openPanel":
         self.openPanel()
         return
@@ -72,26 +92,23 @@ class MainFlutterWindow: NSWindow {
     }
   }
 
-  func openPanel() {
+  /// FloatingPanelを作成する。
+  ///
+  /// [opePanel]メソッドを呼ぶことでユーザーが見えるように表示する
+  func createPanel() {
     flutterEngine.run(withEntrypoint: "panel");
     let flutterViewController = FlutterViewController(engine: flutterEngine, nibName: nil, bundle: nil)
 
-    var newEntryPanel = FloatingPanel(contentRect: NSRect(x: 0, y: 0, width: 1200, height: 600), backing: .buffered, defer: false)
-
-    newEntryPanel.title = "Floating Panel Title"
-    newEntryPanel.contentView = flutterViewController.view
-    newEntryPanel.contentViewController = flutterViewController
+    panel = FloatingPanel(flutterViewController: flutterViewController)
+    panel.contentView = flutterViewController.view
+    panel.contentViewController = flutterViewController
     RegisterGeneratedPlugins(registry: flutterViewController)
-
-    newEntryPanel.orderFront(nil)
-    newEntryPanel.makeKey()
   }
 
-  /// ウィンドウをcloseする
-  ///
-  /// ウィンドウが表示されている場合は閉じ、表示されていない場合は開きます。
-  func closeWindow() {
-    self.close()
+  /// FloatingPanelを表示する。
+  func openPanel() {
+    panel.orderFront(nil)
+    panel.makeKey()
   }
 
   /// アプリケーションを終了する。
@@ -100,54 +117,3 @@ class MainFlutterWindow: NSWindow {
   }
 }
 
-class FloatingPanel: NSPanel {
-  init(contentRect: NSRect, backing: NSWindow.BackingStoreType, defer flag: Bool) {
-    super.init(contentRect: contentRect, styleMask: [.nonactivatingPanel, .titled, .resizable, .closable, .fullSizeContentView], backing: backing, defer: flag)
-
-    // Set this if you want the panel to remember its size/position
-    //        self.setFrameAutosaveName("a unique name")
-
-    // Allow the pannel to be on top of almost all other windows
-    self.isFloatingPanel = true
-    self.level = .floating
-
-    // Allow the pannel to appear in a fullscreen space
-    self.collectionBehavior.insert(.fullScreenAuxiliary)
-
-    // While we may set a title for the window, don't show it
-    self.titleVisibility = .hidden
-    self.titlebarAppearsTransparent = true
-
-    // Since there is no titlebar make the window moveable by click-dragging on the background
-    self.isMovableByWindowBackground = true
-
-    // Keep the panel around after closing since I expect the user to open/close it often
-    self.isReleasedWhenClosed = false
-
-    // Activate this if you want the window to hide once it is no longer focused
-    //                self.hidesOnDeactivate = true
-
-    // Hide the traffic icons (standard close, minimize, maximize buttons)
-    self.standardWindowButton(.closeButton)?.isHidden = true
-    self.standardWindowButton(.miniaturizeButton)?.isHidden = true
-    self.standardWindowButton(.zoomButton)?.isHidden = true
-  }
-
-  // `canBecomeKey` and `canBecomeMain` are required so that text inputs inside the panel can receive focus
-//    return true
-//  }
-
-  override var canBecomeMain: Bool {
-    return true
-  }
-
-  override func resignMain() {
-    super.resignMain()
-    close()
-  }
-
-  override func close() {
-    super.close()
-  }
-
-}
