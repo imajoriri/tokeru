@@ -2,7 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:hotkey_manager/hotkey_manager.dart';
 import 'package:logger/logger.dart';
 import 'package:quick_flutter/controller/hot_key/hot_key_controller.dart';
 import 'package:quick_flutter/controller/refresh/refresh_controller.dart';
@@ -37,8 +36,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  await hotKeyManager.unregisterAll();
 
   runApp(
     ProviderScope(
