@@ -1,14 +1,10 @@
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quick_flutter/controller/user/user_controller.dart';
-import 'package:quick_flutter/model/app_item/app_item.dart';
-import 'package:quick_flutter/repository/app_item/app_item_repository.dart';
+import 'package:quick_flutter/controller/panel_screen/panel_screen_controller.dart';
 import 'package:quick_flutter/utils/panel_method_channel.dart';
 import 'package:quick_flutter/widget/button/submit_button.dart';
-import 'package:uuid/uuid.dart';
 
 final GlobalKey _childKey = GlobalKey();
 
@@ -21,19 +17,9 @@ class PanelScreen extends HookConsumerWidget {
     TextEditingController textEditingConroller,
     WidgetRef ref,
   ) async {
-    // TODO: リファクタ
-    final chat = AppChatItem(
-      id: const Uuid().v4(),
-      message: textEditingConroller.text,
-      createdAt: DateTime.now(),
-    );
-    final user = await ref.read(userControllerProvider.future);
-    final repository = ref.read(appItemRepositoryProvider(user.id));
-    try {
-      await repository.add(chat);
-    } on Exception catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
-    }
+    ref.read(panelScreenControllerProvider.notifier).send(
+          message: textEditingConroller.text,
+        );
     textEditingConroller.clear();
   }
 
