@@ -40,6 +40,7 @@ class PanelScreen extends HookConsumerWidget {
     // ウィンドウのリサイズが完了するまでにエラーが発生しないように、
     // スクロールできるようにする。
     return SingleChildScrollView(
+      physics: const NeverScrollableScrollPhysics(),
       child: Padding(
         key: _childKey,
         padding: const EdgeInsets.all(8.0),
