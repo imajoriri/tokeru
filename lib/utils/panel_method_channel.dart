@@ -16,10 +16,19 @@ class _PanelMethodChannel {
       if (height != null) "height": height,
     });
   }
+
+  /// ウィンドウを閉じる。
+  Future<void> closeWindow() async {
+    await _panelMethodChannel
+        .invokeMethod(_AppPanelMethodChannelType.close.name);
+  }
 }
 
 enum _AppPanelMethodChannelType {
   /// パネルのサイズを変更する。
   resizePanel,
+
+  /// ウィンドウを閉じる。
+  close,
   ;
 }

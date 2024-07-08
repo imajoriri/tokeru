@@ -47,10 +47,14 @@ class PanelScreen extends HookConsumerWidget {
           shortcuts: const {
             SingleActivator(LogicalKeyboardKey.enter, meta: true):
                 ActivateIntent(),
+            SingleActivator(LogicalKeyboardKey.escape): _CloseWindowIntent(),
           },
           actions: {
             ActivateIntent: CallbackAction<ActivateIntent>(
               onInvoke: (intent) => _send(textEditingConroller, ref),
+            ),
+            _CloseWindowIntent: CallbackAction<_CloseWindowIntent>(
+              onInvoke: (intent) => panelMethodChannel.closeWindow(),
             ),
           },
           child: Row(
@@ -77,4 +81,8 @@ class PanelScreen extends HookConsumerWidget {
       ),
     );
   }
+}
+
+class _CloseWindowIntent extends Intent {
+  const _CloseWindowIntent();
 }

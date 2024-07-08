@@ -73,6 +73,9 @@ class FloatingPanel: NSPanel {
       case "resizePanel":
         self.setFrameSize(call: call)
         return
+      case "close":
+        self.close()
+        return
       default:
         result(FlutterMethodNotImplemented)
         return
