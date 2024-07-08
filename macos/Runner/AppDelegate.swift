@@ -14,11 +14,4 @@ class AppDelegate: FlutterAppDelegate {
     // 思い出しやすいようにコード自体は残す
     // NSApp.setActivationPolicy(.accessory)
   }
-
-  // Dockやアプリケーションスイッチャーで選択された時にウィンドウを表示する
-  override func applicationDidBecomeActive(_ notification: Notification) {
-    for window in NSApp.windows {
-      window.makeKeyAndOrderFront(nil)
-    }
-  }
 }
