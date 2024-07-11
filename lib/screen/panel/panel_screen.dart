@@ -109,6 +109,7 @@ class PanelScreen extends HookConsumerWidget {
                       focusNode: focusNode,
                       controller: textEditingConroller,
                       maxLines: null,
+                      cursorColor: Colors.black,
                       style: context.appTextTheme.bodyMedium,
                       decoration: const InputDecoration(
                         isDense: true,
