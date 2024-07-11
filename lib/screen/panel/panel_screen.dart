@@ -32,7 +32,7 @@ class PanelScreen extends HookConsumerWidget {
     // ウィンドウをロックしているかどうか。
     final isLocked = useState(false);
 
-    panelMethodChannel.addListnerActive((type) async {
+    panelMethodChannel.addListner((type) async {
       switch (type) {
         case OsHandlerType.windowActive:
           focusNode.requestFocus();

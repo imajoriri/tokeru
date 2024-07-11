@@ -24,7 +24,7 @@ class _PanelMethodChannel {
   }
 
   /// activeの通知を受け取る。
-  void addListnerActive(Future<dynamic> Function(OsHandlerType) handler) {
+  void addListner(Future<dynamic> Function(OsHandlerType) handler) {
     _panelMethodChannel.setMethodCallHandler((call) async {
       final type = OsHandlerType.fromString(call.method);
       if (type != null) {
