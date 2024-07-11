@@ -22,6 +22,7 @@ class _MainMethodChannel {
     _mainMethodChannel.setMethodCallHandler((call) async {
       switch (call.method) {
         case 'inactive':
+          handler?.call(call);
           break;
         case 'active':
           handler?.call(call);
