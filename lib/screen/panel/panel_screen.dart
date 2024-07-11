@@ -6,6 +6,7 @@ import 'package:quick_flutter/controller/panel_screen/panel_screen_controller.da
 import 'package:quick_flutter/utils/panel_method_channel.dart';
 import 'package:quick_flutter/widget/button/icon_button.dart';
 import 'package:quick_flutter/widget/button/submit_button.dart';
+import 'package:quick_flutter/widget/theme/app_theme.dart';
 
 final GlobalKey _childKey = GlobalKey();
 
@@ -26,6 +27,31 @@ class PanelScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final focusNode = useFocusNode();
+
+    // ウィンドウをロックしているかどうか。
+    final isLocked = useState(false);
+
+    panelMethodChannel.addListnerActive((type) async {
+      switch (type) {
+        case OsHandlerType.windowActive:
+          focusNode.requestFocus();
+          break;
+        case OsHandlerType.windowInactive:
+
+          // ロックしている場合はウィンドウを閉じない。
+          if (!isLocked.value) {
+            panelMethodChannel.closeWindow();
+          } else {
+            // インアクティブの状態で、フォーカスがあると入力できると間違えてしまうので、
+            // フォーカスを外す。
+            FocusManager.instance.primaryFocus?.unfocus();
+          }
+          break;
+        default:
+          break;
+      }
+    });
     final textEditingConroller = useTextEditingController();
     final canSubmit = useState(textEditingConroller.text.isNotEmpty);
 
@@ -40,9 +66,6 @@ class PanelScreen extends HookConsumerWidget {
         panelMethodChannel.resizePanel(height: size.height.toInt());
       });
     });
-
-    // ウィンドウをロックしているかどうか。
-    final isLocked = useState(false);
 
     // ウィンドウのリサイズが完了するまでにエラーが発生しないように、
     // スクロールできるようにする。
@@ -83,8 +106,10 @@ class PanelScreen extends HookConsumerWidget {
                 children: [
                   Expanded(
                     child: TextField(
+                      focusNode: focusNode,
                       controller: textEditingConroller,
                       maxLines: null,
+                      style: context.appTextTheme.bodyMedium,
                       decoration: const InputDecoration(
                         isDense: true,
                         border: InputBorder.none,

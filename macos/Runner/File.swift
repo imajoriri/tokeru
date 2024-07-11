@@ -50,7 +50,25 @@ class FloatingPanel: NSPanel {
     self.standardWindowButton(.zoomButton)?.isHidden = true
 
     channelMethod = FlutterMethodChannel(name: "quick.flutter/panel", binaryMessenger: flutterViewController.engine.binaryMessenger)
+    setupNotification()
     setHandler()
+  }
+
+  private func setupNotification() {
+    NotificationCenter.default.addObserver(self, selector: #selector(handleDidBecomeKeyNotification(_:)), name: NSWindow.didBecomeKeyNotification, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(handleDidResignKeyNotification(_:)), name: NSWindow.didResignKeyNotification, object: nil)
+  }
+
+  deinit {
+    NotificationCenter.default.removeObserver(self)
+  }
+
+  @objc private func handleDidBecomeKeyNotification(_ notification: Notification) {
+    self.channelMethod.invokeMethod("active", arguments: nil)
+  }
+
+  @objc private func handleDidResignKeyNotification(_ notification: Notification) {
+    self.channelMethod.invokeMethod("inactive", arguments: nil)
   }
 
   override var canBecomeMain: Bool {
@@ -63,7 +81,8 @@ class FloatingPanel: NSPanel {
 
   override func resignMain() {
     super.resignMain()
-    close()
+    // ここでcloseを呼ばないことで、inactiveになってもウィンドウが閉じない
+    // close()
   }
 
   func setHandler() {
