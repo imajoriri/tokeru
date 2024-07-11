@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/controller/panel_screen/panel_screen_controller.dart';
 import 'package:quick_flutter/utils/panel_method_channel.dart';
+import 'package:quick_flutter/widget/button/icon_button.dart';
 import 'package:quick_flutter/widget/button/submit_button.dart';
 
 final GlobalKey _childKey = GlobalKey();
@@ -26,8 +27,11 @@ class PanelScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textEditingConroller = useTextEditingController();
+    final canSubmit = useState(textEditingConroller.text.isNotEmpty);
 
     textEditingConroller.addListener(() {
+      canSubmit.value = textEditingConroller.text.isNotEmpty;
+
       // リビルド後にサイズを取得しないと改行後のサイズが取得できない
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final RenderBox renderBox =
@@ -36,6 +40,9 @@ class PanelScreen extends HookConsumerWidget {
         panelMethodChannel.resizePanel(height: size.height.toInt());
       });
     });
+
+    // ウィンドウをロックしているかどうか。
+    final isLocked = useState(false);
 
     // ウィンドウのリサイズが完了するまでにエラーが発生しないように、
     // スクロールできるようにする。
@@ -58,23 +65,40 @@ class PanelScreen extends HookConsumerWidget {
               onInvoke: (intent) => panelMethodChannel.closeWindow(),
             ),
           },
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: TextField(
-                  controller: textEditingConroller,
-                  maxLines: null,
-                  decoration: const InputDecoration(
-                    isDense: true,
-                    border: InputBorder.none,
-                  ),
+              AppIconButton.small(
+                icon: Icon(
+                  isLocked.value ? Icons.lock_rounded : Icons.lock_open_rounded,
                 ),
-              ),
-              SubmitButton(
                 onPressed: () {
-                  _send(textEditingConroller, ref);
+                  isLocked.value = !isLocked.value;
                 },
+                tooltip: '',
+              ),
+              const SizedBox(height: 8),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: textEditingConroller,
+                      maxLines: null,
+                      decoration: const InputDecoration(
+                        isDense: true,
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                  SubmitButton(
+                    onPressed: canSubmit.value
+                        ? () {
+                            _send(textEditingConroller, ref);
+                          }
+                        : null,
+                  ),
+                ],
               ),
             ],
           ),
