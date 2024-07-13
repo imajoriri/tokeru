@@ -7,7 +7,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'todo_controller.g.dart';
 
-/// 今日作成された[AppTodoItem]を返すController
+/// 未完了の[AppTodoItem]を返すController。
 ///
 /// ユーザーがログインしていない場合は空を返す。
 @Riverpod(keepAlive: true)
@@ -20,10 +20,7 @@ class TodoController extends _$TodoController with AppTodoItemsNotifierMixin {
       return [];
     }
     final repository = ref.read(appItemRepositoryProvider(user.value!.id));
-    final now = DateTime.now();
-    final todayStart = DateTime(now.year, now.month, now.day);
     final appItems = await repository.fetch(
-      start: todayStart,
       type: 'todo',
       isDone: false,
     );
