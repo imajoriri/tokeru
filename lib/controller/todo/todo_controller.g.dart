@@ -6,9 +6,9 @@ part of 'todo_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$todoControllerHash() => r'e909557c04b5fe5868575ce53b330a184b312d8f';
+String _$todoControllerHash() => r'3d30f82488a08cd7889235b63798575c690c7bdf';
 
-/// 今日作成された[AppTodoItem]を返すController
+/// 未完了の[AppTodoItem]を返すController。
 ///
 /// ユーザーがログインしていない場合は空を返す。
 ///

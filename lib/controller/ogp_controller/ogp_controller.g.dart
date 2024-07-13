@@ -6,7 +6,7 @@ part of 'ogp_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$ogpControllerHash() => r'5d82e482c47835ef3d066bc39018dd154a4fc98b';
+String _$ogpControllerHash() => r'd1bbf7b537b8d903e1ac113ea69653be0164f1af';
 
 /// Copied from Dart SDK
 class _SystemHash {
