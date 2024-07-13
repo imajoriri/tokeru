@@ -118,7 +118,7 @@ class _ChatListItemChat extends ConsumerWidget {
                   child: asyncValue.when(
                     data: (ogp) {
                       return UrlPreviewCard(
-                        key: UniqueKey(),
+                        key: ValueKey(uri.toString()),
                         ogp: ogp,
                         onTap: () async {
                           if (await canLaunchUrl(uri)) {
