@@ -1,4 +1,4 @@
-part of 'chat_view.dart';
+part of 'main_screen.dart';
 
 /// チャットのTextField。
 class _ChatTextField extends HookConsumerWidget {
@@ -7,22 +7,8 @@ class _ChatTextField extends HookConsumerWidget {
   Future<void> _send({
     required TextEditingController textEditingController,
     required WidgetRef ref,
-    required bool todoMode,
   }) async {
     if (textEditingController.text.isEmpty) return;
-
-    // Todoモードの場合、改行でTodoを複数作成する。
-    if (todoMode) {
-      final titles = textEditingController.text.split('\n');
-      await ref.read(
-        todoAddControllerProvider(
-          titles: titles,
-          indexType: TodoAddIndexType.last,
-        ).future,
-      );
-      textEditingController.clear();
-      return;
-    }
 
     final provider = todayAppItemControllerProvider;
     ref.read(provider.notifier).addChat(message: textEditingController.text);
@@ -35,13 +21,22 @@ class _ChatTextField extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textEditingController = useTextEditingController();
+    final baseOffsetIsTop =
+        useState(textEditingController.selection.baseOffset == 0);
     final hasFocus = useState(false);
     final canSubmit = useState(false);
-    final todoMode = useState(false);
 
-    textEditingController.addListener(() {
-      canSubmit.value = textEditingController.text.isNotEmpty;
-    });
+    useEffect(
+      () {
+        textEditingController.addListener(() {
+          baseOffsetIsTop.value =
+              textEditingController.selection.baseOffset == 0;
+          canSubmit.value = textEditingController.text.isNotEmpty;
+        });
+        return;
+      },
+      const [],
+    );
 
     final animationController =
         useAnimationController(duration: const Duration(milliseconds: 150));
@@ -62,10 +57,19 @@ class _ChatTextField extends HookConsumerWidget {
               _send(
                 textEditingController: textEditingController,
                 ref: ref,
-                todoMode: todoMode.value,
               ),
+          // カーソルがテキストの先頭にいる時のみ、上矢印キーでフォーカスを移動する。
+          if (baseOffsetIsTop.value)
+            const SingleActivator(LogicalKeyboardKey.arrowUp): () {
+              if (textEditingController.selection.baseOffset == 0) {
+                FocusScope.of(context).previousFocus();
+              }
+            },
         },
         child: Focus(
+          // このWidget全体にフォーカスが当たってしまうため、スキップする。
+          // 本来はTextFieldにフォーカスを当てたい。
+          focusNode: useFocusNode(skipTraversal: true),
           onFocusChange: (value) {
             hasFocus.value = chatFocusNode.hasFocus;
             if (value) {
@@ -88,12 +92,10 @@ class _ChatTextField extends HookConsumerWidget {
                         focusNode: chatFocusNode,
                         style: context.appTextTheme.bodyMedium,
                         cursorColor: Colors.black,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           isDense: true,
                           border: InputBorder.none,
-                          hintText: todoMode.value
-                              ? 'New todo list'
-                              : 'Talk to myself',
+                          hintText: 'Talk to myself',
                         ),
                       ),
                     ),
@@ -101,21 +103,12 @@ class _ChatTextField extends HookConsumerWidget {
                 ),
                 Row(
                   children: [
-                    CheckButton(
-                      onPressed: (_) async {
-                        todoMode.value = !todoMode.value;
-                      },
-                      checked: todoMode.value,
-                      uncheckedColor: context.appColors.iconSubtle,
-                      checkedColor: context.appColors.primary,
-                    ),
                     const Spacer(),
                     SubmitButton(
                       onPressed: canSubmit.value
                           ? () => _send(
                                 textEditingController: textEditingController,
                                 ref: ref,
-                                todoMode: todoMode.value,
                               )
                           : null,
                     ),
