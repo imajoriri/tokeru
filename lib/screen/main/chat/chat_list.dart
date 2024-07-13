@@ -11,6 +11,7 @@ class _ChatList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       child: appItems.when(
+        skipLoadingOnReload: true,
         data: (appItems) {
           return Expanded(
             child: NotificationListener<ScrollNotification>(
