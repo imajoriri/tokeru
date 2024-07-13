@@ -91,14 +91,30 @@ class PanelScreen extends HookConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              AppIconButton.small(
-                icon: Icon(
-                  isLocked.value ? Icons.lock_rounded : Icons.lock_open_rounded,
-                ),
-                onPressed: () {
-                  isLocked.value = !isLocked.value;
-                },
-                tooltip: '',
+              Row(
+                children: [
+                  // 閉じるボタン。
+                  AppIconButton.small(
+                    icon: const Icon(Icons.close_rounded),
+                    onPressed: () {
+                      panelMethodChannel.closeWindow();
+                    },
+                    tooltip: '',
+                  ),
+                  const Spacer(),
+                  // ロックボタン。
+                  AppIconButton.small(
+                    icon: Icon(
+                      isLocked.value
+                          ? Icons.lock_rounded
+                          : Icons.lock_open_rounded,
+                    ),
+                    onPressed: () {
+                      isLocked.value = !isLocked.value;
+                    },
+                    tooltip: '',
+                  ),
+                ],
               ),
               const SizedBox(height: 8),
               Row(
