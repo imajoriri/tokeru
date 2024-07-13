@@ -91,9 +91,9 @@ class PanelScreen extends HookConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ロックボタン
               Row(
                 children: [
+                  // 閉じるボタン。
                   AppIconButton.small(
                     icon: const Icon(Icons.close_rounded),
                     onPressed: () {
@@ -102,6 +102,7 @@ class PanelScreen extends HookConsumerWidget {
                     tooltip: '',
                   ),
                   const Spacer(),
+                  // ロックボタン。
                   AppIconButton.small(
                     icon: Icon(
                       isLocked.value
