@@ -11,17 +11,11 @@ class TodayTodoList extends HookConsumerWidget {
         if (todos.isEmpty) {
           return const _EmptyState();
         }
-
-        final totalMinutes = todos
-            .map((todo) => todo.minutes)
-            .where((minutes) => minutes != null)
-            .fold<int>(0, (prev, minutes) => prev + minutes!);
-
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // title
-            _Header(totalMinutes: totalMinutes),
+            const _Header(),
 
             // TodoList
             Padding(
@@ -190,11 +184,7 @@ class _EmptyState extends StatelessWidget {
 }
 
 class _Header extends ConsumerWidget {
-  const _Header({
-    required this.totalMinutes,
-  });
-
-  final int totalMinutes;
+  const _Header();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -204,7 +194,7 @@ class _Header extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            "Today's To-Dos @${totalMinutes}min",
+            "To-Dos",
             style: context.appTextTheme.titleSmall,
           ),
           AppIconButton.medium(

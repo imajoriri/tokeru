@@ -7,9 +7,11 @@ part of 'panel_screen_controller.dart';
 // **************************************************************************
 
 String _$panelScreenControllerHash() =>
-    r'74823d9d22e3d4f563140bfc5f4dc95d24c05f1d';
+    r'45360a7443f7b278dba998b96a8f8519019459a5';
 
-/// See also [PanelScreenController].
+/// [PanelScreen]のコントローラー。
+///
+/// Copied from [PanelScreenController].
 @ProviderFor(PanelScreenController)
 final panelScreenControllerProvider =
     AutoDisposeNotifierProvider<PanelScreenController, void>.internal(
