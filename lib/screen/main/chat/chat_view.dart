@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:quick_flutter/controller/app_item/app_item_controller.dart';
 import 'package:quick_flutter/controller/ogp_controller/ogp_controller.dart';
 import 'package:quick_flutter/controller/today_app_item/today_app_item_controller.dart';
 import 'package:quick_flutter/controller/todo_add/todo_add_controller.dart';
@@ -26,14 +27,11 @@ class ChatView extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider = todayAppItemControllerProvider;
-    final appItems = ref.watch(provider);
-
-    return Column(
+    return const Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        _ChatList(appItems: appItems),
-        const Padding(
+        _ChatList(),
+        Padding(
           padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
           child: _ChatTextField(),
         ),

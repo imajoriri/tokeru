@@ -1,22 +1,20 @@
 part of 'chat_view.dart';
 
 class _ChatList extends ConsumerWidget {
-  const _ChatList({
-    required this.appItems,
-  });
-
-  final AsyncValue<List<AppItem>> appItems;
+  const _ChatList();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final asyncValue = ref.watch(appItemControllerProvider);
     return Container(
-      child: appItems.when(
-        data: (appItems) {
+      child: asyncValue.when(
+        data: (state) {
+          final appItems = state.chatItems;
           return Expanded(
             child: NotificationListener<ScrollNotification>(
               onNotification: (notification) {
                 if (notification.metrics.extentAfter < 300) {
-                  ref.read(todayAppItemControllerProvider.notifier).fetchNext();
+                  ref.read(appItemControllerProvider.notifier).fetchNextChats();
                 }
                 return false;
               },

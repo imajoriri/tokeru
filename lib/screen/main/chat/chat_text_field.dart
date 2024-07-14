@@ -24,8 +24,9 @@ class _ChatTextField extends HookConsumerWidget {
       return;
     }
 
-    final provider = todayAppItemControllerProvider;
-    ref.read(provider.notifier).addChat(message: textEditingController.text);
+    ref
+        .read(appItemControllerProvider.notifier)
+        .addChat(message: textEditingController.text);
     textEditingController.clear();
     FirebaseAnalytics.instance.logEvent(
       name: AnalyticsEventName.addChat.name,

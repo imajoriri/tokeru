@@ -33,38 +33,38 @@ class TodayAppItemController extends _$TodayAppItemController {
     return todos;
   }
 
-  /// 次の[AppItem]を取得する
-  Future<void> fetchNext() async {
-    // 次の[AppItem]がない場合は何もしない。
-    if (!hasNext) {
-      return;
-    }
+  // /// 次の[AppItem]を取得する
+  // Future<void> fetchNext() async {
+  //   // 次の[AppItem]がない場合は何もしない。
+  //   if (!hasNext) {
+  //     return;
+  //   }
 
-    if (state.isLoading || state.isRefreshing || state.hasError) {
-      return;
-    }
-    final value = state.valueOrNull;
-    if (value == null) {
-      return;
-    }
+  //   if (state.isLoading || state.isRefreshing || state.hasError) {
+  //     return;
+  //   }
+  //   final value = state.valueOrNull;
+  //   if (value == null) {
+  //     return;
+  //   }
 
-    state = const AsyncLoading<List<AppItem>>().copyWithPrevious(state);
-    try {
-      final user = ref.read(userControllerProvider).requireValue;
-      final repository = ref.read(appItemRepositoryProvider(user.id));
-      final last = value.last;
-      final todos = await repository.fetch(
-        end: last.createdAt,
-        limit: initialPerPage,
-      );
-      if (todos.isEmpty) {
-        hasNext = false;
-      }
-      state = AsyncData([...value, ...todos]);
-    } on Exception catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
-    }
-  }
+  //   state = const AsyncLoading<List<AppItem>>().copyWithPrevious(state);
+  //   try {
+  //     final user = ref.read(userControllerProvider).requireValue;
+  //     final repository = ref.read(appItemRepositoryProvider(user.id));
+  //     final last = value.last;
+  //     final todos = await repository.fetch(
+  //       end: last.createdAt,
+  //       limit: initialPerPage,
+  //     );
+  //     if (todos.isEmpty) {
+  //       hasNext = false;
+  //     }
+  //     state = AsyncData([...value, ...todos]);
+  //   } on Exception catch (e, s) {
+  //     await FirebaseCrashlytics.instance.recordError(e, s);
+  //   }
+  // }
 
   /// [AppTodoItem]を更新する。
   ///
@@ -112,24 +112,24 @@ class TodayAppItemController extends _$TodayAppItemController {
     state = AsyncData(tmp);
   }
 
-  /// [AppChatItem]を追加する
-  Future<void> addChat({
-    required String message,
-  }) async {
-    final chat = AppChatItem(
-      id: const Uuid().v4(),
-      message: message,
-      createdAt: DateTime.now(),
-    );
-    state = AsyncData([chat, ...state.value!]);
-    final user = ref.read(userControllerProvider).requireValue;
-    final repository = ref.read(appItemRepositoryProvider(user.id));
-    try {
-      await repository.add(chat);
-    } on Exception catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
-    }
-  }
+  // /// [AppChatItem]を追加する
+  // Future<void> addChat({
+  //   required String message,
+  // }) async {
+  //   final chat = AppChatItem(
+  //     id: const Uuid().v4(),
+  //     message: message,
+  //     createdAt: DateTime.now(),
+  //   );
+  //   state = AsyncData([chat, ...state.value!]);
+  //   final user = ref.read(userControllerProvider).requireValue;
+  //   final repository = ref.read(appItemRepositoryProvider(user.id));
+  //   try {
+  //     await repository.add(chat);
+  //   } on Exception catch (e, s) {
+  //     await FirebaseCrashlytics.instance.recordError(e, s);
+  //   }
+  // }
 
   /// [AppChatItem]を[AppTodoItem]に変換する
   ///
