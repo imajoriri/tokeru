@@ -6,10 +6,12 @@ part of 'refresh_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$refreshControllerHash() => r'05b489a5be0af9d7bf6434b59c54ecf5c20ab7b2';
+String _$refreshControllerHash() => r'196079fe3021e8cd5993334c31dfe3a726fa2b31';
 
-/// データを更新するためのコントローラー。
+/// アプリ内のデータを更新するためのコントローラー。
 ///
+/// 「Cmd + R」でこのProviderがinvalidateされ、watchしているProviderも更新されることを
+/// 想定している。
 /// 最新更新日を返す。
 /// このコントローラーをref.watchすることで、データの更新を行う。
 ///

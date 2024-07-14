@@ -8,6 +8,7 @@ class _ChatList extends ConsumerWidget {
     final asyncValue = ref.watch(appItemControllerProvider);
     return Container(
       child: asyncValue.when(
+        skipLoadingOnReload: true,
         data: (state) {
           final appItems = state.chatItems;
           return Expanded(

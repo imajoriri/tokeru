@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:quick_flutter/controller/app_item_should_update/app_item_should_update_controller.dart';
 import 'package:quick_flutter/controller/refresh/refresh_controller.dart';
 import 'package:quick_flutter/controller/user/user_controller.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
@@ -21,6 +22,7 @@ class TodayAppItemController extends _$TodayAppItemController {
   @override
   FutureOr<List<AppItem>> build() async {
     ref.watch(refreshControllerProvider);
+    ref.watch(appItemShouldUpdateControllerProvider);
     final user = ref.watch(userControllerProvider);
     if (user.hasError || user.valueOrNull == null) {
       return [];

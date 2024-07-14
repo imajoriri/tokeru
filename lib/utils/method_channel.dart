@@ -18,18 +18,41 @@ class _MainMethodChannel {
   }
 
   /// activeの通知を受け取る。
-  void addListnerActive(Future<dynamic> Function(MethodCall)? handler) {
+  void addListnerActive(Future<dynamic> Function(MainOsHandlerType) handler) {
     _mainMethodChannel.setMethodCallHandler((call) async {
-      switch (call.method) {
-        case 'inactive':
-          handler?.call(call);
-          break;
-        case 'active':
-          handler?.call(call);
-          break;
+      final type = MainOsHandlerType.fromString(call.method);
+      if (type != null) {
+        handler.call(type);
       }
       return null;
     });
+  }
+}
+
+/// OS側からの通知の種類。
+enum MainOsHandlerType {
+  /// ウィンドウがアクティブになった時の通知。
+  windowActive(label: "active"),
+
+  /// ウィンドウが非アクティブになった時の通知。
+  windowInactive(label: "inactive"),
+  ;
+
+  const MainOsHandlerType({
+    required this.label,
+  });
+
+  /// OS側から通知として飛んでくる文字列。
+  final String label;
+
+  /// OS側からの通知の[String]を[OsHandlerType]に変換する。
+  static MainOsHandlerType? fromString(String value) {
+    for (final type in values) {
+      if (type.label == value) {
+        return type;
+      }
+    }
+    return null;
   }
 }
 
