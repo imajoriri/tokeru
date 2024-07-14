@@ -4,11 +4,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:quick_flutter/controller/hot_key/hot_key_controller.dart';
-import 'package:quick_flutter/controller/refresh/refresh_controller.dart';
 import 'package:quick_flutter/firebase_options.dart';
 import 'package:quick_flutter/screen/main/main_screen.dart';
 import 'package:quick_flutter/screen/panel/panel_screen.dart';
-import 'package:quick_flutter/utils/method_channel.dart';
 import 'package:quick_flutter/widget/app_platform_menu_bar.dart';
 import 'package:quick_flutter/widget/callback_shortcut.dart';
 import 'package:quick_flutter/widget/theme/app_theme.dart';
@@ -48,12 +46,6 @@ void main() async {
                 // 画面表示時にホットキーを登録するためにProviderを参照する。
                 // リビルドされたいわけではないのでreadを使う。
                 ref.read(hotKeyControllerProvider);
-
-                mainMethodChannel.addListnerActive((_) async {
-                  if (ref.read(refreshControllerProvider.notifier).isPast()) {
-                    ref.invalidate(refreshControllerProvider);
-                  }
-                });
 
                 return Material(
                   color: context.appColors.backgroundDefault,
