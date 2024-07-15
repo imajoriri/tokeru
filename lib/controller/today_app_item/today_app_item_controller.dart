@@ -1,12 +1,10 @@
 import 'package:collection/collection.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:quick_flutter/controller/app_item_should_update/app_item_should_update_controller.dart';
 import 'package:quick_flutter/controller/refresh/refresh_controller.dart';
 import 'package:quick_flutter/controller/user/user_controller.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
 import 'package:quick_flutter/repository/app_item/app_item_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:uuid/uuid.dart';
 
 part 'today_app_item_controller.g.dart';
 
@@ -136,33 +134,33 @@ class TodayAppItemController extends _$TodayAppItemController {
   /// [AppChatItem]を[AppTodoItem]に変換する
   ///
   /// Chatのmessageをtitleに変換する。
-  Future<void> convertToTodo({
-    required String chatId,
-  }) async {
-    final user = ref.read(userControllerProvider).requireValue;
-    final chat = state.value!.firstWhereOrNull((e) => e.id == chatId);
-    if (chat == null || chat is! AppChatItem) {
-      assert(false, 'chat is null or not AppChatItem');
-      return;
-    }
-    final convertedTodo = AppTodoItem(
-      id: chat.id,
-      title: chat.message,
-      isDone: false,
-      index: 0,
-      createdAt: chat.createdAt,
-    );
-    final repository = ref.read(appItemRepositoryProvider(user.id));
-    try {
-      await repository.update(item: convertedTodo);
-      final tmp = [...state.value!];
-      final index = tmp.indexWhere((element) => element.id == chat.id);
-      if (index != -1) {
-        tmp[index] = convertedTodo;
-      }
-      state = AsyncData(tmp);
-    } on Exception catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
-    }
-  }
+  // Future<void> convertToTodo({
+  //   required String chatId,
+  // }) async {
+  //   final user = ref.read(userControllerProvider).requireValue;
+  //   final chat = state.value!.firstWhereOrNull((e) => e.id == chatId);
+  //   if (chat == null || chat is! AppChatItem) {
+  //     assert(false, 'chat is null or not AppChatItem');
+  //     return;
+  //   }
+  //   final convertedTodo = AppTodoItem(
+  //     id: chat.id,
+  //     title: chat.message,
+  //     isDone: false,
+  //     index: 0,
+  //     createdAt: chat.createdAt,
+  //   );
+  //   final repository = ref.read(appItemRepositoryProvider(user.id));
+  //   try {
+  //     await repository.update(item: convertedTodo);
+  //     final tmp = [...state.value!];
+  //     final index = tmp.indexWhere((element) => element.id == chat.id);
+  //     if (index != -1) {
+  //       tmp[index] = convertedTodo;
+  //     }
+  //     state = AsyncData(tmp);
+  //   } on Exception catch (e, s) {
+  //     await FirebaseCrashlytics.instance.recordError(e, s);
+  //   }
+  // }
 }
