@@ -29,27 +29,7 @@ class _ChatList extends ConsumerWidget {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Builder(
-                    builder: (context) {
-                      if (index == appItems.length - 1) {
-                        return const SizedBox.shrink();
-                      }
-                      // ignore: unnecessary_cast
-                      final nextAppItem = appItems[index + 1] as AppItem?;
-                      // 次のAppItemが日付が変わるかどうか。
-                      final isNextDay = nextAppItem != null &&
-                          appItem.createdAt.day != nextAppItem.createdAt.day;
-                      if (isNextDay) {
-                        return _DayDividerItem(
-                          year: appItem.createdAt.year,
-                          month: appItem.createdAt.month,
-                          day: appItem.createdAt.day,
-                        );
-                      } else {
-                        return const SizedBox.shrink();
-                      }
-                    },
-                  ),
+                  _TodoDivider(index: index),
                   switch (appItem) {
                     AppTodoItem() => ChatListItem.todo(
                         todo: appItem,
@@ -84,6 +64,69 @@ class _ChatList extends ConsumerWidget {
           child: Text('Error: $error'),
         );
       },
+    );
+  }
+}
+
+class _TodoDivider extends ConsumerWidget {
+  const _TodoDivider({
+    super.key,
+    required this.index,
+  });
+
+  final int index;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final item = ref.watch(todayAppItemControllerProvider).valueOrNull?[index]
+        as AppItem;
+    final next = ref
+        .watch(todayAppItemControllerProvider)
+        .valueOrNull
+        ?.firstWhereIndexedOrNull((i, _) => i == index + 1);
+    return Builder(
+      builder: (context) {
+        // 次のAppItemが日付が変わるかどうか。
+        final isNextDay =
+            next != null && item.createdAt.day != next.createdAt.day;
+
+        final readTime = ref.watch(readControllerProvider).valueOrNull;
+        // 未読のラインを表示するかどうか。
+        final isUnreadLine = readTime != null &&
+            next != null &&
+            item.createdAt.isAfter(readTime) &&
+            next.createdAt.isBefore(readTime);
+        return Column(
+          children: [
+            if (isNextDay)
+              _DayDividerItem(
+                year: item.createdAt.year,
+                month: item.createdAt.month,
+                day: item.createdAt.day,
+              ),
+            if (isUnreadLine) const _UnreadDivider(),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _UnreadDivider extends StatelessWidget {
+  const _UnreadDivider();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(child: Divider(color: context.appColors.borderDefault)),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          child: const Text(
+            'New',
+          ),
+        ),
+      ],
     );
   }
 }
