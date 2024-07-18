@@ -6,7 +6,7 @@ part of 'app_item_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$appItemControllerHash() => r'c15397539e66a7b4362af7021a080091974e7c0b';
+String _$appItemControllerHash() => r'f9dbdec0c013ecfb8f4f339cb066127bf5a22cc7';
 
 /// [AppItem]を返すController。
 ///
