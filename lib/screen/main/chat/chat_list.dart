@@ -15,7 +15,7 @@ class _ChatList extends ConsumerWidget {
         return NotificationListener<ScrollNotification>(
           onNotification: (notification) {
             if (notification.metrics.extentAfter < 300) {
-              ref.read(todayAppItemControllerProvider.notifier).fetchNext();
+              ref.read(appItemControllerProvider.notifier).fetchNext();
             }
             return false;
           },
@@ -77,10 +77,10 @@ class _TodoDivider extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final item = ref.watch(todayAppItemControllerProvider).valueOrNull?[index]
-        as AppItem;
+    final item =
+        ref.watch(appItemControllerProvider).valueOrNull?[index] as AppItem;
     final next = ref
-        .watch(todayAppItemControllerProvider)
+        .watch(appItemControllerProvider)
         .valueOrNull
         ?.firstWhereIndexedOrNull((i, _) => i == index + 1);
     // 次のAppItemが日付が変わるかどうか。

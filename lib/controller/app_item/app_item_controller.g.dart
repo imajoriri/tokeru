@@ -1,28 +1,28 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'read_controller.dart';
+part of 'app_item_controller.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$readControllerHash() => r'f0c8173d820e89eec0c84c00dde5fecfeb0c851a';
+String _$appItemControllerHash() => r'c15397539e66a7b4362af7021a080091974e7c0b';
 
-/// Todoの既読した時刻を管理するコントローラー。
+/// [AppItem]を返すController。
 ///
-/// Copied from [ReadController].
-@ProviderFor(ReadController)
-final readControllerProvider =
-    AutoDisposeAsyncNotifierProvider<ReadController, DateTime>.internal(
-  ReadController.new,
-  name: r'readControllerProvider',
+/// Copied from [AppItemController].
+@ProviderFor(AppItemController)
+final appItemControllerProvider =
+    AsyncNotifierProvider<AppItemController, List<AppItem>>.internal(
+  AppItemController.new,
+  name: r'appItemControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$readControllerHash,
+      : _$appItemControllerHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$ReadController = AutoDisposeAsyncNotifier<DateTime>;
+typedef _$AppItemController = AsyncNotifier<List<AppItem>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
