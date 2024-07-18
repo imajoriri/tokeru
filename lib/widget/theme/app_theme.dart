@@ -28,7 +28,7 @@ class AppTheme {
       textLink: const Color(0xff0091FF),
       backgroundDefault: const Color(0xffFBFBFB),
       backgroundSubtle: const Color(0xffF4F4F4),
-      backgroundHovered: const Color(0xffF4F4F4),
+      backgroundHovered: const Color(0xffE0E0E0),
       backgroundDisabled: const Color(0xffE0E0E0),
       backgroundSelected: const Color(0xffF6EDFF),
       backgroundChecked: const Color(0xffC2C2C2),
