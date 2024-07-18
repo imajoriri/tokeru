@@ -12,4 +12,9 @@ class ReadController extends _$ReadController {
     // 2時間前。
     return DateTime.now().subtract(const Duration(hours: 2));
   }
+
+  Future<void> markAsRead(DateTime readAt) async {
+    // 既読した時刻を更新する。
+    state = AsyncValue.data(readAt);
+  }
 }

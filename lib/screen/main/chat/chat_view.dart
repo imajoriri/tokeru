@@ -42,7 +42,9 @@ class ChatView extends HookConsumerWidget {
               Positioned(
                 bottom: context.appSpacing.small,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => ref
+                      .read(readControllerProvider.notifier)
+                      .markAsRead(DateTime.now()),
                   child: const Text('Mark as read'),
                 ),
               ),
