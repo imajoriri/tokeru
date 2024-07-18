@@ -46,7 +46,7 @@ class ChatListItem extends HookWidget {
       onShowHoverHighlight: (value) => hover.value = value,
       child: Container(
         color: hover.value
-            ? context.appColors.backgroundHovered
+            ? context.appColors.textDefault.withOpacity(0.08)
             : context.appColors.backgroundDefault,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
         child: switch (app) {
