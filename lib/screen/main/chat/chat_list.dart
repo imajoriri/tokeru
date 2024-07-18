@@ -70,7 +70,6 @@ class _ChatList extends ConsumerWidget {
 
 class _TodoDivider extends ConsumerWidget {
   const _TodoDivider({
-    super.key,
     required this.index,
   });
 
@@ -84,30 +83,25 @@ class _TodoDivider extends ConsumerWidget {
         .watch(todayAppItemControllerProvider)
         .valueOrNull
         ?.firstWhereIndexedOrNull((i, _) => i == index + 1);
-    return Builder(
-      builder: (context) {
-        // 次のAppItemが日付が変わるかどうか。
-        final isNextDay =
-            next != null && item.createdAt.day != next.createdAt.day;
+    // 次のAppItemが日付が変わるかどうか。
+    final isNextDay = next != null && item.createdAt.day != next.createdAt.day;
 
-        final readTime = ref.watch(readControllerProvider).valueOrNull;
-        // 未読のラインを表示するかどうか。
-        final isUnreadLine = readTime != null &&
-            next != null &&
-            item.createdAt.isAfter(readTime) &&
-            next.createdAt.isBefore(readTime);
-        return Column(
-          children: [
-            if (isNextDay)
-              _DayDividerItem(
-                year: item.createdAt.year,
-                month: item.createdAt.month,
-                day: item.createdAt.day,
-              ),
-            if (isUnreadLine) const _UnreadDivider(),
-          ],
-        );
-      },
+    final readTime = ref.watch(readControllerProvider).valueOrNull;
+    // 未読のラインを表示するかどうか。
+    final isUnreadLine = readTime != null &&
+        next != null &&
+        item.createdAt.isAfter(readTime) &&
+        next.createdAt.isBefore(readTime);
+    return Column(
+      children: [
+        if (isNextDay)
+          _DayDividerItem(
+            year: item.createdAt.year,
+            month: item.createdAt.month,
+            day: item.createdAt.day,
+          ),
+        if (isUnreadLine) const _UnreadDivider(),
+      ],
     );
   }
 }
