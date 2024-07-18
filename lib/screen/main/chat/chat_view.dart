@@ -8,6 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/controller/ogp_controller/ogp_controller.dart';
 import 'package:quick_flutter/controller/read/read_controller.dart';
 import 'package:quick_flutter/controller/app_item/app_item_controller.dart';
+import 'package:quick_flutter/controller/read_all/read_all_controller.dart';
 import 'package:quick_flutter/controller/todo_add/todo_add_controller.dart';
 import 'package:quick_flutter/controller/todo_update/todo_update_controller.dart';
 import 'package:quick_flutter/model/analytics_event/analytics_event_name.dart';
@@ -30,6 +31,7 @@ class ChatView extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = appItemControllerProvider;
     final appItems = ref.watch(provider);
+    final readAll = ref.watch(readAllProvider);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -39,14 +41,23 @@ class ChatView extends HookConsumerWidget {
             alignment: Alignment.bottomCenter,
             children: [
               _ChatList(appItems: appItems),
-              Positioned(
-                bottom: context.appSpacing.small,
-                child: ElevatedButton(
-                  onPressed: () => ref
-                      .read(readControllerProvider.notifier)
-                      .markAsRead(DateTime.now()),
-                  child: const Text('Mark as read'),
-                ),
+              readAll.when(
+                data: (value) {
+                  if (value) {
+                    return const SizedBox.shrink();
+                  }
+                  return Positioned(
+                    bottom: context.appSpacing.small,
+                    child: ElevatedButton(
+                      onPressed: () => ref
+                          .read(readControllerProvider.notifier)
+                          .markAsRead(DateTime.now()),
+                      child: const Text('Mark as read'),
+                    ),
+                  );
+                },
+                loading: () => const SizedBox.shrink(),
+                error: (error, _) => const SizedBox.shrink(),
               ),
             ],
           ),
