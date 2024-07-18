@@ -32,7 +32,21 @@ class ChatView extends HookConsumerWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        _ChatList(appItems: appItems),
+        Expanded(
+          child: Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              _ChatList(appItems: appItems),
+              Positioned(
+                bottom: context.appSpacing.small,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  child: const Text('Mark as read'),
+                ),
+              ),
+            ],
+          ),
+        ),
         const Padding(
           padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
           child: _ChatTextField(),
