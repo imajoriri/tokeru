@@ -48,9 +48,17 @@ class _ChatList extends ConsumerWidget {
                   },
                   if (isLast) ...[
                     const SizedBox(height: 16),
-                    // 既読ボタンが表示されている時は最後のテキストが見えるように、スペースを空ける。
-                    if (ref.watch(readAllProvider).valueOrNull == false)
-                      const SizedBox(height: 32),
+                    // 既読ボタンがある時はテキストと被らないように、
+                    // 余白を追加する。
+                    AnimatedSize(
+                      duration: const Duration(milliseconds: 150),
+                      curve: Curves.easeInOutExpo,
+                      child: SizedBox(
+                        height: ref.watch(readAllProvider).valueOrNull == false
+                            ? 32
+                            : 0,
+                      ),
+                    ),
                   ],
                 ],
               );
