@@ -9,6 +9,7 @@ class _ChatList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final readAll = ref.watch(readAllProvider).valueOrNull == true;
     return appItems.when(
       skipLoadingOnReload: true,
       data: (appItems) {
@@ -53,11 +54,7 @@ class _ChatList extends ConsumerWidget {
                     AnimatedSize(
                       duration: const Duration(milliseconds: 150),
                       curve: Curves.easeInOutExpo,
-                      child: SizedBox(
-                        height: ref.watch(readAllProvider).valueOrNull == false
-                            ? 32
-                            : 0,
-                      ),
+                      child: SizedBox(height: readAll ? 0 : 32),
                     ),
                   ],
                 ],
