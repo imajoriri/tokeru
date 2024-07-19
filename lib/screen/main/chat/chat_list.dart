@@ -46,7 +46,12 @@ class _ChatList extends ConsumerWidget {
                     AppChatItem() => _ChatListItemChat(appItem: appItem),
                     AppDividerItem() => throw UnimplementedError(),
                   },
-                  if (isLast) const SizedBox(height: 16),
+                  if (isLast) ...[
+                    const SizedBox(height: 16),
+                    // 既読ボタンが表示されている時は最後のテキストが見えるように、スペースを空ける。
+                    if (ref.watch(readAllProvider).valueOrNull == false)
+                      const SizedBox(height: 32),
+                  ],
                 ],
               );
             },
