@@ -16,6 +16,10 @@ Future<bool> readAll(ReadAllRef ref) async {
 
   final readAt = await ref.watch(readControllerProvider.future);
 
+  if (readAt == null) {
+    return false;
+  }
+
   // 最後のチャットが既読されているかどうか。
   return latestAppItem.createdAt.isBefore(readAt);
 }
