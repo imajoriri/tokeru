@@ -6,7 +6,7 @@ part of 'read_all_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$readAllHash() => r'766e98ba31828bc5e62f739dae5424924e6a378d';
+String _$readAllHash() => r'42ae837bd6f8c6abd03a9b9a6f03307e62319a3a';
 
 /// 全てのチャットを既読したかどうかを管理するコントローラー。
 ///
