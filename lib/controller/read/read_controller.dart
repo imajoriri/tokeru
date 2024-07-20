@@ -9,13 +9,12 @@ part 'read_controller.g.dart';
 @riverpod
 class ReadController extends _$ReadController {
   @override
-  FutureOr<DateTime?> build() async {
+  Stream<DateTime?> build() {
     ref.watch(refreshControllerProvider);
     final user = ref.watch(userControllerProvider);
     if (user.hasError || user.valueOrNull == null) {
-      return null;
+      return const Stream.empty();
     }
-
     return ref.watch(readRepositoryProvider(user.value!.id)).fetch();
   }
 

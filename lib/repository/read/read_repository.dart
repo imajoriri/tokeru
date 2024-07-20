@@ -19,15 +19,17 @@ class ReadRepository {
   final String userId;
 
   /// 最終既読時刻を取得する。
-  Future<DateTime?> fetch() async {
+  Stream<DateTime?> fetch() {
     final doc = ref.read(userDocumentProvider(userId));
-    final snapshot = await doc.get();
-    final data = snapshot.data() as Map<String, dynamic>?;
-    if (data == null || !data.containsKey(_readAt)) {
-      return null;
-    }
+    final snapshot = doc.snapshots();
+    return snapshot.map((event) {
+      final data = event.data() as Map<String, dynamic>?;
+      if (data == null || !data.containsKey(_readAt)) {
+        return null;
+      }
 
-    return DateTime.fromMillisecondsSinceEpoch(data[_readAt] as int);
+      return DateTime.fromMillisecondsSinceEpoch(data[_readAt] as int);
+    });
   }
 
   /// 既読時刻を更新する。
