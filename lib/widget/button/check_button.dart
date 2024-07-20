@@ -31,7 +31,6 @@ class CheckButton extends HookWidget {
   @override
   Widget build(BuildContext context) {
     const animationDuration = Duration(milliseconds: 100);
-    final effectiveChecked = useState(checked);
     final pressed = useState(false);
     onTapCheck() async {
       if (!pressed.value) {
@@ -39,8 +38,7 @@ class CheckButton extends HookWidget {
         await Future.delayed(animationDuration);
       }
       pressed.value = false;
-      effectiveChecked.value = !effectiveChecked.value;
-      onPressed?.call(effectiveChecked.value);
+      onPressed?.call(!checked);
     }
 
     const minScale = 0.9;
@@ -73,7 +71,7 @@ class CheckButton extends HookWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
               border: Border.all(
-                color: effectiveChecked.value
+                color: checked
                     ? checkedColor ?? context.appColors.onSurfaceSubtle
                     : uncheckedColor ?? context.appColors.onSurface,
                 width: 2,
@@ -82,11 +80,11 @@ class CheckButton extends HookWidget {
             alignment: Alignment.center,
             child: AnimatedOpacity(
               duration: animationDuration,
-              opacity: effectiveChecked.value ? 1.0 : 0.0,
+              opacity: checked ? 1.0 : 0.0,
               child: Icon(
                 Icons.check_rounded,
                 size: 12,
-                color: effectiveChecked.value
+                color: checked
                     ? checkedColor ?? context.appColors.onSurfaceSubtle
                     : uncheckedColor ?? context.appColors.onSurface,
               ),
