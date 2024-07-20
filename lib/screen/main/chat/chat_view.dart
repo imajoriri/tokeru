@@ -57,6 +57,7 @@ class _ReadButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final readAll = ref.watch(readAllProvider);
     return readAll.when(
+      skipLoadingOnReload: true,
       data: (value) {
         if (value) {
           return const SizedBox.shrink();
