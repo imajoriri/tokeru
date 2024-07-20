@@ -29,44 +29,50 @@ class ChatView extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider = appItemControllerProvider;
-    final appItems = ref.watch(provider);
-    final readAll = ref.watch(readAllProvider);
-
-    return Column(
+    return const Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Expanded(
           child: Stack(
             alignment: Alignment.bottomCenter,
             children: [
-              _ChatList(appItems: appItems),
-              readAll.when(
-                data: (value) {
-                  if (value) {
-                    return const SizedBox.shrink();
-                  }
-                  return Positioned(
-                    bottom: context.appSpacing.small,
-                    child: ElevatedButton(
-                      onPressed: () => ref
-                          .read(readControllerProvider.notifier)
-                          .markAsRead(DateTime.now()),
-                      child: const Text('Mark as read'),
-                    ),
-                  );
-                },
-                loading: () => const SizedBox.shrink(),
-                error: (error, _) => const SizedBox.shrink(),
-              ),
+              _ChatList(),
+              _ReadButton(),
             ],
           ),
         ),
-        const Padding(
+        Padding(
           padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
           child: _ChatTextField(),
         ),
       ],
+    );
+  }
+}
+
+class _ReadButton extends ConsumerWidget {
+  const _ReadButton();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final readAll = ref.watch(readAllProvider);
+    return readAll.when(
+      data: (value) {
+        if (value) {
+          return const SizedBox.shrink();
+        }
+        return Positioned(
+          bottom: context.appSpacing.small,
+          child: ElevatedButton(
+            onPressed: () => ref
+                .read(readControllerProvider.notifier)
+                .markAsRead(DateTime.now()),
+            child: const Text('Mark as read'),
+          ),
+        );
+      },
+      loading: () => const SizedBox.shrink(),
+      error: (error, _) => const SizedBox.shrink(),
     );
   }
 }
