@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:quick_flutter/widget/color/status_color.dart';
 
 /// ボタンとして必要最低限の機能を持つWidget
 class AppButton extends HookWidget {
@@ -33,13 +34,13 @@ class AppButton extends HookWidget {
 
     late final Color overlayColor;
     if (!enabled) {
-      overlayColor = containerColor.withOpacity(0.38);
+      overlayColor = containerColor.disabled;
     } else if (pressed.value) {
-      overlayColor = containerColor.withOpacity(0.10);
+      overlayColor = containerColor.pressed;
     } else if (hover.value) {
-      overlayColor = containerColor.withOpacity(0.08);
+      overlayColor = containerColor.hovered;
     } else if (focus.value) {
-      overlayColor = containerColor.withOpacity(0.10);
+      overlayColor = containerColor.focused;
     } else {
       overlayColor = containerColor.withOpacity(0);
     }

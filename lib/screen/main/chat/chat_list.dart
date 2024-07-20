@@ -123,11 +123,13 @@ class _UnreadDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(child: Divider(color: context.appColors.borderDefault)),
+        Expanded(child: Divider(color: context.appColors.primary)),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-          child: const Text(
+          child: Text(
             'New',
+            style: context.appTextTheme.labelSmall
+                .copyWith(color: context.appColors.primary),
           ),
         ),
       ],
@@ -211,12 +213,12 @@ class _DayDividerItem extends StatelessWidget {
     final text = isToday ? 'Today' : '$month/$day';
     return Row(
       children: [
-        Expanded(child: Divider(color: context.appColors.borderDefault)),
+        Expanded(child: Divider(color: context.appColors.outline)),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           decoration: BoxDecoration(
             border: Border.all(
-              color: context.appColors.borderDefault,
+              color: context.appColors.outline,
             ),
             borderRadius: BorderRadius.circular(16),
           ),
@@ -224,7 +226,7 @@ class _DayDividerItem extends StatelessWidget {
             text,
           ),
         ),
-        Expanded(child: Divider(color: context.appColors.borderDefault)),
+        Expanded(child: Divider(color: context.appColors.outline)),
       ],
     );
   }

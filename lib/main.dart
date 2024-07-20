@@ -48,7 +48,7 @@ void main() async {
                 ref.read(hotKeyControllerProvider);
 
                 return Material(
-                  color: context.appColors.backgroundDefault,
+                  color: context.appColors.surface,
                   child: const MainScreen(),
                 );
               },

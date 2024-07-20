@@ -16,7 +16,7 @@ class SubmitButton extends HookWidget {
   Widget build(BuildContext context) {
     return AppButton(
       onPressed: onPressed,
-      containerColor: context.appColors.primaryContainer,
+      containerColor: context.appColors.onPrimary,
       backgroundColor: context.appColors.primary,
       child: Container(
         padding: EdgeInsets.symmetric(
@@ -30,7 +30,7 @@ class SubmitButton extends HookWidget {
           child: const Icon(Icons.send),
           data: IconThemeData(
             size: 16,
-            color: context.appColors.primaryContainer,
+            color: context.appColors.onPrimary,
           ),
         ),
       ),

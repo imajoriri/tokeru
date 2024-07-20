@@ -35,7 +35,7 @@ class TextButtonSmall extends HookWidget {
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: hover.value || focus.value
-                ? context.appColors.backgroundHovered
+                ? context.appColors.surface
                 : Colors.transparent,
             borderRadius: BorderRadius.circular(8),
           ),

@@ -139,18 +139,18 @@ class TodoListItem extends HookConsumerWidget {
     );
 
     final backgroundColor = hasFocus.value && !readOnly
-        ? context.appColors.backgroundSelected
+        ? context.appColors.primary.withOpacity(0.08)
         : onHover.value
-            ? getHoverColor(context.appColors.textDefault)
+            ? context.appColors.onSurface.hovered
             : Colors.transparent;
 
     late final Color textFieldColor;
     if (todo.isDone) {
-      textFieldColor = context.appColors.textSubtle;
+      textFieldColor = context.appColors.onSurfaceSubtle;
     } else if (readOnly) {
-      textFieldColor = context.appColors.textDisabled;
+      textFieldColor = context.appColors.onSurface;
     } else {
-      textFieldColor = context.appColors.textDefault;
+      textFieldColor = context.appColors.onSurface;
     }
 
     return CallbackShortcuts(
