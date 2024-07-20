@@ -30,34 +30,26 @@ class CheckButton extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final animationController = useAnimationController(
-      duration: const Duration(milliseconds: 100),
-    );
+    const animationDuration = Duration(milliseconds: 100);
+    final effectiveChecked = useState(checked);
+    final pressed = useState(false);
+    onTapCheck() async {
+      if (!pressed.value) {
+        pressed.value = true;
+        await Future.delayed(animationDuration);
+      }
+      pressed.value = false;
+      effectiveChecked.value = !effectiveChecked.value;
+      onPressed?.call(effectiveChecked.value);
+    }
 
-    final colorAnimation = ColorTween(
-      begin: uncheckedColor ?? context.appColors.onSurface,
-      end: checkedColor ?? context.appColors.onSurfaceSubtle,
-    ).animate(animationController);
-
-    useEffect(
-      () {
-        if (checked) {
-          animationController.forward();
-        } else {
-          animationController.reverse();
-        }
-        return;
-      },
-      [checked],
-    );
-
-    final widgetScale = useState(1.0);
+    const minScale = 0.9;
+    const widgetSize = 16.0;
 
     return GestureDetector(
-      onTapDown: (detail) => widgetScale.value = 0.9,
-      onTapCancel: () => widgetScale.value = 1.0,
-      onTapUp: (details) => widgetScale.value = 1.0,
-      onTap: () => onPressed?.call(!checked),
+      onTapDown: (detail) => pressed.value = true,
+      onTapCancel: () => pressed.value = false,
+      onTap: onTapCheck,
       child: FocusableActionDetector(
         focusNode: useFocusNode(skipTraversal: true),
         shortcuts: {
@@ -65,39 +57,40 @@ class CheckButton extends HookWidget {
         },
         actions: {
           ActivateIntent: CallbackAction<ActivateIntent>(
-            onInvoke: (intent) => onPressed?.call(!checked),
+            onInvoke: (intent) => onTapCheck.call(),
           ),
         },
         mouseCursor: onPressed != null
             ? SystemMouseCursors.click
             : SystemMouseCursors.basic,
         child: AnimatedScale(
-          duration: const Duration(milliseconds: 100),
-          scale: widgetScale.value,
-          child: AnimatedBuilder(
-            animation: animationController,
-            builder: (context, child) {
-              return Container(
-                width: 16,
-                height: 16,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  border: Border.all(
-                    color: colorAnimation.value!,
-                    width: 2,
-                  ),
-                ),
-                alignment: Alignment.center,
-                child: Opacity(
-                  opacity: animationController.value,
-                  child: Icon(
-                    Icons.check_rounded,
-                    size: 12,
-                    color: colorAnimation.value,
-                  ),
-                ),
-              );
-            },
+          duration: animationDuration,
+          scale: pressed.value ? minScale : 1.0,
+          child: AnimatedContainer(
+            duration: animationDuration,
+            width: widgetSize,
+            height: widgetSize,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4),
+              border: Border.all(
+                color: effectiveChecked.value
+                    ? checkedColor ?? context.appColors.onSurfaceSubtle
+                    : uncheckedColor ?? context.appColors.onSurface,
+                width: 2,
+              ),
+            ),
+            alignment: Alignment.center,
+            child: AnimatedOpacity(
+              duration: animationDuration,
+              opacity: effectiveChecked.value ? 1.0 : 0.0,
+              child: Icon(
+                Icons.check_rounded,
+                size: 12,
+                color: effectiveChecked.value
+                    ? checkedColor ?? context.appColors.onSurfaceSubtle
+                    : uncheckedColor ?? context.appColors.onSurface,
+              ),
+            ),
           ),
         ),
       ),

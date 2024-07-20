@@ -1,15 +1,11 @@
 part of 'chat_view.dart';
 
 class _ChatList extends ConsumerWidget {
-  const _ChatList({
-    required this.appItems,
-  });
-
-  final AsyncValue<List<AppItem>> appItems;
+  const _ChatList();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final readAll = ref.watch(readAllProvider).valueOrNull == true;
+    final appItems = ref.watch(appItemControllerProvider);
     return appItems.when(
       skipLoadingOnReload: true,
       data: (appItems) {
@@ -40,23 +36,14 @@ class _ChatList extends ConsumerWidget {
                               todo: appItem.copyWith(
                                 isDone: value ?? false,
                               ),
-                            ).future,
+                            ),
                           );
                         },
                       ),
                     AppChatItem() => _ChatListItemChat(appItem: appItem),
                     AppDividerItem() => throw UnimplementedError(),
                   },
-                  if (isLast) ...[
-                    const SizedBox(height: 16),
-                    // 既読ボタンがある時はテキストと被らないように、
-                    // 余白を追加する。
-                    AnimatedSize(
-                      duration: const Duration(milliseconds: 150),
-                      curve: Curves.easeInOutExpo,
-                      child: SizedBox(height: readAll ? 0 : 32),
-                    ),
-                  ],
+                  if (isLast) const _BottomSpace(),
                 ],
               );
             },
@@ -74,6 +61,28 @@ class _ChatList extends ConsumerWidget {
           child: Text('Error: $error'),
         );
       },
+    );
+  }
+}
+
+/// リストの最後に余白を追加するWidget。
+class _BottomSpace extends ConsumerWidget {
+  const _BottomSpace();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final readAll = ref.watch(readAllProvider).valueOrNull == true;
+    return Column(
+      children: [
+        const SizedBox(height: 16),
+        // 既読ボタンがある時はテキストと被らないように、
+        // 余白を追加する。
+        AnimatedSize(
+          duration: const Duration(milliseconds: 150),
+          curve: Curves.easeInOutExpo,
+          child: SizedBox(height: readAll ? 0 : 32),
+        ),
+      ],
     );
   }
 }

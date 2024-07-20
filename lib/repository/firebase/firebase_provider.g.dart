@@ -6,7 +6,7 @@ part of 'firebase_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userDocumentHash() => r'e40171950108aa9ccc714df05da44543c7b546aa';
+String _$userDocumentHash() => r'e07fa9fbafa87e3781631bb6b43edbf5c59f9753';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -72,7 +72,7 @@ class UserDocumentFamily extends Family<DocumentReference> {
 }
 
 /// See also [userDocument].
-class UserDocumentProvider extends AutoDisposeProvider<DocumentReference> {
+class UserDocumentProvider extends Provider<DocumentReference> {
   /// See also [userDocument].
   UserDocumentProvider(
     String userId,
@@ -124,7 +124,7 @@ class UserDocumentProvider extends AutoDisposeProvider<DocumentReference> {
   }
 
   @override
-  AutoDisposeProviderElement<DocumentReference> createElement() {
+  ProviderElement<DocumentReference> createElement() {
     return _UserDocumentProviderElement(this);
   }
 
@@ -142,13 +142,13 @@ class UserDocumentProvider extends AutoDisposeProvider<DocumentReference> {
   }
 }
 
-mixin UserDocumentRef on AutoDisposeProviderRef<DocumentReference> {
+mixin UserDocumentRef on ProviderRef<DocumentReference> {
   /// The parameter `userId` of this provider.
   String get userId;
 }
 
-class _UserDocumentProviderElement
-    extends AutoDisposeProviderElement<DocumentReference> with UserDocumentRef {
+class _UserDocumentProviderElement extends ProviderElement<DocumentReference>
+    with UserDocumentRef {
   _UserDocumentProviderElement(super.provider);
 
   @override

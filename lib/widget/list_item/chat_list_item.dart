@@ -7,29 +7,19 @@ import 'package:quick_flutter/widget/theme/app_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ChatListItem extends HookWidget {
-  const ChatListItem._({
-    required this.app,
-    this.onChangedCheck,
-    this.bottomWidget,
-  });
-
-  factory ChatListItem.chat({
+  const ChatListItem.chat({
+    super.key,
     required AppChatItem chat,
-    Widget? bottomWidget,
-  }) =>
-      ChatListItem._(
-        app: chat,
-        bottomWidget: bottomWidget,
-      );
+    this.bottomWidget,
+  })  : app = chat,
+        onChangedCheck = null;
 
-  factory ChatListItem.todo({
+  const ChatListItem.todo({
+    super.key,
     required AppTodoItem todo,
-    required void Function(bool?)? onChangedCheck,
-  }) =>
-      ChatListItem._(
-        app: todo,
-        onChangedCheck: onChangedCheck,
-      );
+    this.onChangedCheck,
+  })  : app = todo,
+        bottomWidget = null;
 
   final AppItem app;
 
@@ -78,7 +68,6 @@ class _Chat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SelectionArea(
-      // focusNode: FocusNode(skipTraversal: true),
       child: SizedBox(
         width: double.infinity,
         child: Column(

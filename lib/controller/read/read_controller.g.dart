@@ -6,7 +6,7 @@ part of 'read_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$readControllerHash() => r'fe29cc3dd3e6cad21f41e1bd957ae8b4ab4dcebd';
+String _$readControllerHash() => r'4574c4c6fd266c2c8b4d65f6452d8a35e5668b57';
 
 /// Todoの既読した時刻を管理するコントローラー。
 ///
