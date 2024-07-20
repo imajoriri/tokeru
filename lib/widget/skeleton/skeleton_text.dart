@@ -34,7 +34,7 @@ class SkeletonText extends StatelessWidget {
             child: Container(
               height: style.fontSize!,
               decoration: BoxDecoration(
-                color: context.appColors.backgroundSkeleton,
+                color: context.appColors.skeleton,
                 borderRadius: BorderRadius.circular(4),
               ),
             ),

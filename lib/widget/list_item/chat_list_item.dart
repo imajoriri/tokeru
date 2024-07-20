@@ -46,8 +46,8 @@ class ChatListItem extends HookWidget {
       onShowHoverHighlight: (value) => hover.value = value,
       child: Container(
         color: hover.value
-            ? context.appColors.textDefault.withOpacity(0.08)
-            : context.appColors.backgroundDefault,
+            ? context.appColors.onSurface.withOpacity(0.08)
+            : context.appColors.surface,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
         child: switch (app) {
           AppChatItem(:final message) => _Chat(
@@ -94,7 +94,7 @@ class _Chat extends StatelessWidget {
               text: message,
               style: context.appTextTheme.bodyMedium,
               linkStyle: context.appTextTheme.bodyMedium.copyWith(
-                color: context.appColors.textLink,
+                color: context.appColors.link,
                 decoration: TextDecoration.none,
               ),
             ),
@@ -133,8 +133,8 @@ class _Todo extends StatelessWidget {
             style: context.appTextTheme.bodyMedium.copyWith(
               decoration: isDone ? TextDecoration.lineThrough : null,
               color: isDone
-                  ? context.appColors.textSubtle
-                  : context.appColors.textDefault,
+                  ? context.appColors.onSurfaceSubtle
+                  : context.appColors.onSurface,
             ),
           ),
         ),

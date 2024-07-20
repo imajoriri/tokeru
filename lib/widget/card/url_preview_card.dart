@@ -37,7 +37,7 @@ class UrlPreviewCard extends StatelessWidget {
           padding: EdgeInsets.all(context.appSpacing.small),
           decoration: BoxDecoration(
             border: Border.all(
-              color: context.appColors.borderDefault,
+              color: context.appColors.outline,
               width: 1.0,
             ),
             borderRadius: BorderRadius.circular(8.0),
@@ -58,7 +58,7 @@ class UrlPreviewCard extends StatelessWidget {
                     Text(
                       ogp.description,
                       style: context.appTextTheme.bodySmall
-                          .copyWith(color: context.appColors.textSubtle),
+                          .copyWith(color: context.appColors.onSurfaceSubtle),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -76,7 +76,7 @@ class UrlPreviewCard extends StatelessWidget {
                   fadeOutDuration: const Duration(milliseconds: 150),
                   fit: BoxFit.cover,
                   placeholder: (context, url) => Container(
-                    color: context.appColors.backgroundSkeleton,
+                    color: context.appColors.skeleton,
                     width: _ogpImageWidth,
                     height: _ogpImageHeight,
                   ),
@@ -108,7 +108,7 @@ class _Skeleton extends UrlPreviewCard {
       padding: EdgeInsets.all(context.appSpacing.small),
       decoration: BoxDecoration(
         border: Border.all(
-          color: context.appColors.borderDefault,
+          color: context.appColors.outline,
           width: 1.0,
         ),
         borderRadius: BorderRadius.circular(8.0),

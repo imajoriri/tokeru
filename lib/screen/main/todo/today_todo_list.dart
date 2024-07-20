@@ -162,7 +162,7 @@ class _EmptyState extends StatelessWidget {
             Text(
               'There are no To-Dos for today.\nPlease start by clicking here or pressing Command + N.',
               style: context.appTextTheme.bodySmall.copyWith(
-                color: context.appColors.textSubtle,
+                color: context.appColors.onSurfaceSubtle,
               ),
               textAlign: TextAlign.center,
             ),

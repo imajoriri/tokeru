@@ -2,114 +2,74 @@ import 'package:flutter/material.dart';
 
 class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
   AppColorsExtension({
+    // Primary
     required this.primary,
-    required this.primaryHovered,
-    required this.primaryContainer,
-    required this.textDefault,
-    required this.textSubtle,
-    required this.textDisabled,
-    required this.textDanger,
-    required this.textSuccess,
-    required this.textLink,
-    required this.backgroundDefault,
-    required this.backgroundSubtle,
-    required this.backgroundHovered,
-    required this.backgroundDisabled,
-    required this.backgroundSelected,
-    required this.backgroundChecked,
-    required this.backgroundSkeleton,
-    required this.borderDefault,
-    required this.borderSubtle,
-    required this.borderStrong,
-    required this.iconDefault,
-    required this.iconSubtle,
-    required this.iconHovered,
+    required this.onPrimary,
+
+    // surface
+    required this.surface,
+    required this.onSurface,
+    required this.onSurfaceSubtle,
+
+    // outline
+    required this.outline,
+    required this.outlineSubtle,
+    required this.outlineStrong,
+
+    // others
+    required this.link,
+    required this.skeleton,
   });
 
   // Primary
   final Color primary;
-  final Color primaryHovered;
-  final Color primaryContainer;
+  final Color onPrimary;
 
-  // Text
-  final Color textDefault;
-  final Color textSubtle;
-  final Color textDisabled;
-  final Color textDanger;
-  final Color textSuccess;
-  final Color textLink;
+  // surface
+  final Color surface;
+  final Color onSurface;
+  final Color onSurfaceSubtle;
 
-  // background
-  final Color backgroundDefault;
-  final Color backgroundSubtle;
-  final Color backgroundHovered;
-  final Color backgroundDisabled;
-  final Color backgroundSelected;
-  final Color backgroundChecked;
-  final Color backgroundSkeleton;
+  // outline
+  final Color outline;
+  final Color outlineSubtle;
+  final Color outlineStrong;
 
-  // border
-  final Color borderDefault;
-  final Color borderSubtle;
-  final Color borderStrong;
-
-  // icon
-  final Color iconDefault;
-  final Color iconSubtle;
-  final Color iconHovered;
+  // others
+  final Color link;
+  final Color skeleton;
 
   @override
   ThemeExtension<AppColorsExtension> copyWith({
+    // Primary
     Color? primary,
-    Color? primaryHovered,
-    Color? primaryContainer,
-    // Text
-    Color? textDefault,
-    Color? textSubtle,
-    Color? textDisabled,
-    Color? textDanger,
-    Color? textSuccess,
-    Color? textLink,
-    // background
-    Color? backgroundDefault,
-    Color? backgroundSubtle,
-    Color? backgroundHovered,
-    Color? backgroundDisabled,
-    Color? backgroundSelected,
-    Color? backgroundChecked,
-    Color? backgroundSkeleton,
-    // border
-    Color? borderDefault,
-    Color? borderSubtle,
-    Color? borderStrong,
-    // icon
-    Color? iconDefault,
-    Color? iconHovered,
-    Color? iconSubtle,
+    Color? onPrimary,
+
+    // surface
+    Color? surface,
+    Color? onSurface,
+    Color? onSurfaceSubtle,
+
+    // outline
+    Color? outline,
+    Color? outlineSubtle,
+    Color? outlineStrong,
+
+    // others
+    Color? link,
+    Color? skeleton,
   }) {
     return AppColorsExtension(
       primary: primary ?? this.primary,
-      primaryHovered: primaryHovered ?? this.primaryHovered,
-      primaryContainer: primaryContainer ?? this.primaryContainer,
-      textDefault: textDefault ?? this.textDefault,
-      textSubtle: textSubtle ?? this.textSubtle,
-      textDisabled: textDisabled ?? this.textDisabled,
-      textDanger: textDanger ?? this.textDanger,
-      textSuccess: textSuccess ?? this.textSuccess,
-      textLink: textLink ?? this.textLink,
-      backgroundDefault: backgroundDefault ?? this.backgroundDefault,
-      backgroundSubtle: backgroundSubtle ?? this.backgroundSubtle,
-      backgroundHovered: backgroundHovered ?? this.backgroundHovered,
-      backgroundDisabled: backgroundDisabled ?? this.backgroundDisabled,
-      backgroundSelected: backgroundSelected ?? this.backgroundSelected,
-      backgroundChecked: backgroundChecked ?? this.backgroundChecked,
-      backgroundSkeleton: backgroundSkeleton ?? this.backgroundSkeleton,
-      borderDefault: borderDefault ?? this.borderDefault,
-      borderSubtle: borderSubtle ?? this.borderSubtle,
-      borderStrong: borderStrong ?? this.borderStrong,
-      iconDefault: iconDefault ?? this.iconDefault,
-      iconSubtle: iconSubtle ?? this.iconSubtle,
-      iconHovered: iconHovered ?? this.iconHovered,
+      onPrimary: onPrimary ?? this.onPrimary,
+      surface: surface ?? this.surface,
+      onSurface: onSurface ?? this.onSurface,
+      onSurfaceSubtle: onSurfaceSubtle ?? this.onSurfaceSubtle,
+      outline: outline ?? this.outline,
+      outlineSubtle: outlineSubtle ?? this.outlineSubtle,
+      outlineStrong: outlineStrong ?? this.outlineStrong,
+      link: link ?? this.link,
+      skeleton: skeleton ?? this.skeleton,
     );
   }
 
@@ -118,41 +78,6 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     covariant ThemeExtension<AppColorsExtension>? other,
     double t,
   ) {
-    if (other is! AppColorsExtension) {
-      return this;
-    }
-
-    return AppColorsExtension(
-      primary: Color.lerp(primary, other.primary, t)!,
-      primaryHovered: Color.lerp(primaryHovered, other.primaryHovered, t)!,
-      primaryContainer:
-          Color.lerp(primaryContainer, other.primaryContainer, t)!,
-      textDefault: Color.lerp(textDefault, other.textDefault, t)!,
-      textSubtle: Color.lerp(textSubtle, other.textSubtle, t)!,
-      textDisabled: Color.lerp(textDisabled, other.textDisabled, t)!,
-      textDanger: Color.lerp(textDanger, other.textDanger, t)!,
-      textSuccess: Color.lerp(textSuccess, other.textSuccess, t)!,
-      textLink: Color.lerp(textLink, other.textLink, t)!,
-      backgroundDefault:
-          Color.lerp(backgroundDefault, other.backgroundDefault, t)!,
-      backgroundHovered:
-          Color.lerp(backgroundHovered, other.backgroundHovered, t)!,
-      backgroundDisabled:
-          Color.lerp(backgroundDisabled, other.backgroundDisabled, t)!,
-      backgroundSubtle:
-          Color.lerp(backgroundSubtle, other.backgroundSubtle, t)!,
-      backgroundSelected:
-          Color.lerp(backgroundSelected, other.backgroundSelected, t)!,
-      backgroundChecked:
-          Color.lerp(backgroundChecked, other.backgroundChecked, t)!,
-      backgroundSkeleton:
-          Color.lerp(backgroundSkeleton, other.backgroundSkeleton, t)!,
-      borderDefault: Color.lerp(borderDefault, other.borderDefault, t)!,
-      borderSubtle: Color.lerp(borderSubtle, other.borderSubtle, t)!,
-      borderStrong: Color.lerp(borderStrong, other.borderStrong, t)!,
-      iconDefault: Color.lerp(iconDefault, other.iconDefault, t)!,
-      iconSubtle: Color.lerp(iconSubtle, other.iconSubtle, t)!,
-      iconHovered: Color.lerp(iconHovered, other.iconHovered, t)!,
-    );
+    return this;
   }
 }

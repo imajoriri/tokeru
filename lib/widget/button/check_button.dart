@@ -35,8 +35,8 @@ class CheckButton extends HookWidget {
     );
 
     final colorAnimation = ColorTween(
-      begin: uncheckedColor ?? context.appColors.iconDefault,
-      end: checkedColor ?? context.appColors.iconSubtle,
+      begin: uncheckedColor ?? context.appColors.onSurface,
+      end: checkedColor ?? context.appColors.onSurfaceSubtle,
     ).animate(animationController);
 
     useEffect(
