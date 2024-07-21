@@ -10,7 +10,7 @@ class _ChatTextField extends HookConsumerWidget {
   }) async {
     if (textEditingController.text.isEmpty) return;
 
-    final provider = appItemControllerProvider;
+    final provider = appItemsProvider;
     ref.read(provider.notifier).addChat(message: textEditingController.text);
     textEditingController.clear();
     FirebaseAnalytics.instance.logEvent(
