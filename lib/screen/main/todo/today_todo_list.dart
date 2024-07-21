@@ -98,7 +98,8 @@ class TodayTodoList extends HookConsumerWidget {
                           onSortUp: index != 0
                               ? () {
                                   final focusController = ref.read(
-                                      todoFocusControllerProvider.notifier);
+                                    todoFocusControllerProvider.notifier,
+                                  );
                                   focusController.removeFocus();
                                   ref
                                       .read(todoControllerProvider.notifier)
@@ -118,7 +119,8 @@ class TodayTodoList extends HookConsumerWidget {
                                       1
                               ? () {
                                   final focusController = ref.read(
-                                      todoFocusControllerProvider.notifier);
+                                    todoFocusControllerProvider.notifier,
+                                  );
                                   focusController.removeFocus();
                                   ref
                                       .read(todoControllerProvider.notifier)
