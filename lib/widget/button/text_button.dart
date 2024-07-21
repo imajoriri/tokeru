@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:quick_flutter/widget/color/status_color.dart';
 import 'package:quick_flutter/widget/theme/app_theme.dart';
 
 /// 小さめのテキストボタン。
@@ -31,11 +32,12 @@ class TextButtonSmall extends HookWidget {
         },
         onShowFocusHighlight: (value) => focus.value = value,
         onShowHoverHighlight: (value) => hover.value = value,
-        child: Container(
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 100),
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: hover.value || focus.value
-                ? context.appColors.backgroundHovered
+                ? context.appColors.onSurface.hovered
                 : Colors.transparent,
             borderRadius: BorderRadius.circular(8),
           ),

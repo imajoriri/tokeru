@@ -18,7 +18,7 @@ class SkeletonCard extends StatelessWidget {
       child: Container(
         width: width,
         height: height,
-        color: context.appColors.backgroundSkeleton,
+        color: context.appColors.skeleton,
       ),
     );
   }

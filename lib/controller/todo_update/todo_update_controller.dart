@@ -1,6 +1,5 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:quick_flutter/controller/past_todo/past_todo_controller.dart';
-import 'package:quick_flutter/controller/today_app_item/today_app_item_controller.dart';
+import 'package:quick_flutter/controller/app_item/app_item_controller.dart';
 import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/user/user_controller.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
@@ -28,18 +27,14 @@ Future<void> todoUpdateController(
 
   // 以下のエラーの対策
   // Providers are not allowed to modify other providers during their initialization.
-  await ref.read(todayAppItemControllerProvider.future);
+  await ref.read(appItemControllerProvider.future);
   await ref.read(todoControllerProvider.future);
-  await ref.read(pastTodoControllerProvider.future);
 
   // TodayAppItemControllerも更新する。
-  ref.read(todayAppItemControllerProvider.notifier).updateTodo(todo: todo);
+  ref.read(appItemControllerProvider.notifier).updateTodo(todo: todo);
 
   // TodoControllerも更新する。
   ref.read(todoControllerProvider.notifier).updateTodo(todo: todo);
-
-  // PastTodoControllerも更新する。
-  ref.read(pastTodoControllerProvider.notifier).updateTodo(todo: todo);
 
   final user = ref.read(userControllerProvider);
   if (user.valueOrNull == null) {
@@ -48,7 +43,7 @@ Future<void> todoUpdateController(
   }
   final repository = ref.read(appItemRepositoryProvider(user.value!.id));
   try {
-    await repository.update(item: todo);
+    repository.update(item: todo);
   } on Exception catch (e, s) {
     await FirebaseCrashlytics.instance.recordError(e, s);
   }

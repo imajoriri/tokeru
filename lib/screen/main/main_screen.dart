@@ -11,7 +11,7 @@ class MainScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      backgroundColor: context.appColors.backgroundDefault,
+      backgroundColor: context.appColors.surface,
       floatingActionButton: FloatingActionButton.small(
         onPressed: () async {
           await UrlController.featureRequest.launch();
@@ -19,7 +19,7 @@ class MainScreen extends ConsumerWidget {
         // 丸にする
         shape: CircleBorder(
           side: BorderSide(
-            color: context.appColors.borderDefault,
+            color: context.appColors.outline,
           ),
         ),
         elevation: 1,
@@ -28,10 +28,10 @@ class MainScreen extends ConsumerWidget {
         hoverElevation: 1,
         // ripple effectをなくす
         splashColor: Colors.transparent,
-        backgroundColor: context.appColors.backgroundDefault,
+        backgroundColor: context.appColors.surface,
         child: Icon(
           Icons.feedback_outlined,
-          color: context.appColors.textSubtle,
+          color: context.appColors.onSurfaceSubtle,
         ),
       ),
       body: Row(
@@ -45,7 +45,7 @@ class MainScreen extends ConsumerWidget {
             height: double.infinity,
             margin: EdgeInsets.symmetric(vertical: context.appSpacing.small),
             decoration: BoxDecoration(
-              color: context.appColors.borderDefault,
+              color: context.appColors.outline,
               borderRadius: BorderRadius.circular(10),
             ),
           ),

@@ -24,7 +24,7 @@ class _ChatTextField extends HookConsumerWidget {
       return;
     }
 
-    final provider = todayAppItemControllerProvider;
+    final provider = appItemControllerProvider;
     ref.read(provider.notifier).addChat(message: textEditingController.text);
     textEditingController.clear();
     FirebaseAnalytics.instance.logEvent(
@@ -46,12 +46,12 @@ class _ChatTextField extends HookConsumerWidget {
     final animationController =
         useAnimationController(duration: const Duration(milliseconds: 150));
     final colorTween = ColorTween(
-      begin: context.appColors.borderDefault,
-      end: context.appColors.borderStrong,
+      begin: context.appColors.outline,
+      end: context.appColors.outlineStrong,
     );
     final shadowColorTween = ColorTween(
       begin: Colors.transparent,
-      end: context.appColors.borderStrong.withOpacity(0.2),
+      end: context.appColors.outlineStrong.withOpacity(0.2),
     );
 
     return AnimatedBuilder(
@@ -106,7 +106,6 @@ class _ChatTextField extends HookConsumerWidget {
                         todoMode.value = !todoMode.value;
                       },
                       checked: todoMode.value,
-                      uncheckedColor: context.appColors.iconSubtle,
                       checkedColor: context.appColors.primary,
                     ),
                     const Spacer(),
@@ -133,7 +132,7 @@ class _ChatTextField extends HookConsumerWidget {
               color: colorTween.evaluate(animationController)!,
             ),
             borderRadius: BorderRadius.circular(4),
-            color: context.appColors.backgroundDefault,
+            color: context.appColors.surface,
             boxShadow: [
               BoxShadow(
                 color: shadowColorTween.evaluate(animationController)!,

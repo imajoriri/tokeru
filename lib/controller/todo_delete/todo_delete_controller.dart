@@ -1,6 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:quick_flutter/controller/past_todo/past_todo_controller.dart';
-import 'package:quick_flutter/controller/today_app_item/today_app_item_controller.dart';
+import 'package:quick_flutter/controller/app_item/app_item_controller.dart';
 import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/user/user_controller.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
@@ -31,7 +31,7 @@ Future<void> todoDeleteController(
     await FirebaseCrashlytics.instance.recordError(e, s);
   }
   // TodayAppItemControllerも更新する。
-  ref.read(todayAppItemControllerProvider.notifier).deleteTodo(todoId: todoId);
+  ref.read(appItemControllerProvider.notifier).deleteTodo(todoId: todoId);
 
   // TodoControllerも更新する。
   ref.read(todoControllerProvider.notifier).deleteTodo(todoId: todoId);

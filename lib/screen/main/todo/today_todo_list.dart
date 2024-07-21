@@ -41,91 +41,97 @@ class TodayTodoList extends HookConsumerWidget {
                   return HookBuilder(
                     key: key,
                     builder: (context) {
-                      return TodoListItem(
-                        todo: todo,
-                        index: index,
-                        focusNode:
-                            ref.watch(todoFocusControllerProvider)[index],
-                        controller:
-                            useTodoTextEditingController(text: todo.title),
-                        onDeleted: () async {
-                          final currentFocusIndex = ref
-                              .read(todoFocusControllerProvider.notifier)
-                              .getFocusIndex();
-                          await ref.read(
-                            todoDeleteControllerProvider(todoId: todo.id)
-                                .future,
-                          );
-                          ref
-                              .read(todoFocusControllerProvider.notifier)
-                              .requestFocus(currentFocusIndex - 1);
-                        },
-                        onUpdatedTitle: (value) {
-                          ref.read(
-                            todoUpdateControllerProvider(
-                              todo: todo.copyWith(title: value),
-                            ).future,
-                          );
-                        },
-                        onToggleDone: (value) {
-                          ref.read(
-                            todoUpdateControllerProvider(
-                              todo: todo.copyWith(isDone: value ?? false),
-                            ).future,
-                          );
-                          FirebaseAnalytics.instance.logEvent(
-                            name: AnalyticsEventName.toggleTodoDone.name,
-                          );
-                        },
-                        focusDown: () {
-                          FocusScope.of(context).nextFocus();
-                        },
-                        focusUp: () {
-                          FocusScope.of(context).previousFocus();
-                        },
-                        onNewTodoBelow: () async {
-                          await ref.read(
-                            todoAddControllerProvider(
-                              titles: [''],
-                              indexType: TodoAddIndexType.current,
-                            ).future,
-                          );
-                        },
-                        // 一番上のTodoは上に移動できない
-                        onSortUp: index != 0
-                            ? () {
-                                final focusController = ref
-                                    .read(todoFocusControllerProvider.notifier);
-                                focusController.removeFocus();
-                                ref
-                                    .read(todoControllerProvider.notifier)
-                                    .reorder(index, index - 1);
-                                WidgetsBinding.instance
-                                    .addPostFrameCallback((_) {
-                                  focusController.requestFocus(index - 1);
-                                });
-                              }
-                            : null,
-                        // 一番下のTodoは下に移動できない
-                        onSortDown: index !=
-                                ref
-                                        .read(todoControllerProvider)
-                                        .valueOrNull!
-                                        .length -
-                                    1
-                            ? () {
-                                final focusController = ref
-                                    .read(todoFocusControllerProvider.notifier);
-                                focusController.removeFocus();
-                                ref
-                                    .read(todoControllerProvider.notifier)
-                                    .reorder(index, index + 1);
-                                WidgetsBinding.instance
-                                    .addPostFrameCallback((_) {
-                                  focusController.requestFocus(index + 1);
-                                });
-                              }
-                            : null,
+                      return Padding(
+                        padding:
+                            EdgeInsets.only(bottom: context.appSpacing.smallX),
+                        child: TodoListItem(
+                          todo: todo,
+                          index: index,
+                          focusNode:
+                              ref.watch(todoFocusControllerProvider)[index],
+                          controller:
+                              useTodoTextEditingController(text: todo.title),
+                          onDeleted: () async {
+                            final currentFocusIndex = ref
+                                .read(todoFocusControllerProvider.notifier)
+                                .getFocusIndex();
+                            await ref.read(
+                              todoDeleteControllerProvider(todoId: todo.id)
+                                  .future,
+                            );
+                            ref
+                                .read(todoFocusControllerProvider.notifier)
+                                .requestFocus(currentFocusIndex - 1);
+                          },
+                          onUpdatedTitle: (value) {
+                            ref.read(
+                              todoUpdateControllerProvider(
+                                todo: todo.copyWith(title: value),
+                              ).future,
+                            );
+                          },
+                          onToggleDone: (value) {
+                            ref.read(
+                              todoUpdateControllerProvider(
+                                todo: todo.copyWith(isDone: value ?? false),
+                              ).future,
+                            );
+                            FirebaseAnalytics.instance.logEvent(
+                              name: AnalyticsEventName.toggleTodoDone.name,
+                            );
+                          },
+                          focusDown: () {
+                            FocusScope.of(context).nextFocus();
+                          },
+                          focusUp: () {
+                            FocusScope.of(context).previousFocus();
+                          },
+                          onNewTodoBelow: () async {
+                            await ref.read(
+                              todoAddControllerProvider(
+                                titles: [''],
+                                indexType: TodoAddIndexType.current,
+                              ).future,
+                            );
+                          },
+                          // 一番上のTodoは上に移動できない
+                          onSortUp: index != 0
+                              ? () {
+                                  final focusController = ref.read(
+                                    todoFocusControllerProvider.notifier,
+                                  );
+                                  focusController.removeFocus();
+                                  ref
+                                      .read(todoControllerProvider.notifier)
+                                      .reorder(index, index - 1);
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    focusController.requestFocus(index - 1);
+                                  });
+                                }
+                              : null,
+                          // 一番下のTodoは下に移動できない
+                          onSortDown: index !=
+                                  ref
+                                          .read(todoControllerProvider)
+                                          .valueOrNull!
+                                          .length -
+                                      1
+                              ? () {
+                                  final focusController = ref.read(
+                                    todoFocusControllerProvider.notifier,
+                                  );
+                                  focusController.removeFocus();
+                                  ref
+                                      .read(todoControllerProvider.notifier)
+                                      .reorder(index, index + 1);
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    focusController.requestFocus(index + 1);
+                                  });
+                                }
+                              : null,
+                        ),
                       );
                     },
                   );
@@ -162,7 +168,7 @@ class _EmptyState extends StatelessWidget {
             Text(
               'There are no To-Dos for today.\nPlease start by clicking here or pressing Command + N.',
               style: context.appTextTheme.bodySmall.copyWith(
-                color: context.appColors.textSubtle,
+                color: context.appColors.onSurfaceSubtle,
               ),
               textAlign: TextAlign.center,
             ),

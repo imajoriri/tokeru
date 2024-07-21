@@ -188,7 +188,7 @@ class _HotkeyItem extends HookConsumerWidget {
           Text(
             ref.watch(hotKeyControllerProvider).error.toString(),
             style: context.textTheme.labelMedium!.copyWith(
-              color: context.appColors.textDanger,
+              color: Colors.red,
             ),
           ),
       ],

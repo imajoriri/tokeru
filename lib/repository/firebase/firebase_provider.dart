@@ -3,10 +3,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'firebase_provider.g.dart';
 
-final firestoreProvider =
-    Provider.autoDispose((ref) => FirebaseFirestore.instance);
+final firestoreProvider = Provider((ref) => FirebaseFirestore.instance);
 
-@riverpod
+@Riverpod(keepAlive: true)
 DocumentReference userDocument(UserDocumentRef ref, String userId) {
   return ref.read(firestoreProvider).collection('users').doc(userId);
 }
