@@ -1,18 +1,19 @@
 part of 'chat_view.dart';
 
-class _ChatList extends ConsumerWidget {
+class _ChatList extends HookConsumerWidget {
   const _ChatList();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appItems = ref.watch(appItemControllerProvider);
+    final appItems = ref.watch(appItemsProvider);
+
     return appItems.when(
       skipLoadingOnReload: true,
       data: (appItems) {
         return NotificationListener<ScrollNotification>(
           onNotification: (notification) {
             if (notification.metrics.extentAfter < 300) {
-              ref.read(appItemControllerProvider.notifier).fetchNext();
+              ref.read(appItemsProvider.notifier).fetchNext();
             }
             return false;
           },
@@ -51,9 +52,8 @@ class _ChatList extends ConsumerWidget {
         );
       },
       loading: () {
-        return const Padding(
-          padding: EdgeInsets.all(20.0),
-          child: CupertinoActivityIndicator(),
+        return const Center(
+          child: CircularProgressIndicator(),
         );
       },
       error: (error, _) {
@@ -96,10 +96,9 @@ class _TodoDivider extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final item =
-        ref.watch(appItemControllerProvider).valueOrNull?[index] as AppItem;
+    final item = ref.watch(appItemsProvider).valueOrNull?[index] as AppItem;
     final next = ref
-        .watch(appItemControllerProvider)
+        .watch(appItemsProvider)
         .valueOrNull
         ?.firstWhereIndexedOrNull((i, _) => i == index + 1);
     // 次のAppItemが日付が変わるかどうか。
