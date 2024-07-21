@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'firebase_provider.dart';
+part of 'read_repository.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userDocumentHash() => r'e07fa9fbafa87e3781631bb6b43edbf5c59f9753';
+String _$readRepositoryHash() => r'6a47f5797834b69379842090c4153ebe0cfa092b';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,27 +29,27 @@ class _SystemHash {
   }
 }
 
-/// See also [userDocument].
-@ProviderFor(userDocument)
-const userDocumentProvider = UserDocumentFamily();
+/// See also [readRepository].
+@ProviderFor(readRepository)
+const readRepositoryProvider = ReadRepositoryFamily();
 
-/// See also [userDocument].
-class UserDocumentFamily extends Family<DocumentReference> {
-  /// See also [userDocument].
-  const UserDocumentFamily();
+/// See also [readRepository].
+class ReadRepositoryFamily extends Family<ReadRepository> {
+  /// See also [readRepository].
+  const ReadRepositoryFamily();
 
-  /// See also [userDocument].
-  UserDocumentProvider call(
+  /// See also [readRepository].
+  ReadRepositoryProvider call(
     String userId,
   ) {
-    return UserDocumentProvider(
+    return ReadRepositoryProvider(
       userId,
     );
   }
 
   @override
-  UserDocumentProvider getProviderOverride(
-    covariant UserDocumentProvider provider,
+  ReadRepositoryProvider getProviderOverride(
+    covariant ReadRepositoryProvider provider,
   ) {
     return call(
       provider.userId,
@@ -68,32 +68,32 @@ class UserDocumentFamily extends Family<DocumentReference> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'userDocumentProvider';
+  String? get name => r'readRepositoryProvider';
 }
 
-/// See also [userDocument].
-class UserDocumentProvider extends Provider<DocumentReference> {
-  /// See also [userDocument].
-  UserDocumentProvider(
+/// See also [readRepository].
+class ReadRepositoryProvider extends AutoDisposeProvider<ReadRepository> {
+  /// See also [readRepository].
+  ReadRepositoryProvider(
     String userId,
   ) : this._internal(
-          (ref) => userDocument(
-            ref as UserDocumentRef,
+          (ref) => readRepository(
+            ref as ReadRepositoryRef,
             userId,
           ),
-          from: userDocumentProvider,
-          name: r'userDocumentProvider',
+          from: readRepositoryProvider,
+          name: r'readRepositoryProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$userDocumentHash,
-          dependencies: UserDocumentFamily._dependencies,
+                  : _$readRepositoryHash,
+          dependencies: ReadRepositoryFamily._dependencies,
           allTransitiveDependencies:
-              UserDocumentFamily._allTransitiveDependencies,
+              ReadRepositoryFamily._allTransitiveDependencies,
           userId: userId,
         );
 
-  UserDocumentProvider._internal(
+  ReadRepositoryProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -107,12 +107,12 @@ class UserDocumentProvider extends Provider<DocumentReference> {
 
   @override
   Override overrideWith(
-    DocumentReference Function(UserDocumentRef provider) create,
+    ReadRepository Function(ReadRepositoryRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
-      override: UserDocumentProvider._internal(
-        (ref) => create(ref as UserDocumentRef),
+      override: ReadRepositoryProvider._internal(
+        (ref) => create(ref as ReadRepositoryRef),
         from: from,
         name: null,
         dependencies: null,
@@ -124,13 +124,13 @@ class UserDocumentProvider extends Provider<DocumentReference> {
   }
 
   @override
-  ProviderElement<DocumentReference> createElement() {
-    return _UserDocumentProviderElement(this);
+  AutoDisposeProviderElement<ReadRepository> createElement() {
+    return _ReadRepositoryProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is UserDocumentProvider && other.userId == userId;
+    return other is ReadRepositoryProvider && other.userId == userId;
   }
 
   @override
@@ -142,17 +142,17 @@ class UserDocumentProvider extends Provider<DocumentReference> {
   }
 }
 
-mixin UserDocumentRef on ProviderRef<DocumentReference> {
+mixin ReadRepositoryRef on AutoDisposeProviderRef<ReadRepository> {
   /// The parameter `userId` of this provider.
   String get userId;
 }
 
-class _UserDocumentProviderElement extends ProviderElement<DocumentReference>
-    with UserDocumentRef {
-  _UserDocumentProviderElement(super.provider);
+class _ReadRepositoryProviderElement
+    extends AutoDisposeProviderElement<ReadRepository> with ReadRepositoryRef {
+  _ReadRepositoryProviderElement(super.provider);
 
   @override
-  String get userId => (origin as UserDocumentProvider).userId;
+  String get userId => (origin as ReadRepositoryProvider).userId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

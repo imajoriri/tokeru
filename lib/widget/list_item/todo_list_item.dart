@@ -6,6 +6,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
 import 'package:quick_flutter/widget/button/check_button.dart';
+import 'package:quick_flutter/widget/color/status_color.dart';
 import 'package:quick_flutter/widget/theme/app_theme.dart';
 
 class TodoListItem extends HookConsumerWidget {
@@ -138,18 +139,18 @@ class TodoListItem extends HookConsumerWidget {
     );
 
     final backgroundColor = hasFocus.value && !readOnly
-        ? context.appColors.backgroundSelected
+        ? context.appColors.primary.withOpacity(0.08)
         : onHover.value
-            ? context.appColors.backgroundHovered
+            ? context.appColors.onSurface.hovered
             : Colors.transparent;
 
     late final Color textFieldColor;
     if (todo.isDone) {
-      textFieldColor = context.appColors.textSubtle;
+      textFieldColor = context.appColors.onSurfaceSubtle;
     } else if (readOnly) {
-      textFieldColor = context.appColors.textDisabled;
+      textFieldColor = context.appColors.onSurface;
     } else {
-      textFieldColor = context.appColors.textDefault;
+      textFieldColor = context.appColors.onSurface;
     }
 
     return CallbackShortcuts(

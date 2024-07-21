@@ -1,5 +1,5 @@
 import 'package:quick_flutter/controller/refresh/refresh_controller.dart';
-import 'package:quick_flutter/controller/today_app_item/today_app_item_controller.dart';
+import 'package:quick_flutter/controller/app_item/app_item_controller.dart';
 import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/user/user_controller.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
@@ -10,7 +10,7 @@ part 'today_done_todo_controller.g.dart';
 
 /// 今日作成された完了済みの[AppTodoItem]を返すController
 ///
-/// [todayAppItemControllerProvider]を監視すしているため、[todayAppItemControllerProvider]が更新されると、
+/// [appItemControllerProvider]を監視すしているため、[appItemControllerProvider]が更新されると、
 /// このControllerも更新される。
 @Riverpod(keepAlive: true)
 class TodayDoneTodoController extends _$TodayDoneTodoController {

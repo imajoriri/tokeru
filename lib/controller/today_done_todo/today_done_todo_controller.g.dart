@@ -11,7 +11,7 @@ String _$todayDoneTodoControllerHash() =>
 
 /// 今日作成された完了済みの[AppTodoItem]を返すController
 ///
-/// [todayAppItemControllerProvider]を監視すしているため、[todayAppItemControllerProvider]が更新されると、
+/// [appItemControllerProvider]を監視すしているため、[appItemControllerProvider]が更新されると、
 /// このControllerも更新される。
 ///
 /// Copied from [TodayDoneTodoController].

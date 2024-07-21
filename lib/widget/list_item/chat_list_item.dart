@@ -7,29 +7,19 @@ import 'package:quick_flutter/widget/theme/app_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ChatListItem extends HookWidget {
-  const ChatListItem._({
-    required this.app,
-    this.onChangedCheck,
-    this.bottomWidget,
-  });
-
-  factory ChatListItem.chat({
+  const ChatListItem.chat({
+    super.key,
     required AppChatItem chat,
-    Widget? bottomWidget,
-  }) =>
-      ChatListItem._(
-        app: chat,
-        bottomWidget: bottomWidget,
-      );
+    this.bottomWidget,
+  })  : app = chat,
+        onChangedCheck = null;
 
-  factory ChatListItem.todo({
+  const ChatListItem.todo({
+    super.key,
     required AppTodoItem todo,
-    required void Function(bool?)? onChangedCheck,
-  }) =>
-      ChatListItem._(
-        app: todo,
-        onChangedCheck: onChangedCheck,
-      );
+    this.onChangedCheck,
+  })  : app = todo,
+        bottomWidget = null;
 
   final AppItem app;
 
@@ -46,8 +36,8 @@ class ChatListItem extends HookWidget {
       onShowHoverHighlight: (value) => hover.value = value,
       child: Container(
         color: hover.value
-            ? context.appColors.backgroundHovered
-            : context.appColors.backgroundDefault,
+            ? context.appColors.onSurface.withOpacity(0.08)
+            : context.appColors.surface,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
         child: switch (app) {
           AppChatItem(:final message) => _Chat(
@@ -78,7 +68,6 @@ class _Chat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SelectionArea(
-      // focusNode: FocusNode(skipTraversal: true),
       child: SizedBox(
         width: double.infinity,
         child: Column(
@@ -94,7 +83,7 @@ class _Chat extends StatelessWidget {
               text: message,
               style: context.appTextTheme.bodyMedium,
               linkStyle: context.appTextTheme.bodyMedium.copyWith(
-                color: context.appColors.textLink,
+                color: context.appColors.link,
                 decoration: TextDecoration.none,
               ),
             ),
@@ -133,8 +122,8 @@ class _Todo extends StatelessWidget {
             style: context.appTextTheme.bodyMedium.copyWith(
               decoration: isDone ? TextDecoration.lineThrough : null,
               color: isDone
-                  ? context.appColors.textSubtle
-                  : context.appColors.textDefault,
+                  ? context.appColors.onSurfaceSubtle
+                  : context.appColors.onSurface,
             ),
           ),
         ),

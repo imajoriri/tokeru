@@ -42,15 +42,15 @@ class AppIconButton extends HookWidget {
   Widget build(BuildContext context) {
     return AppButton(
       onPressed: onPressed,
-      containerColor: context.appColors.textDefault,
-      backgroundColor: context.appColors.backgroundDefault,
+      containerColor: context.appColors.onSurface,
+      backgroundColor: context.appColors.surface,
       child: Padding(
         padding: EdgeInsets.all(context.appSpacing.smallX),
         child: IconTheme.merge(
           child: icon,
           data: IconThemeData(
             size: iconSize,
-            color: context.appColors.iconDefault,
+            color: context.appColors.onSurface,
           ),
         ),
       ),

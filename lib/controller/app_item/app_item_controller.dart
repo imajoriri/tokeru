@@ -1,18 +1,18 @@
 import 'package:collection/collection.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:quick_flutter/controller/app_item_should_update/app_item_should_update_controller.dart';
 import 'package:quick_flutter/controller/refresh/refresh_controller.dart';
 import 'package:quick_flutter/controller/user/user_controller.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
 import 'package:quick_flutter/repository/app_item/app_item_repository.dart';
+import 'package:quick_flutter/utils/method_channel.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
 
-part 'today_app_item_controller.g.dart';
+part 'app_item_controller.g.dart';
 
-/// 今日作成された[AppItem]を返すController。
+/// [AppItem]を返すController。
 @Riverpod(keepAlive: true)
-class TodayAppItemController extends _$TodayAppItemController {
+class AppItemController extends _$AppItemController {
   /// 1ページあたりの取得数。
   final initialPerPage = 50;
 
@@ -22,11 +22,18 @@ class TodayAppItemController extends _$TodayAppItemController {
   @override
   FutureOr<List<AppItem>> build() async {
     ref.watch(refreshControllerProvider);
-    ref.watch(appItemShouldUpdateControllerProvider);
     final user = ref.watch(userControllerProvider);
     if (user.hasError || user.valueOrNull == null) {
       return [];
     }
+
+    // ウィンドウがアクティブになったら、自身を更新する。
+    mainMethodChannel.addListnerActive((type) async {
+      // TODO: Firebaseをwatchして、更新があった場合に更新する。
+      if (type == MainOsHandlerType.windowActive) {
+        ref.invalidateSelf();
+      }
+    });
 
     final repository = ref.read(appItemRepositoryProvider(user.value!.id));
     final todos = await repository.fetch(
