@@ -7,22 +7,8 @@ class _ChatTextField extends HookConsumerWidget {
   Future<void> _send({
     required TextEditingController textEditingController,
     required WidgetRef ref,
-    required bool todoMode,
   }) async {
     if (textEditingController.text.isEmpty) return;
-
-    // Todoモードの場合、改行でTodoを複数作成する。
-    if (todoMode) {
-      final titles = textEditingController.text.split('\n');
-      await ref.read(
-        todoAddControllerProvider(
-          titles: titles,
-          indexType: TodoAddIndexType.last,
-        ).future,
-      );
-      textEditingController.clear();
-      return;
-    }
 
     final provider = appItemControllerProvider;
     ref.read(provider.notifier).addChat(message: textEditingController.text);
@@ -37,7 +23,6 @@ class _ChatTextField extends HookConsumerWidget {
     final textEditingController = useTextEditingController();
     final hasFocus = useState(false);
     final canSubmit = useState(false);
-    final todoMode = useState(false);
 
     textEditingController.addListener(() {
       canSubmit.value = textEditingController.text.isNotEmpty;
@@ -62,7 +47,6 @@ class _ChatTextField extends HookConsumerWidget {
               _send(
                 textEditingController: textEditingController,
                 ref: ref,
-                todoMode: todoMode.value,
               ),
         },
         child: Focus(
@@ -88,12 +72,10 @@ class _ChatTextField extends HookConsumerWidget {
                         focusNode: chatFocusNode,
                         style: context.appTextTheme.bodyMedium,
                         cursorColor: Colors.black,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           isDense: true,
                           border: InputBorder.none,
-                          hintText: todoMode.value
-                              ? 'New todo list'
-                              : 'Talk to myself',
+                          hintText: 'Talk to myself',
                         ),
                       ),
                     ),
@@ -101,20 +83,12 @@ class _ChatTextField extends HookConsumerWidget {
                 ),
                 Row(
                   children: [
-                    CheckButton(
-                      onPressed: (_) async {
-                        todoMode.value = !todoMode.value;
-                      },
-                      checked: todoMode.value,
-                      checkedColor: context.appColors.primary,
-                    ),
                     const Spacer(),
                     SubmitButton(
                       onPressed: canSubmit.value
                           ? () => _send(
                                 textEditingController: textEditingController,
                                 ref: ref,
-                                todoMode: todoMode.value,
                               )
                           : null,
                     ),
