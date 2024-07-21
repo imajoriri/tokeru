@@ -122,6 +122,7 @@ class PanelScreen extends HookConsumerWidget {
                 children: [
                   Expanded(
                     child: TextField(
+                      autofocus: true,
                       focusNode: focusNode,
                       controller: textEditingConroller,
                       maxLines: null,
