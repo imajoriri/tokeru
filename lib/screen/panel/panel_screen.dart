@@ -32,26 +32,31 @@ class PanelScreen extends HookConsumerWidget {
     // ウィンドウをロックしているかどうか。
     final isLocked = useState(false);
 
-    panelMethodChannel.addListner((type) async {
-      switch (type) {
-        case OsHandlerType.windowActive:
-          focusNode.requestFocus();
-          break;
-        case OsHandlerType.windowInactive:
+    // ビルド後にrequestFocusしないとエラーになるため、
+    // addPostFrameCallbackを使用する。
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      panelMethodChannel.addListner((type) async {
+        switch (type) {
+          case OsHandlerType.windowActive:
+            focusNode.requestFocus();
+            break;
+          case OsHandlerType.windowInactive:
 
-          // ロックしている場合はウィンドウを閉じない。
-          if (!isLocked.value) {
-            panelMethodChannel.closeWindow();
-          } else {
-            // インアクティブの状態で、フォーカスがあると入力できると間違えてしまうので、
-            // フォーカスを外す。
-            FocusManager.instance.primaryFocus?.unfocus();
-          }
-          break;
-        default:
-          break;
-      }
+            // ロックしている場合はウィンドウを閉じない。
+            if (!isLocked.value) {
+              panelMethodChannel.closeWindow();
+            } else {
+              // インアクティブの状態で、フォーカスがあると入力できると間違えてしまうので、
+              // フォーカスを外す。
+              FocusManager.instance.primaryFocus?.unfocus();
+            }
+            break;
+          default:
+            break;
+        }
+      });
     });
+
     final textEditingConroller = useTextEditingController();
     final canSubmit = useState(textEditingConroller.text.isNotEmpty);
 
