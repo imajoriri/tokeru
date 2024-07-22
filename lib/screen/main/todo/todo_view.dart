@@ -1,10 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart';
-import 'package:quick_flutter/controller/past_todo/past_todo_controller.dart';
 import 'package:quick_flutter/controller/today_done_todo/today_done_todo_controller.dart';
 import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/todo_add/todo_add_controller.dart';
@@ -23,7 +20,6 @@ import 'package:quick_flutter/widget/theme/app_theme.dart';
 import 'package:quick_flutter/widget/list_item/todo_list_item.dart';
 
 part 'today_todo_list.dart';
-part 'past_todo_list.dart';
 part 'done_todo_list.dart';
 
 class TodoView extends StatelessWidget {
@@ -41,9 +37,6 @@ class TodoView extends StatelessWidget {
           ),
           // SliverList(
           //   delegate: SliverChildListDelegate([const DoneTodoList()]),
-          // ),
-          // SliverList(
-          //   delegate: SliverChildListDelegate([const PastTodoList()]),
           // ),
         ],
       ),
