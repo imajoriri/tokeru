@@ -33,14 +33,14 @@ mixin AppTodoItemsNotifierMixin<T> on StreamNotifier<List<AppTodoItem>> {
     state = AsyncData(tmp);
 
     // indexを更新する
-    await _updateCurrentOrder();
+    await updateCurrentOrder();
   }
 
   /// 現在のListの順番をindexとして更新する。
   ///
   /// 新規作成後や削除後に並び替えをリセットするために使用する。
   /// ショートカットでの移動時に連続で呼ばれる可能性があるため、APIの呼び出しはデバウンスしている。
-  Future<void> _updateCurrentOrder() async {
+  Future<void> updateCurrentOrder() async {
     final user = ref.read(userControllerProvider);
     if (user.valueOrNull == null) {
       assert(false, 'user is null');
