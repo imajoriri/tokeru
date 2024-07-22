@@ -1,5 +1,4 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:quick_flutter/controller/past_todo/past_todo_controller.dart';
 import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/user/user_controller.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
@@ -32,7 +31,4 @@ Future<void> todoDeleteController(
 
   // TodoControllerも更新する。
   ref.read(todoControllerProvider.notifier).deleteTodo(todoId: todoId);
-
-  // PastTodoControllerも更新する。
-  ref.read(pastTodoControllerProvider.notifier).deleteTodo(todoId: todoId);
 }
