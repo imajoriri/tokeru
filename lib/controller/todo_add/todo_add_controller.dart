@@ -2,7 +2,6 @@ import 'package:collection/collection.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:quick_flutter/controller/app_item/app_item_controller.dart';
 import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/todo_focus/todo_focus_controller.dart';
 import 'package:quick_flutter/controller/user/user_controller.dart';
@@ -81,7 +80,6 @@ Future<void> todoAddController(
 
     // 追加したTodoをTodayAppItemControllerとTodoControllerに追加する。
     for (final item in items) {
-      ref.read(appItemControllerProvider.notifier).addTodo(todo: item);
       ref.read(todoControllerProvider.notifier).addTodo(todo: item);
     }
 

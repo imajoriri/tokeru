@@ -1,5 +1,4 @@
 import 'package:quick_flutter/controller/refresh/refresh_controller.dart';
-import 'package:quick_flutter/controller/app_item/app_item_controller.dart';
 import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/user/user_controller.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';

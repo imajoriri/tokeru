@@ -1,5 +1,4 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:quick_flutter/controller/app_item/app_item_controller.dart';
 import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/user/user_controller.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
@@ -27,13 +26,7 @@ Future<void> todoUpdateController(
 
   // 以下のエラーの対策
   // Providers are not allowed to modify other providers during their initialization.
-  await ref.read(appItemControllerProvider.future);
   await ref.read(todoControllerProvider.future);
-
-  // TodayAppItemControllerも更新する。
-  ref.read(appItemControllerProvider.notifier).updateTodo(todo: todo);
-
-  // TodoControllerも更新する。
   ref.read(todoControllerProvider.notifier).updateTodo(todo: todo);
 
   final user = ref.read(userControllerProvider);
