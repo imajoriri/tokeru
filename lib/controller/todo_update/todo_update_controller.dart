@@ -24,11 +24,6 @@ Future<void> todoUpdateController(
     return;
   }
 
-  // 以下のエラーの対策
-  // Providers are not allowed to modify other providers during their initialization.
-  await ref.read(todoControllerProvider.future);
-  ref.read(todoControllerProvider.notifier).updateTodo(todo: todo);
-
   final user = ref.read(userControllerProvider);
   if (user.valueOrNull == null) {
     assert(false, 'user is null');

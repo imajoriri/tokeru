@@ -77,14 +77,6 @@ Future<void> todoAddController(
   final repository = ref.read(appItemRepositoryProvider(user.value!.id));
   try {
     await repository.addAll(items);
-
-    // 追加したTodoをTodayAppItemControllerとTodoControllerに追加する。
-    for (final item in items) {
-      ref.read(todoControllerProvider.notifier).addTodo(todo: item);
-    }
-
-    // 追加したTodoの順番を更新する。
-    await ref.read(todoControllerProvider.notifier).updateCurrentOrder();
   } on Exception catch (e, s) {
     await FirebaseCrashlytics.instance.recordError(e, s);
   }

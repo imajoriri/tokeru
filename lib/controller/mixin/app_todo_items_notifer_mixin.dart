@@ -8,7 +8,7 @@ import 'package:quick_flutter/repository/app_item/app_item_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 /// [AppTodoItem]の更新、削除、並び替えを行うMixin。
-mixin AppTodoItemsNotifierMixin<T> on AsyncNotifier<List<AppTodoItem>> {
+mixin AppTodoItemsNotifierMixin<T> on StreamNotifier<List<AppTodoItem>> {
   Timer? _deleteDonesDebounce;
   Timer? _updateOrderDebounce;
 
@@ -27,13 +27,23 @@ mixin AppTodoItemsNotifierMixin<T> on AsyncNotifier<List<AppTodoItem>> {
 
   /// [oldIndex]の[AppTodoItem]を[newIndex]に移動する
   Future<void> reorder(int oldIndex, int newIndex) async {
+    final user = ref.read(userControllerProvider);
+    if (user.valueOrNull == null) {
+      assert(false, 'user is null');
+      return;
+    }
     final tmp = [...state.value!];
     final item = tmp.removeAt(oldIndex);
     tmp.insert(newIndex, item);
-    state = AsyncData(tmp);
+    for (var i = 0; i < tmp.length; i++) {
+      tmp[i] = tmp[i].copyWith(index: i);
+    }
+    final repository = ref.read(appItemRepositoryProvider(user.value!.id));
+    print(tmp);
+    await repository.updateTodoOrder(todos: tmp);
 
-    // indexを更新する
-    await updateCurrentOrder();
+    // // indexを更新する
+    // await updateCurrentOrder();
   }
 
   /// 現在のListの順番をindexとして更新する。

@@ -28,6 +28,21 @@ class AppItemRepository {
       .where('type', isNotEqualTo: null)
       .orderBy('createdAt', descending: true);
 
+  Stream<List<AppTodoItem>> fetchTodos({
+    bool isDone = false,
+  }) {
+    final snapshot = query
+        .where('isDone', isEqualTo: isDone)
+        .where('type', isEqualTo: 'todo')
+        .orderBy('index', descending: true)
+        .snapshots();
+    return snapshot.map((event) {
+      return event.docs.map((doc) {
+        return AppTodoItem.fromJson(doc.data()..['id'] = doc.id);
+      }).toList();
+    });
+  }
+
   /// 指定した日付より後に作成された[AppItem]を取得する
   ///
   /// - [limit]: 取得するTodoの最大数
@@ -35,13 +50,13 @@ class AppItemRepository {
   /// - [end]: この日付より前に作成された[AppItem]を取得する
   /// - [type]: 取得する[AppItem]のタイプ
   /// - [isDone]: 取得する[AppItem]のisDone
-  Future<List<AppItem>> fetch({
+  Stream<List<AppItem>> fetch({
     int limit = 50,
     DateTime? start,
     DateTime? end,
     String? type,
     bool? isDone,
-  }) async {
+  }) {
     var doc = ref
         .read(userDocumentProvider(userId))
         .collection(_collectionName)
@@ -60,19 +75,33 @@ class AppItemRepository {
     if (isDone != null) {
       doc = doc.where('isDone', isEqualTo: isDone);
     }
-    final response = await doc.get();
-    return (response.docs.map((doc) {
-      // typeがない場合はAppChatItemとして扱う
-      if (!doc.data().containsKey('type')) {
-        return AppChatItem(
-          id: doc.id,
-          message: '',
-          createdAt:
-              const TimestampConverter().fromJson(doc.data()['createdAt']),
-        );
-      }
-      return AppItem.fromJson(doc.data()..['id'] = doc.id);
-    }).toList());
+    final snapshot = doc.snapshots();
+    return snapshot.map((event) {
+      return event.docs.map((doc) {
+        if (!doc.data().containsKey('type')) {
+          return AppChatItem(
+            id: doc.id,
+            message: '',
+            createdAt:
+                const TimestampConverter().fromJson(doc.data()['createdAt']),
+          );
+        }
+        return AppItem.fromJson(doc.data()..['id'] = doc.id);
+      }).toList();
+    });
+    // final response = await doc.get();
+    // return (response.docs.map((doc) {
+    //   // typeがない場合はAppChatItemとして扱う
+    //   if (!doc.data().containsKey('type')) {
+    //     return AppChatItem(
+    //       id: doc.id,
+    //       message: '',
+    //       createdAt:
+    //           const TimestampConverter().fromJson(doc.data()['createdAt']),
+    //     );
+    //   }
+    //   return AppItem.fromJson(doc.data()..['id'] = doc.id);
+    // }).toList());
   }
 
   /// [AppItem]を追加する。

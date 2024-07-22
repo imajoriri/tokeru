@@ -28,7 +28,4 @@ Future<void> todoDeleteController(
   } on Exception catch (e, s) {
     await FirebaseCrashlytics.instance.recordError(e, s);
   }
-
-  // TodoControllerも更新する。
-  ref.read(todoControllerProvider.notifier).deleteTodo(todoId: todoId);
 }
