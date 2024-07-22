@@ -30,9 +30,5 @@ class TodoController extends _$TodoController with AppTodoItemsNotifierMixin {
           return a.index.compareTo(b.index);
         });
     });
-    // stream.listen((event) {
-    //   // print(event);
-    // });
-    // return stream;
   }
 }

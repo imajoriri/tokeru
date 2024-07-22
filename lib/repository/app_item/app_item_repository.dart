@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
 import 'package:quick_flutter/repository/firebase/firebase_provider.dart';
-import 'package:quick_flutter/systems/timestamp_converter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'app_item_repository.g.dart';
@@ -41,67 +40,6 @@ class AppItemRepository {
         return AppTodoItem.fromJson(doc.data()..['id'] = doc.id);
       }).toList();
     });
-  }
-
-  /// 指定した日付より後に作成された[AppItem]を取得する
-  ///
-  /// - [limit]: 取得するTodoの最大数
-  /// - [start]: この日付より後に作成された[AppItem]を取得する
-  /// - [end]: この日付より前に作成された[AppItem]を取得する
-  /// - [type]: 取得する[AppItem]のタイプ
-  /// - [isDone]: 取得する[AppItem]のisDone
-  Stream<List<AppItem>> fetch({
-    int limit = 50,
-    DateTime? start,
-    DateTime? end,
-    String? type,
-    bool? isDone,
-  }) {
-    var doc = ref
-        .read(userDocumentProvider(userId))
-        .collection(_collectionName)
-        .where('type', isNotEqualTo: null)
-        .orderBy('createdAt', descending: true)
-        .limit(limit);
-    if (start != null) {
-      doc = doc.where('createdAt', isGreaterThan: start);
-    }
-    if (end != null) {
-      doc = doc.where('createdAt', isLessThan: end);
-    }
-    if (type != null) {
-      doc = doc.where('type', isEqualTo: type);
-    }
-    if (isDone != null) {
-      doc = doc.where('isDone', isEqualTo: isDone);
-    }
-    final snapshot = doc.snapshots();
-    return snapshot.map((event) {
-      return event.docs.map((doc) {
-        if (!doc.data().containsKey('type')) {
-          return AppChatItem(
-            id: doc.id,
-            message: '',
-            createdAt:
-                const TimestampConverter().fromJson(doc.data()['createdAt']),
-          );
-        }
-        return AppItem.fromJson(doc.data()..['id'] = doc.id);
-      }).toList();
-    });
-    // final response = await doc.get();
-    // return (response.docs.map((doc) {
-    //   // typeがない場合はAppChatItemとして扱う
-    //   if (!doc.data().containsKey('type')) {
-    //     return AppChatItem(
-    //       id: doc.id,
-    //       message: '',
-    //       createdAt:
-    //           const TimestampConverter().fromJson(doc.data()['createdAt']),
-    //     );
-    //   }
-    //   return AppItem.fromJson(doc.data()..['id'] = doc.id);
-    // }).toList());
   }
 
   /// [AppItem]を追加する。
