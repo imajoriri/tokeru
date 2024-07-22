@@ -27,30 +27,20 @@ mixin AppTodoItemsNotifierMixin<T> on StreamNotifier<List<AppTodoItem>> {
 
   /// [oldIndex]の[AppTodoItem]を[newIndex]に移動する
   Future<void> reorder(int oldIndex, int newIndex) async {
-    final user = ref.read(userControllerProvider);
-    if (user.valueOrNull == null) {
-      assert(false, 'user is null');
-      return;
-    }
     final tmp = [...state.value!];
     final item = tmp.removeAt(oldIndex);
     tmp.insert(newIndex, item);
-    for (var i = 0; i < tmp.length; i++) {
-      tmp[i] = tmp[i].copyWith(index: i);
-    }
-    final repository = ref.read(appItemRepositoryProvider(user.value!.id));
-    print(tmp);
-    await repository.updateTodoOrder(todos: tmp);
+    state = AsyncData(tmp);
 
-    // // indexを更新する
-    // await updateCurrentOrder();
+    // indexを更新する
+    await _updateCurrentOrder();
   }
 
   /// 現在のListの順番をindexとして更新する。
   ///
   /// 新規作成後や削除後に並び替えをリセットするために使用する。
   /// ショートカットでの移動時に連続で呼ばれる可能性があるため、APIの呼び出しはデバウンスしている。
-  Future<void> updateCurrentOrder() async {
+  Future<void> _updateCurrentOrder() async {
     final user = ref.read(userControllerProvider);
     if (user.valueOrNull == null) {
       assert(false, 'user is null');

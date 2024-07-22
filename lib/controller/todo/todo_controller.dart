@@ -23,9 +23,16 @@ class TodoController extends _$TodoController with AppTodoItemsNotifierMixin {
     final stream = repository.fetchTodos(
       isDone: false,
     );
-    stream.listen((event) {
-      // print(event);
+    // streamをindex順に並び替える。
+    return stream.map((event) {
+      return event
+        ..sort((a, b) {
+          return a.index.compareTo(b.index);
+        });
     });
-    return stream;
+    // stream.listen((event) {
+    //   // print(event);
+    // });
+    // return stream;
   }
 }

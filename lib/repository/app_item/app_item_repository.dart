@@ -31,11 +31,11 @@ class AppItemRepository {
   Stream<List<AppTodoItem>> fetchTodos({
     bool isDone = false,
   }) {
+    // NOTE: ここでorderBy indexをすると、intではなく文字列でソートされてしまう。
     final snapshot = query
         .where('isDone', isEqualTo: isDone)
         .where('type', isEqualTo: 'todo')
-        .orderBy('index', descending: true)
-        .snapshots();
+        .snapshots(source: ListenSource.cache);
     return snapshot.map((event) {
       return event.docs.map((doc) {
         return AppTodoItem.fromJson(doc.data()..['id'] = doc.id);
