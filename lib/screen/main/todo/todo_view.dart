@@ -6,7 +6,7 @@ import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/new_todo/new_todo.dart';
 import 'package:quick_flutter/controller/todo_delete/todo_delete_controller.dart';
 import 'package:quick_flutter/controller/todo_focus/todo_focus_controller.dart';
-import 'package:quick_flutter/controller/todo_update/todo_update_controller.dart';
+import 'package:quick_flutter/controller/updated_todo/updated_todo.dart';
 import 'package:quick_flutter/model/analytics_event/analytics_event_name.dart';
 import 'package:quick_flutter/widget/actions/new_todo.dart/new_todo_action.dart';
 import 'package:quick_flutter/widget/button/icon_button.dart';
