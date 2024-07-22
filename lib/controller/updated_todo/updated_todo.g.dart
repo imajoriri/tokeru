@@ -1,13 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'todo_update_controller.dart';
+part of 'updated_todo.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$todoUpdateControllerHash() =>
-    r'b32467dc87fc53b39d1c688fddfeef073973f639';
+String _$updatedTodoHash() => r'1e46394f0402c5fedf8853cc51cbcd39e383caf8';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -32,49 +31,33 @@ class _SystemHash {
 
 /// [AppTodoItem]の更新を行うController。
 ///
-/// 以下のControllerのstateも更新する。
-/// - [TodayAppItemController]
-/// - [TodoController]
-///
-/// Copied from [todoUpdateController].
-@ProviderFor(todoUpdateController)
-const todoUpdateControllerProvider = TodoUpdateControllerFamily();
+/// Copied from [updatedTodo].
+@ProviderFor(updatedTodo)
+const updatedTodoProvider = UpdatedTodoFamily();
 
 /// [AppTodoItem]の更新を行うController。
 ///
-/// 以下のControllerのstateも更新する。
-/// - [TodayAppItemController]
-/// - [TodoController]
-///
-/// Copied from [todoUpdateController].
-class TodoUpdateControllerFamily extends Family<AsyncValue<void>> {
+/// Copied from [updatedTodo].
+class UpdatedTodoFamily extends Family<AsyncValue<void>> {
   /// [AppTodoItem]の更新を行うController。
   ///
-  /// 以下のControllerのstateも更新する。
-  /// - [TodayAppItemController]
-  /// - [TodoController]
-  ///
-  /// Copied from [todoUpdateController].
-  const TodoUpdateControllerFamily();
+  /// Copied from [updatedTodo].
+  const UpdatedTodoFamily();
 
   /// [AppTodoItem]の更新を行うController。
   ///
-  /// 以下のControllerのstateも更新する。
-  /// - [TodayAppItemController]
-  /// - [TodoController]
-  ///
-  /// Copied from [todoUpdateController].
-  TodoUpdateControllerProvider call({
+  /// Copied from [updatedTodo].
+  UpdatedTodoProvider call({
     required AppItem todo,
   }) {
-    return TodoUpdateControllerProvider(
+    return UpdatedTodoProvider(
       todo: todo,
     );
   }
 
   @override
-  TodoUpdateControllerProvider getProviderOverride(
-    covariant TodoUpdateControllerProvider provider,
+  UpdatedTodoProvider getProviderOverride(
+    covariant UpdatedTodoProvider provider,
   ) {
     return call(
       todo: provider.todo,
@@ -93,44 +76,36 @@ class TodoUpdateControllerFamily extends Family<AsyncValue<void>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'todoUpdateControllerProvider';
+  String? get name => r'updatedTodoProvider';
 }
 
 /// [AppTodoItem]の更新を行うController。
 ///
-/// 以下のControllerのstateも更新する。
-/// - [TodayAppItemController]
-/// - [TodoController]
-///
-/// Copied from [todoUpdateController].
-class TodoUpdateControllerProvider extends AutoDisposeFutureProvider<void> {
+/// Copied from [updatedTodo].
+class UpdatedTodoProvider extends AutoDisposeFutureProvider<void> {
   /// [AppTodoItem]の更新を行うController。
   ///
-  /// 以下のControllerのstateも更新する。
-  /// - [TodayAppItemController]
-  /// - [TodoController]
-  ///
-  /// Copied from [todoUpdateController].
-  TodoUpdateControllerProvider({
+  /// Copied from [updatedTodo].
+  UpdatedTodoProvider({
     required AppItem todo,
   }) : this._internal(
-          (ref) => todoUpdateController(
-            ref as TodoUpdateControllerRef,
+          (ref) => updatedTodo(
+            ref as UpdatedTodoRef,
             todo: todo,
           ),
-          from: todoUpdateControllerProvider,
-          name: r'todoUpdateControllerProvider',
+          from: updatedTodoProvider,
+          name: r'updatedTodoProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$todoUpdateControllerHash,
-          dependencies: TodoUpdateControllerFamily._dependencies,
+                  : _$updatedTodoHash,
+          dependencies: UpdatedTodoFamily._dependencies,
           allTransitiveDependencies:
-              TodoUpdateControllerFamily._allTransitiveDependencies,
+              UpdatedTodoFamily._allTransitiveDependencies,
           todo: todo,
         );
 
-  TodoUpdateControllerProvider._internal(
+  UpdatedTodoProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -144,12 +119,12 @@ class TodoUpdateControllerProvider extends AutoDisposeFutureProvider<void> {
 
   @override
   Override overrideWith(
-    FutureOr<void> Function(TodoUpdateControllerRef provider) create,
+    FutureOr<void> Function(UpdatedTodoRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
-      override: TodoUpdateControllerProvider._internal(
-        (ref) => create(ref as TodoUpdateControllerRef),
+      override: UpdatedTodoProvider._internal(
+        (ref) => create(ref as UpdatedTodoRef),
         from: from,
         name: null,
         dependencies: null,
@@ -162,12 +137,12 @@ class TodoUpdateControllerProvider extends AutoDisposeFutureProvider<void> {
 
   @override
   AutoDisposeFutureProviderElement<void> createElement() {
-    return _TodoUpdateControllerProviderElement(this);
+    return _UpdatedTodoProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is TodoUpdateControllerProvider && other.todo == todo;
+    return other is UpdatedTodoProvider && other.todo == todo;
   }
 
   @override
@@ -179,18 +154,17 @@ class TodoUpdateControllerProvider extends AutoDisposeFutureProvider<void> {
   }
 }
 
-mixin TodoUpdateControllerRef on AutoDisposeFutureProviderRef<void> {
+mixin UpdatedTodoRef on AutoDisposeFutureProviderRef<void> {
   /// The parameter `todo` of this provider.
   AppItem get todo;
 }
 
-class _TodoUpdateControllerProviderElement
-    extends AutoDisposeFutureProviderElement<void>
-    with TodoUpdateControllerRef {
-  _TodoUpdateControllerProviderElement(super.provider);
+class _UpdatedTodoProviderElement extends AutoDisposeFutureProviderElement<void>
+    with UpdatedTodoRef {
+  _UpdatedTodoProviderElement(super.provider);
 
   @override
-  AppItem get todo => (origin as TodoUpdateControllerProvider).todo;
+  AppItem get todo => (origin as UpdatedTodoProvider).todo;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

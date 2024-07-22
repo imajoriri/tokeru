@@ -65,14 +65,14 @@ class TodayTodoList extends HookConsumerWidget {
                           },
                           onUpdatedTitle: (value) {
                             ref.read(
-                              todoUpdateControllerProvider(
+                              updatedTodoProvider(
                                 todo: todo.copyWith(title: value),
                               ).future,
                             );
                           },
                           onToggleDone: (value) {
                             ref.read(
-                              todoUpdateControllerProvider(
+                              updatedTodoProvider(
                                 todo: todo.copyWith(isDone: value ?? false),
                               ).future,
                             );
