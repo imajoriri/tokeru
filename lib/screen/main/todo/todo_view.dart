@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/controller/todo/todo_controller.dart';
-import 'package:quick_flutter/controller/todo_add/todo_add_controller.dart';
+import 'package:quick_flutter/controller/new_todo/new_todo.dart';
 import 'package:quick_flutter/controller/todo_delete/todo_delete_controller.dart';
 import 'package:quick_flutter/controller/todo_focus/todo_focus_controller.dart';
 import 'package:quick_flutter/controller/todo_update/todo_update_controller.dart';

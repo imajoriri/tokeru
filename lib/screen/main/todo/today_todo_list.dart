@@ -88,8 +88,8 @@ class TodayTodoList extends HookConsumerWidget {
                           },
                           onNewTodoBelow: () async {
                             await ref.read(
-                              todoAddControllerProvider(
-                                titles: [''],
+                              newTodoProvider(
+                                title: '',
                                 indexType: TodoAddIndexType.current,
                               ).future,
                             );
@@ -208,8 +208,7 @@ class _Header extends ConsumerWidget {
             tooltip: ShortcutActivatorType.newTodo.longLabel,
             onPressed: () async {
               await ref.read(
-                todoAddControllerProvider(
-                  titles: [''],
+                newTodoProvider(
                   indexType: TodoAddIndexType.first,
                 ).future,
               );

@@ -7,7 +7,7 @@ part of 'todo_delete_controller.dart';
 // **************************************************************************
 
 String _$todoDeleteControllerHash() =>
-    r'08bf1cc96b142e6f861e474bb01c841e5ff44a10';
+    r'5965ab6d88811f01e7886e82f929ebb19c9a4d12';
 
 /// Copied from Dart SDK
 class _SystemHash {
