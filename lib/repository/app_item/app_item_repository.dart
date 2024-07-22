@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
 import 'package:quick_flutter/repository/firebase/firebase_provider.dart';
@@ -20,6 +21,12 @@ class AppItemRepository {
   });
   final Ref ref;
   final String userId;
+
+  Query<Map<String, dynamic>> get query => ref
+      .read(userDocumentProvider(userId))
+      .collection(_collectionName)
+      .where('type', isNotEqualTo: null)
+      .orderBy('createdAt', descending: true);
 
   /// 指定した日付より後に作成された[AppItem]を取得する
   ///
