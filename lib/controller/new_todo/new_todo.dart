@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +10,9 @@ import 'package:quick_flutter/repository/app_item/app_item_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
 
-part 'todo_add_controller.g.dart';
+part 'new_todo.g.dart';
 
-/// [todoAddControllerProvider]で追加するIndexの指定方法。
+/// Todoを追加するIndexの指定方法。
 enum TodoAddIndexType {
   /// 一番最初に追加する。
   first,
@@ -27,9 +26,7 @@ enum TodoAddIndexType {
   current,
 }
 
-/// [AppTodoItem]を複数追加を行うController。
-///
-/// 複数の[Todo]を一度に追加するために、Recordを受け取っている。
+/// [AppTodoItem]の追加を行うController。
 ///
 /// todos:
 /// - index: [TodoController]に追加する位置
@@ -39,46 +36,40 @@ enum TodoAddIndexType {
 /// - [TodayAppItemController]
 /// - [TodoController]
 @riverpod
-Future<void> todoAddController(
-  TodoAddControllerRef ref, {
-  required List<String> titles,
+Future<AppTodoItem?> newTodo(
+  NewTodoRef ref, {
+  String title = '',
   required TodoAddIndexType indexType,
 }) async {
   final user = ref.read(userControllerProvider);
   if (user.valueOrNull == null) {
     assert(false, 'user is null');
-    return;
+    return null;
   }
 
   // フォーカスを移動した時に2つのフォーカスが存在することがあるため、
   // 一度全てのフォーカスを外す。
   FocusManager.instance.primaryFocus?.unfocus();
 
-  // 受け取ったtitlesの中で先頭に追加するTodoのIndexを取得する。
-  final firstIndex = switch (indexType) {
+  // 追加するTodoのIndex。
+  final index = switch (indexType) {
     TodoAddIndexType.first => 0,
     TodoAddIndexType.last =>
       ref.read(todoControllerProvider).valueOrNull!.length,
     TodoAddIndexType.current =>
-      ref.read(todoFocusControllerProvider.notifier).getFocusIndex(),
+      ref.read(todoFocusControllerProvider.notifier).getFocusIndex() + 1,
   };
-  final items = titles
-      .mapIndexed(
-        (index, e) => AppTodoItem(
-          id: const Uuid().v4(),
-          title: e,
-          isDone: false,
-          index: firstIndex + index + 1,
-          createdAt: DateTime.now(),
-        ),
-      )
-      .toList();
+  final item = AppTodoItem(
+    id: const Uuid().v4(),
+    title: title,
+    isDone: false,
+    index: index,
+    createdAt: DateTime.now(),
+  );
 
   final repository = ref.read(appItemRepositoryProvider(user.value!.id));
   try {
-    await repository.addAll(items);
-    // 追加したTodoの順番を更新する。
-    await ref.read(todoControllerProvider.notifier).updateCurrentOrder();
+    await repository.add(item);
   } on Exception catch (e, s) {
     await FirebaseCrashlytics.instance.recordError(e, s);
   }
@@ -86,10 +77,11 @@ Future<void> todoAddController(
   if (indexType == TodoAddIndexType.current) {
     // フォーカスが存在していると
     FocusManager.instance.primaryFocus?.unfocus();
-    ref.read(todoFocusControllerProvider)[items.last.index].requestFocus();
+    ref.read(todoFocusControllerProvider)[item.index].requestFocus();
   }
 
   FirebaseAnalytics.instance.logEvent(
     name: AnalyticsEventName.addTodo.name,
   );
+  return item;
 }
