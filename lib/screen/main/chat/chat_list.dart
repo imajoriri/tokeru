@@ -33,7 +33,7 @@ class _ChatList extends HookConsumerWidget {
                         todo: appItem,
                         onChangedCheck: (value) {
                           ref.read(
-                            todoUpdateControllerProvider(
+                            updatedTodoProvider(
                               todo: appItem.copyWith(
                                 isDone: value ?? false,
                               ),

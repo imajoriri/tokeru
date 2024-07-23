@@ -16,6 +16,7 @@ class TodoListItem extends HookConsumerWidget {
     this.index,
     this.controller,
     this.focusNode,
+    this.autofocus = false,
     this.onDeleted,
     this.onUpdatedTitle,
     this.onToggleDone,
@@ -36,6 +37,8 @@ class TodoListItem extends HookConsumerWidget {
   final TextEditingController? controller;
 
   final FocusNode? focusNode;
+
+  final bool autofocus;
 
   /// [AppTodoItem]の削除時に呼ばれるコールバック
   ///
@@ -232,6 +235,7 @@ class TodoListItem extends HookConsumerWidget {
                           style: context.appTextTheme.bodyMedium.copyWith(
                             color: textFieldColor,
                           ),
+                          autofocus: autofocus,
                           cursorHeight: 16,
                           readOnly: readOnly,
                           maxLines: null,

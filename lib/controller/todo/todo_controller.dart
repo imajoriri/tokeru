@@ -13,20 +13,22 @@ part 'todo_controller.g.dart';
 @Riverpod(keepAlive: true)
 class TodoController extends _$TodoController with AppTodoItemsNotifierMixin {
   @override
-  FutureOr<List<AppTodoItem>> build() async {
+  Stream<List<AppTodoItem>> build() {
     ref.watch(refreshControllerProvider);
     final user = ref.watch(userControllerProvider);
     if (user.hasError || user.valueOrNull == null) {
-      return [];
+      return const Stream.empty();
     }
     final repository = ref.read(appItemRepositoryProvider(user.value!.id));
-    final appItems = await repository.fetch(
-      type: 'todo',
+    final stream = repository.fetchTodos(
       isDone: false,
     );
-    final todos = appItems.whereType<AppTodoItem>().toList();
-    // sort
-    todos.sort((a, b) => a.index.compareTo(b.index));
-    return todos;
+    // streamをindex順に並び替える。
+    return stream.map((event) {
+      return event
+        ..sort((a, b) {
+          return a.index.compareTo(b.index);
+        });
+    });
   }
 }

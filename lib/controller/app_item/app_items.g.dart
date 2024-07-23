@@ -6,7 +6,7 @@ part of 'app_items.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$appItemsHash() => r'c03336ade237b1a0561d19f959d16432ffcdfea3';
+String _$appItemsHash() => r'c6e9f67838cc06fc0c883958546ed06bdf07092e';
 
 /// See also [AppItems].
 @ProviderFor(AppItems)
@@ -22,7 +22,7 @@ final appItemsProvider =
 
 typedef _$AppItems = AutoDisposeAsyncNotifier<List<AppItem>>;
 String _$appItemsPaginationHash() =>
-    r'0e2fe43a1e4a883aa40b37b5d653ccd7119ac7fe';
+    r'3415793ceea13dfa18d645fa86032d11b7adba5e';
 
 /// Copied from Dart SDK
 class _SystemHash {
