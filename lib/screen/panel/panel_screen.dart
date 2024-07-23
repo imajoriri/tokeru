@@ -74,81 +74,84 @@ class PanelScreen extends HookConsumerWidget {
 
     // ウィンドウのリサイズが完了するまでにエラーが発生しないように、
     // スクロールできるようにする。
-    return SingleChildScrollView(
-      physics: const NeverScrollableScrollPhysics(),
-      child: Padding(
-        key: _childKey,
-        padding: const EdgeInsets.all(8.0),
-        child: FocusableActionDetector(
-          shortcuts: const {
-            SingleActivator(LogicalKeyboardKey.enter, meta: true):
-                ActivateIntent(),
-            SingleActivator(LogicalKeyboardKey.escape): _CloseWindowIntent(),
-          },
-          actions: {
-            ActivateIntent: CallbackAction<ActivateIntent>(
-              onInvoke: (intent) => _send(textEditingConroller, ref),
-            ),
-            _CloseWindowIntent: CallbackAction<_CloseWindowIntent>(
-              onInvoke: (intent) => panelMethodChannel.closeWindow(),
-            ),
-          },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  // 閉じるボタン。
-                  AppIconButton.small(
-                    icon: const Icon(Icons.close_rounded),
-                    onPressed: () {
-                      panelMethodChannel.closeWindow();
-                    },
-                    tooltip: '',
-                  ),
-                  const Spacer(),
-                  // ロックボタン。
-                  AppIconButton.small(
-                    icon: Icon(
-                      isLocked.value
-                          ? Icons.lock_rounded
-                          : Icons.lock_open_rounded,
-                    ),
-                    onPressed: () {
-                      isLocked.value = !isLocked.value;
-                    },
-                    tooltip: '',
-                  ),
-                ],
+    return Scaffold(
+      backgroundColor: context.appColors.surface,
+      body: SingleChildScrollView(
+        physics: const NeverScrollableScrollPhysics(),
+        child: Padding(
+          key: _childKey,
+          padding: const EdgeInsets.all(8.0),
+          child: FocusableActionDetector(
+            shortcuts: const {
+              SingleActivator(LogicalKeyboardKey.enter, meta: true):
+                  ActivateIntent(),
+              SingleActivator(LogicalKeyboardKey.escape): _CloseWindowIntent(),
+            },
+            actions: {
+              ActivateIntent: CallbackAction<ActivateIntent>(
+                onInvoke: (intent) => _send(textEditingConroller, ref),
               ),
-              const SizedBox(height: 8),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Expanded(
-                    child: TextField(
-                      autofocus: true,
-                      focusNode: focusNode,
-                      controller: textEditingConroller,
-                      maxLines: null,
-                      cursorColor: Colors.black,
-                      style: context.appTextTheme.bodyMedium,
-                      decoration: const InputDecoration(
-                        isDense: true,
-                        border: InputBorder.none,
+              _CloseWindowIntent: CallbackAction<_CloseWindowIntent>(
+                onInvoke: (intent) => panelMethodChannel.closeWindow(),
+              ),
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    // 閉じるボタン。
+                    AppIconButton.small(
+                      icon: const Icon(Icons.close_rounded),
+                      onPressed: () {
+                        panelMethodChannel.closeWindow();
+                      },
+                      tooltip: '',
+                    ),
+                    const Spacer(),
+                    // ロックボタン。
+                    AppIconButton.small(
+                      icon: Icon(
+                        isLocked.value
+                            ? Icons.lock_rounded
+                            : Icons.lock_open_rounded,
+                      ),
+                      onPressed: () {
+                        isLocked.value = !isLocked.value;
+                      },
+                      tooltip: '',
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        autofocus: true,
+                        focusNode: focusNode,
+                        controller: textEditingConroller,
+                        maxLines: null,
+                        cursorColor: Colors.black,
+                        style: context.appTextTheme.bodyMedium,
+                        decoration: const InputDecoration(
+                          isDense: true,
+                          border: InputBorder.none,
+                        ),
                       ),
                     ),
-                  ),
-                  SubmitButton(
-                    onPressed: canSubmit.value
-                        ? () {
-                            _send(textEditingConroller, ref);
-                          }
-                        : null,
-                  ),
-                ],
-              ),
-            ],
+                    SubmitButton(
+                      onPressed: canSubmit.value
+                          ? () {
+                              _send(textEditingConroller, ref);
+                            }
+                          : null,
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -2,27 +2,67 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:quick_flutter/controller/user/user_controller.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
 import 'package:quick_flutter/repository/app_item/app_item_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:uuid/uuid.dart';
 
 /// [AppTodoItem]の更新、削除、並び替えを行うMixin。
 mixin AppTodoItemsNotifierMixin<T> on StreamNotifier<List<AppTodoItem>> {
   Timer? _deleteDonesDebounce;
   Timer? _updateOrderDebounce;
 
-  /// [AppTodoItem]を追加する。
-  void addTodo({
-    required AppTodoItem todo,
-  }) {
-    final index = todo.index;
-    // todoのindexから、実際の配列のindexを計算する
-    final indexInList =
-        index > state.valueOrNull!.length ? state.valueOrNull!.length : index;
+  /// 先頭に[AppTodoItem]を追加する。
+  Future<void> addToFirst() async {
+    final user = ref.read(userControllerProvider);
+    if (user.valueOrNull == null) {
+      assert(false, 'user is null');
+      return;
+    }
+
+    final repository = ref.read(appItemRepositoryProvider(user.value!.id));
+    final todo = AppTodoItem(
+      id: const Uuid().v4(),
+      title: '',
+      isDone: false,
+      index: 0,
+      createdAt: DateTime.now(),
+    );
+    await repository.add(todo);
+
     final tmp = [...state.valueOrNull!];
-    tmp.insert(indexInList, todo);
-    state = AsyncData(tmp);
+    tmp.insert(0, todo);
+    updateCurrentOrder();
+  }
+
+  /// 特定のIndexに[AppTodoItem]を追加する。
+  ///
+  /// 特定のIndexにTodoを追加した後に、全てのTodoのindexを更新する。
+  /// [index]が配列の長さを超えている場合は、最後に追加される。
+  Future<void> addTodoWithIndex({
+    required int index,
+  }) async {
+    final user = ref.read(userControllerProvider);
+    if (user.valueOrNull == null) {
+      assert(false, 'user is null');
+      return;
+    }
+
+    final repository = ref.read(appItemRepositoryProvider(user.value!.id));
+    final todo = AppTodoItem(
+      id: const Uuid().v4(),
+      title: '',
+      isDone: false,
+      index: index,
+      createdAt: DateTime.now(),
+    );
+    await repository.add(todo);
+
+    final todos = [...state.valueOrNull!];
+    todos.insert(index, todo);
+    updateCurrentOrder();
   }
 
   /// [oldIndex]の[AppTodoItem]を[newIndex]に移動する
@@ -36,7 +76,7 @@ mixin AppTodoItemsNotifierMixin<T> on StreamNotifier<List<AppTodoItem>> {
     await updateCurrentOrder();
   }
 
-  /// 現在のListの順番をindexとして更新する。
+  /// 現在のListの順番をindexとしてデータを更新する。
   ///
   /// 新規作成後や削除後に並び替えをリセットするために使用する。
   /// ショートカットでの移動時に連続で呼ばれる可能性があるため、APIの呼び出しはデバウンスしている。
@@ -51,7 +91,6 @@ mixin AppTodoItemsNotifierMixin<T> on StreamNotifier<List<AppTodoItem>> {
     for (var i = 0; i < tmp.length; i++) {
       tmp[i] = tmp[i].copyWith(index: i);
     }
-    state = AsyncData(tmp);
 
     // 既存のデバウンスタイマーをキャンセル
     _updateOrderDebounce?.cancel();
@@ -73,9 +112,19 @@ mixin AppTodoItemsNotifierMixin<T> on StreamNotifier<List<AppTodoItem>> {
       return;
     }
 
-    state = AsyncData(
-      state.valueOrNull!.where((e) => e.id != todoId).toList(),
-    );
+    final user = ref.read(userControllerProvider);
+    if (user.valueOrNull == null) {
+      assert(false, 'user is null');
+      return;
+    }
+
+    final repository = ref.read(appItemRepositoryProvider(user.value!.id));
+    try {
+      await repository.delete(id: todoId);
+      updateCurrentOrder();
+    } on Exception catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+    }
   }
 
   /// [AppTodoItem]を更新する。
@@ -83,9 +132,9 @@ mixin AppTodoItemsNotifierMixin<T> on StreamNotifier<List<AppTodoItem>> {
   /// 存在しない場合は、何もしない。
   /// - [milliseconds]: デバウンスする時間。この時間内に複数回呼ばれた場合、最後の呼び出しのみが実行される。
   /// - [onUpdated]: 更新後に実行するコールバック。
-  void updateTodo({
+  void toggleTodo({
     required AppTodoItem todo,
-    int milliseconds = 1200,
+    int milliseconds = 200,
     VoidCallback? onUpdated,
   }) async {
     final oldTodo = state.valueOrNull?.firstWhereOrNull((e) => e.id == todo.id);
@@ -102,6 +151,7 @@ mixin AppTodoItemsNotifierMixin<T> on StreamNotifier<List<AppTodoItem>> {
       }).toList(),
     );
     _filterDoneIsTrueWithDebounce(
+      todo: todo,
       milliseconds: milliseconds,
       onDeleted: onUpdated,
     );
@@ -112,17 +162,18 @@ mixin AppTodoItemsNotifierMixin<T> on StreamNotifier<List<AppTodoItem>> {
   /// 新規作成後や削除後に並び替えをリセットするために使用する。
   /// ショートカットでの移動時に連続で呼ばれる可能性があるため、APIの呼び出しはデバウンスしている。
   Future<void> _filterDoneIsTrueWithDebounce({
-    int milliseconds = 1200,
+    required AppTodoItem todo,
+    int milliseconds = 200,
     VoidCallback? onDeleted,
   }) async {
     _deleteDonesDebounce?.cancel();
 
     _deleteDonesDebounce =
         Timer(Duration(milliseconds: milliseconds), () async {
-      final tmp = [
-        ...state.value!.whereType<AppTodoItem>().where((e) => !e.isDone),
-      ];
-      state = AsyncData(tmp);
+      final user = ref.read(userControllerProvider);
+      final repository = ref.read(appItemRepositoryProvider(user.value!.id));
+      await repository.update(item: todo);
+      updateCurrentOrder();
       onDeleted?.call();
     });
   }

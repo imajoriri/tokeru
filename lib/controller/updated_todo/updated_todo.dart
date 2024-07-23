@@ -1,5 +1,4 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:quick_flutter/controller/todo/todo_controller.dart';
 import 'package:quick_flutter/controller/user/user_controller.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
 import 'package:quick_flutter/repository/app_item/app_item_repository.dart';
@@ -27,13 +26,7 @@ Future<AppTodoItem> updatedTodo(
 
   final repository = ref.read(appItemRepositoryProvider(user.value!.id));
   try {
-    await ref.read(todoControllerProvider.future);
-    ref.read(todoControllerProvider.notifier).updateTodo(
-          todo: todo,
-          onUpdated: () {
-            repository.update(item: todo);
-          },
-        );
+    repository.update(item: todo);
   } on Exception catch (e, s) {
     await FirebaseCrashlytics.instance.recordError(e, s);
   }
