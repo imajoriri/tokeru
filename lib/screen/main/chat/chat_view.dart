@@ -8,7 +8,7 @@ import 'package:quick_flutter/controller/app_item/app_items.dart';
 import 'package:quick_flutter/controller/ogp_controller/ogp_controller.dart';
 import 'package:quick_flutter/controller/read/read_controller.dart';
 import 'package:quick_flutter/controller/read_all/read_all_controller.dart';
-import 'package:quick_flutter/controller/todo_update/todo_update_controller.dart';
+import 'package:quick_flutter/controller/updated_todo/updated_todo.dart';
 import 'package:quick_flutter/model/analytics_event/analytics_event_name.dart';
 import 'package:quick_flutter/model/app_item/app_item.dart';
 import 'package:quick_flutter/widget/button/submit_button.dart';
