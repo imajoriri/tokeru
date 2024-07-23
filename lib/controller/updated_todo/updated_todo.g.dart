@@ -6,7 +6,7 @@ part of 'updated_todo.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$updatedTodoHash() => r'1e46394f0402c5fedf8853cc51cbcd39e383caf8';
+String _$updatedTodoHash() => r'6ce20181a0013e4275e39a644d68c0af9db3d7a6';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -38,7 +38,7 @@ const updatedTodoProvider = UpdatedTodoFamily();
 /// [AppTodoItem]の更新を行うController。
 ///
 /// Copied from [updatedTodo].
-class UpdatedTodoFamily extends Family<AsyncValue<void>> {
+class UpdatedTodoFamily extends Family<AsyncValue<AppTodoItem>> {
   /// [AppTodoItem]の更新を行うController。
   ///
   /// Copied from [updatedTodo].
@@ -82,7 +82,7 @@ class UpdatedTodoFamily extends Family<AsyncValue<void>> {
 /// [AppTodoItem]の更新を行うController。
 ///
 /// Copied from [updatedTodo].
-class UpdatedTodoProvider extends AutoDisposeFutureProvider<void> {
+class UpdatedTodoProvider extends AutoDisposeFutureProvider<AppTodoItem> {
   /// [AppTodoItem]の更新を行うController。
   ///
   /// Copied from [updatedTodo].
@@ -119,7 +119,7 @@ class UpdatedTodoProvider extends AutoDisposeFutureProvider<void> {
 
   @override
   Override overrideWith(
-    FutureOr<void> Function(UpdatedTodoRef provider) create,
+    FutureOr<AppTodoItem> Function(UpdatedTodoRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -136,7 +136,7 @@ class UpdatedTodoProvider extends AutoDisposeFutureProvider<void> {
   }
 
   @override
-  AutoDisposeFutureProviderElement<void> createElement() {
+  AutoDisposeFutureProviderElement<AppTodoItem> createElement() {
     return _UpdatedTodoProviderElement(this);
   }
 
@@ -154,13 +154,13 @@ class UpdatedTodoProvider extends AutoDisposeFutureProvider<void> {
   }
 }
 
-mixin UpdatedTodoRef on AutoDisposeFutureProviderRef<void> {
+mixin UpdatedTodoRef on AutoDisposeFutureProviderRef<AppTodoItem> {
   /// The parameter `todo` of this provider.
   AppItem get todo;
 }
 
-class _UpdatedTodoProviderElement extends AutoDisposeFutureProviderElement<void>
-    with UpdatedTodoRef {
+class _UpdatedTodoProviderElement
+    extends AutoDisposeFutureProviderElement<AppTodoItem> with UpdatedTodoRef {
   _UpdatedTodoProviderElement(super.provider);
 
   @override

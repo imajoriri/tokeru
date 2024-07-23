@@ -47,21 +47,14 @@ class TodayTodoList extends HookConsumerWidget {
                         child: TodoListItem(
                           todo: todo,
                           index: index,
-                          focusNode:
-                              ref.watch(todoFocusControllerProvider)[index],
+                          // 新規作成されたときに自動でフォーカスする。
+                          autofocus: true,
                           controller:
                               useTodoTextEditingController(text: todo.title),
                           onDeleted: () async {
-                            final currentFocusIndex = ref
-                                .read(todoFocusControllerProvider.notifier)
-                                .getFocusIndex();
-                            await ref.read(
-                              todoDeleteControllerProvider(todoId: todo.id)
-                                  .future,
-                            );
                             ref
-                                .read(todoFocusControllerProvider.notifier)
-                                .requestFocus(currentFocusIndex - 1);
+                                .read(todoControllerProvider.notifier)
+                                .deleteTodo(todoId: todo.id);
                           },
                           onUpdatedTitle: (value) {
                             ref.read(
@@ -71,11 +64,11 @@ class TodayTodoList extends HookConsumerWidget {
                             );
                           },
                           onToggleDone: (value) {
-                            ref.read(
-                              updatedTodoProvider(
-                                todo: todo.copyWith(isDone: value ?? false),
-                              ).future,
-                            );
+                            ref
+                                .read(todoControllerProvider.notifier)
+                                .toggleTodo(
+                                  todo: todo.copyWith(isDone: value!),
+                                );
                             FirebaseAnalytics.instance.logEvent(
                               name: AnalyticsEventName.toggleTodoDone.name,
                             );
@@ -87,27 +80,19 @@ class TodayTodoList extends HookConsumerWidget {
                             FocusScope.of(context).previousFocus();
                           },
                           onNewTodoBelow: () async {
-                            await ref.read(
-                              newTodoProvider(
-                                title: '',
-                                indexType: TodoAddIndexType.current,
-                              ).future,
-                            );
+                            await ref
+                                .read(todoControllerProvider.notifier)
+                                .addTodoWithIndex(index: index + 1);
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              FocusScope.of(context).nextFocus();
+                            });
                           },
                           // 一番上のTodoは上に移動できない
                           onSortUp: index != 0
                               ? () {
-                                  final focusController = ref.read(
-                                    todoFocusControllerProvider.notifier,
-                                  );
-                                  focusController.removeFocus();
                                   ref
                                       .read(todoControllerProvider.notifier)
                                       .reorder(index, index - 1);
-                                  WidgetsBinding.instance
-                                      .addPostFrameCallback((_) {
-                                    focusController.requestFocus(index - 1);
-                                  });
                                 }
                               : null,
                           // 一番下のTodoは下に移動できない
@@ -118,17 +103,9 @@ class TodayTodoList extends HookConsumerWidget {
                                           .length -
                                       1
                               ? () {
-                                  final focusController = ref.read(
-                                    todoFocusControllerProvider.notifier,
-                                  );
-                                  focusController.removeFocus();
                                   ref
                                       .read(todoControllerProvider.notifier)
                                       .reorder(index, index + 1);
-                                  WidgetsBinding.instance
-                                      .addPostFrameCallback((_) {
-                                    focusController.requestFocus(index + 1);
-                                  });
                                 }
                               : null,
                         ),
@@ -207,15 +184,7 @@ class _Header extends ConsumerWidget {
             icon: const Icon(Icons.add),
             tooltip: ShortcutActivatorType.newTodo.longLabel,
             onPressed: () async {
-              await ref.read(
-                newTodoProvider(
-                  indexType: TodoAddIndexType.first,
-                ).future,
-              );
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                ref.read(todoFocusControllerProvider.notifier).requestFocus(0);
-              });
-
+              await ref.read(todoControllerProvider.notifier).addToFirst();
               await FirebaseAnalytics.instance.logEvent(
                 name: AnalyticsEventName.addTodo.name,
               );
