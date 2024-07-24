@@ -18,3 +18,5 @@ jobs:
 
       - name: "Run tests"
         run: melos exec -- "flutter test"
+        env:
+          MELOS_SDK_PATH: ${{ FLUTTER_ROOT }}
