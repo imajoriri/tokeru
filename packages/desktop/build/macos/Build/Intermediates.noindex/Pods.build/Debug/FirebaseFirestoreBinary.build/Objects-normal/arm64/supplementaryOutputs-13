@@ -1,0 +1,18 @@
+"/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseFirestoreBinary/Firestore/Swift/Source/Codable/CodableErrors.swift":
+  swift-dependencies: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseFirestoreBinary.build/Objects-normal/arm64/CodableErrors.swiftdeps"
+  object: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseFirestoreBinary.build/Objects-normal/arm64/CodableErrors.o"
+  dependencies: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseFirestoreBinary.build/Objects-normal/arm64/CodableErrors.d"
+  const-values: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseFirestoreBinary.build/Objects-normal/arm64/CodableErrors.swiftconstvalues"
+  diagnostics: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseFirestoreBinary.build/Objects-normal/arm64/CodableErrors.dia"
+"/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseFirestoreBinary/Firestore/Swift/Source/Codable/CodablePassThroughTypes.swift":
+  object: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseFirestoreBinary.build/Objects-normal/arm64/CodablePassThroughTypes.o"
+  dependencies: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseFirestoreBinary.build/Objects-normal/arm64/CodablePassThroughTypes.d"
+  diagnostics: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseFirestoreBinary.build/Objects-normal/arm64/CodablePassThroughTypes.dia"
+  swift-dependencies: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseFirestoreBinary.build/Objects-normal/arm64/CodablePassThroughTypes.swiftdeps"
+  const-values: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseFirestoreBinary.build/Objects-normal/arm64/CodablePassThroughTypes.swiftconstvalues"
+"/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseFirestoreBinary/Firestore/Swift/Source/AsyncAwait/CollectionReference+AsyncAwait.swift":
+  const-values: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseFirestoreBinary.build/Objects-normal/arm64/CollectionReference+AsyncAwait.swiftconstvalues"
+  dependencies: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseFirestoreBinary.build/Objects-normal/arm64/CollectionReference+AsyncAwait.d"
+  swift-dependencies: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseFirestoreBinary.build/Objects-normal/arm64/CollectionReference+AsyncAwait.swiftdeps"
+  object: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseFirestoreBinary.build/Objects-normal/arm64/CollectionReference+AsyncAwait.o"
+  diagnostics: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseFirestoreBinary.build/Objects-normal/arm64/CollectionReference+AsyncAwait.dia"

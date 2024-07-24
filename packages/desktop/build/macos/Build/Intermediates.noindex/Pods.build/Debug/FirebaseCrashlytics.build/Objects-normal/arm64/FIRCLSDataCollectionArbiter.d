@@ -1,0 +1,45 @@
+dependencies: \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseCrashlytics.build/module.modulemap \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCrashlytics/Crashlytics/Crashlytics/DataCollection/FIRCLSDataCollectionArbiter.m \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCrashlytics/Crashlytics/Crashlytics/DataCollection/FIRCLSDataCollectionArbiter.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromises.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/PromisesObjC.build/module.modulemap \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/Target\ Support\ Files/PromisesObjC/PromisesObjC-umbrella.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+All.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromiseError.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Always.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Any.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Async.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Await.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Catch.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Delay.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Do.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Race.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Recover.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Reduce.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Retry.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Testing.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Then.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Timeout.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Validate.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/PromisesObjC/Sources/FBLPromises/include/FBLPromise+Wrap.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCrashlytics/FirebaseCore/Extension/FirebaseCoreInternal.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseCore.build/module.modulemap \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/Target\ Support\ Files/FirebaseCore/FirebaseCore-umbrella.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCore/FirebaseCore/Sources/Public/FirebaseCore/FIRApp.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCore/FirebaseCore/Sources/Public/FirebaseCore/FIRConfiguration.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCore/FirebaseCore/Sources/Public/FirebaseCore/FIRLoggerLevel.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCore/FirebaseCore/Sources/Public/FirebaseCore/FirebaseCore.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCore/FirebaseCore/Sources/Public/FirebaseCore/FIROptions.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCore/FirebaseCore/Sources/Public/FirebaseCore/FIRVersion.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCrashlytics/FirebaseCore/Extension/FIRAppInternal.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCrashlytics/FirebaseCore/Extension/FIRComponent.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCrashlytics/FirebaseCore/Extension/FIRComponentContainer.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCrashlytics/FirebaseCore/Extension/FIRComponentType.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCrashlytics/FirebaseCore/Extension/FIRDependency.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCrashlytics/FirebaseCore/Extension/FIRHeartbeatLogger.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCrashlytics/FirebaseCore/Extension/FIRLibrary.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCrashlytics/FirebaseCore/Extension/FIRLogger.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCrashlytics/FirebaseCore/Extension/FIROptionsInternal.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCrashlytics/Crashlytics/Crashlytics/FIRCLSUserDefaults/FIRCLSUserDefaults.h

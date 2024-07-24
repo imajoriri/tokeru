@@ -1,0 +1,169 @@
+{
+  "main_library": {
+    "exported_symbols": [
+      {
+        "data": {
+          "global": [
+            "_kOldTableS2DRmqIds",
+            "_kFIRMessagingSendTtlDefault",
+            "_kFIRMessagingSecMissingEntitlementErrorCode",
+            "_kFIRMessagingAnalyticsMessageLabel",
+            "_kFIRMessaging_CMD_RST",
+            "_kFIRMessagingFirebaseUserAgentKey",
+            "_kFIRMessagingSubDirectoryName",
+            "_kTableLastRmqId",
+            "_kFIRMessagingAllScopeIdentifier",
+            "_kFIRMessagingParamInstanceID",
+            "_kFIRMessagingCheckinKeychainService",
+            "_kFIRMessagingMessageInternalReservedKeyword",
+            "_KFIRMessagingSendMessageAppData",
+            "_kFIRMessagingKeychainErrorDomain",
+            "_kFIRMessagingContextManagerCategoryKey",
+            "_kFIRMessagingFromKey",
+            "_kFIRMessagingContextManagerTitleKey",
+            "_kFIRMessagingAppDelegateProxyEnabledInfoPlistKey",
+            "_kFIRMessagingMessageLinkKey",
+            "_kFIRMessagingMessageAPNSContentAvailableKey",
+            "_FirebaseMessagingVersionNumber",
+            "_kFIRMessagingSendDelay",
+            "_kFIRMessagingSendMessageID",
+            "_kFIRMessagingAnalyticsComposerLabel",
+            "_kPendingBatchesEncodingKey",
+            "_kFIRMessagingRegistrationTokenRefreshNotification",
+            "_kFIRMessagingLastCheckinTimeKey",
+            "_kFIRMessagingAPNSTokenNotification",
+            "_kTableSyncMessages",
+            "_kFIRMessagingFirebaseHeartbeatKey",
+            "_FirebaseMessagingVersionString",
+            "_kFIRMessagingTokenOptionsAPNSKey",
+            "_kPendingTopicBatchActionKey",
+            "_kFIRMessagingAPNSTokenType",
+            "_kFIRMessagingSendTTL",
+            "_kFIRMessagingDefaultGCMTokenFailNotification",
+            "_kFIRMessagingRemoteNotificationsProxyEnabledInfoPlistKey",
+            "_kFIRMessagingKeychainWildcardIdentifier",
+            "_kFIRMessagingMessagePersistentIDKey",
+            "_kFIRMessagingMessageIDKey",
+            "_kTableOutgoingRmqMessages",
+            "_kFIRMessagingAnalyticsComposerIdentifier",
+            "_kFIRMessagingFID",
+            "_kFIRMessagingTokenOptionsAPNSIsSandboxKey",
+            "_fm_MessagingClientEventExtension_fields",
+            "_kFIRMessagingInstanceIDSubDirectoryName",
+            "_kFIRMessagingFIAMTokenScope",
+            "_kFIRMessagingGServicesDictionaryKey",
+            "_kFIRMessagingCheckinFetchedNotification",
+            "_kFIRMessagingContextManagerBodyKey",
+            "_kFIRMessagingDefaultCheckinInterval",
+            "_kFIRMessagingDefaultTokenScope",
+            "_kFIRMessagingDeviceDataVersionKey",
+            "_kFIRMessagingSendTo",
+            "_kFIRMessagingInstanceIDUserDefaultsKeyLocale",
+            "_kFIRMessagingContextManagerLocalTimeEnd",
+            "_FIRMessagingRegistrationTokenRefreshedNotification",
+            "_fm_MessagingClientEvent_fields",
+            "_kFIRMessagingContextManagerLocalTimeStart",
+            "_kFIRMessagingSecretTokenKey",
+            "_kFIRMessagingUserDefaultsKeyAutoInitEnabled",
+            "_kFIRMessagingMessageSyncMessageTTLKey",
+            "_kFIRLoggerMessaging",
+            "_kFIRMessagingProductID",
+            "_kFIRMessagingContextManagerSoundKey",
+            "_kTableS2DRmqIds",
+            "_kFIRMessagingTokenOptionsFirebaseAppIDKey",
+            "_kFIRMessagingDigestStringKey",
+            "_kFIRMessagingVersionInfoStringKey",
+            "_kFIRMessagingPlistAutoInitEnabled",
+            "_kFIRMessagingSenderID",
+            "_kFIRMessagingContextManagerBadgeKey",
+            "_FIRMessagingErrorDomain",
+            "_kFIRMessagingDeviceAuthIdKey",
+            "_kPendingTopicBatchTopicsKey",
+            "_kFIRMessagingContextManagerContentAvailableKey",
+            "_kPendingTopicsTimestampEncodingKey"
+          ],
+          "objc_class": [
+            "FIRMessagingMessageInfo",
+            "FIRMessagingTokenDeleteOperation",
+            "FIRMessagingTokenOperation",
+            "FIRMessagingSyncMessageManager",
+            "PodsDummy_FirebaseMessaging",
+            "FIRMessaging",
+            "FIRMessagingCheckinStore",
+            "FIRMessagingTopicBatch",
+            "FIRMessagingExtensionHelper",
+            "FIRMessagingTokenStore",
+            "FIRMessagingKeychain",
+            "FIRMessagingBackupExcludedPlist",
+            "FIRMessagingMetricsLog",
+            "FIRMessagingAuthService",
+            "FIRMessagingRemoteNotificationsProxy",
+            "FIRMessagingTokenInfo",
+            "FIRMessagingAPNSInfo",
+            "FIRMessagingTokenFetchOperation",
+            "FIRMessagingAuthKeychain",
+            "FIRMessagingTokenManager",
+            "FIRMessagingLogger",
+            "FIRMessagingCheckinService",
+            "FIRMessagingPendingTopicsList",
+            "FIRMessagingTopicOperation",
+            "FIRMessagingRmqManager",
+            "FIRMessagingPersistentSyncMessage",
+            "FIRMessagingContextManagerService",
+            "FIRMessagingPubSub",
+            "FIRMessagingAnalytics",
+            "FIRMessagingCheckinPreferences"
+          ]
+        },
+        "text": {
+          "global": [
+            "_FIRMessagingSharedLogger",
+            "_FIRMessagingHasLocaleChanged",
+            "_FIRMessagingStringFromSQLiteResult",
+            "_FIRMessagingSupportedDirectory",
+            "_FIRMessagingIsContextManagerMessage",
+            "_FIRMessagingFirebaselocalesMap",
+            "_FIRMessagingCurrentAppVersion",
+            "_FIRMessagingAppIdentifier",
+            "_FIRMessagingBundleIDByRemovingLastPartFrom",
+            "_FIRMessagingCurrentLocale",
+            "_FIRMessagingIsWatchKitExtension",
+            "_FIRMessagingAPNSTupleStringForTokenAndServerType",
+            "_FIRMessagingIsAPNSSyncMessage",
+            "_FIRMessagingIsProductionApp",
+            "_FIRMessagingCurrentTimestampInSeconds",
+            "_FIRMessagingEncodeString",
+            "_FIRMessagingFirebaseAppID",
+            "_FIRMessagingFirebaseLocales",
+            "_FIRMessagingEncodeData",
+            "_FIRMessagingSubscriptionsServer",
+            "_FIRMessagingIsSandboxApp",
+            "_FIRMessagingCurrentTimestampInMilliseconds",
+            "_FIRMessagingTokenRegisterServer",
+            "_FIRMessagingPropertyNameFromObject",
+            "_FIRMessagingStringForAPNSDeviceToken"
+          ]
+        }
+      }
+    ],
+    "flags": [
+      {
+        "attributes": [
+          "not_app_extension_safe"
+        ]
+      }
+    ],
+    "install_names": [
+      {
+        "name": "@rpath/FirebaseMessaging.framework/Versions/A/FirebaseMessaging"
+      }
+    ],
+    "target_info": [
+      {
+        "min_deployment": "11",
+        "target": "arm64-macos"
+      }
+    ]
+  },
+  "tapi_tbd_version": 5
+}

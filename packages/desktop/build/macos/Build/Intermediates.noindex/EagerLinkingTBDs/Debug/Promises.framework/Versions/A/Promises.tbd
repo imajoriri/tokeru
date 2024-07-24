@@ -1,0 +1,144 @@
+{
+  "main_library": {
+    "exported_symbols": [
+      {
+        "data": {
+          "global": [
+            "_$s8Promises5MaybeO11asAnyObjectyXlSgyF",
+            "_$s8Promises4race2on_AA7PromiseCyxGSo17OS_dispatch_queueC_AFdtlF",
+            "_$s8Promises12PromiseErrorO9hashValueSivpMV",
+            "_$s8Promises7PromiseCyACyxGxyKXKcfC",
+            "_$s8Promises3all2on__AA7PromiseCyx_q_tGSo17OS_dispatch_queueC_AEyxGAEyq_Gtr0_lF",
+            "_$s8Promises5MaybeO5errors5Error_pSgvpMV",
+            "_$s8Promises4wrap2on_AA7PromiseCyypSgGSo17OS_dispatch_queueC_yyycKctF",
+            "_$s8Promises3any2on___AA7PromiseCyAA5MaybeOyxG_AGyq_GAGyq0_GtGSo17OS_dispatch_queueC_AEyxGAEyq_GAEyq0_Gtr1_lF",
+            "_$s8Promises7PromiseC2on_ACyxGSo17OS_dispatch_queueC_ACyqd__GyKctclufC",
+            "_$s8Promises7PromiseC11descriptionSSvg",
+            "_$s8Promises7PromiseC7pendingACyxGyFZ",
+            "_$s8Promises12PromiseErrorON",
+            "_$s8Promises12PromiseErrorO10Foundation13CustomNSErrorAAMc",
+            "_$s8Promises7PromiseCMn",
+            "_$s8Promises3all2on_AA7PromiseCySayxGGSo17OS_dispatch_queueC_AEyxGdtlF",
+            "_PromisesVersionNumber",
+            "_$s8Promises7PromiseC7recover2on_ACyxGSo17OS_dispatch_queueC_xs5Error_pKctF",
+            "_$s8Promises7PromiseC4then2on_ACyqd__GSo17OS_dispatch_queueC_AFxKctlF",
+            "_$s8Promises7PromiseC10isRejectedSbvg",
+            "_$s8Promises5MaybeOyACyxGxcfC",
+            "_$s8Promises7PromiseC4then2on_ACyqd__GSo17OS_dispatch_queueC_qd__xKctlF",
+            "_$s8Promises7PromiseC7fulfillyyxF",
+            "_$s8Promises2eeoiySbAA5MaybeOyxG_AEtSQRzlF",
+            "_$s8Promises12PromiseErrorO13errorUserInfoSDySSypGvg",
+            "_$s8Promises7PromiseC5valuexSgvg",
+            "_$s8Promises7asMaybeyAA0C0OyxGyXllF",
+            "_$s8Promises12PromiseErrorO9errorCodeSivg",
+            "_$s8Promises7PromiseC5errors5Error_pSgvg",
+            "_$s8Promises7PromiseCfD",
+            "_$s8Promises5MaybeO5valuexSgvpMV",
+            "_$s8Promises3all2on___AA7PromiseCyx_q_q0_tGSo17OS_dispatch_queueC_AEyxGAEyq_GAEyq0_Gtr1_lF",
+            "_$s8Promises12PromiseErrorO4hash4intoys6HasherVz_tF",
+            "_$s8Promises12PromiseErrorO9errorCodeSivpMV",
+            "_$s8Promises7PromiseCyACyxGSo10FBLPromiseCyqd__GcRld__ClufC",
+            "_$sSo17OS_dispatch_queueC8PromisesE8promisesABvMZ",
+            "_$s8Promises07waitForA07timeoutSbSd_tF",
+            "_$s8Promises4wrap2on_AA7PromiseCyxGSo17OS_dispatch_queueC_yyxcKctlF",
+            "_$s8Promises12PromiseErrorOyACSgs0C0_pcfC",
+            "_$s8Promises3any2on_AA7PromiseCySayAA5MaybeOyxGGGSo17OS_dispatch_queueC_AEyxGdtlF",
+            "_$s8Promises7PromiseC7recover2on_ACyxGSo17OS_dispatch_queueC_AFs5Error_pKctF",
+            "_$s8Promises7PromiseC5catch2on_ACyxGSo17OS_dispatch_queueC_ys5Error_pctF",
+            "_$s8Promises3all2on____AA7PromiseCyx_q_q0_q1_tGSo17OS_dispatch_queueC_AEyxGAEyq_GAEyq0_GAEyq1_Gtr2_lF",
+            "_$s8Promises4wrap2on_AA7PromiseCyxGSo17OS_dispatch_queueC_yys5Error_pSg_xtcKctlF",
+            "_$s8Promises7PromiseC11objCPromiseSo10FBLPromiseCyyXlGvpWvd",
+            "_$s8Promises7PromiseCMa",
+            "_$s8Promises4race2on_AA7PromiseCyxGSo17OS_dispatch_queueC_SayAFGtlF",
+            "_$s8Promises12PromiseErrorOSQAAMc",
+            "_$sSo17OS_dispatch_groupC8PromisesE8promisesABvgZ",
+            "_$sSo17OS_dispatch_queueC8PromisesE8promisesABvgZ",
+            "_$s8Promises7PromiseC11isFulfilledSbvg",
+            "_$s8Promises3any2on__AA7PromiseCyAA5MaybeOyxG_AGyq_GtGSo17OS_dispatch_queueC_AEyxGAEyq_Gtr0_lF",
+            "_$s8Promises7PromiseCACyxGycfC",
+            "_$s8Promises12PromiseErrorO21__derived_enum_equalsySbAC_ACtFZ",
+            "_$s8Promises12awaitPromiseyxAA0C0CyxGKlF",
+            "_$s8Promises7PromiseCyACyxGs5Error_pcfC",
+            "_$s8Promises12PromiseErrorOMn",
+            "_$s8Promises7PromiseC9isPendingSbvpMV",
+            "_$s8Promises5retry2on8attempts5delay9condition_AA7PromiseCyxGSo17OS_dispatch_queueC_SiSdSbSi_s5Error_ptcSgAIyKctlF",
+            "_$s8Promises7PromiseC11isFulfilledSbvpMV",
+            "_$s8Promises7PromiseCyxGs23CustomStringConvertibleAAMc",
+            "_$sSo17OS_dispatch_queueC8PromisesE8promisesABvsZ",
+            "_$s8Promises7PromiseC13asObjCPromiseSo10FBLPromiseCyqd__GyRld__ClF",
+            "_$s8Promises12PromiseErrorOMa",
+            "_$s8Promises7PromiseCyACyxGSo10FBLPromiseCyqd__GcRld__ClufCTq",
+            "_$s8Promises4wrap2on_AA7PromiseCyxSg_q_SgtGSo17OS_dispatch_queueC_yyAF_AGs5Error_pSgtcKctr0_lF",
+            "_$s8Promises5MaybeOMn",
+            "_$s8Promises7PromiseC2on_ACyxGSo17OS_dispatch_queueC_yyxc_ys5Error_pctKctcfC",
+            "_$s8Promises7PromiseC5delay2on_ACyxGSo17OS_dispatch_queueC_SdtF",
+            "_$s8Promises7PromiseC6reduce2on_7combineACyxGSo17OS_dispatch_queueC_qd__dAGx_qd__tKctlF",
+            "_$s8Promises7PromiseC11descriptionSSvpMV",
+            "_$s8Promises7PromiseC2on_ACyxGSo17OS_dispatch_queueC_qd__yKctclufC",
+            "_$s8Promises5MaybeO5valuexSgvg",
+            "_$s8Promises7PromiseC5errors5Error_pSgvpMV",
+            "_PromisesVersionString",
+            "_$s8Promises7PromiseC11objCPromiseSo10FBLPromiseCyyXlGvpMV",
+            "_$s8Promises5MaybeOyACyxGs5Error_pcfC",
+            "_$s8Promises7PromiseC5valuexSgvpMV",
+            "_$s8Promises12PromiseErrorO11errorDomainSSvgZ",
+            "_$s8Promises12PromiseErrorO13errorUserInfoSDySSypGvpMV",
+            "_$s8Promises5MaybeOyxGSQAASQRzlMc",
+            "_$s8Promises12PromiseErrorOs0C0AAMc",
+            "_$s8Promises7PromiseC7asValueyxSgyXlSgFZ",
+            "_$s8Promises3any2on_AA7PromiseCySayAA5MaybeOyxGGGSo17OS_dispatch_queueC_q_tSTR_AEyxG7ElementRt_r0_lF",
+            "_$s8Promises7PromiseC10isRejectedSbvpMV",
+            "_$s8Promises5MaybeOMa",
+            "_$s8Promises7PromiseC6rejectyys5Error_pF",
+            "_$s8Promises7PromiseC6reduce2on__ACyxGSo17OS_dispatch_queueC_qd__AFx_7ElementQyd__tKctSTRd__lF",
+            "_$s8Promises4wrap2on_AA7PromiseCyxSgGSo17OS_dispatch_queueC_yys5Error_pSg_AFtcKctlF",
+            "_$s8Promises5MaybeO5errors5Error_pSgvg",
+            "_$s8Promises7PromiseC6always2on_ACyxGSo17OS_dispatch_queueC_yyctF",
+            "_$s8Promises7PromiseC4then2on_ACyxGSo17OS_dispatch_queueC_yxKctF",
+            "_$s8Promises7PromiseCfd",
+            "_$s8Promises7PromiseC11objCPromiseSo10FBLPromiseCyyXlGvg",
+            "_$s8Promises3all2on_AA7PromiseCySayxGGSo17OS_dispatch_queueC_q_tSTR_AEyxG7ElementRt_r0_lF",
+            "_$s8Promises4wrap2on_AA7PromiseCyxSgGSo17OS_dispatch_queueC_yyAFcKctlF",
+            "_$s8Promises7PromiseC8validate2on_ACyxGSo17OS_dispatch_queueC_SbxctF",
+            "_$s8Promises7PromiseCyACyxGSo10FBLPromiseCyqd__GcRld__Clufc",
+            "_$s8Promises7PromiseC11asAnyObjectyyXlSgxFZ",
+            "_$s8Promises7PromiseC9isPendingSbvg",
+            "_$s8Promises2neoiySbAA5MaybeOyxG_AEtSQRzlF",
+            "_$s8Promises7PromiseC7timeout2on_ACyxGSo17OS_dispatch_queueC_SdtF",
+            "_$s8Promises12PromiseErrorOSHAAMc",
+            "_$s8Promises4wrap2on_AA7PromiseCyxSgGSo17OS_dispatch_queueC_yyAF_s5Error_pSgtcKctlF",
+            "_$s8Promises4wrap2on_AA7PromiseCyxGSo17OS_dispatch_queueC_yyx_s5Error_pSgtcKctlF",
+            "_$s8Promises12PromiseErrorO9hashValueSivg"
+          ],
+          "objc_class": [
+            "PodsDummy_PromisesSwift"
+          ]
+        }
+      }
+    ],
+    "flags": [
+      {
+        "attributes": [
+          "not_app_extension_safe"
+        ]
+      }
+    ],
+    "install_names": [
+      {
+        "name": "@rpath/Promises.framework/Versions/A/Promises"
+      }
+    ],
+    "swift_abi": [
+      {
+        "abi": 7
+      }
+    ],
+    "target_info": [
+      {
+        "min_deployment": "11",
+        "target": "arm64-macos"
+      }
+    ]
+  },
+  "tapi_tbd_version": 5
+}
