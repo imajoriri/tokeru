@@ -1,8 +1,5 @@
 name: flutter analyze
 
-env:
-  MELOS_SDK_PATH: ${{ steps.flutter-action.outputs.CACHE-PATH }}
-
 on:
   pull_request:
     types: [opened, synchronize]
