@@ -1,0 +1,64 @@
+name: quick_flutter
+description: A new Flutter project.
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.4
+
+environment:
+  sdk: ">=3.1.13 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.2
+  hooks_riverpod: 2.4.10
+  flutter_hooks: ^0.20.5
+  riverpod_annotation: ^2.2.1
+  riverpod_generator: ^2.3.11
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.8.1
+  flutter_markdown: ^0.6.18
+  collection: ^1.17.0
+  intl: ^0.18.0
+  desktop_window: ^0.4.0
+  logger: ^2.0.2+1
+  uuid: ^4.4.0
+  flutter_linkify: ^6.0.0
+  dio: ^5.4.3+1
+  html: ^0.15.4
+  cached_network_image: ^3.3.1
+  flutter_animate: ^4.5.0
+
+  # firebase
+  firebase_auth: ^4.17.4
+  firebase_core: ^2.31.0
+  firebase_crashlytics: ^3.4.14
+  cloud_firestore: ^4.15.8
+  firebase_analytics: ^10.8.7
+  hotkey_manager: ^0.2.2
+  shared_preferences: ^2.2.3
+
+  googleapis: ^13.1.0
+  googleapis_auth: ^1.6.0
+  google_sign_in: ^6.2.1
+  extension_google_sign_in_as_googleapis_auth: ^2.0.12
+
+  url_launcher: ^6.2.5
+
+  flutter_localizations:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+  build_runner: ^2.4.8
+  freezed: ^2.4.5
+  json_serializable: ^6.7.1
+  golden_toolkit: ^0.15.0
+
+flutter:
+  uses-material-design: true
+  generate: true
