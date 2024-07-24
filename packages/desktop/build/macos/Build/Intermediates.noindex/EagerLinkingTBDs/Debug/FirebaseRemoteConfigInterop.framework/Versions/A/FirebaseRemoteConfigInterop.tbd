@@ -1,0 +1,120 @@
+{
+  "main_library": {
+    "exported_symbols": [
+      {
+        "data": {
+          "global": [
+            "_$s27FirebaseRemoteConfigInterop0bC9ConstantsCACycfC",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC14parameterValueSSvpMV",
+            "_$s27FirebaseRemoteConfigInterop0bC9ConstantsC29NamespaceGoogleMobilePlatformSSvgZ",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC12parameterKeySSvpWvd",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC14parameterValueSSvpWvd",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentCMn",
+            "_$s27FirebaseRemoteConfigInterop13RolloutsStateC11assignmentsShyAA17RolloutAssignmentCGvM",
+            "_FirebaseRemoteConfigInteropVersionString",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC9variantIdSSvg",
+            "_$s27FirebaseRemoteConfigInterop13RolloutsStateC11assignmentsShyAA17RolloutAssignmentCGvgTq",
+            "_$s27FirebaseRemoteConfigInterop13RolloutsStateC11assignmentsShyAA17RolloutAssignmentCGvpMV",
+            "_$s27FirebaseRemoteConfigInterop13RolloutsStateCN",
+            "_$s27FirebaseRemoteConfigInterop0bC9ConstantsCACycfc",
+            "_$s27FirebaseRemoteConfigInterop13RolloutsStateC11assignmentsShyAA17RolloutAssignmentCGvg",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC14parameterValueSSvg",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC9rolloutIdSSvg",
+            "_$s27FirebaseRemoteConfigInterop13RolloutsStateC14assignmentListACSayAA17RolloutAssignmentCG_tcfc",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC9rolloutId07variantH015templateVersion12parameterKey0L5ValueACSS_SSs5Int64VS2StcfC",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC14parameterValueSSvs",
+            "_$s27FirebaseRemoteConfigInterop13RolloutsStateC14assignmentListACSayAA17RolloutAssignmentCG_tcfC",
+            "_$s27FirebaseRemoteConfigInterop13RolloutsStateCMn",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC12parameterKeySSvgTq",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentCACycfC",
+            "_$s27FirebaseRemoteConfigInterop13RolloutsStateCMa",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC9rolloutIdSSvpWvd",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC9variantIdSSvsTq",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC15templateVersions5Int64VvsTq",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC15templateVersions5Int64VvM",
+            "_$s27FirebaseRemoteConfigInterop13RolloutsStateC14assignmentListACSayAA17RolloutAssignmentCG_tcfCTq",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC15templateVersions5Int64Vvg",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC9rolloutIdSSvMTq",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC15templateVersions5Int64VvgTq",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC9variantIdSSvgTq",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC12parameterKeySSvpMV",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC12parameterKeySSvsTq",
+            "_$s27FirebaseRemoteConfigInterop0bC9ConstantsCMn",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentCMa",
+            "_$s27FirebaseRemoteConfigInterop13RolloutsStateC11assignmentsShyAA17RolloutAssignmentCGvMTq",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC15templateVersions5Int64VvpMV",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC9variantIdSSvM",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC9variantIdSSvs",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC9variantIdSSvpWvd",
+            "_$s27FirebaseRemoteConfigInterop13RolloutsStateC11assignmentsShyAA17RolloutAssignmentCGvsTq",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC9rolloutId07variantH015templateVersion12parameterKey0L5ValueACSS_SSs5Int64VS2StcfCTq",
+            "_$s27FirebaseRemoteConfigInterop13RolloutsStateC11assignmentsShyAA17RolloutAssignmentCGvpfi",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC12parameterKeySSvMTq",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC15templateVersions5Int64Vvs",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC9rolloutId07variantH015templateVersion12parameterKey0L5ValueACSS_SSs5Int64VS2Stcfc",
+            "_FirebaseRemoteConfigInteropVersionNumber",
+            "_$s27FirebaseRemoteConfigInterop0bC9ConstantsC29NamespaceGoogleMobilePlatformSSvpZ",
+            "_$s27FirebaseRemoteConfigInterop13RolloutsStateCfD",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC9rolloutIdSSvM",
+            "_$s27FirebaseRemoteConfigInterop13RolloutsStateC11assignmentsShyAA17RolloutAssignmentCGvs",
+            "_$s27FirebaseRemoteConfigInterop0bC9ConstantsCN",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC14parameterValueSSvgTq",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC12parameterKeySSvg",
+            "_$s27FirebaseRemoteConfigInterop13RolloutsStateC11assignmentsShyAA17RolloutAssignmentCGvpWvd",
+            "_$s27FirebaseRemoteConfigInterop0bC9ConstantsCfD",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC14parameterValueSSvM",
+            "_$s27FirebaseRemoteConfigInterop13RolloutsStateCACycfC",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC14parameterValueSSvMTq",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC14parameterValueSSvsTq",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC9rolloutIdSSvpMV",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC15templateVersions5Int64VvMTq",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentCACycfc",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC9rolloutIdSSvsTq",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC12parameterKeySSvM",
+            "_$s27FirebaseRemoteConfigInterop13RolloutsStateCACycfc",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC9rolloutIdSSvgTq",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentCN",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC12parameterKeySSvs",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentCfD",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC9rolloutIdSSvs",
+            "_$s27FirebaseRemoteConfigInterop0bC9ConstantsC29NamespaceGoogleMobilePlatformSSvau",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC9variantIdSSvMTq",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC9variantIdSSvpMV",
+            "_$s27FirebaseRemoteConfigInterop0bC9ConstantsCMa",
+            "_$s27FirebaseRemoteConfigInterop17RolloutAssignmentC15templateVersions5Int64VvpWvd"
+          ],
+          "objc_class": [
+            "PodsDummy_FirebaseRemoteConfigInterop",
+            "FIRRolloutAssignment",
+            "FIRRemoteConfigConstants",
+            "FIRRolloutsState"
+          ]
+        }
+      }
+    ],
+    "flags": [
+      {
+        "attributes": [
+          "not_app_extension_safe"
+        ]
+      }
+    ],
+    "install_names": [
+      {
+        "name": "@rpath/FirebaseRemoteConfigInterop.framework/Versions/A/FirebaseRemoteConfigInterop"
+      }
+    ],
+    "swift_abi": [
+      {
+        "abi": 7
+      }
+    ],
+    "target_info": [
+      {
+        "min_deployment": "11",
+        "target": "arm64-macos"
+      }
+    ]
+  },
+  "tapi_tbd_version": 5
+}

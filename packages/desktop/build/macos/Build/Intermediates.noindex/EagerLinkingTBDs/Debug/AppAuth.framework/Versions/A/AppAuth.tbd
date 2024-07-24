@@ -1,0 +1,109 @@
+{
+  "main_library": {
+    "exported_symbols": [
+      {
+        "data": {
+          "global": [
+            "_OIDOAuthorizationRequestCodeChallengeMethodS256",
+            "_OIDGrantTypeAuthorizationCode",
+            "_OIDOAuthErrorResponseErrorKey",
+            "_OIDRedirectURIsParam",
+            "_AppAuthVersionString",
+            "_TCPServerErrorDomain",
+            "_OIDGrantTypePassword",
+            "_OIDResponseTypeCode",
+            "_OIDOAuthExceptionInvalidTokenRequestNullRedirectURL",
+            "_OIDSubjectTypeParam",
+            "_OIDScopeProfile",
+            "_OIDApplicationTypeParam",
+            "_OIDScopeAddress",
+            "_OIDScopeEmail",
+            "_OIDOAuthExceptionInvalidAuthorizationFlow",
+            "_OIDScopeOpenID",
+            "_OIDGrantTypeClientCredentials",
+            "_OIDOAuthTokenErrorDomain",
+            "_OIDClientSecretParam",
+            "_OIDGeneralErrorDomain",
+            "_OIDOAuthErrorFieldError",
+            "_OIDResourceServerAuthorizationErrorDomain",
+            "_OIDResponseTypeIDToken",
+            "_OIDScopePhone",
+            "_OIDRegistrationAccessTokenParam",
+            "_OIDRegistrationClientURIParam",
+            "_OIDTokenEndpointAuthenticationMethodParam",
+            "_OIDGrantTypesParam",
+            "_AppAuthVersionNumber",
+            "_OIDOAuthErrorFieldErrorURI",
+            "_gOIDURLQueryComponentForceIOS7Handling",
+            "_OIDOAuthRegistrationErrorDomain",
+            "_OIDGrantTypeRefreshToken",
+            "_OIDClientIDParam",
+            "_OIDClientIDIssuedAtParam",
+            "_OIDHTTPErrorDomain",
+            "_OIDResponseTypeToken",
+            "_OIDResponseTypesParam",
+            "_OIDApplicationTypeNative",
+            "_OIDClientSecretExpirestAtParam",
+            "_OIDOAuthAuthorizationErrorDomain",
+            "_OIDOAuthErrorFieldErrorDescription"
+          ],
+          "objc_class": [
+            "OIDAuthStatePendingAction",
+            "OIDTokenRequest",
+            "OIDEndSessionImplementation",
+            "OIDIDToken",
+            "OIDFieldMapping",
+            "OIDAuthorizationResponse",
+            "HTTPServerRequest",
+            "OIDURLSessionProvider",
+            "OIDAuthState",
+            "OIDRegistrationRequest",
+            "PodsDummy_AppAuth",
+            "OIDEndSessionResponse",
+            "OIDAuthorizationRequest",
+            "OIDExternalUserAgentMac",
+            "OIDScopeUtilities",
+            "OIDAuthorizationSession",
+            "OIDEndSessionRequest",
+            "OIDServiceDiscovery",
+            "OIDServiceConfiguration",
+            "TCPServer",
+            "OIDTokenResponse",
+            "OIDURLQueryComponent",
+            "HTTPServer",
+            "OIDRedirectHTTPHandler",
+            "OIDAuthorizationService",
+            "HTTPConnection",
+            "OIDRegistrationResponse",
+            "OIDTokenUtilities",
+            "OIDErrorUtilities"
+          ],
+          "objc_ivar": [
+            "OIDEndSessionImplementation._pendingEndSessionCallback",
+            "OIDEndSessionImplementation._request",
+            "OIDEndSessionImplementation._externalUserAgent"
+          ]
+        }
+      }
+    ],
+    "flags": [
+      {
+        "attributes": [
+          "not_app_extension_safe"
+        ]
+      }
+    ],
+    "install_names": [
+      {
+        "name": "@rpath/AppAuth.framework/Versions/A/AppAuth"
+      }
+    ],
+    "target_info": [
+      {
+        "min_deployment": "11",
+        "target": "arm64-macos"
+      }
+    ]
+  },
+  "tapi_tbd_version": 5
+}

@@ -1,0 +1,18 @@
+"/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseFirestoreBinary/Firestore/Swift/Source/Codable/CollectionReference+WriteEncodable.swift":
+  dependencies: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseFirestoreBinary.build/Objects-normal/arm64/CollectionReference+WriteEncodable.d"
+  object: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseFirestoreBinary.build/Objects-normal/arm64/CollectionReference+WriteEncodable.o"
+  swift-dependencies: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseFirestoreBinary.build/Objects-normal/arm64/CollectionReference+WriteEncodable.swiftdeps"
+  diagnostics: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseFirestoreBinary.build/Objects-normal/arm64/CollectionReference+WriteEncodable.dia"
+  const-values: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseFirestoreBinary.build/Objects-normal/arm64/CollectionReference+WriteEncodable.swiftconstvalues"
+"/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseFirestoreBinary/Firestore/Swift/Source/Codable/DocumentReference+Codable.swift":
+  const-values: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseFirestoreBinary.build/Objects-normal/arm64/DocumentReference+Codable.swiftconstvalues"
+  dependencies: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseFirestoreBinary.build/Objects-normal/arm64/DocumentReference+Codable.d"
+  object: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseFirestoreBinary.build/Objects-normal/arm64/DocumentReference+Codable.o"
+  swift-dependencies: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseFirestoreBinary.build/Objects-normal/arm64/DocumentReference+Codable.swiftdeps"
+  diagnostics: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseFirestoreBinary.build/Objects-normal/arm64/DocumentReference+Codable.dia"
+"/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseFirestoreBinary/Firestore/Swift/Source/Codable/DocumentID.swift":
+  const-values: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseFirestoreBinary.build/Objects-normal/arm64/DocumentID.swiftconstvalues"
+  dependencies: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseFirestoreBinary.build/Objects-normal/arm64/DocumentID.d"
+  diagnostics: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseFirestoreBinary.build/Objects-normal/arm64/DocumentID.dia"
+  swift-dependencies: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseFirestoreBinary.build/Objects-normal/arm64/DocumentID.swiftdeps"
+  object: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseFirestoreBinary.build/Objects-normal/arm64/DocumentID.o"

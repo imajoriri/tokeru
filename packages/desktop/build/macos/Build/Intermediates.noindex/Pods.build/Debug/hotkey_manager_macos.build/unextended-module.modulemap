@@ -1,0 +1,10 @@
+framework module hotkey_manager_macos {
+  umbrella header "hotkey_manager_macos-umbrella.h"
+
+  export *
+  module * { export * }
+}
+
+module hotkey_manager_macos.__Swift {
+  exclude header "hotkey_manager_macos-Swift.h"
+}

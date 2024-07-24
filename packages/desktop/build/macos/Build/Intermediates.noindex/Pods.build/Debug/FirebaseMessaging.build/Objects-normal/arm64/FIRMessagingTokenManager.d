@@ -1,0 +1,29 @@
+dependencies: \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseMessaging.build/module.modulemap \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseMessaging/FirebaseMessaging/Sources/Token/FIRMessagingTokenManager.m \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseMessaging/FirebaseMessaging/Sources/Token/FIRMessagingTokenManager.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseMessaging/FirebaseMessaging/Sources/Public/FirebaseMessaging/FIRMessaging.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseMessaging/FirebaseInstallations/Source/Library/Private/FirebaseInstallationsInternal.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseInstallations.build/module.modulemap \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/Target\ Support\ Files/FirebaseInstallations/FirebaseInstallations-umbrella.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseInstallations/FirebaseInstallations/Source/Library/Public/FirebaseInstallations/FirebaseInstallations.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseInstallations/FirebaseInstallations/Source/Library/Public/FirebaseInstallations/FIRInstallations.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseInstallations/FirebaseInstallations/Source/Library/Public/FirebaseInstallations/FIRInstallationsAuthTokenResult.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseInstallations/FirebaseInstallations/Source/Library/Public/FirebaseInstallations/FIRInstallationsErrors.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseMessaging/FirebaseMessaging/Sources/FIRMessagingConstants.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseMessaging/FirebaseMessaging/Sources/FIRMessagingDefines.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseMessaging/FirebaseMessaging/Sources/FIRMessagingLogger.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseMessaging/FirebaseMessaging/Sources/FIRMessagingCode.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseMessaging/FirebaseMessaging/Sources/NSError+FIRMessaging.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseMessaging/FirebaseMessaging/Sources/Token/FIRMessagingAuthKeychain.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseMessaging/FirebaseMessaging/Sources/Token/FIRMessagingAuthService.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseMessaging/FirebaseMessaging/Sources/Token/FIRMessagingCheckinService.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseMessaging/FirebaseMessaging/Sources/FIRMessagingUtilities.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseMessaging/FirebaseMessaging/Sources/Token/FIRMessagingCheckinPreferences.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseMessaging/FirebaseMessaging/Sources/Token/FIRMessagingCheckinStore.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseMessaging/FirebaseMessaging/Sources/Token/FIRMessagingTokenDeleteOperation.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseMessaging/FirebaseMessaging/Sources/Token/FIRMessagingTokenOperation.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseMessaging/FirebaseMessaging/Sources/Token/FIRMessagingTokenFetchOperation.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseMessaging/FirebaseMessaging/Sources/Token/FIRMessagingTokenInfo.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseMessaging/FirebaseMessaging/Sources/Token/FIRMessagingAPNSInfo.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseMessaging/FirebaseMessaging/Sources/Token/FIRMessagingTokenStore.h

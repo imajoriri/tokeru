@@ -1,0 +1,43 @@
+dependencies: \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/GoogleSignIn.build/module.modulemap \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/GoogleSignIn/GoogleSignIn/Sources/GIDAuthentication.m \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/GoogleSignIn/GoogleSignIn/Sources/GIDAuthentication.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/AppAuth.build/module.modulemap \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/Target\ Support\ Files/AppAuth/AppAuth-umbrella.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuthCore.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuthCore/OIDAuthState.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuthCore/OIDAuthStateChangeDelegate.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuthCore/OIDAuthStateErrorDelegate.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuthCore/OIDAuthorizationRequest.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuthCore/OIDExternalUserAgentRequest.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuthCore/OIDResponseTypes.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuthCore/OIDScopes.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuthCore/OIDAuthorizationResponse.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuthCore/OIDAuthorizationService.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuthCore/OIDError.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuthCore/OIDErrorUtilities.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuthCore/OIDExternalUserAgent.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuthCore/OIDExternalUserAgentSession.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuthCore/OIDGrantTypes.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuthCore/OIDIDToken.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuthCore/OIDRegistrationRequest.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuthCore/OIDRegistrationResponse.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuthCore/OIDScopeUtilities.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuthCore/OIDServiceConfiguration.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuthCore/OIDServiceDiscovery.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuthCore/OIDTokenRequest.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuthCore/OIDTokenResponse.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuthCore/OIDTokenUtilities.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuthCore/OIDURLSessionProvider.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuthCore/OIDEndSessionRequest.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuthCore/OIDEndSessionResponse.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuthCore/OIDClientMetadataParameters.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuthCore/OIDDefines.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuthCore/OIDFieldMapping.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuthCore/OIDURLQueryComponent.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuth.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuth/macOS/OIDAuthState+Mac.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuth/macOS/OIDAuthorizationService+Mac.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuth/macOS/OIDExternalUserAgentMac.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuth/macOS/OIDRedirectHTTPHandler.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/AppAuth/Sources/AppAuth/macOS/LoopbackHTTPServer/OIDLoopbackHTTPServer.h

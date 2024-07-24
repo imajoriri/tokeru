@@ -1,0 +1,23 @@
+{
+  'version': 0,
+  'use-external-names': 'false',
+  'case-sensitive': 'false',
+  'roots': [{
+    'type': 'directory',
+    'name': "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Products/Debug/FirebaseRemoteConfigInterop/FirebaseRemoteConfigInterop.framework/Modules"
+    'contents': [{
+      'type': 'file',
+      'name': "module.modulemap",
+      'external-contents': "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/unextended-module.modulemap",
+    }]
+    },
+    {
+    'type': 'directory',
+    'name': "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Products/Debug/FirebaseRemoteConfigInterop/FirebaseRemoteConfigInterop.framework/Headers"
+    'contents': [{
+      'type': 'file',
+      'name': "FirebaseRemoteConfigInterop-Swift.h",
+      'external-contents': "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/unextended-interface-header.h",
+    }]
+    }]
+}

@@ -1,0 +1,59 @@
+dependencies: \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseSessions.build/module.modulemap \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseSessions/FirebaseSessions/SourcesObjC/NanoPB/FIRSESNanoPBHelpers.m \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/GoogleUtilities.build/module.modulemap \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/Target\ Support\ Files/GoogleUtilities/GoogleUtilities-umbrella.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/GoogleUtilities/GoogleUtilities/AppDelegateSwizzler/Public/GoogleUtilities/GULAppDelegateSwizzler.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/GoogleUtilities/GoogleUtilities/AppDelegateSwizzler/Public/GoogleUtilities/GULApplication.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/GoogleUtilities/GoogleUtilities/AppDelegateSwizzler/Public/GoogleUtilities/GULSceneDelegateSwizzler.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/GoogleUtilities/GoogleUtilities/Environment/Public/GoogleUtilities/GULAppEnvironmentUtil.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/GoogleUtilities/GoogleUtilities/Environment/Public/GoogleUtilities/GULHeartbeatDateStorable.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/GoogleUtilities/GoogleUtilities/Environment/Public/GoogleUtilities/GULHeartbeatDateStorage.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/GoogleUtilities/GoogleUtilities/Environment/Public/GoogleUtilities/GULHeartbeatDateStorageUserDefaults.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/GoogleUtilities/GoogleUtilities/Environment/Public/GoogleUtilities/GULKeychainStorage.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/GoogleUtilities/GoogleUtilities/Environment/Public/GoogleUtilities/GULKeychainUtils.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/GoogleUtilities/GoogleUtilities/Environment/Public/GoogleUtilities/GULNetworkInfo.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/GoogleUtilities/GoogleUtilities/Environment/Public/GoogleUtilities/GULSecureCoding.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/GoogleUtilities/GoogleUtilities/Environment/Public/GoogleUtilities/GULURLSessionDataResponse.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/GoogleUtilities/GoogleUtilities/Environment/Public/GoogleUtilities/NSURLSession+GULPromises.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/GoogleUtilities/GoogleUtilities/Logger/Public/GoogleUtilities/GULLogger.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/GoogleUtilities/GoogleUtilities/Logger/Public/GoogleUtilities/GULLoggerLevel.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/GoogleUtilities/GoogleUtilities/MethodSwizzler/Public/GoogleUtilities/GULOriginalIMPConvenienceMacros.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/GoogleUtilities/GoogleUtilities/MethodSwizzler/Public/GoogleUtilities/GULSwizzler.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/GoogleUtilities/GoogleUtilities/NSData+zlib/Public/GoogleUtilities/GULNSData+zlib.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/GoogleUtilities/GoogleUtilities/Network/Public/GoogleUtilities/GULMutableDictionary.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/GoogleUtilities/GoogleUtilities/Network/Public/GoogleUtilities/GULNetwork.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/GoogleUtilities/GoogleUtilities/Network/Public/GoogleUtilities/GULNetworkConstants.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/GoogleUtilities/GoogleUtilities/Network/Public/GoogleUtilities/GULNetworkLoggerProtocol.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/GoogleUtilities/GoogleUtilities/Network/Public/GoogleUtilities/GULNetworkMessageCode.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/GoogleUtilities/GoogleUtilities/Network/Public/GoogleUtilities/GULNetworkURLSession.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/GoogleUtilities/GoogleUtilities/Reachability/Public/GoogleUtilities/GULReachabilityChecker.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/GoogleUtilities/GoogleUtilities/UserDefaults/Public/GoogleUtilities/GULUserDefaults.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseSessions/FirebaseSessions/SourcesObjC/NanoPB/FIRSESNanoPBHelpers.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/nanopb.build/module.modulemap \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/Target\ Support\ Files/nanopb/nanopb-umbrella.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/nanopb/pb.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/nanopb/pb_common.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/nanopb/pb_decode.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/nanopb/pb_encode.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseSessions/FirebaseSessions/SourcesObjC/Protogen/nanopb/sessions.nanopb.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseCoreExtension.build/module.modulemap \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseCore.build/module.modulemap \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/Target\ Support\ Files/FirebaseCore/FirebaseCore-umbrella.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCore/FirebaseCore/Sources/Public/FirebaseCore/FIRApp.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCore/FirebaseCore/Sources/Public/FirebaseCore/FIRConfiguration.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCore/FirebaseCore/Sources/Public/FirebaseCore/FIRLoggerLevel.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCore/FirebaseCore/Sources/Public/FirebaseCore/FirebaseCore.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCore/FirebaseCore/Sources/Public/FirebaseCore/FIROptions.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCore/FirebaseCore/Sources/Public/FirebaseCore/FIRVersion.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/Target\ Support\ Files/FirebaseCoreExtension/FirebaseCoreExtension-umbrella.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCoreExtension/FirebaseCore/Extension/FIRAppInternal.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCoreExtension/FirebaseCore/Extension/FIRComponent.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCoreExtension/FirebaseCore/Extension/FIRComponentContainer.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCoreExtension/FirebaseCore/Extension/FIRComponentType.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCoreExtension/FirebaseCore/Extension/FIRDependency.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCoreExtension/FirebaseCore/Extension/FirebaseCoreInternal.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCoreExtension/FirebaseCore/Extension/FIRHeartbeatLogger.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCoreExtension/FirebaseCore/Extension/FIRLibrary.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCoreExtension/FirebaseCore/Extension/FIRLogger.h \
+  /Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseCoreExtension/FirebaseCore/Extension/FIROptionsInternal.h
