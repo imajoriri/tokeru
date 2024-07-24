@@ -23,7 +23,9 @@ runs:
         dart pub global activate melos
         # GitHub ActionsではFVMを使わないため、melos.yamlからsdkPathを削除する
         sed -i '/sdkPath/d' melos.yaml
-        melos bs
       shell: bash
-      env:
-        MELOS_SDK_PATH: ${{ steps.flutter-action.outputs.CACHE-PATH }}
+
+    - name: "Install melos dependencies"
+      run: |
+        melos bootstrap
+      shell: bash
