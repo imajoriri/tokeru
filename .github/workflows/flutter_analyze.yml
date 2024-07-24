@@ -1,5 +1,8 @@
 name: flutter analyze
 
+env:
+  MELOS_SDK_PATH: ${{ steps.flutter-action.outputs.CACHE-PATH }}
+
 on:
   pull_request:
     types: [opened, synchronize]
@@ -14,4 +17,4 @@ jobs:
       - uses: ./.github/actions/install_flutter_dependencies
 
       - name: "Run analyze"
-        run: melos analyze --sdk-path ${{ steps.flutter-action.outputs.CACHE-PATH }}
+        run: melos analyze
