@@ -22,3 +22,5 @@ runs:
       run: |
         dart pub global activate melos
       shell: bash
+      env:
+        MELOS_SDK_PATH: ${{ steps.flutter-action.outputs.CACHE-PATH }}
