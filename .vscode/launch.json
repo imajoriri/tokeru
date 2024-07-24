@@ -5,22 +5,18 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "quick_flutter",
+      "name": "macos dev",
+      "program": "packages/desktop/lib/main.dart",
       "request": "launch",
       "type": "dart",
       "args": ["--dart-define-from-file=dart_defines/dev.json"]
     },
     {
-      "name": "quick_flutter (profile mode)",
+      "name": "macos prod (profile mode)",
+      "program": "packages/desktop/lib/main.dart",
       "request": "launch",
       "type": "dart",
       "args": ["--dart-define-from-file=dart_defines/dev.json"]
-    },
-    {
-      "name": "quick_flutter (release mode)",
-      "request": "launch",
-      "type": "dart",
-      "args": ["--dart-define-from-file=dart_defines/prod.json"]
     }
   ]
 }

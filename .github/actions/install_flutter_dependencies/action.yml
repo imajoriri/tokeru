@@ -17,3 +17,15 @@ runs:
       with:
         flutter-version: ${{ env.FLUTTER_VERSION }}
         cache: true
+
+    - name: "Install melos"
+      run: |
+        dart pub global activate melos
+        # GitHub ActionsではFVMを使わないため、melos.yamlからsdkPathを削除する
+        sed -i '/sdkPath/d' melos.yaml
+      shell: bash
+
+    - name: "Install melos dependencies"
+      run: |
+        melos bootstrap
+      shell: bash
