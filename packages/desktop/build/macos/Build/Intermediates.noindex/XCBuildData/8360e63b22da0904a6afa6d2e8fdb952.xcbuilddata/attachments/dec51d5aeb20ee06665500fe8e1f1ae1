@@ -1,0 +1,48 @@
+{
+  "" : {
+    "diagnostics" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/FirebaseRemoteConfigInterop-master.dia",
+    "emit-module-dependencies" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/FirebaseRemoteConfigInterop-master-emit-module.d",
+    "emit-module-diagnostics" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/FirebaseRemoteConfigInterop-master-emit-module.dia",
+    "swift-dependencies" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/FirebaseRemoteConfigInterop-master.swiftdeps"
+  },
+  "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseRemoteConfigInterop/FirebaseRemoteConfig/Interop/RemoteConfigConstants.swift" : {
+    "const-values" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RemoteConfigConstants.swiftconstvalues",
+    "dependencies" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RemoteConfigConstants.d",
+    "diagnostics" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RemoteConfigConstants.dia",
+    "index-unit-output-path" : "/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RemoteConfigConstants.o",
+    "llvm-bc" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RemoteConfigConstants.bc",
+    "object" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RemoteConfigConstants.o",
+    "swift-dependencies" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RemoteConfigConstants.swiftdeps",
+    "swiftmodule" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RemoteConfigConstants~partial.swiftmodule"
+  },
+  "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseRemoteConfigInterop/FirebaseRemoteConfig/Interop/RemoteConfigInterop.swift" : {
+    "const-values" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RemoteConfigInterop.swiftconstvalues",
+    "dependencies" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RemoteConfigInterop.d",
+    "diagnostics" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RemoteConfigInterop.dia",
+    "index-unit-output-path" : "/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RemoteConfigInterop.o",
+    "llvm-bc" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RemoteConfigInterop.bc",
+    "object" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RemoteConfigInterop.o",
+    "swift-dependencies" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RemoteConfigInterop.swiftdeps",
+    "swiftmodule" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RemoteConfigInterop~partial.swiftmodule"
+  },
+  "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseRemoteConfigInterop/FirebaseRemoteConfig/Interop/RolloutAssignment.swift" : {
+    "const-values" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RolloutAssignment.swiftconstvalues",
+    "dependencies" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RolloutAssignment.d",
+    "diagnostics" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RolloutAssignment.dia",
+    "index-unit-output-path" : "/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RolloutAssignment.o",
+    "llvm-bc" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RolloutAssignment.bc",
+    "object" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RolloutAssignment.o",
+    "swift-dependencies" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RolloutAssignment.swiftdeps",
+    "swiftmodule" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RolloutAssignment~partial.swiftmodule"
+  },
+  "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseRemoteConfigInterop/FirebaseRemoteConfig/Interop/RolloutsStateSubscriber.swift" : {
+    "const-values" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RolloutsStateSubscriber.swiftconstvalues",
+    "dependencies" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RolloutsStateSubscriber.d",
+    "diagnostics" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RolloutsStateSubscriber.dia",
+    "index-unit-output-path" : "/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RolloutsStateSubscriber.o",
+    "llvm-bc" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RolloutsStateSubscriber.bc",
+    "object" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RolloutsStateSubscriber.o",
+    "swift-dependencies" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RolloutsStateSubscriber.swiftdeps",
+    "swiftmodule" : "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseRemoteConfigInterop.build/Objects-normal/arm64/RolloutsStateSubscriber~partial.swiftmodule"
+  }
+}
