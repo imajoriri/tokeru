@@ -14,4 +14,4 @@ jobs:
       - uses: ./.github/actions/install_flutter_dependencies
 
       - name: "Run analyze"
-        run: melos analyze
+        run: melos analyze --sdk-path ${{ steps.flutter-action.outputs.CACHE-PATH }}

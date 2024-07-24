@@ -24,14 +24,16 @@ class AppItemRepository {
   Query<Map<String, dynamic>> get query => ref
       .read(userDocumentProvider(userId))
       .collection(_collectionName)
-      .where('type', isNotEqualTo: null)
+      .where('type', isEqualTo: 'chat')
       .orderBy('createdAt', descending: true);
 
   Stream<List<AppTodoItem>> fetchTodos({
     bool isDone = false,
   }) {
     // NOTE: ここでorderBy indexをすると、intではなく文字列でソートされてしまう。
-    final snapshot = query
+    final snapshot = ref
+        .read(userDocumentProvider(userId))
+        .collection(_collectionName)
         .where('isDone', isEqualTo: isDone)
         .where('type', isEqualTo: 'todo')
         .snapshots();
