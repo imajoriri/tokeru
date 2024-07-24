@@ -21,3 +21,4 @@ runs:
     - name: "Install melos"
       run: |
         dart pub global activate melos
+      shell: bash
