@@ -17,3 +17,7 @@ runs:
       with:
         flutter-version: ${{ env.FLUTTER_VERSION }}
         cache: true
+
+    - name: "Install melos"
+      run: |
+        dart pub global activate melos
