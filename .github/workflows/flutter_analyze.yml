@@ -15,5 +15,3 @@ jobs:
 
       - name: "Run analyze"
         run: melos analyze
-        env:
-          MELOS_SDK_PATH: ${{ steps.flutter-action.outputs.CACHE-PATH }}

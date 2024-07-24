@@ -15,5 +15,3 @@ jobs:
 
       - name: "Run tests"
         run: melos exec -- "flutter test"
-        env:
-          MELOS_SDK_PATH: ${{ steps.flutter-action.outputs.CACHE-PATH }}
