@@ -21,6 +21,7 @@ runs:
     - name: "Install melos"
       run: |
         dart pub global activate melos
+        sed -i '/sdkPath/d' melos.yaml
       shell: bash
       env:
         MELOS_SDK_PATH: ${{ steps.flutter-action.outputs.CACHE-PATH }}
