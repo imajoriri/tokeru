@@ -1,5 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quick_flutter/systems/shared_preference.dart';
+import 'package:tokeru_desktop/systems/shared_preference.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'hotkey_repository.g.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quick_flutter/widget/theme/app_theme.dart';
+import 'package:tokeru_desktop/widget/theme/app_theme.dart';
 
 /// [Text]の箇所で使用するスケルトンUI。
 class SkeletonText extends StatelessWidget {

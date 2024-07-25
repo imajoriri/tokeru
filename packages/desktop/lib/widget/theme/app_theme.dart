@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:quick_flutter/systems/color.dart';
-import 'package:quick_flutter/widget/theme/app_color_theme_extension.dart';
-import 'package:quick_flutter/widget/theme/app_spacing_theme_extension.dart';
-import 'package:quick_flutter/widget/theme/app_text_theme_extension.dart';
+import 'package:tokeru_desktop/systems/color.dart';
+import 'package:tokeru_desktop/widget/theme/app_color_theme_extension.dart';
+import 'package:tokeru_desktop/widget/theme/app_spacing_theme_extension.dart';
+import 'package:tokeru_desktop/widget/theme/app_text_theme_extension.dart';
 
 class AppTheme {
   static final spacing = () {

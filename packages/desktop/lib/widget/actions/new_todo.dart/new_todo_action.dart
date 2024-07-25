@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quick_flutter/controller/todo/todo_controller.dart';
+import 'package:tokeru_desktop/controller/todo/todo_controller.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'new_todo_action.g.dart';

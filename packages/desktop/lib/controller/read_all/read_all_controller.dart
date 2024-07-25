@@ -1,5 +1,5 @@
-import 'package:quick_flutter/controller/app_item/app_items.dart';
-import 'package:quick_flutter/controller/read/read_controller.dart';
+import 'package:tokeru_desktop/controller/app_item/app_items.dart';
+import 'package:tokeru_desktop/controller/read/read_controller.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'read_all_controller.g.dart';

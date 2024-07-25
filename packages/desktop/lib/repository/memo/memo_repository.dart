@@ -1,6 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quick_flutter/model/memo/memo.dart';
-import 'package:quick_flutter/repository/firebase/firebase_provider.dart';
+import 'package:tokeru_desktop/model/memo/memo.dart';
+import 'package:tokeru_desktop/repository/firebase/firebase_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'memo_repository.g.dart';

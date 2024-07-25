@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:quick_flutter/widget/button/button.dart';
-import 'package:quick_flutter/widget/theme/app_theme.dart';
+import 'package:tokeru_desktop/widget/theme/app_theme.dart';
+import 'package:tokeru_widgets/widgets.dart';
 
 /// チャットを送信するためのButton。
 class SubmitButton extends HookWidget {
