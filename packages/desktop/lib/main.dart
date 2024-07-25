@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
-import 'package:quick_flutter/controller/hot_key/hot_key_controller.dart';
-import 'package:quick_flutter/firebase_options.dart';
-import 'package:quick_flutter/screen/main/main_screen.dart';
-import 'package:quick_flutter/screen/panel/panel_screen.dart';
-import 'package:quick_flutter/widget/app_platform_menu_bar.dart';
-import 'package:quick_flutter/widget/callback_shortcut.dart';
-import 'package:quick_flutter/widget/theme/app_theme.dart';
+import 'package:tokeru_desktop/controller/hot_key/hot_key_controller.dart';
+import 'package:tokeru_desktop/firebase_options.dart';
+import 'package:tokeru_desktop/screen/main/main_screen.dart';
+import 'package:tokeru_desktop/screen/panel/panel_screen.dart';
+import 'package:tokeru_desktop/widget/app_platform_menu_bar.dart';
+import 'package:tokeru_desktop/widget/callback_shortcut.dart';
+import 'package:tokeru_desktop/widget/theme/app_theme.dart';
 
 @pragma('vm:entry-point')
 void panel() async {

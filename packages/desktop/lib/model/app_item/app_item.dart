@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:quick_flutter/systems/link.dart';
-import 'package:quick_flutter/systems/regexp.dart';
-import 'package:quick_flutter/systems/timestamp_converter.dart';
+import 'package:tokeru_desktop/systems/link.dart';
+import 'package:tokeru_desktop/systems/regexp.dart';
+import 'package:tokeru_desktop/systems/timestamp_converter.dart';
 
 part 'app_item.freezed.dart';
 part 'app_item.g.dart';

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quick_flutter/model/app_item/app_item.dart';
-import 'package:quick_flutter/repository/firebase/firebase_provider.dart';
+import 'package:tokeru_desktop/model/app_item/app_item.dart';
+import 'package:tokeru_desktop/repository/firebase/firebase_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'app_item_repository.g.dart';

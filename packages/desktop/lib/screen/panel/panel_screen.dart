@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quick_flutter/controller/panel_screen/panel_screen_controller.dart';
-import 'package:quick_flutter/utils/panel_method_channel.dart';
-import 'package:quick_flutter/widget/button/icon_button.dart';
-import 'package:quick_flutter/widget/button/submit_button.dart';
-import 'package:quick_flutter/widget/theme/app_theme.dart';
+import 'package:tokeru_desktop/controller/panel_screen/panel_screen_controller.dart';
+import 'package:tokeru_desktop/utils/panel_method_channel.dart';
+import 'package:tokeru_desktop/widget/button/icon_button.dart';
+import 'package:tokeru_desktop/widget/button/submit_button.dart';
+import 'package:tokeru_desktop/widget/theme/app_theme.dart';
 
 final GlobalKey _childKey = GlobalKey();
 

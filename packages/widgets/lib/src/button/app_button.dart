@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:quick_flutter/widget/color/status_color.dart';
+import 'package:tokeru_widgets/src/color/status_color.dart';
 
 /// ボタンとして必要最低限の機能を持つWidget
 class AppButton extends HookWidget {
   const AppButton({
-    Key? key,
+    super.key,
     required this.child,
     required this.containerColor,
     required this.backgroundColor,
     this.onPressed,
-  }) : super(key: key);
+  });
 
   final Widget child;
 

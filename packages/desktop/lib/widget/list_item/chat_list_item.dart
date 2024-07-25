@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
-import 'package:quick_flutter/model/app_item/app_item.dart';
-import 'package:quick_flutter/widget/button/check_button.dart';
-import 'package:quick_flutter/widget/theme/app_theme.dart';
+import 'package:tokeru_desktop/model/app_item/app_item.dart';
+import 'package:tokeru_desktop/widget/button/check_button.dart';
+import 'package:tokeru_desktop/widget/theme/app_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ChatListItem extends HookWidget {

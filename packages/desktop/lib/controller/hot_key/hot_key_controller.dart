@@ -1,8 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hotkey_manager/hotkey_manager.dart';
-import 'package:quick_flutter/repository/hotkey/hotkey_repository.dart';
-import 'package:quick_flutter/utils/method_channel.dart';
+import 'package:tokeru_desktop/repository/hotkey/hotkey_repository.dart';
+import 'package:tokeru_desktop/utils/method_channel.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'hot_key_controller.g.dart';
