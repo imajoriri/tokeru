@@ -17,6 +17,20 @@
       "request": "launch",
       "type": "dart",
       "args": ["--dart-define-from-file=dart_defines/dev.json"]
+    },
+    {
+      "name": "mobile dev",
+      "program": "packages/mobile/lib/main.dart",
+      "request": "launch",
+      "type": "dart",
+      "args": ["--dart-define-from-file=dart_defines/dev.json"]
+    },
+    {
+      "name": "mobile prod (profile mode)",
+      "program": "packages/mobile/lib/main.dart",
+      "request": "launch",
+      "type": "dart",
+      "args": ["--dart-define-from-file=dart_defines/dev.json"]
     }
   ]
 }
