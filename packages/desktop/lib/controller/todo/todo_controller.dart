@@ -1,7 +1,7 @@
 import 'package:tokeru_desktop/controller/mixin/app_todo_items_notifer_mixin.dart';
 import 'package:tokeru_desktop/controller/refresh/refresh_controller.dart';
 import 'package:tokeru_desktop/controller/user/user_controller.dart';
-import 'package:tokeru_desktop/model/app_item/app_item.dart';
+import 'package:tokeru_widgets/model/app_item/app_item.dart';
 import 'package:tokeru_desktop/repository/app_item/app_item_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

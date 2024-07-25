@@ -447,7 +447,7 @@ packages:
     source: hosted
     version: "0.20.5"
   flutter_linkify:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: flutter_linkify
       sha256: "74669e06a8f358fee4512b4320c0b80e51cffc496607931de68d28f099254073"
@@ -982,7 +982,7 @@ packages:
     source: hosted
     version: "0.28.0"
   shared_preferences:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: shared_preferences
       sha256: d3bbe5553a986e83980916ded2f0b435ef2e1893dfaa29d5a7a790d0eca12180

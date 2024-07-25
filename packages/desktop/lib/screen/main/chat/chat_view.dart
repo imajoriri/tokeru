@@ -9,13 +9,10 @@ import 'package:tokeru_desktop/controller/ogp_controller/ogp_controller.dart';
 import 'package:tokeru_desktop/controller/read/read_controller.dart';
 import 'package:tokeru_desktop/controller/read_all/read_all_controller.dart';
 import 'package:tokeru_desktop/controller/updated_todo/updated_todo.dart';
-import 'package:tokeru_desktop/model/analytics_event/analytics_event_name.dart';
-import 'package:tokeru_desktop/model/app_item/app_item.dart';
-import 'package:tokeru_desktop/widget/button/submit_button.dart';
-import 'package:tokeru_desktop/widget/card/url_preview_card.dart';
+import 'package:tokeru_widgets/model/analytics_event/analytics_event_name.dart';
+import 'package:tokeru_widgets/model/app_item/app_item.dart';
 import 'package:tokeru_desktop/widget/focus_nodes.dart';
-import 'package:tokeru_desktop/widget/list_item/chat_list_item.dart';
-import 'package:tokeru_desktop/widget/theme/app_theme.dart';
+import 'package:tokeru_widgets/widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 part 'chat_list.dart';

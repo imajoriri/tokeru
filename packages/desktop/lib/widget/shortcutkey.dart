@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tokeru_desktop/systems/keyboard_key_extension.dart';
+import 'package:tokeru_widgets/systems/keyboard_key_extension.dart';
 
 /// アプリ内のショートカットキーを定義するクラス
 ///

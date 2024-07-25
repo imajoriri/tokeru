@@ -3,7 +3,7 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
-import 'package:tokeru_desktop/systems/flavor.dart';
+import 'package:tokeru_widgets/systems/flavor.dart';
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///

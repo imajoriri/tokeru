@@ -4,9 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tokeru_desktop/controller/panel_screen/panel_screen_controller.dart';
 import 'package:tokeru_desktop/utils/panel_method_channel.dart';
-import 'package:tokeru_desktop/widget/button/icon_button.dart';
-import 'package:tokeru_desktop/widget/button/submit_button.dart';
-import 'package:tokeru_desktop/widget/theme/app_theme.dart';
+import 'package:tokeru_widgets/widgets.dart';
 
 final GlobalKey _childKey = GlobalKey();
 

@@ -3,7 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tokeru_desktop/controller/url/url_controller.dart';
 import 'package:tokeru_desktop/screen/main/chat/chat_view.dart';
 import 'package:tokeru_desktop/screen/main/todo/todo_view.dart';
-import 'package:tokeru_desktop/widget/theme/app_theme.dart';
+import 'package:tokeru_widgets/widgets.dart';
 
 class MainScreen extends ConsumerWidget {
   const MainScreen({super.key});
