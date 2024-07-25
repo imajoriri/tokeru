@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:tokeru_desktop/widget/theme/app_theme.dart';
+import 'package:tokeru_widgets/widgets.dart';
 
 /// Tokeruで使用するチェックボタン。
 class CheckButton extends HookWidget {
   const CheckButton({
-    Key? key,
+    super.key,
     required this.checked,
     this.onPressed,
     this.uncheckedColor,
     this.checkedColor,
-  }) : super(key: key);
+  });
 
   final bool checked;
 

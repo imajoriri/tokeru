@@ -9,7 +9,7 @@ import 'package:tokeru_desktop/screen/main/main_screen.dart';
 import 'package:tokeru_desktop/screen/panel/panel_screen.dart';
 import 'package:tokeru_desktop/widget/app_platform_menu_bar.dart';
 import 'package:tokeru_desktop/widget/callback_shortcut.dart';
-import 'package:tokeru_desktop/widget/theme/app_theme.dart';
+import 'package:tokeru_widgets/widgets.dart';
 
 @pragma('vm:entry-point')
 void panel() async {

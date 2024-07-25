@@ -157,6 +157,11 @@ class _ChatListItemChat extends ConsumerWidget {
     final links = appItem.links;
     return ChatListItem.chat(
       chat: appItem,
+      launchUrl: (link) async {
+        if (!await launchUrl(link)) {
+          throw Exception('Could not launch ${link.toString()}');
+        }
+      },
       bottomWidget: links.isEmpty
           ? null
           : ListView.separated(

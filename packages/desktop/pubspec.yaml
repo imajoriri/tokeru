@@ -24,7 +24,7 @@ dependencies:
   desktop_window: ^0.4.0
   logger: ^2.0.2+1
   uuid: ^4.4.0
-  flutter_linkify: ^6.0.0
+
   dio: ^5.4.3+1
   html: ^0.15.4
   cached_network_image: ^3.3.1
@@ -37,7 +37,6 @@ dependencies:
   cloud_firestore: ^4.15.8
   firebase_analytics: ^10.8.7
   hotkey_manager: ^0.2.2
-  shared_preferences: ^2.2.3
 
   googleapis: ^13.1.0
   googleapis_auth: ^1.6.0

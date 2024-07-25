@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tokeru_desktop/systems/color.dart';
-import 'package:tokeru_desktop/widget/theme/app_color_theme_extension.dart';
-import 'package:tokeru_desktop/widget/theme/app_spacing_theme_extension.dart';
-import 'package:tokeru_desktop/widget/theme/app_text_theme_extension.dart';
+import 'package:tokeru_widgets/widget/theme/app_color_theme_extension.dart';
+import 'package:tokeru_widgets/widget/theme/app_spacing_theme_extension.dart';
+import 'package:tokeru_widgets/widget/theme/app_text_theme_extension.dart';
 
 class AppTheme {
   static final spacing = () {
@@ -37,12 +36,6 @@ class AppTheme {
 
     return defaultTheme.copyWith(
       dividerColor: colorExt.outline,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColor.seed,
-        outline: AppColor.outline,
-        outlineVariant: AppColor.outlineVariant,
-        shadow: AppColor.shadow,
-      ),
       extensions: [
         colorExt,
         spacing,
@@ -97,12 +90,6 @@ class AppTheme {
     final colorExt = color;
 
     return defaultTheme.copyWith(
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColor.seed,
-        outline: AppColor.outline,
-        outlineVariant: AppColor.outlineVariant,
-        shadow: AppColor.shadow,
-      ),
       extensions: [
         colorExt,
         spacing,

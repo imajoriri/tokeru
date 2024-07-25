@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:tokeru_desktop/widget/theme/app_theme.dart';
 import 'package:tokeru_widgets/widgets.dart';
 
 /// 小さめのアイコンボタン。
@@ -21,22 +20,20 @@ class AppIconButton extends HookWidget {
   final EdgeInsets padding;
 
   const AppIconButton.medium({
-    Key? key,
+    super.key,
     required this.icon,
     required this.onPressed,
     required this.tooltip,
   })  : iconSize = 20,
-        padding = const EdgeInsets.all(8),
-        super(key: key);
+        padding = const EdgeInsets.all(8);
 
   const AppIconButton.small({
-    Key? key,
+    super.key,
     required this.icon,
     required this.onPressed,
     required this.tooltip,
   })  : iconSize = 16,
-        padding = const EdgeInsets.all(8),
-        super(key: key);
+        padding = const EdgeInsets.all(8);
 
   @override
   Widget build(BuildContext context) {

@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
-import 'package:tokeru_desktop/model/app_item/app_item.dart';
-import 'package:tokeru_desktop/widget/button/check_button.dart';
-import 'package:tokeru_desktop/widget/theme/app_theme.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:tokeru_widgets/model/app_item/app_item.dart';
+import 'package:tokeru_widgets/widgets.dart';
 
 class ChatListItem extends HookWidget {
   const ChatListItem.chat({
     super.key,
     required AppChatItem chat,
+    required this.launchUrl,
     this.bottomWidget,
   })  : app = chat,
         onChangedCheck = null;
@@ -19,12 +18,16 @@ class ChatListItem extends HookWidget {
     required AppTodoItem todo,
     this.onChangedCheck,
   })  : app = todo,
-        bottomWidget = null;
+        bottomWidget = null,
+        launchUrl = null;
 
   final AppItem app;
 
   /// チェックボックスの状態が変更されたときのコールバック。
   final void Function(bool?)? onChangedCheck;
+
+  /// URLをタップした時の処理。
+  final void Function(Uri)? launchUrl;
 
   /// Widget下部に表示するWidget。
   final Widget? bottomWidget;
@@ -43,6 +46,7 @@ class ChatListItem extends HookWidget {
           AppChatItem(:final message) => _Chat(
               message: message,
               bottomWidget: bottomWidget,
+              launchUrl: launchUrl!,
             ),
           AppTodoItem(:final title, :final isDone) => _Todo(
               isDone: isDone,
@@ -59,11 +63,13 @@ class ChatListItem extends HookWidget {
 class _Chat extends StatelessWidget {
   const _Chat({
     required this.message,
+    required this.launchUrl,
     this.bottomWidget,
   });
 
   final String message;
   final Widget? bottomWidget;
+  final void Function(Uri) launchUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -75,9 +81,7 @@ class _Chat extends StatelessWidget {
           children: [
             Linkify(
               onOpen: (link) async {
-                if (!await launchUrl(Uri.parse(link.url))) {
-                  throw Exception('Could not launch ${link.url}');
-                }
+                launchUrl(Uri.parse(link.url));
               },
               options: const LinkifyOptions(humanize: false),
               text: message,

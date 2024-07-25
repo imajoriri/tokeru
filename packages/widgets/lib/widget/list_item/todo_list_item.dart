@@ -3,13 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:tokeru_desktop/model/app_item/app_item.dart';
-import 'package:tokeru_desktop/widget/button/check_button.dart';
-import 'package:tokeru_desktop/widget/theme/app_theme.dart';
+import 'package:tokeru_widgets/model/app_item/app_item.dart';
 import 'package:tokeru_widgets/widgets.dart';
 
-class TodoListItem extends HookConsumerWidget {
+class TodoListItem extends HookWidget {
   const TodoListItem({
     super.key,
     required this.todo,
@@ -87,7 +84,7 @@ class TodoListItem extends HookConsumerWidget {
   static const _debounceDuration = Duration(milliseconds: 400);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final readOnly = onUpdatedTitle == null;
     final effectiveController = controller ?? useTextEditingController();
     final effectiveFocusNode = focusNode ?? useFocusNode();
