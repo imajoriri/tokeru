@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:quick_flutter/controller/refresh/refresh_controller.dart';
-import 'package:quick_flutter/controller/user/user_controller.dart';
-import 'package:quick_flutter/model/app_item/app_item.dart';
-import 'package:quick_flutter/repository/app_item/app_item_repository.dart';
+import 'package:tokeru_desktop/controller/refresh/refresh_controller.dart';
+import 'package:tokeru_desktop/controller/user/user_controller.dart';
+import 'package:tokeru_desktop/model/app_item/app_item.dart';
+import 'package:tokeru_desktop/repository/app_item/app_item_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
 

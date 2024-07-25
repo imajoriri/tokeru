@@ -1,6 +1,6 @@
-import 'package:quick_flutter/controller/refresh/refresh_controller.dart';
-import 'package:quick_flutter/controller/user/user_controller.dart';
-import 'package:quick_flutter/repository/read/read_repository.dart';
+import 'package:tokeru_desktop/controller/refresh/refresh_controller.dart';
+import 'package:tokeru_desktop/controller/user/user_controller.dart';
+import 'package:tokeru_desktop/repository/read/read_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'read_controller.g.dart';

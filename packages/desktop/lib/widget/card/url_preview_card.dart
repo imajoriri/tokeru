@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:quick_flutter/model/ogp/ogp.dart';
-import 'package:quick_flutter/widget/skeleton/skeleton_card.dart';
-import 'package:quick_flutter/widget/skeleton/skeleton_text.dart';
-import 'package:quick_flutter/widget/theme/app_theme.dart';
+import 'package:tokeru_desktop/model/ogp/ogp.dart';
+import 'package:tokeru_desktop/widget/skeleton/skeleton_card.dart';
+import 'package:tokeru_desktop/widget/skeleton/skeleton_text.dart';
+import 'package:tokeru_desktop/widget/theme/app_theme.dart';
 
 /// ogp の 画像の横幅
 const double _ogpImageWidth = 120;

@@ -1,18 +1,18 @@
 "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseSessions/FirebaseSessions/Sources/Settings/SDKDefaultSettings.swift":
-  dependencies: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseSessions.build/Objects-normal/arm64/SDKDefaultSettings.d"
+  const-values: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseSessions.build/Objects-normal/arm64/SDKDefaultSettings.swiftconstvalues"
   swift-dependencies: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseSessions.build/Objects-normal/arm64/SDKDefaultSettings.swiftdeps"
   diagnostics: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseSessions.build/Objects-normal/arm64/SDKDefaultSettings.dia"
-  const-values: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseSessions.build/Objects-normal/arm64/SDKDefaultSettings.swiftconstvalues"
   object: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseSessions.build/Objects-normal/arm64/SDKDefaultSettings.o"
-"/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseSessions/FirebaseSessions/Sources/SessionCoordinator.swift":
-  object: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseSessions.build/Objects-normal/arm64/SessionCoordinator.o"
-  swift-dependencies: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseSessions.build/Objects-normal/arm64/SessionCoordinator.swiftdeps"
-  const-values: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseSessions.build/Objects-normal/arm64/SessionCoordinator.swiftconstvalues"
-  diagnostics: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseSessions.build/Objects-normal/arm64/SessionCoordinator.dia"
-  dependencies: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseSessions.build/Objects-normal/arm64/SessionCoordinator.d"
+  dependencies: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseSessions.build/Objects-normal/arm64/SDKDefaultSettings.d"
 "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseSessions/FirebaseSessions/Sources/SessionGenerator.swift":
   dependencies: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseSessions.build/Objects-normal/arm64/SessionGenerator.d"
+  swift-dependencies: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseSessions.build/Objects-normal/arm64/SessionGenerator.swiftdeps"
+  diagnostics: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseSessions.build/Objects-normal/arm64/SessionGenerator.dia"
   const-values: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseSessions.build/Objects-normal/arm64/SessionGenerator.swiftconstvalues"
   object: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseSessions.build/Objects-normal/arm64/SessionGenerator.o"
-  diagnostics: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseSessions.build/Objects-normal/arm64/SessionGenerator.dia"
-  swift-dependencies: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseSessions.build/Objects-normal/arm64/SessionGenerator.swiftdeps"
+"/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/macos/Pods/FirebaseSessions/FirebaseSessions/Sources/SessionCoordinator.swift":
+  const-values: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseSessions.build/Objects-normal/arm64/SessionCoordinator.swiftconstvalues"
+  dependencies: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseSessions.build/Objects-normal/arm64/SessionCoordinator.d"
+  swift-dependencies: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseSessions.build/Objects-normal/arm64/SessionCoordinator.swiftdeps"
+  object: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseSessions.build/Objects-normal/arm64/SessionCoordinator.o"
+  diagnostics: "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/FirebaseSessions.build/Objects-normal/arm64/SessionCoordinator.dia"

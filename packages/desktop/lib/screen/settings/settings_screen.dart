@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quick_flutter/controller/hot_key/hot_key_controller.dart';
-import 'package:quick_flutter/controller/screen_type/screen_type_controller.dart';
-import 'package:quick_flutter/systems/context_extension.dart';
-import 'package:quick_flutter/systems/keyboard_key_extension.dart';
-import 'package:quick_flutter/widget/theme/app_theme.dart';
+import 'package:tokeru_desktop/controller/hot_key/hot_key_controller.dart';
+import 'package:tokeru_desktop/controller/screen_type/screen_type_controller.dart';
+import 'package:tokeru_desktop/systems/context_extension.dart';
+import 'package:tokeru_desktop/systems/keyboard_key_extension.dart';
+import 'package:tokeru_desktop/widget/theme/app_theme.dart';
 
 class SettingsScreen extends HookConsumerWidget {
   const SettingsScreen({super.key});

@@ -79,7 +79,7 @@
 		<dict>
 			<key>cdhash</key>
 			<data>
-			/oi0GRXd4n2EQ7M5fjuqeOzeeLA=
+			OU+ILwsbnWVDbXR0SUyKq/dfyA4=
 			</data>
 			<key>requirement</key>
 			<string>identifier "io.flutter.flutter.app" and anchor apple generic and certificate leaf[subject.CN] = "Apple Development: Takeyuki Imajo (N32HHRAQF7)" and certificate 1[field.1.2.840.113635.100.6.2.1] /* exists */</string>
