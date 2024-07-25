@@ -3,4 +3,10 @@ name: tokeru
 packages:
   - packages/**
 
+scripts:
+  gen:
+    run: flutter pub run build_runner build --delete-conflicting-outputs
+    exec:
+      concurrency: 1
+
 sdkPath: .fvm/flutter_sdk

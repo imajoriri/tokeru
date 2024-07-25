@@ -11,6 +11,14 @@ dependencies:
   flutter:
     sdk: flutter
 
+  hooks_riverpod: 2.4.10
+  flutter_hooks: ^0.20.5
+  riverpod_annotation: ^2.2.1
+  riverpod_generator: ^2.3.11
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.8.1
+  logger: ^2.0.2+1
+
   # melos
   tokeru_widgets:
 
@@ -21,6 +29,8 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^3.0.0
+  build_runner: ^2.4.8
+  freezed: ^2.4.5
 
 flutter:
   uses-material-design: true
