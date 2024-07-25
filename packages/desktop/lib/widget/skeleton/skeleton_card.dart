@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:quick_flutter/widget/theme/app_theme.dart';
+import 'package:tokeru_desktop/widget/theme/app_theme.dart';
 
 class SkeletonCard extends StatelessWidget {
   const SkeletonCard({

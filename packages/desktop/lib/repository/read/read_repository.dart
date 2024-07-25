@@ -1,5 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quick_flutter/repository/firebase/firebase_provider.dart';
+import 'package:tokeru_desktop/repository/firebase/firebase_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'read_repository.g.dart';

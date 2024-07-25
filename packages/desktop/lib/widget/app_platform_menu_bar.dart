@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:quick_flutter/controller/url/url_controller.dart';
-import 'package:quick_flutter/utils/method_channel.dart';
-import 'package:quick_flutter/widget/actions/new_todo.dart/new_todo_action.dart';
-import 'package:quick_flutter/widget/actions/reload/reload_action.dart';
-import 'package:quick_flutter/widget/shortcutkey.dart';
+import 'package:tokeru_desktop/controller/url/url_controller.dart';
+import 'package:tokeru_desktop/utils/method_channel.dart';
+import 'package:tokeru_desktop/widget/actions/new_todo.dart/new_todo_action.dart';
+import 'package:tokeru_desktop/widget/actions/reload/reload_action.dart';
+import 'package:tokeru_desktop/widget/shortcutkey.dart';
 
 /// [PlatformMenuBar]の中でRefを使うためにラップしたWidgetクラス
 class AppPlatformMenuBar extends ConsumerWidget {

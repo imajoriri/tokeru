@@ -1,0 +1,23 @@
+{
+  'version': 0,
+  'use-external-names': 'false',
+  'case-sensitive': 'false',
+  'roots': [{
+    'type': 'directory',
+    'name': "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Products/Debug/PromisesSwift/Promises.framework/Modules"
+    'contents': [{
+      'type': 'file',
+      'name': "module.modulemap",
+      'external-contents': "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/PromisesSwift.build/unextended-module.modulemap",
+    }]
+    },
+    {
+    'type': 'directory',
+    'name': "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Products/Debug/PromisesSwift/Promises.framework/Headers"
+    'contents': [{
+      'type': 'file',
+      'name': "Promises-Swift.h",
+      'external-contents': "/Users/imajo-takeyuki/dev/quick_flutter/packages/desktop/build/macos/Build/Intermediates.noindex/Pods.build/Debug/PromisesSwift.build/unextended-interface-header.h",
+    }]
+    }]
+}
