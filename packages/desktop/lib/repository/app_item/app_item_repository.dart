@@ -27,21 +27,28 @@ class AppItemRepository {
       .where('type', isEqualTo: 'chat')
       .orderBy('createdAt', descending: true);
 
-  Stream<List<AppTodoItem>> fetchTodos({
+  Future<List<AppTodoItem>> fetchTodos({
     bool isDone = false,
   }) {
     // NOTE: ここでorderBy indexをすると、intではなく文字列でソートされてしまう。
-    final snapshot = ref
+    final response = ref
         .read(userDocumentProvider(userId))
         .collection(_collectionName)
         .where('isDone', isEqualTo: isDone)
         .where('type', isEqualTo: 'todo')
-        .snapshots();
-    return snapshot.map((event) {
-      return event.docs.map((doc) {
+        .get();
+
+    return response.then((snapshot) {
+      return snapshot.docs.map((doc) {
         return AppTodoItem.fromJson(doc.data()..['id'] = doc.id);
       }).toList();
     });
+
+    // return snapshot.map((event) {
+    //   return event.docs.map((doc) {
+    //     return AppTodoItem.fromJson(doc.data()..['id'] = doc.id);
+    //   }).toList();
+    // });
   }
 
   /// [AppItem]を追加する。
