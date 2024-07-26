@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:tokeru_desktop/repository/firebase/firebase_provider.dart';
+import 'package:riverpod/riverpod.dart';
+import 'package:tokeru_model/repository/firebase/firebase_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tokeru_model/model.dart';
 
@@ -43,12 +43,6 @@ class AppItemRepository {
         return AppTodoItem.fromJson(doc.data()..['id'] = doc.id);
       }).toList();
     });
-
-    // return snapshot.map((event) {
-    //   return event.docs.map((doc) {
-    //     return AppTodoItem.fromJson(doc.data()..['id'] = doc.id);
-    //   }).toList();
-    // });
   }
 
   /// [AppItem]を追加する。
