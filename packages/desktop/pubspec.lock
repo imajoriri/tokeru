@@ -170,7 +170,7 @@ packages:
     source: hosted
     version: "1.1.1"
   cloud_firestore:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: cloud_firestore
       sha256: a0f161b92610e078b4962d7e6ebeb66dc9cce0ada3514aeee442f68165d78185
@@ -258,7 +258,7 @@ packages:
     source: hosted
     version: "2.3.6"
   dio:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: dio
       sha256: e17f6b3097b8c51b72c74c9f071a605c47bcc8893839bd66732457a5ebe73714
@@ -574,7 +574,7 @@ packages:
     source: hosted
     version: "0.2.0"
   html:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: html
       sha256: "3a7812d5bcd2894edf53dfaf8cd640876cf6cef50a8f238745c8b8120ea74d3a"

@@ -1,5 +1,3 @@
-import 'package:url_launcher/url_launcher.dart';
-
 /// URLのコントローラー
 enum UrlController {
   /// 開発者のXアカウント
@@ -24,8 +22,5 @@ enum UrlController {
   /// URL
   final String url;
 
-  /// ブラウザで開く
-  Future<void> launch() async {
-    await launchUrl(Uri.parse(url));
-  }
+  Uri get uri => Uri.parse(url);
 }

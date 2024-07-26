@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:tokeru_desktop/controller/refresh/refresh_controller.dart';
+import 'package:tokeru_model/controller/refresh/refresh_controller.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'reload_action.g.dart';

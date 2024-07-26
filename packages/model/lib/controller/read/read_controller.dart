@@ -1,7 +1,7 @@
-import 'package:tokeru_desktop/controller/refresh/refresh_controller.dart';
-import 'package:tokeru_desktop/controller/user/user_controller.dart';
-import 'package:tokeru_desktop/repository/read/read_repository.dart';
+import 'package:tokeru_model/controller/refresh/refresh_controller.dart';
+import 'package:tokeru_model/controller/user/user_controller.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:tokeru_model/repository/read/read_repository.dart';
 
 part 'read_controller.g.dart';
 
