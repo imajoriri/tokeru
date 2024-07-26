@@ -4,6 +4,9 @@ description: "dependencies install step"
 
 runs:
   using: "composite"
+  defaults:
+    run:
+      working-directory: ./
   steps:
     - name: "Read flutter version from fvm config"
       id: flutter_info
