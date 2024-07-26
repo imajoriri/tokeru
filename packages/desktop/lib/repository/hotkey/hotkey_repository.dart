@@ -1,6 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:tokeru_widgets/systems/shared_preference.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:tokeru_model/systems.dart';
 
 part 'hotkey_repository.g.dart';
 

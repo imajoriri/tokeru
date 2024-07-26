@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:tokeru_widgets/model/ogp/ogp.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:tokeru_widgets/widget/skeleton/skeleton_card.dart';
 import 'package:tokeru_widgets/widget/skeleton/skeleton_text.dart';
 import 'package:tokeru_widgets/widget/theme/app_theme.dart';
@@ -11,20 +11,39 @@ const double _ogpImageWidth = 120;
 /// ogp の 画像の縦幅
 const double _ogpImageHeight = 63;
 
+/// [text]の中から[Uri]を抽出する
+List<Uri> getLinks({
+  required String text,
+}) {
+  const linkifier = UrlLinkifier();
+  var list = <LinkifyElement>[TextElement(text)];
+  list = linkifier.parse(list, const LinkifyOptions());
+
+  return list
+      .whereType<LinkableElement>()
+      .map((element) => Uri.parse(element.url))
+      .toList();
+}
+
 /// URLプレビューのカード。
 class UrlPreviewCard extends StatelessWidget {
-  final Ogp ogp;
-
-  /// タップ時の処理。
-  final void Function()? onTap;
-
   const UrlPreviewCard({
     super.key,
-    required this.ogp,
+    required this.url,
+    required this.title,
+    required this.description,
+    required this.imageUrl,
     this.onTap,
   });
 
   const factory UrlPreviewCard.loading() = _Skeleton;
+  final String url;
+  final String title;
+  final String description;
+  final String imageUrl;
+
+  /// タップ時の処理。
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -49,14 +68,14 @@ class UrlPreviewCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      ogp.title,
+                      title,
                       style: context.appTextTheme.bodySmall,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     SizedBox(height: context.appSpacing.smallX),
                     Text(
-                      ogp.description,
+                      description,
                       style: context.appTextTheme.bodySmall
                           .copyWith(color: context.appColors.onSurfaceSubtle),
                       maxLines: 2,
@@ -69,7 +88,7 @@ class UrlPreviewCard extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
                 child: CachedNetworkImage(
-                  imageUrl: ogp.imageUrl,
+                  imageUrl: imageUrl,
                   width: _ogpImageWidth,
                   height: _ogpImageHeight,
                   fadeInDuration: const Duration(milliseconds: 150),
@@ -94,12 +113,10 @@ class UrlPreviewCard extends StatelessWidget {
 class _Skeleton extends UrlPreviewCard {
   const _Skeleton()
       : super(
-          ogp: const Ogp(
-            url: '',
-            title: '',
-            description: '',
-            imageUrl: '',
-          ),
+          url: '',
+          title: '',
+          description: '',
+          imageUrl: '',
         );
 
   @override

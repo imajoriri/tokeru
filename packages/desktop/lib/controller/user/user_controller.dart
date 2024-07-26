@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:tokeru_widgets/model/user/user.dart';
+import 'package:tokeru_model/model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'user_controller.g.dart';

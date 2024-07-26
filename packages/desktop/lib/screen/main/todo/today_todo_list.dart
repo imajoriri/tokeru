@@ -45,7 +45,7 @@ class TodayTodoList extends HookConsumerWidget {
                         padding:
                             EdgeInsets.only(bottom: context.appSpacing.smallX),
                         child: TodoListItem(
-                          todo: todo,
+                          isDone: todo.isDone,
                           index: index,
                           // 新規作成されたときに自動でフォーカスする。
                           autofocus: true,
