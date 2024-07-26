@@ -21,8 +21,16 @@ runs:
     - name: "Install melos"
       run: |
         dart pub global activate melos
-        # GitHub ActionsではFVMを使わないため、melos.yamlからsdkPathを削除する
-        sed -i '' '/sdkPath/d' melos.yaml
+      shell: bash
+
+    - name: "Remove melos sdkPath(linux)"
+      if: runner.os == 'Linux'
+      run: sed -i '/sdkPath/d' melos.yaml
+      shell: bash
+
+    - name: "Remove melos sdkPath(macos)"
+      if: runner.os == 'macOS'
+      run: sed -i '' '/sdkPath/d' melos.yaml
       shell: bash
 
     - name: "Install melos dependencies"

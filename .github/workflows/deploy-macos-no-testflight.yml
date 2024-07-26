@@ -26,24 +26,6 @@ jobs:
         uses: actions/checkout@v4
 
       - uses: ./.github/actions/install_flutter_dependencies
-      # - name: "setup java"
-      #   uses: actions/setup-java@v4
-      #   with:
-      #     distribution: "zulu"
-      #     java-version: "21"
-
-      # - name: "Read flutter version from fvm config"
-      #   id: flutter_info
-      #   run: |
-      #     FLUTTER_VERSION=$(jq -r '.flutterSdkVersion' ./.fvm/fvm_config.json)
-      #     echo "FLUTTER_VERSION=$FLUTTER_VERSION" >> $GITHUB_ENV
-      #   shell: bash
-
-      # - name: "Setup Flutter"
-      #   uses: subosito/flutter-action@v2
-      #   with:
-      #     flutter-version: ${{ env.FLUTTER_VERSION }}
-      #     cache: true
 
       - name: "Install codemagic-cli-tools"
         run: |
