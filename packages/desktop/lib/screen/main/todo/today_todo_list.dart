@@ -57,18 +57,14 @@ class TodayTodoList extends HookConsumerWidget {
                                 .deleteTodo(todoId: todo.id);
                           },
                           onUpdatedTitle: (value) {
-                            ref.read(
-                              updatedTodoProvider(
-                                todo: todo.copyWith(title: value),
-                              ).future,
-                            );
+                            ref
+                                .read(todoControllerProvider.notifier)
+                                .updateTodoTitle(todoId: todo.id, title: value);
                           },
                           onToggleDone: (value) {
                             ref
                                 .read(todoControllerProvider.notifier)
-                                .toggleTodo(
-                                  todo: todo.copyWith(isDone: value!),
-                                );
+                                .toggleTodoDone(todoId: todo.id);
                             FirebaseAnalytics.instance.logEvent(
                               name: AnalyticsEventName.toggleTodoDone.name,
                             );
@@ -80,7 +76,7 @@ class TodayTodoList extends HookConsumerWidget {
                             FocusScope.of(context).previousFocus();
                           },
                           onNewTodoBelow: () async {
-                            await ref
+                            ref
                                 .read(todoControllerProvider.notifier)
                                 .addTodoWithIndex(index: index + 1);
                             WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -184,7 +180,9 @@ class _Header extends ConsumerWidget {
             icon: const Icon(Icons.add),
             tooltip: ShortcutActivatorType.newTodo.longLabel,
             onPressed: () async {
-              await ref.read(todoControllerProvider.notifier).addToFirst();
+              await ref
+                  .read(todoControllerProvider.notifier)
+                  .addTodoWithIndex(index: 0);
               await FirebaseAnalytics.instance.logEvent(
                 name: AnalyticsEventName.addTodo.name,
               );
