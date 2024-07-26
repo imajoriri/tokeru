@@ -21,9 +21,6 @@ env:
 jobs:
   deploy_macos_app:
     runs-on: macos-latest
-    defaults:
-      run:
-        working-directory: packages/desktop
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
@@ -81,18 +78,21 @@ jobs:
           keychain add-certificates
 
       - name: "xcode-project use-profiles"
+        working-directory: packages/desktop
         run: |
           /usr/bin/plutil -replace CFBundleIdentifier -string $APP_BUNDLE_ID ios/Runner/Info.plist
           find **/*.xcodeproj -type f | xargs sed -i "" -E 's/PRODUCT_BUNDLE_IDENTIFIER = ".+";//g'
           xcode-project use-profiles
 
       - name: Build macOS app
+        working-directory: packages/desktop
         run: |
           build_number=$(app-store-connect get-latest-build-number $APPLE_APP_ID)
           new_build_number=$((build_number + 1))
           flutter build macos --dart-define-from-file=dart_defines/prod.json --build-number=$new_build_number
 
       - name: "Package macOS app"
+        working-directory: packages/desktop
         run: |
           APP_NAME=$(find $(pwd) -name "*.app")
           PACKAGE_NAME=$(basename "$APP_NAME" .app).pkg
@@ -109,5 +109,6 @@ jobs:
           rm -f unsigned.pkg
 
       - name: "Upload TestFlight"
+        working-directory: packages/desktop
         run: |
           app-store-connect publish --path "$PACKAGE_NAME"
