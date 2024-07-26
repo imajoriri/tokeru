@@ -20,7 +20,7 @@ class NewTodoAction extends Action<NewTodoIntent> {
 
   @override
   Object? invoke(covariant NewTodoIntent intent) async {
-    await ref.read(todoControllerProvider.notifier).addToFirst();
+    await ref.read(todoControllerProvider.notifier).addTodoWithIndex(index: 0);
     return null;
   }
 }
