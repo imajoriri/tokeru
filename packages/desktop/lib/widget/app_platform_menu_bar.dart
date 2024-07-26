@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:tokeru_desktop/controller/url/url_controller.dart';
+import 'package:tokeru_model/controller/url/url_controller.dart';
 import 'package:tokeru_desktop/utils/method_channel.dart';
 import 'package:tokeru_desktop/widget/actions/new_todo.dart/new_todo_action.dart';
 import 'package:tokeru_desktop/widget/actions/reload/reload_action.dart';
 import 'package:tokeru_desktop/widget/shortcutkey.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// [PlatformMenuBar]の中でRefを使うためにラップしたWidgetクラス
 class AppPlatformMenuBar extends ConsumerWidget {
@@ -110,13 +111,13 @@ class AppPlatformMenuBar extends ConsumerWidget {
                 PlatformMenuItem(
                   label: 'Thank you for using Tokeru!😊',
                   onSelected: () async {
-                    await UrlController.developerXAccount.launch();
+                    await launchUrl(UrlController.developerXAccount.uri);
                   },
                 ),
                 PlatformMenuItem(
                   label: 'I would like to hear your feedback!',
                   onSelected: () async {
-                    await UrlController.developerXAccount.launch();
+                    await launchUrl(UrlController.developerXAccount.uri);
                   },
                 ),
               ],
@@ -126,25 +127,25 @@ class AppPlatformMenuBar extends ConsumerWidget {
                 PlatformMenuItem(
                   label: '📩 Follow on X(Twitter)',
                   onSelected: () async {
-                    await UrlController.developerXAccount.launch();
+                    await launchUrl(UrlController.developerXAccount.uri);
                   },
                 ),
                 PlatformMenuItem(
                   label: '💡 Got an idea for a feature',
                   onSelected: () async {
-                    await UrlController.featureRequest.launch();
+                    await launchUrl(UrlController.featureRequest.uri);
                   },
                 ),
                 PlatformMenuItem(
                   label: '📝 Found a bug',
                   onSelected: () async {
-                    await UrlController.bugReport.launch();
+                    await launchUrl(UrlController.bugReport.uri);
                   },
                 ),
                 PlatformMenuItem(
                   label: '🧑‍💻 Tokeru repository is public',
                   onSelected: () async {
-                    await UrlController.tokeruRepository.launch();
+                    await launchUrl(UrlController.tokeruRepository.uri);
                   },
                 ),
               ],

@@ -2,7 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:tokeru_desktop/controller/todo/todo_controller.dart';
+import 'package:tokeru_model/controller/todo/todo_controller.dart';
 import 'package:tokeru_model/model.dart';
 import 'package:tokeru_desktop/widget/actions/new_todo.dart/new_todo_action.dart';
 import 'package:tokeru_desktop/widget/focus_nodes.dart';

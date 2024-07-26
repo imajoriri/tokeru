@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:tokeru_desktop/controller/url/url_controller.dart';
+import 'package:tokeru_model/controller/url/url_controller.dart';
 import 'package:tokeru_desktop/screen/main/chat/chat_view.dart';
 import 'package:tokeru_desktop/screen/main/todo/todo_view.dart';
 import 'package:tokeru_widgets/widgets.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MainScreen extends ConsumerWidget {
   const MainScreen({super.key});
@@ -14,7 +15,7 @@ class MainScreen extends ConsumerWidget {
       backgroundColor: context.appColors.surface,
       floatingActionButton: FloatingActionButton.small(
         onPressed: () async {
-          await UrlController.featureRequest.launch();
+          await launchUrl(UrlController.featureRequest.uri);
         },
         // 丸にする
         shape: CircleBorder(

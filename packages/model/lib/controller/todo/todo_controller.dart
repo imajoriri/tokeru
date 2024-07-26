@@ -3,11 +3,11 @@ import 'dart:ui';
 
 import 'package:collection/collection.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:tokeru_desktop/controller/refresh/refresh_controller.dart';
-import 'package:tokeru_desktop/controller/user/user_controller.dart';
+import 'package:tokeru_model/controller/refresh/refresh_controller.dart';
+import 'package:tokeru_model/controller/user/user_controller.dart';
 import 'package:tokeru_model/model.dart';
-import 'package:tokeru_desktop/repository/app_item/app_item_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:tokeru_model/repository/app_item/app_item_repository.dart';
 import 'package:uuid/uuid.dart';
 
 part 'todo_controller.g.dart';
