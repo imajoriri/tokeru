@@ -1,5 +1,5 @@
-import 'package:tokeru_desktop/controller/app_item/app_items.dart';
-import 'package:tokeru_desktop/controller/read/read_controller.dart';
+import 'package:tokeru_model/controller/app_item/app_items.dart';
+import 'package:tokeru_model/controller/read/read_controller.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'read_all_controller.g.dart';
