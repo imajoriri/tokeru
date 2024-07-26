@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:tokeru_desktop/controller/refresh/refresh_controller.dart';
-import 'package:tokeru_widgets/model/ogp/ogp.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:html/parser.dart' as html_parser;
 import 'package:html/dom.dart';
+import 'package:tokeru_model/model.dart';
 
 part 'ogp_controller.g.dart';
 

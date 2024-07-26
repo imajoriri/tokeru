@@ -4,7 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tokeru_desktop/controller/todo/todo_controller.dart';
 import 'package:tokeru_desktop/controller/updated_todo/updated_todo.dart';
-import 'package:tokeru_widgets/model/analytics_event/analytics_event_name.dart';
+import 'package:tokeru_model/model.dart';
 import 'package:tokeru_desktop/widget/actions/new_todo.dart/new_todo_action.dart';
 import 'package:tokeru_desktop/widget/focus_nodes.dart';
 import 'package:tokeru_desktop/widget/shortcutkey.dart';

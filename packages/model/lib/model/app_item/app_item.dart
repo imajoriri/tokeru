@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:tokeru_widgets/systems/link.dart';
-import 'package:tokeru_widgets/systems/regexp.dart';
-import 'package:tokeru_widgets/systems/timestamp_converter.dart';
+import 'package:tokeru_model/systems/regexp.dart';
+import 'package:tokeru_model/systems/timestamp_converter.dart';
 
 part 'app_item.freezed.dart';
 part 'app_item.g.dart';
@@ -46,10 +45,4 @@ extension AppTodoItemExtension on AppTodoItem {
     }
     return int.tryParse(match.group(1) ?? '');
   }
-}
-
-/// [AppChatItem]に関する拡張メソッド
-extension AppChatItemExtension on AppChatItem {
-  /// メッセージの中からURLを抽出する
-  List<Uri> get links => getLinks(text: message);
 }

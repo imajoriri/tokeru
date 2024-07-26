@@ -3,13 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:tokeru_widgets/model/app_item/app_item.dart';
 import 'package:tokeru_widgets/widgets.dart';
 
 class TodoListItem extends HookWidget {
   const TodoListItem({
     super.key,
-    required this.todo,
+    required this.isDone,
     this.index,
     this.controller,
     this.focusNode,
@@ -24,7 +23,7 @@ class TodoListItem extends HookWidget {
     this.onSortDown,
   });
 
-  final AppTodoItem todo;
+  final bool isDone;
 
   /// [AppTodoItem]のリストのIndex。
   ///
@@ -145,7 +144,7 @@ class TodoListItem extends HookWidget {
             : Colors.transparent;
 
     late final Color textFieldColor;
-    if (todo.isDone) {
+    if (isDone) {
       textFieldColor = context.appColors.onSurfaceSubtle;
     } else if (readOnly) {
       textFieldColor = context.appColors.onSurface;
@@ -157,7 +156,7 @@ class TodoListItem extends HookWidget {
       bindings: <ShortcutActivator, VoidCallback>{
         if (onToggleDone != null)
           const SingleActivator(meta: true, LogicalKeyboardKey.keyK): () {
-            onToggleDone!(!todo.isDone);
+            onToggleDone!(!isDone);
           },
         if (onDeleted != null)
           const SingleActivator(meta: true, LogicalKeyboardKey.keyD):
@@ -195,7 +194,7 @@ class TodoListItem extends HookWidget {
                   padding: const EdgeInsets.only(bottom: 10, top: 10, left: 8),
                   child: CheckButton(
                     onPressed: onToggleDone,
-                    checked: todo.isDone,
+                    checked: isDone,
                   ),
                 ),
                 const SizedBox(width: 8),

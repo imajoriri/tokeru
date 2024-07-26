@@ -1,11 +1,11 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:tokeru_widgets/model/analytics_event/analytics_event_name.dart';
 import 'package:tokeru_desktop/widget/actions/new_todo.dart/new_todo_action.dart';
 import 'package:tokeru_desktop/widget/actions/reload/reload_action.dart';
 import 'package:tokeru_desktop/widget/actions/toggle_focus/toggle_focus_action.dart';
 import 'package:tokeru_desktop/widget/shortcutkey.dart';
+import 'package:tokeru_model/model.dart';
 
 /// [CallbackShortcuts]の中でRefを使うためにラップしたWidgetクラス
 class AppCallbackShortcuts extends ConsumerWidget {

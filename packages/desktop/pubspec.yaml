@@ -47,6 +47,7 @@ dependencies:
 
   # melos
   tokeru_widgets:
+  tokeru_model:
 
   flutter_localizations:
     sdk: flutter

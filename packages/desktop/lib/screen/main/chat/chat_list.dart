@@ -29,20 +29,8 @@ class _ChatList extends HookConsumerWidget {
                 children: [
                   _TodoDivider(index: index),
                   switch (appItem) {
-                    AppTodoItem() => ChatListItem.todo(
-                        todo: appItem,
-                        onChangedCheck: (value) {
-                          ref.read(
-                            updatedTodoProvider(
-                              todo: appItem.copyWith(
-                                isDone: value ?? false,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
                     AppChatItem() => _ChatListItemChat(appItem: appItem),
-                    AppDividerItem() => throw UnimplementedError(),
+                    _ => throw UnimplementedError(),
                   },
                   if (isLast) const _BottomSpace(),
                 ],
@@ -154,9 +142,9 @@ class _ChatListItemChat extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final links = appItem.links;
+    final links = getLinks(text: appItem.message);
     return ChatListItem.chat(
-      chat: appItem,
+      text: appItem.message,
       launchUrl: (link) async {
         if (!await launchUrl(link)) {
           throw Exception('Could not launch ${link.toString()}');
@@ -177,7 +165,10 @@ class _ChatListItemChat extends ConsumerWidget {
                     data: (ogp) {
                       return UrlPreviewCard(
                         key: ValueKey(uri.toString()),
-                        ogp: ogp,
+                        title: ogp.title,
+                        description: ogp.description,
+                        imageUrl: ogp.imageUrl,
+                        url: uri.toString(),
                         onTap: () async {
                           if (await canLaunchUrl(uri)) {
                             await launchUrl(uri);
