@@ -71,4 +71,22 @@ class DefaultFirebaseOptions {
     storageBucket: 'quick-chat-pro.appspot.com',
     iosBundleId: 'com.tokeru.macos.prod',
   );
+
+  static const FirebaseOptions iosDev = FirebaseOptions(
+    apiKey: 'AIzaSyBASHnaNJ0ry00TlXoPeJVQAZkv2cd414w',
+    appId: '1:998557904358:ios:863f947a495d188817fa27',
+    messagingSenderId: '998557904358',
+    projectId: 'quick-chat-dev-a442c',
+    storageBucket: 'quick-chat-dev-a442c.appspot.com',
+    iosBundleId: 'com.tokeru.macos.dev',
+  );
+
+  static const FirebaseOptions iosProd = FirebaseOptions(
+    apiKey: 'AIzaSyDlDMQe3k9nq3I9LTTEEO4xpBJogJyt5rY',
+    appId: '1:93729662960:ios:d90accbf72c4c900f81f35',
+    messagingSenderId: '93729662960',
+    projectId: 'quick-chat-pro',
+    storageBucket: 'quick-chat-pro.appspot.com',
+    iosBundleId: 'com.tokeru.macos.prod',
+  );
 }
