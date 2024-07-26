@@ -1,16 +1,8 @@
 PODS:
-  - AppAuth (1.7.5):
-    - AppAuth/Core (= 1.7.5)
-    - AppAuth/ExternalUserAgent (= 1.7.5)
-  - AppAuth/Core (1.7.5)
-  - AppAuth/ExternalUserAgent (1.7.5):
-    - AppAuth/Core
   - cloud_firestore (4.17.5):
     - Firebase/CoreOnly (~> 10.25.0)
     - Firebase/Firestore (~> 10.25.0)
     - firebase_core
-    - FlutterMacOS
-  - desktop_window (0.0.1):
     - FlutterMacOS
   - Firebase/Analytics (10.25.0):
     - Firebase/Core
@@ -138,12 +130,6 @@ PODS:
     - PromisesSwift (~> 2.1)
   - FirebaseSharedSwift (10.25.0)
   - FlutterMacOS (1.0.0)
-  - google_sign_in_ios (0.0.1):
-    - AppAuth (>= 1.7.4)
-    - Flutter
-    - FlutterMacOS
-    - GoogleSignIn (~> 7.1)
-    - GTMSessionFetcher (>= 3.4.0)
   - GoogleAppMeasurement (10.25.0):
     - GoogleAppMeasurement/AdIdSupport (= 10.25.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
@@ -168,10 +154,6 @@ PODS:
     - GoogleUtilities/Environment (~> 7.7)
     - nanopb (< 2.30911.0, >= 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleSignIn (7.1.0):
-    - AppAuth (< 2.0, >= 1.7.3)
-    - GTMAppAuth (< 5.0, >= 4.1.1)
-    - GTMSessionFetcher/Core (~> 3.3)
   - GoogleUtilities/AppDelegateSwizzler (7.13.3):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
@@ -200,14 +182,7 @@ PODS:
   - GoogleUtilities/UserDefaults (7.13.3):
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
-  - GTMAppAuth (4.1.1):
-    - AppAuth/Core (~> 1.7)
-    - GTMSessionFetcher/Core (< 4.0, >= 3.3)
-  - GTMSessionFetcher (3.4.1):
-    - GTMSessionFetcher/Full (= 3.4.1)
   - GTMSessionFetcher/Core (3.4.1)
-  - GTMSessionFetcher/Full (3.4.1):
-    - GTMSessionFetcher/Core
   - HotKey (0.2.0)
   - hotkey_manager_macos (0.0.1):
     - FlutterMacOS
@@ -235,7 +210,6 @@ PODS:
 
 DEPENDENCIES:
   - cloud_firestore (from `Flutter/ephemeral/.symlinks/plugins/cloud_firestore/macos`)
-  - desktop_window (from `Flutter/ephemeral/.symlinks/plugins/desktop_window/macos`)
   - Firebase/Analytics (~> 10.25.0)
   - Firebase/Auth (~> 10.25.0)
   - Firebase/Core (~> 10.25.0)
@@ -249,7 +223,6 @@ DEPENDENCIES:
   - firebase_crashlytics (from `Flutter/ephemeral/.symlinks/plugins/firebase_crashlytics/macos`)
   - FirebaseFirestore (from `https://github.com/invertase/firestore-ios-sdk-frameworks.git`, tag `10.25.0`)
   - FlutterMacOS (from `Flutter/ephemeral`)
-  - google_sign_in_ios (from `Flutter/ephemeral/.symlinks/plugins/google_sign_in_ios/darwin`)
   - hotkey_manager_macos (from `Flutter/ephemeral/.symlinks/plugins/hotkey_manager_macos/macos`)
   - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin`)
   - shared_preferences_foundation (from `Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin`)
@@ -258,7 +231,6 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - AppAuth
     - Firebase
     - FirebaseAnalytics
     - FirebaseAppCheckInterop
@@ -280,9 +252,7 @@ SPEC REPOS:
     - FirebaseSharedSwift
     - GoogleAppMeasurement
     - GoogleDataTransport
-    - GoogleSignIn
     - GoogleUtilities
-    - GTMAppAuth
     - GTMSessionFetcher
     - HotKey
     - leveldb-library
@@ -293,8 +263,6 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   cloud_firestore:
     :path: Flutter/ephemeral/.symlinks/plugins/cloud_firestore/macos
-  desktop_window:
-    :path: Flutter/ephemeral/.symlinks/plugins/desktop_window/macos
   firebase_analytics:
     :path: Flutter/ephemeral/.symlinks/plugins/firebase_analytics/macos
   firebase_auth:
@@ -308,8 +276,6 @@ EXTERNAL SOURCES:
     :tag: 10.25.0
   FlutterMacOS:
     :path: Flutter/ephemeral
-  google_sign_in_ios:
-    :path: Flutter/ephemeral/.symlinks/plugins/google_sign_in_ios/darwin
   hotkey_manager_macos:
     :path: Flutter/ephemeral/.symlinks/plugins/hotkey_manager_macos/macos
   path_provider_foundation:
@@ -327,9 +293,7 @@ CHECKOUT OPTIONS:
     :tag: 10.25.0
 
 SPEC CHECKSUMS:
-  AppAuth: 501c04eda8a8d11f179dbe8637b7a91bb7e5d2fa
   cloud_firestore: c037b5acdf0be76bc426c05d978be2090f094219
-  desktop_window: fb7c4f12c1129f947ac482296b6f14059d57a3c3
   Firebase: 0312a2352584f782ea56f66d91606891d4607f06
   firebase_analytics: 47e1f6453c222417b323ca53b1793f1a9ef395f6
   firebase_auth: e102811c55546b05d1db96ae9af577090e4fb687
@@ -355,12 +319,9 @@ SPEC CHECKSUMS:
   FirebaseSessions: dbd14adac65ce996228652c1fc3a3f576bdf3ecc
   FirebaseSharedSwift: 0274086954b1b2d5fd7e829eccc587044d72a4ba
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
-  google_sign_in_ios: 07375bfbf2620bc93a602c0e27160d6afc6ead38
   GoogleAppMeasurement: 9abf64b682732fed36da827aa2a68f0221fd2356
   GoogleDataTransport: 6c09b596d841063d76d4288cc2d2f42cc36e1e2a
-  GoogleSignIn: d4281ab6cf21542b1cfaff85c191f230b399d2db
   GoogleUtilities: ea963c370a38a8069cc5f7ba4ca849a60b6d7d15
-  GTMAppAuth: f69bd07d68cd3b766125f7e072c45d7340dea0de
   GTMSessionFetcher: 8000756fc1c19d2e5697b90311f7832d2e33f6cd
   HotKey: e96d8a2ddbf4591131e2bb3f54e69554d90cdca6
   hotkey_manager_macos: 1e2edb0c7ae4fe67108af44a9d3445de41404160

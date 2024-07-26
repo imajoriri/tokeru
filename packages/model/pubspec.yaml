@@ -11,12 +11,16 @@ dependencies:
     sdk: flutter
 
   intl: ^0.18.0
+
+  # shared_preferences
   shared_preferences: ^2.2.3
 
-  hooks_riverpod: 2.4.10
-  flutter_hooks: ^0.20.5
+  # Riverpod
+  riverpod: ^0.20.5
   riverpod_annotation: ^2.2.1
   riverpod_generator: ^2.3.11
+
+  # freezed
   freezed_annotation: ^2.4.1
   json_annotation: ^4.8.1
 
