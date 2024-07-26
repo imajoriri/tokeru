@@ -1,4 +1,4 @@
-name: Upload App Store Connect(No TestFlight)
+name: Deploy macoOS(No TestFlight)
 
 on:
   workflow_dispatch:
@@ -18,6 +18,9 @@ env:
 jobs:
   deploy_macos_app:
     runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: packages/desktop
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4

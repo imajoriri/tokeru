@@ -1,4 +1,4 @@
-name: Build and Release macOS App
+name: Deploy macOS
 
 on:
   workflow_dispatch:
@@ -14,6 +14,9 @@ env:
 jobs:
   deploy_macos_app:
     runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: packages/desktop
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
