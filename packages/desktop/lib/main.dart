@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:tokeru_desktop/controller/hot_key/hot_key_controller.dart';
-import 'package:tokeru_desktop/firebase_options.dart';
+import 'package:tokeru_model/firebase_options.dart';
 import 'package:tokeru_desktop/screen/main/main_screen.dart';
 import 'package:tokeru_desktop/screen/panel/panel_screen.dart';
 import 'package:tokeru_desktop/widget/app_platform_menu_bar.dart';
