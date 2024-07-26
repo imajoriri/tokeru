@@ -6,6 +6,8 @@ packages:
 scripts:
   gen:
     run: flutter pub run build_runner build --delete-conflicting-outputs
+    packageFilters:
+      dependsOn: "build_runner"
     exec:
       concurrency: 1
 
