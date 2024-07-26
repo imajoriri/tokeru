@@ -6,7 +6,7 @@ part of 'todo_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$todoControllerHash() => r'b7f0ed3671a6f77263ad73b8a0cb524f4b4f82a3';
+String _$todoControllerHash() => r'e68d0c41bd579aa469699b073c75726c395f97c7';
 
 /// 未完了の[AppTodoItem]を返すController。
 ///
@@ -15,7 +15,7 @@ String _$todoControllerHash() => r'b7f0ed3671a6f77263ad73b8a0cb524f4b4f82a3';
 /// Copied from [TodoController].
 @ProviderFor(TodoController)
 final todoControllerProvider =
-    StreamNotifierProvider<TodoController, List<AppTodoItem>>.internal(
+    AsyncNotifierProvider<TodoController, List<AppTodoItem>>.internal(
   TodoController.new,
   name: r'todoControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -25,6 +25,6 @@ final todoControllerProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$TodoController = StreamNotifier<List<AppTodoItem>>;
+typedef _$TodoController = AsyncNotifier<List<AppTodoItem>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
