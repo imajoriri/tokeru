@@ -21,7 +21,6 @@ dependencies:
   flutter_markdown: ^0.6.18
   collection: ^1.17.0
   intl: ^0.18.0
-  desktop_window: ^0.4.0
   logger: ^2.0.2+1
   uuid: ^4.4.0
 
@@ -37,11 +36,6 @@ dependencies:
   cloud_firestore: ^4.15.8
   firebase_analytics: ^10.8.7
   hotkey_manager: ^0.2.2
-
-  googleapis: ^13.1.0
-  googleapis_auth: ^1.6.0
-  google_sign_in: ^6.2.1
-  extension_google_sign_in_as_googleapis_auth: ^2.0.12
 
   url_launcher: ^6.2.5
 
