@@ -2,6 +2,8 @@ name: Deploy macoOS(No TestFlight)
 
 on:
   workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize]
   # mainにマージされた時に走らせる
   push:
     branches:
