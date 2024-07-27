@@ -73,7 +73,7 @@ jobs:
           new_build_number=$((build_number + 1))
           echo "$new_build_number"
           flutter build ipa --release \
-            --export-options-plist=$HOME/export_options.plist \
+            --export-options-plist=export_options.plist \
             --dart-define-from-file=dart_defines/prod.json \
             --build-number=$new_build_number
 
