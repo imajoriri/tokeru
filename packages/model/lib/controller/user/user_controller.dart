@@ -60,15 +60,8 @@ class UserController extends _$UserController {
     await auth.FirebaseAuth.instance.signInWithCredential(credential);
 
     try {
-      final userCredential = await auth.FirebaseAuth.instance.currentUser
+      await auth.FirebaseAuth.instance.currentUser
           ?.linkWithCredential(credential);
-      state = AsyncValue.data(
-        User(
-          id: userCredential!.user!.uid,
-          idToken: await userCredential.user!.getIdToken() ?? '',
-          isAnonymous: userCredential.user!.isAnonymous,
-        ),
-      );
     } on auth.FirebaseAuthException catch (e) {
       switch (e.code) {
         case "provider-already-linked":
@@ -86,6 +79,14 @@ class UserController extends _$UserController {
         default:
           Exception("Unknown error.");
       }
+    } finally {
+      ref.invalidateSelf();
     }
+  }
+
+  /// サインアウトする。
+  Future<void> signOut() async {
+    await auth.FirebaseAuth.instance.signOut();
+    ref.invalidateSelf();
   }
 }
