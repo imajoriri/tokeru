@@ -19,6 +19,7 @@ class UserController extends _$UserController {
       return User(
         id: currentUser.uid,
         idToken: await currentUser.getIdToken() ?? '',
+        isAnonymous: currentUser.isAnonymous,
       );
     }
 
@@ -28,6 +29,7 @@ class UserController extends _$UserController {
       return User(
         id: userCredential.user!.uid,
         idToken: await userCredential.user!.getIdToken() ?? '',
+        isAnonymous: true,
       );
     } on auth.FirebaseAuthException catch (e, s) {
       await FirebaseCrashlytics.instance.recordError(e, s);
@@ -64,6 +66,7 @@ class UserController extends _$UserController {
         User(
           id: userCredential!.user!.uid,
           idToken: await userCredential.user!.getIdToken() ?? '',
+          isAnonymous: userCredential.user!.isAnonymous,
         ),
       );
     } on auth.FirebaseAuthException catch (e) {
