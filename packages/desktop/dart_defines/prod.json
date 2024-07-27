@@ -1,5 +1,7 @@
 {
   "flavor": "prod",
   "appName": "Tokeru",
-  "appIdSuffix": "prod"
+  "appIdSuffix": "prod",
+  "google_client_id": "93729662960-rggstu04j4jsv8jro046vqrcrr8tkhhc.apps.googleusercontent.com",
+  "google_reversed_client_id": "com.googleusercontent.apps.93729662960-rggstu04j4jsv8jro046vqrcrr8tkhhc"
 }
