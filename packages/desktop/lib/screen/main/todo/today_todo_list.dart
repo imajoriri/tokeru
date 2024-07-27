@@ -123,11 +123,11 @@ class TodayTodoList extends HookConsumerWidget {
   }
 }
 
-class _EmptyState extends StatelessWidget {
+class _EmptyState extends ConsumerWidget {
   const _EmptyState();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: Actions.handler<NewTodoIntent>(
         context,
@@ -148,10 +148,9 @@ class _EmptyState extends StatelessWidget {
             const SizedBox(height: 16),
             TextButtonSmall(
               onPressed: () {
-                Actions.handler<NewTodoIntent>(
-                  context,
-                  const NewTodoIntent(),
-                );
+                ref
+                    .read(todoControllerProvider.notifier)
+                    .addTodoWithIndex(index: 0);
               },
               child: const Text('Add To-Do'),
             ),
