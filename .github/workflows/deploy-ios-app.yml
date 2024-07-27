@@ -2,9 +2,6 @@ name: Deploy iOS
 
 on:
   workflow_dispatch:
-  pull_request:
-    types: [opened, synchronize]
-  # mainにマージされた時に走らせる
   push:
     branches:
       - main
@@ -76,23 +73,6 @@ jobs:
             --export-options-plist=/Users/runner/export_options.plist \
             --dart-define-from-file=dart_defines/prod.json \
             --build-number=$new_build_number
-
-      # - name: "Package macOS app"
-      #   working-directory: packages/mobile
-      #   run: |
-      #     APP_NAME=$(find $(pwd) -name "*.app")
-      #     PACKAGE_NAME=$(basename "$APP_NAME" .app).pkg
-      #     echo "APP_NAME=$APP_NAME" >> $GITHUB_ENV
-      #     echo "PACKAGE_NAME=$PACKAGE_NAME" >> $GITHUB_ENV
-      #     xcrun productbuild --component "$APP_NAME" /Applications/ unsigned.pkg
-      #     INSTALLER_CERT_NAME=$(keychain list-certificates \
-      #               | jq '[.[]
-      #                 | select(.common_name
-      #                 | contains("Mac Developer Installer"))
-      #                 | .common_name][0]' \
-      #               | xargs)
-      #     xcrun productsign --sign "$INSTALLER_CERT_NAME" unsigned.pkg "$PACKAGE_NAME"
-      #     rm -f unsigned.pkg
 
       - name: "Upload TestFlight"
         working-directory: packages/mobile
