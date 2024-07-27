@@ -17,6 +17,9 @@ class ChatScreen extends HookConsumerWidget {
     final textEditingController = useTextEditingController();
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Chat'),
+      ),
       backgroundColor: context.appColors.surface,
       body: Column(
         children: [
