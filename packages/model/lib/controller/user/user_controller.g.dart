@@ -6,7 +6,7 @@ part of 'user_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userControllerHash() => r'f99e141bb52d15bd0999471d8776516aaede5d67';
+String _$userControllerHash() => r'd6619ca69853dd8884ae9812e2c038c0bd58afc7';
 
 /// ログインしているユーザーを取得する
 ///

@@ -6,7 +6,7 @@ part of 'firebase_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userDocumentHash() => r'e07fa9fbafa87e3781631bb6b43edbf5c59f9753';
+String _$userDocumentHash() => r'b868d5d223068ca06767224f02cef6a445cef03b';
 
 /// Copied from Dart SDK
 class _SystemHash {

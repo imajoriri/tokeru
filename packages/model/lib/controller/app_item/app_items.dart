@@ -17,6 +17,7 @@ class AppItems extends _$AppItems {
   @override
   FutureOr<List<AppItem>> build() async {
     ref.watch(refreshControllerProvider);
+
     final user = ref.watch(userControllerProvider);
     if (user.hasError || user.valueOrNull == null) {
       return [];
@@ -84,6 +85,10 @@ class _AppItemsPagination extends _$AppItemsPagination {
     SchedulerBinding.instance.addPostFrameCallback((_) {
       loadDocuments();
     });
+    ref.onDispose(() {
+      _streamSub?.cancel();
+      _liveStreamSub?.cancel();
+    });
     return [];
   }
 
@@ -124,9 +129,11 @@ class _AppItemsPagination extends _$AppItemsPagination {
           // document only.
           // TODO: なぜ読んでいるかわからない。初回で2回呼ばれてしまう。
           await loadDocuments(getMore: false);
-        } else {
-          _streamSub?.cancel();
         }
+        // dataが空の時にlistenしなくなるためコメントアウト。
+        //  else {
+        //   _streamSub?.cancel();
+        // }
       } else {
         _setLiveListener(query);
       }
