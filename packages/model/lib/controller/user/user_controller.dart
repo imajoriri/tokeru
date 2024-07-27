@@ -38,10 +38,8 @@ class UserController extends _$UserController {
   /// Google アカウントでログインする。
   Future<void> signInWithGoogle() async {
     final GoogleSignInAccount? googleUser = await GoogleSignIn(
-      // TODO: 環境変数にする。
-      clientId:
-          "998557904358-6eq6dvardchiqtjtmtj9g3dmvkk5k2tn.apps.googleusercontent.com",
-    ).signIn();
+            clientId: const String.fromEnvironment('google_client_id'))
+        .signIn();
 
     // Obtain the auth details from the request
     final GoogleSignInAuthentication? googleAuth =

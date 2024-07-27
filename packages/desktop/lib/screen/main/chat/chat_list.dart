@@ -8,7 +8,6 @@ class _ChatList extends HookConsumerWidget {
     final appItems = ref.watch(appItemsProvider);
 
     return appItems.when(
-      skipLoadingOnReload: true,
       data: (appItems) {
         return NotificationListener<ScrollNotification>(
           onNotification: (notification) {
