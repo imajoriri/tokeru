@@ -133,6 +133,7 @@ class _AppItemsPagination extends _$AppItemsPagination {
         } else {
           _streamSub?.cancel();
         }
+      } else {
         _setLiveListener(query);
       }
     });
