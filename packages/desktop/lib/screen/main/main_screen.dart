@@ -12,6 +12,8 @@ class MainScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final showLoginButton =
+        ref.watch(userControllerProvider).valueOrNull?.isAnonymous ?? true;
     return Scaffold(
       backgroundColor: context.appColors.surface,
       floatingActionButton: FloatingActionButton.small(
@@ -61,11 +63,16 @@ class MainScreen extends ConsumerWidget {
                   padding: EdgeInsets.all(context.appSpacing.medium),
                   child: TextButtonSmall(
                     onPressed: () {
-                      ref
-                          .read(userControllerProvider.notifier)
-                          .signInWithGoogle();
+                      if (showLoginButton) {
+                        ref
+                            .read(userControllerProvider.notifier)
+                            .signInWithGoogle();
+                        return;
+                      }
+
+                      ref.read(userControllerProvider.notifier).signOut();
                     },
-                    child: const Text('Login'),
+                    child: Text(showLoginButton ? 'Login' : 'Logout'),
                   ),
                 ),
                 // todo list
