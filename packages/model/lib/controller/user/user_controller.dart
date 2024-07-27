@@ -57,13 +57,9 @@ class UserController extends _$UserController {
       idToken: googleAuth?.idToken,
     );
 
-    await auth.FirebaseAuth.instance.signInWithCredential(credential);
-    final linkCredential =
-        auth.GoogleAuthProvider.credential(idToken: state.requireValue.idToken);
-
     try {
       await auth.FirebaseAuth.instance.currentUser
-          ?.linkWithCredential(linkCredential);
+          ?.linkWithCredential(credential);
     } on auth.FirebaseAuthException catch (e) {
       switch (e.code) {
         case "provider-already-linked":
@@ -82,6 +78,9 @@ class UserController extends _$UserController {
           Exception("Unknown error.");
       }
     } finally {
+      // すでにログイン済みのユーザーの場合、`linkWithCredential`でエラーになる。
+      // その場合は、`signInWithCredential`でログインする。
+      await auth.FirebaseAuth.instance.signInWithCredential(credential);
       ref.invalidateSelf();
     }
   }
@@ -89,6 +88,12 @@ class UserController extends _$UserController {
   /// サインアウトする。
   Future<void> signOut() async {
     await auth.FirebaseAuth.instance.signOut();
+    const clientId = String.fromEnvironment('google_client_id');
+    if (clientId.isEmpty) {
+      throw Exception('Google client id is not set.');
+    }
+
+    await GoogleSignIn(clientId: clientId).signOut();
     ref.invalidateSelf();
   }
 }
