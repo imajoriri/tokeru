@@ -7,5 +7,5 @@ final firestoreProvider = Provider((ref) => FirebaseFirestore.instance);
 
 @Riverpod(keepAlive: true)
 DocumentReference userDocument(UserDocumentRef ref, String userId) {
-  return ref.read(firestoreProvider).collection('users').doc(userId);
+  return ref.watch(firestoreProvider).collection('users').doc(userId);
 }
