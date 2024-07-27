@@ -51,6 +51,11 @@ class UserController extends _$UserController {
     final GoogleSignInAuthentication? googleAuth =
         await googleUser?.authentication;
 
+    // acceccTokenとidTokenがない場合はキャンセルとみなして処理を終了する
+    if (googleAuth?.accessToken == null || googleAuth?.idToken == null) {
+      return;
+    }
+
     // Create a new credential
     final credential = auth.GoogleAuthProvider.credential(
       accessToken: googleAuth?.accessToken,
