@@ -58,10 +58,12 @@ class UserController extends _$UserController {
     );
 
     await auth.FirebaseAuth.instance.signInWithCredential(credential);
+    final linkCredential =
+        auth.GoogleAuthProvider.credential(idToken: state.requireValue.idToken);
 
     try {
       await auth.FirebaseAuth.instance.currentUser
-          ?.linkWithCredential(credential);
+          ?.linkWithCredential(linkCredential);
     } on auth.FirebaseAuthException catch (e) {
       switch (e.code) {
         case "provider-already-linked":

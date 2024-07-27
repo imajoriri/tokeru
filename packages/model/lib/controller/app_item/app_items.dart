@@ -22,8 +22,8 @@ class AppItems extends _$AppItems {
       return [];
     }
     final repository =
-        ref.read(appItemRepositoryProvider(user.requireValue.id));
-    final query = repository.query;
+        ref.watch(appItemRepositoryProvider(user.requireValue.id));
+    final query = repository.chatQuery(userId: user.requireValue.id);
 
     final documents = ref.watch(_appItemsPaginationProvider(query));
     final items = documents.map((doc) {
@@ -47,7 +47,7 @@ class AppItems extends _$AppItems {
     }
     final repository =
         ref.read(appItemRepositoryProvider(user.requireValue.id));
-    final query = repository.query;
+    final query = repository.chatQuery(userId: user.requireValue.id);
     ref.read(_appItemsPaginationProvider(query).notifier).loadDocuments();
   }
 
@@ -81,15 +81,9 @@ class _AppItemsPagination extends _$AppItemsPagination {
 
   @override
   List<DocumentSnapshot> build(Query<Map<String, dynamic>> query) {
-    final user = ref.watch(userControllerProvider);
-    if (user.hasError || user.valueOrNull == null) {
-      return [];
-    }
-
     SchedulerBinding.instance.addPostFrameCallback((_) {
       loadDocuments();
     });
-
     return [];
   }
 
