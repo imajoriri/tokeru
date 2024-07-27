@@ -46,7 +46,7 @@ jobs:
       - name: "Install the Certificates"
         run: |
           app-store-connect certificates list \
-            --type IOS_DISTRIBUTION \
+            --type DISTRIBUTION \
             --certificate-key=@file:$RUNNER_TEMP/cert_key \
             --save
 
