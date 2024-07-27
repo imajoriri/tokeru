@@ -1,4 +1,6 @@
-# melos_managed_dependency_overrides: tokeru_widgets
+# melos_managed_dependency_overrides: tokeru_widgets,tokeru_model
 dependency_overrides:
+  tokeru_model:
+    path: ../model
   tokeru_widgets:
     path: ../widgets
