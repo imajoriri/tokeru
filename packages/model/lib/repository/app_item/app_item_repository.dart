@@ -21,11 +21,16 @@ class AppItemRepository {
   final Ref ref;
   final String userId;
 
-  Query<Map<String, dynamic>> get query => ref
-      .read(userDocumentProvider(userId))
-      .collection(_collectionName)
-      .where('type', isEqualTo: 'chat')
-      .orderBy('createdAt', descending: true);
+  Query<Map<String, dynamic>> chatQuery({
+    required String userId,
+  }) {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection(_collectionName)
+        .where('type', isEqualTo: 'chat')
+        .orderBy('createdAt', descending: true);
+  }
 
   Future<List<AppTodoItem>> fetchTodos({
     bool isDone = false,
