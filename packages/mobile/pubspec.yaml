@@ -11,16 +11,22 @@ dependencies:
   flutter:
     sdk: flutter
 
-  hooks_riverpod: 2.4.10
+  # Riverpod
+  hooks_riverpod: 2.5.1
   flutter_hooks: ^0.20.5
   riverpod_annotation: ^2.2.1
   riverpod_generator: ^2.3.11
+
+  # freezed
   freezed_annotation: ^2.4.1
   json_annotation: ^4.8.1
+
+  # logger
   logger: ^2.0.2+1
 
   # melos
   tokeru_widgets:
+  tokeru_model:
 
   cupertino_icons: ^1.0.6
 
