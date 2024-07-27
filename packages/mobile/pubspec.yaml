@@ -11,6 +11,9 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # firebase
+  firebase_core: ^2.31.0
+
   # Riverpod
   hooks_riverpod: 2.5.1
   flutter_hooks: ^0.20.5

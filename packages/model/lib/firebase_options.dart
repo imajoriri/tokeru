@@ -31,12 +31,9 @@ class DefaultFirebaseOptions {
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return flavorEnv == Flavor.prod.name ? prod : dev;
       case TargetPlatform.macOS:
-        return flavorEnv == Flavor.prod.name ? macosProd : macosDev;
+        return flavorEnv == Flavor.prod.name ? prod : dev;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -54,7 +51,7 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions macosDev = FirebaseOptions(
+  static const FirebaseOptions dev = FirebaseOptions(
     apiKey: 'AIzaSyBASHnaNJ0ry00TlXoPeJVQAZkv2cd414w',
     appId: '1:998557904358:ios:26798c3f7837a6d617fa27',
     messagingSenderId: '998557904358',
@@ -63,27 +60,9 @@ class DefaultFirebaseOptions {
     iosBundleId: 'com.tokeru.macos.dev',
   );
 
-  static const FirebaseOptions macosProd = FirebaseOptions(
+  static const FirebaseOptions prod = FirebaseOptions(
     apiKey: 'AIzaSyDlDMQe3k9nq3I9LTTEEO4xpBJogJyt5rY',
     appId: '1:93729662960:ios:730348869192c221f81f35',
-    messagingSenderId: '93729662960',
-    projectId: 'quick-chat-pro',
-    storageBucket: 'quick-chat-pro.appspot.com',
-    iosBundleId: 'com.tokeru.macos.prod',
-  );
-
-  static const FirebaseOptions iosDev = FirebaseOptions(
-    apiKey: 'AIzaSyBASHnaNJ0ry00TlXoPeJVQAZkv2cd414w',
-    appId: '1:998557904358:ios:863f947a495d188817fa27',
-    messagingSenderId: '998557904358',
-    projectId: 'quick-chat-dev-a442c',
-    storageBucket: 'quick-chat-dev-a442c.appspot.com',
-    iosBundleId: 'com.tokeru.macos.dev',
-  );
-
-  static const FirebaseOptions iosProd = FirebaseOptions(
-    apiKey: 'AIzaSyDlDMQe3k9nq3I9LTTEEO4xpBJogJyt5rY',
-    appId: '1:93729662960:ios:d90accbf72c4c900f81f35',
     messagingSenderId: '93729662960',
     projectId: 'quick-chat-pro',
     storageBucket: 'quick-chat-pro.appspot.com',
