@@ -35,6 +35,6 @@ class ReadRepository {
   /// 既読時刻を更新する。
   Future<void> update(DateTime readAt) async {
     final doc = ref.read(userDocumentProvider(userId));
-    await doc.update({_readAt: readAt.millisecondsSinceEpoch});
+    await doc.set({_readAt: readAt.millisecondsSinceEpoch});
   }
 }
