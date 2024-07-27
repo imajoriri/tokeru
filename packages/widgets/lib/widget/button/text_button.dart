@@ -19,6 +19,7 @@ class TextButtonSmall extends HookWidget {
     final hover = useState(false);
     final focus = useState(false);
     return GestureDetector(
+      onTap: onPressed,
       child: FocusableActionDetector(
         mouseCursor: SystemMouseCursors.click,
         actions: {

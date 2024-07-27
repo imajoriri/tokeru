@@ -7,7 +7,7 @@ part of 'panel_screen_controller.dart';
 // **************************************************************************
 
 String _$panelScreenControllerHash() =>
-    r'45360a7443f7b278dba998b96a8f8519019459a5';
+    r'90e6970de28e497e6197a34638a22f4becf02717';
 
 /// [PanelScreen]のコントローラー。
 ///
