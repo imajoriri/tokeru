@@ -7,8 +7,12 @@ class User {
   /// idToken
   String idToken;
 
+  /// 匿名ログインかどうか。
+  bool isAnonymous;
+
   User({
     required this.id,
     required this.idToken,
+    required this.isAnonymous,
   });
 }
