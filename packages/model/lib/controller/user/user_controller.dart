@@ -44,28 +44,29 @@ class UserController extends _$UserController {
       throw Exception('Google client id is not set.');
     }
 
-    final GoogleSignInAccount? googleUser =
-        await GoogleSignIn(clientId: clientId).signIn();
+    final googleUser = await GoogleSignIn(clientId: clientId).signIn();
 
     // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
+    final googleAuth = await googleUser?.authentication;
 
-    // acceccTokenとidTokenがない場合はキャンセルとみなして処理を終了する
-    if (googleAuth?.accessToken == null || googleAuth?.idToken == null) {
+    // googleAuthがない場合はキャンセルとみなして処理を終了する
+    if (googleAuth == null) {
       return;
     }
 
     // Create a new credential
     final credential = auth.GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
     );
 
     try {
       await auth.FirebaseAuth.instance.currentUser
           ?.linkWithCredential(credential);
     } on auth.FirebaseAuthException catch (e) {
+      // すでにログイン済みのユーザーの場合、`linkWithCredential`でエラーになる。
+      // その場合は、`signInWithCredential`でログインする。
+      await auth.FirebaseAuth.instance.signInWithCredential(credential);
       switch (e.code) {
         case "provider-already-linked":
           Exception("The provider has already been linked to the user.");
@@ -83,9 +84,6 @@ class UserController extends _$UserController {
           Exception("Unknown error.");
       }
     } finally {
-      // すでにログイン済みのユーザーの場合、`linkWithCredential`でエラーになる。
-      // その場合は、`signInWithCredential`でログインする。
-      await auth.FirebaseAuth.instance.signInWithCredential(credential);
       ref.invalidateSelf();
     }
   }
@@ -93,12 +91,6 @@ class UserController extends _$UserController {
   /// サインアウトする。
   Future<void> signOut() async {
     await auth.FirebaseAuth.instance.signOut();
-    const clientId = String.fromEnvironment('google_client_id');
-    if (clientId.isEmpty) {
-      throw Exception('Google client id is not set.');
-    }
-
-    await GoogleSignIn(clientId: clientId).signOut();
     ref.invalidateSelf();
   }
 }
