@@ -61,7 +61,7 @@ class MainScreen extends ConsumerWidget {
                 // login button
                 Padding(
                   padding: EdgeInsets.all(context.appSpacing.medium),
-                  child: TextButtonSmall(
+                  child: AppTextButton(
                     onPressed: () {
                       if (showLoginButton) {
                         ref
@@ -72,7 +72,7 @@ class MainScreen extends ConsumerWidget {
 
                       ref.read(userControllerProvider.notifier).signOut();
                     },
-                    child: Text(showLoginButton ? 'Login' : 'Logout'),
+                    text: Text(showLoginButton ? 'Login' : 'Logout'),
                   ),
                 ),
                 // todo list

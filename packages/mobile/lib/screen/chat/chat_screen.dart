@@ -25,7 +25,7 @@ class ChatScreen extends HookConsumerWidget {
         children: [
           Padding(
             padding: EdgeInsets.all(context.appSpacing.medium),
-            child: TextButtonSmall(
+            child: AppTextButton(
               onPressed: () {
                 if (showLoginButton) {
                   ref.read(userControllerProvider.notifier).signInWithGoogle();
@@ -34,7 +34,7 @@ class ChatScreen extends HookConsumerWidget {
 
                 ref.read(userControllerProvider.notifier).signOut();
               },
-              child: Text(showLoginButton ? 'Login' : 'Logout'),
+              text: Text(showLoginButton ? 'Login' : 'Logout'),
             ),
           ),
           Expanded(
@@ -74,9 +74,7 @@ class ChatScreen extends HookConsumerWidget {
                   padding: EdgeInsets.all(context.appSpacing.smallX),
                   child: TextField(
                     controller: textEditingController,
-                    onTapOutside: (event) {
-                      FocusScope.of(context).unfocus();
-                    },
+                    maxLines: null,
                     decoration: InputDecoration(
                       hintText: 'Message',
                       border: OutlineInputBorder(
