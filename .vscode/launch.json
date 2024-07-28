@@ -30,7 +30,7 @@
       "program": "packages/mobile/lib/main.dart",
       "request": "launch",
       "type": "dart",
-      "args": ["--dart-define-from-file=dart_defines/dev.json"]
+      "args": ["--dart-define-from-file=dart_defines/prod.json"]
     }
   ]
 }
