@@ -146,13 +146,13 @@ class _EmptyState extends ConsumerWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
-            TextButtonSmall(
+            AppTextButton(
               onPressed: () {
                 ref
                     .read(todoControllerProvider.notifier)
                     .addTodoWithIndex(index: 0);
               },
-              child: const Text('Add To-Do'),
+              text: const Text('Add To-Do'),
             ),
           ],
         ),
