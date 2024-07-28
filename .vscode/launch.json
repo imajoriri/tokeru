@@ -12,21 +12,21 @@
       "args": ["--dart-define-from-file=dart_defines/dev.json"]
     },
     {
-      "name": "macos prod (profile mode)",
+      "name": "macos prod",
       "program": "packages/desktop/lib/main.dart",
       "request": "launch",
       "type": "dart",
-      "args": ["--dart-define-from-file=dart_defines/dev.json"]
+      "args": ["--dart-define-from-file=dart_defines/prod.json"]
     },
     {
-      "name": "mobile dev",
+      "name": "ios dev",
       "program": "packages/mobile/lib/main.dart",
       "request": "launch",
       "type": "dart",
       "args": ["--dart-define-from-file=dart_defines/dev.json"]
     },
     {
-      "name": "mobile prod (profile mode)",
+      "name": "ios prod",
       "program": "packages/mobile/lib/main.dart",
       "request": "launch",
       "type": "dart",
