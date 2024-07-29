@@ -18,7 +18,6 @@ class UserController extends _$UserController {
     if (currentUser != null) {
       return User(
         id: currentUser.uid,
-        idToken: await currentUser.getIdToken() ?? '',
         isAnonymous: currentUser.isAnonymous,
       );
     }
@@ -28,7 +27,6 @@ class UserController extends _$UserController {
           await auth.FirebaseAuth.instance.signInAnonymously();
       return User(
         id: userCredential.user!.uid,
-        idToken: await userCredential.user!.getIdToken() ?? '',
         isAnonymous: true,
       );
     } on auth.FirebaseAuthException catch (e, s) {
@@ -78,6 +76,34 @@ class UserController extends _$UserController {
           Exception(
               "The account corresponding to the credential already exists, "
               "or is already linked to a Firebase User.");
+          break;
+        // See the API reference for the full list of error codes.
+        default:
+          Exception("Unknown error.");
+      }
+    } finally {
+      ref.invalidateSelf();
+    }
+  }
+
+  /// Apple sign in でログインする。
+  Future<void> signInWithApple() async {
+    try {
+      await auth.FirebaseAuth.instance.currentUser
+          ?.linkWithProvider(auth.AppleAuthProvider());
+    } on auth.FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case "credential-already-in-use":
+        case "provider-already-linked":
+          // すでにlink済みの場合、`linkWithProvider`でエラーになる。
+          // その場合には、`signInWithCredential`でログインするとエラーになるため、
+          // `signInWithProvider`を使うが、ログインダイアログが2回出てしまうため、いずれ改善したい。
+          await auth.FirebaseAuth.instance
+              .signInWithProvider(auth.AppleAuthProvider());
+          Exception("The provider has already been linked to the user.");
+          break;
+        case "invalid-credential":
+          Exception("The provider's credential is not valid.");
           break;
         // See the API reference for the full list of error codes.
         default:

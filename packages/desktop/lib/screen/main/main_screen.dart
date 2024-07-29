@@ -66,7 +66,7 @@ class MainScreen extends ConsumerWidget {
                       if (showLoginButton) {
                         ref
                             .read(userControllerProvider.notifier)
-                            .signInWithGoogle();
+                            .signInWithApple();
                         return;
                       }
 
