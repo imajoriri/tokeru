@@ -46,7 +46,7 @@ class AppButton extends HookWidget {
     }
 
     const duration = Duration(milliseconds: 150);
-    const bounceDuration = Duration(milliseconds: 60);
+    const bounceDuration = Duration(milliseconds: 200);
 
     void onInvoke() {
       if (onPressed == null) {
@@ -56,10 +56,9 @@ class AppButton extends HookWidget {
         pressed.value = true;
       }
       onPressed?.call();
-      // 1秒後に元に戻す
-      Future.delayed(duration, () {
+      if (context.mounted) {
         pressed.value = false;
-      });
+      }
       return;
     }
 
@@ -84,6 +83,7 @@ class AppButton extends HookWidget {
           onTapCancel: () => pressed.value = false,
           child: AnimatedScale(
             duration: bounceDuration,
+            curve: Curves.easeOutExpo,
             scale: pressed.value && enabled ? 0.95 : 1.0,
             child: Stack(
               children: [
