@@ -28,7 +28,7 @@ class ChatScreen extends HookConsumerWidget {
             child: AppTextButton(
               onPressed: () {
                 if (showLoginButton) {
-                  ref.read(userControllerProvider.notifier).signInWithGoogle();
+                  ref.read(userControllerProvider.notifier).signInWithApple();
                   return;
                 }
 
