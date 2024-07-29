@@ -1,7 +1,7 @@
-flavor=prod
-appName=Tokeru
-appIdSuffix=prod
-google_client_id=93729662960-rggstu04j4jsv8jro046vqrcrr8tkhhc.apps.googleusercontent.com
-google_reversed_client_id=com.googleusercontent.apps.93729662960-rggstu04j4jsv8jro046vqrcrr8tkhhc
+flavor=dev
+appName=devTokeru
+appIdSuffix=dev
+google_client_id=998557904358-6eq6dvardchiqtjtmtj9g3dmvkk5k2tn.apps.googleusercontent.com
+google_reversed_client_id=com.googleusercontent.apps.998557904358-6eq6dvardchiqtjtmtj9g3dmvkk5k2tn
 FLUTTER_WEB_AUTO_DETECT=true
 FLUTTER_WEB_CANVASKIT_URL=https://www.gstatic.com/flutter-canvaskit/04817c99c9fd4956f27505204f7e344335810aed/
