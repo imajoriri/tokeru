@@ -27,6 +27,9 @@ dependencies:
   # logger
   logger: ^2.0.2+1
 
+  # url_launcher
+  url_launcher: ^6.2.5
+
   # melos
   tokeru_widgets:
   tokeru_model:

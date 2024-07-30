@@ -9,6 +9,9 @@ class AppButton extends HookWidget {
     required this.child,
     required this.containerColor,
     required this.backgroundColor,
+    this.shape = const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(8)),
+    ),
     this.onPressed,
   });
 
@@ -25,6 +28,8 @@ class AppButton extends HookWidget {
   final void Function()? onPressed;
 
   bool get enabled => onPressed != null;
+
+  final ShapeBorder shape;
 
   @override
   Widget build(BuildContext context) {
@@ -95,9 +100,9 @@ class AppButton extends HookWidget {
                   bottom: 0,
                   child: AnimatedContainer(
                     duration: duration,
-                    decoration: BoxDecoration(
+                    decoration: ShapeDecoration(
                       color: backgroundColor,
-                      borderRadius: BorderRadius.circular(8),
+                      shape: shape,
                     ),
                   ),
                 ),
@@ -110,9 +115,9 @@ class AppButton extends HookWidget {
                   bottom: 0,
                   child: AnimatedContainer(
                     duration: duration,
-                    decoration: BoxDecoration(
+                    decoration: ShapeDecoration(
                       color: overlayColor,
-                      borderRadius: BorderRadius.circular(8),
+                      shape: shape,
                     ),
                   ),
                 ),
