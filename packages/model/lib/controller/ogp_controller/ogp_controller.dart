@@ -20,7 +20,15 @@ class OgpController extends _$OgpController {
   FutureOr<Ogp> build({required String url}) async {
     ref.watch(refreshControllerProvider);
 
-    final response = await _dio.get(url);
+    final response = await _dio.get(
+      url,
+      options: Options(
+        headers: {
+          // X(Twitter)でこのヘッダーがないとOGPが取得できない。
+          "User-Agent": "bot",
+        },
+      ),
+    );
 
     // レスポンスが200以外の場合は例外を投げる
     if (response.statusCode != 200) {
