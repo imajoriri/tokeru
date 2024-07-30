@@ -10,7 +10,7 @@ class Ogp {
   final String description;
 
   /// 画像URL。
-  final String imageUrl;
+  final String? imageUrl;
 
   const Ogp({
     required this.url,
