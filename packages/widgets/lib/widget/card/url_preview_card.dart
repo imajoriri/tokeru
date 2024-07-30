@@ -32,7 +32,7 @@ class UrlPreviewCard extends StatelessWidget {
     required this.url,
     required this.title,
     required this.description,
-    required this.imageUrl,
+    this.imageUrl,
     this.onTap,
   });
 
@@ -40,7 +40,7 @@ class UrlPreviewCard extends StatelessWidget {
   final String url;
   final String title;
   final String description;
-  final String imageUrl;
+  final String? imageUrl;
 
   /// タップ時の処理。
   final void Function()? onTap;
@@ -85,23 +85,27 @@ class UrlPreviewCard extends StatelessWidget {
                 ),
               ),
               SizedBox(width: context.appSpacing.medium),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: CachedNetworkImage(
-                  imageUrl: imageUrl,
-                  width: _ogpImageWidth,
-                  height: _ogpImageHeight,
-                  fadeInDuration: const Duration(milliseconds: 150),
-                  fadeOutDuration: const Duration(milliseconds: 150),
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => Container(
-                    color: context.appColors.skeleton,
+              if (imageUrl != null)
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: CachedNetworkImage(
+                    imageUrl: imageUrl!,
                     width: _ogpImageWidth,
                     height: _ogpImageHeight,
+                    fadeInDuration: const Duration(milliseconds: 150),
+                    fadeOutDuration: const Duration(milliseconds: 150),
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => Container(
+                      color: context.appColors.skeleton,
+                      width: _ogpImageWidth,
+                      height: _ogpImageHeight,
+                    ),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
                   ),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
-                ),
-              ),
+                )
+              else
+                const SizedBox(width: _ogpImageWidth, height: _ogpImageHeight),
             ],
           ),
         ),
