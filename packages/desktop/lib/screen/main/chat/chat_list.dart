@@ -17,25 +17,27 @@ class _ChatList extends HookConsumerWidget {
             }
             return false;
           },
-          child: ListView.builder(
-            itemCount: appItems.length,
-            shrinkWrap: true,
-            reverse: true,
-            itemBuilder: (context, index) {
-              final appItem = appItems[index];
-              final isLast = index == 0;
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _TodoDivider(index: index),
-                  switch (appItem) {
-                    AppChatItem() => _ChatListItemChat(appItem: appItem),
-                    _ => throw UnimplementedError(),
-                  },
-                  if (isLast) const _BottomSpace(),
-                ],
-              );
-            },
+          child: SelectionArea(
+            child: ListView.builder(
+              itemCount: appItems.length,
+              shrinkWrap: true,
+              reverse: true,
+              itemBuilder: (context, index) {
+                final appItem = appItems[index];
+                final isLast = index == 0;
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _TodoDivider(index: index),
+                    switch (appItem) {
+                      AppChatItem() => _ChatListItemChat(appItem: appItem),
+                      _ => throw UnimplementedError(),
+                    },
+                    if (isLast) const _BottomSpace(),
+                  ],
+                );
+              },
+            ),
           ),
         );
       },
@@ -150,46 +152,50 @@ class _ChatListItemChat extends ConsumerWidget {
           throw Exception('Could not launch ${link.toString()}');
         }
       },
-      bottomWidget: links.isEmpty
-          ? null
-          : ListView.separated(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                final uri = links[index];
-                final asyncValue =
-                    ref.watch(ogpControllerProvider(url: uri.toString()));
-                return AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 150),
-                  child: asyncValue.when(
-                    data: (ogp) {
-                      return UrlPreviewCard(
-                        key: ValueKey(uri.toString()),
-                        title: ogp.title,
-                        description: ogp.description,
-                        imageUrl: ogp.imageUrl,
-                        url: uri.toString(),
-                        onTap: () async {
-                          if (await canLaunchUrl(uri)) {
-                            await launchUrl(uri);
-                          }
-                        },
-                      );
-                    },
-                    loading: () {
-                      return const UrlPreviewCard.loading();
-                    },
-                    error: (error, _) {
-                      return const SizedBox.shrink();
-                    },
-                  ),
-                );
-              },
-              separatorBuilder: (context, index) {
-                return SizedBox(height: context.appSpacing.small);
-              },
-              itemCount: links.length,
-            ),
+      bottomWidget: SelectionContainer.disabled(
+        child: links.isEmpty
+            ? const SizedBox.shrink()
+            : ListView.separated(
+                padding:
+                    EdgeInsets.symmetric(vertical: context.appSpacing.small),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  final uri = links[index];
+                  final asyncValue =
+                      ref.watch(ogpControllerProvider(url: uri.toString()));
+                  return AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 150),
+                    child: asyncValue.when(
+                      data: (ogp) {
+                        return UrlPreviewCard(
+                          key: ValueKey(uri.toString()),
+                          title: ogp.title,
+                          description: ogp.description,
+                          imageUrl: ogp.imageUrl,
+                          url: uri.toString(),
+                          onTap: () async {
+                            if (await canLaunchUrl(uri)) {
+                              await launchUrl(uri);
+                            }
+                          },
+                        );
+                      },
+                      loading: () {
+                        return const UrlPreviewCard.loading();
+                      },
+                      error: (error, _) {
+                        return const SizedBox.shrink();
+                      },
+                    ),
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return SizedBox(height: context.appSpacing.small);
+                },
+                itemCount: links.length,
+              ),
+      ),
     );
   }
 }
