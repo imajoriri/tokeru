@@ -36,9 +36,6 @@ dependencies:
   freezed_annotation: ^2.4.1
   json_annotation: ^4.8.1
 
-  # metadata_fetch
-  metadata_fetch: ^0.4.1
-
   # crypto
   crypto: ^3.0.3
 
