@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:swipeable_page_route/swipeable_page_route.dart';
 import 'package:tokeru_model/controller/app_item/app_items.dart';
 import 'package:tokeru_model/controller/ogp_controller/ogp_controller.dart';
 import 'package:tokeru_model/controller/user/user_controller.dart';
@@ -38,6 +39,21 @@ class ChatScreen extends HookConsumerWidget {
               },
               text: Text(showLoginButton ? 'Login' : 'Logout'),
             ),
+          ),
+          AppTextButton(
+            onPressed: () {
+              Navigator.of(context).push(SwipeablePageRoute(
+                builder: (BuildContext context) => Scaffold(
+                  appBar: AppBar(
+                    title: const Text('Chat'),
+                  ),
+                  body: const Center(
+                    child: Text('Chat'),
+                  ),
+                ),
+              ));
+            },
+            text: const Text('push'),
           ),
           Expanded(
             child: chats.when(
