@@ -105,7 +105,7 @@ class UrlPreviewCard extends StatelessWidget {
                   ),
                 )
               else
-                const SizedBox(width: _ogpImageWidth, height: _ogpImageHeight),
+                const SizedBox(width: 0, height: _ogpImageHeight),
             ],
           ),
         ),
