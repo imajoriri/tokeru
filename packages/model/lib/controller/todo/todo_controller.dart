@@ -20,29 +20,43 @@ class TodoController extends _$TodoController {
   Timer? _deleteDonesDebounce;
   Timer? _updateOrderDebounce;
 
+  StreamSubscription? _streamSub;
+
   @override
-  FutureOr<List<AppTodoItem>> build() async {
+  Stream<List<AppTodoItem>> build() {
     ref.watch(refreshControllerProvider);
     final user = ref.watch(userControllerProvider);
     if (user.hasError || user.valueOrNull == null) {
-      return [];
+      return const Stream.empty();
     }
-    final repository = ref.read(appItemRepositoryProvider(user.value!.id));
-    final todos = await repository.fetchTodos(
-      isDone: false,
-    );
-    // sort
-    todos.sort((a, b) {
-      return a.index.compareTo(b.index);
+
+    _listen();
+
+    ref.onDispose(() {
+      _streamSub?.cancel();
     });
-    return todos;
+    return const Stream.empty();
+  }
+
+  _listen() {
+    final user = ref.watch(userControllerProvider);
+    final repository = ref.read(appItemRepositoryProvider(user.value!.id));
+    final todoQuery = repository.todoQuery(userId: user.requireValue.id);
+    _streamSub = todoQuery.snapshots().listen((event) async {
+      state = AsyncData(
+        event.docs
+            .map((doc) => AppTodoItem.fromJson(doc.data()..['id'] = doc.id))
+            .toList()
+            .sorted((a, b) => a.index.compareTo(b.index)),
+      );
+    });
   }
 
   /// 現在のListの順番をindexとしてデータを更新する。
   ///
   /// 新規作成後や削除後に並び替えをリセットするために使用する。
   /// ショートカットでの移動時に連続で呼ばれる可能性があるため、APIの呼び出しはデバウンスしている。
-  Future<void> updateCurrentOrder() async {
+  Future<void> updateCurrentOrder({bool delay = true}) async {
     final user = ref.read(userControllerProvider);
     if (user.valueOrNull == null) {
       assert(false, 'user is null');
@@ -57,10 +71,48 @@ class TodoController extends _$TodoController {
     // 既存のデバウンスタイマーをキャンセル
     _updateOrderDebounce?.cancel();
 
-    _updateOrderDebounce = Timer(const Duration(milliseconds: 500), () async {
+    _updateOrderDebounce =
+        Timer(Duration(milliseconds: delay ? 500 : 0), () async {
       final repository = ref.read(appItemRepositoryProvider(user.value!.id));
       await repository.updateTodoOrder(todos: tmp);
     });
+  }
+
+  /// 特定のIndexに[AppTodoItem]を追加する。
+  ///
+  /// 特定のIndexにTodoを追加した後に、全てのTodoのindexを更新する。
+  /// [index]が配列の長さを超えている場合は、最後に追加される。
+  Future<void> addTodoWithIndex({
+    required int index,
+  }) async {
+    final user = ref.read(userControllerProvider);
+    if (user.valueOrNull == null) {
+      assert(false, 'user is null');
+      return;
+    }
+
+    final todo = AppTodoItem(
+      id: const Uuid().v4(),
+      title: '',
+      isDone: false,
+      index: index,
+      createdAt: DateTime.now(),
+    );
+    final todos = [...state.valueOrNull!];
+    todos.insert(index, todo);
+
+    // indexを更新。
+    for (var i = 0; i < todos.length; i++) {
+      todos[i] = todos[i].copyWith(index: i);
+    }
+
+    final repository = ref.read(appItemRepositoryProvider(user.value!.id));
+    try {
+      await repository.addAndUpdateOrder(addedTodo: todo, todos: todos);
+    } on Exception catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+    }
+    return;
   }
 
   /// [AppTodoItem]の更新。
@@ -87,36 +139,6 @@ class TodoController extends _$TodoController {
     } on Exception catch (e, s) {
       await FirebaseCrashlytics.instance.recordError(e, s);
     }
-  }
-
-  /// 特定のIndexに[AppTodoItem]を追加する。
-  ///
-  /// 特定のIndexにTodoを追加した後に、全てのTodoのindexを更新する。
-  /// [index]が配列の長さを超えている場合は、最後に追加される。
-  Future<void> addTodoWithIndex({
-    required int index,
-  }) async {
-    final user = ref.read(userControllerProvider);
-    if (user.valueOrNull == null) {
-      assert(false, 'user is null');
-      return;
-    }
-
-    final repository = ref.read(appItemRepositoryProvider(user.value!.id));
-    final todo = AppTodoItem(
-      id: const Uuid().v4(),
-      title: '',
-      isDone: false,
-      index: index,
-      createdAt: DateTime.now(),
-    );
-    final todos = [...state.valueOrNull!];
-    todos.insert(index, todo);
-    state = AsyncData(todos);
-
-    await repository.add(todo);
-
-    updateCurrentOrder();
   }
 
   /// [oldIndex]の[AppTodoItem]を[newIndex]に移動する
