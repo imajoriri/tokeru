@@ -169,12 +169,12 @@ class _Header extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 24, 24, 4),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             "To-Dos",
             style: context.appTextTheme.titleSmall,
           ),
+          SizedBox(width: context.appSpacing.small),
           AppIconButton.medium(
             icon: const Icon(Icons.add),
             tooltip: ShortcutActivatorType.newTodo.longLabel,
