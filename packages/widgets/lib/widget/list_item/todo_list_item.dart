@@ -9,8 +9,8 @@ class TodoListItem extends HookWidget {
   const TodoListItem({
     super.key,
     required this.isDone,
+    this.title,
     this.index,
-    this.controller,
     this.focusNode,
     this.autofocus = false,
     this.onDeleted,
@@ -25,12 +25,13 @@ class TodoListItem extends HookWidget {
 
   final bool isDone;
 
+  /// Todoのタイトル。nullの場合は空文字が表示される。
+  final String? title;
+
   /// [AppTodoItem]のリストのIndex。
   ///
   /// nullの場合、ドラッグアンドドロップのアイコンが表示されない。
   final int? index;
-
-  final TextEditingController? controller;
 
   final FocusNode? focusNode;
 
@@ -85,10 +86,10 @@ class TodoListItem extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final readOnly = onUpdatedTitle == null;
-    final effectiveController = controller ?? useTextEditingController();
+    final effectiveController = useTextEditingController(text: title);
     final effectiveFocusNode = focusNode ?? useFocusNode();
     effectiveFocusNode.skipTraversal = readOnly;
-    var text = controller?.text ?? '';
+    var text = title ?? '';
     final hasFocus = useState(effectiveFocusNode.hasFocus);
     final onHover = useState(false);
 
@@ -134,7 +135,7 @@ class TodoListItem extends HookWidget {
           debounce?.cancel();
         };
       },
-      [controller],
+      [effectiveController],
     );
 
     final backgroundColor = hasFocus.value && !readOnly

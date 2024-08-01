@@ -1,9 +1,12 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tokeru_desktop/controller/panel_screen/panel_screen_controller.dart';
 import 'package:tokeru_desktop/utils/panel_method_channel.dart';
+import 'package:tokeru_model/controller/todo/todo_controller.dart';
+import 'package:tokeru_model/model/analytics_event/analytics_event_name.dart';
 import 'package:tokeru_widgets/widgets.dart';
 
 final GlobalKey _childKey = GlobalKey();
@@ -58,9 +61,8 @@ class PanelScreen extends HookConsumerWidget {
     final textEditingConroller = useTextEditingController();
     final canSubmit = useState(textEditingConroller.text.isNotEmpty);
 
-    textEditingConroller.addListener(() {
-      canSubmit.value = textEditingConroller.text.isNotEmpty;
-
+    // Widget全体をリサイズする。
+    resize() {
       // リビルド後にサイズを取得しないと改行後のサイズが取得できない
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final RenderBox renderBox =
@@ -68,6 +70,16 @@ class PanelScreen extends HookConsumerWidget {
         final size = renderBox.size;
         panelMethodChannel.resizePanel(height: size.height.toInt());
       });
+    }
+
+    textEditingConroller.addListener(() {
+      canSubmit.value = textEditingConroller.text.isNotEmpty;
+      resize();
+    });
+
+    // todoが更新されたらリサイズする。
+    ref.listen(todoControllerProvider, (pre, next) {
+      resize();
     });
 
     // ウィンドウのリサイズが完了するまでにエラーが発生しないように、
@@ -148,11 +160,42 @@ class PanelScreen extends HookConsumerWidget {
                     ),
                   ],
                 ),
+
+                // todo。
+                const _Todo(),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class _Todo extends ConsumerWidget {
+  const _Todo();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final firstTodo = ref.watch(todoControllerProvider).valueOrNull?.first;
+
+    if (firstTodo == null) {
+      return const SizedBox();
+    }
+
+    return TodoListItem(
+      // Todoが変わった時にtitleも更新されてほしいので、keyを設定する。
+      key: ValueKey(firstTodo.id),
+      isDone: firstTodo.isDone,
+      title: firstTodo.title,
+      onToggleDone: (value) {
+        ref
+            .read(todoControllerProvider.notifier)
+            .toggleTodoDone(todoId: firstTodo.id);
+        FirebaseAnalytics.instance.logEvent(
+          name: AnalyticsEventName.toggleTodoDone.name,
+        );
+      },
     );
   }
 }

@@ -48,9 +48,8 @@ class TodayTodoList extends HookConsumerWidget {
                           isDone: todo.isDone,
                           index: index,
                           // 新規作成されたときに自動でフォーカスする。
-                          autofocus: true,
-                          controller:
-                              useTodoTextEditingController(text: todo.title),
+                          // autofocus: true,
+                          title: todo.title,
                           onDeleted: () async {
                             ref
                                 .read(todoControllerProvider.notifier)
@@ -76,10 +75,11 @@ class TodayTodoList extends HookConsumerWidget {
                             FocusScope.of(context).previousFocus();
                           },
                           onNewTodoBelow: () async {
-                            ref
+                            await ref
                                 .read(todoControllerProvider.notifier)
                                 .addTodoWithIndex(index: index + 1);
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                            WidgetsBinding.instance
+                                .addPostFrameCallback((_) async {
                               FocusScope.of(context).nextFocus();
                             });
                           },
