@@ -32,6 +32,18 @@ class AppItemRepository {
         .orderBy('createdAt', descending: true);
   }
 
+  Query<Map<String, dynamic>> todoQuery({
+    required String userId,
+    bool isDone = false,
+  }) {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection(_collectionName)
+        .where('isDone', isEqualTo: isDone)
+        .where('type', isEqualTo: 'todo');
+  }
+
   Future<List<AppTodoItem>> fetchTodos({
     bool isDone = false,
   }) {
@@ -115,6 +127,37 @@ class AppItemRepository {
             'index': todo.index,
           });
     }
+    await batch.commit();
+  }
+
+  /// 追加とソートを同時に行う。
+  Future<void> addAndUpdateOrder(
+      {required AppTodoItem addedTodo,
+      required List<AppTodoItem> todos}) async {
+    final firestore = ref.read(firestoreProvider);
+    final batch = firestore.batch();
+
+    // todoを追加する。
+    batch.set(
+      ref
+          .read(userDocumentProvider(userId))
+          .collection(_collectionName)
+          .doc(addedTodo.id),
+      addedTodo.toJson(),
+    );
+
+    // 並び順を更新する。
+    for (final todo in todos) {
+      batch.update(
+          ref
+              .read(userDocumentProvider(userId))
+              .collection(_collectionName)
+              .doc(todo.id),
+          {
+            'index': todo.index,
+          });
+    }
+
     await batch.commit();
   }
 }
