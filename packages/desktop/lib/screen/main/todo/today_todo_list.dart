@@ -49,8 +49,7 @@ class TodayTodoList extends HookConsumerWidget {
                           index: index,
                           // 新規作成されたときに自動でフォーカスする。
                           autofocus: true,
-                          controller:
-                              useTodoTextEditingController(text: todo.title),
+                          title: todo.title,
                           onDeleted: () async {
                             ref
                                 .read(todoControllerProvider.notifier)
