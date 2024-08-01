@@ -123,7 +123,10 @@ class _UnreadDivider extends StatelessWidget {
       children: [
         Expanded(child: Divider(color: context.appColors.primary)),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          padding: EdgeInsets.symmetric(
+            horizontal: context.appSpacing.small,
+            vertical: context.appSpacing.smallX,
+          ),
           child: Text(
             'New',
             style: context.appTextTheme.labelSmall

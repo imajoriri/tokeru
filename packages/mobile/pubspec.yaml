@@ -30,6 +30,9 @@ dependencies:
   # url_launcher
   url_launcher: ^6.2.5
 
+  # swipeable_page_route
+  swipeable_page_route: ^0.4.2
+
   # melos
   tokeru_widgets:
   tokeru_model:
