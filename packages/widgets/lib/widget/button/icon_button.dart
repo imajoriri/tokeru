@@ -19,11 +19,15 @@ class AppIconButton extends HookWidget {
   /// パディング。
   final EdgeInsets padding;
 
+  /// Borderを表示するかどうか。
+  final bool showBorder;
+
   const AppIconButton.medium({
     super.key,
     required this.icon,
     required this.onPressed,
     required this.tooltip,
+    this.showBorder = false,
   })  : iconSize = 20,
         padding = const EdgeInsets.all(8);
 
@@ -32,6 +36,7 @@ class AppIconButton extends HookWidget {
     required this.icon,
     required this.onPressed,
     required this.tooltip,
+    this.showBorder = false,
   })  : iconSize = 16,
         padding = const EdgeInsets.all(8);
 
@@ -41,8 +46,17 @@ class AppIconButton extends HookWidget {
       onPressed: onPressed,
       containerColor: context.appColors.onSurface,
       backgroundColor: context.appColors.surface,
-      child: Padding(
+      child: Container(
         padding: EdgeInsets.all(context.appSpacing.smallX),
+        // border
+        decoration: showBorder
+            ? BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: context.appColors.outline,
+                ),
+              )
+            : null,
         child: IconTheme.merge(
           child: icon,
           data: IconThemeData(
