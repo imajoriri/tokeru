@@ -44,7 +44,7 @@ class Chats extends _$Chats {
   }
 
   void fetchNext() {
-    final user = ref.watch(userControllerProvider);
+    final user = ref.read(userControllerProvider);
     if (user.hasError || user.valueOrNull == null) {
       return;
     }

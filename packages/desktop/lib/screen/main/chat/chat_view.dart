@@ -1,17 +1,15 @@
-import 'package:collection/collection.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:tokeru_desktop/widget/list_item/chat_list_item.dart';
 import 'package:tokeru_model/controller/chats/chats.dart';
-import 'package:tokeru_model/controller/ogp_controller/ogp_controller.dart';
 import 'package:tokeru_model/controller/read/read_controller.dart';
 import 'package:tokeru_model/controller/read_all/read_all_controller.dart';
 import 'package:tokeru_model/model.dart';
 import 'package:tokeru_desktop/widget/focus_nodes.dart';
 import 'package:tokeru_widgets/widgets.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 part 'chat_list.dart';
 part 'chat_text_field.dart';
