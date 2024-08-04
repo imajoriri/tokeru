@@ -7,7 +7,7 @@ part 'read_all_controller.g.dart';
 /// 全てのチャットを既読したかどうかを管理するコントローラー。
 @riverpod
 Future<bool> readAll(ReadAllRef ref) async {
-  final appItems = await ref.watch(chatsProvider().future);
+  final appItems = await ref.watch(chatsProvider.future);
   final latestAppItem = appItems.firstOrNull;
   // チャットがない場合はfalseを返す。
   if (latestAppItem == null) {

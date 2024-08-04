@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:tokeru_desktop/screen/main/thread/thread_view.dart';
 import 'package:tokeru_model/controller/url/url_controller.dart';
 import 'package:tokeru_desktop/screen/main/chat/chat_view.dart';
 import 'package:tokeru_desktop/screen/main/todo/todo_view.dart';
@@ -43,16 +44,10 @@ class MainScreen extends ConsumerWidget {
         children: [
           // Chat
           const Expanded(child: ChatView()),
+          const _Divider(),
 
-          Container(
-            width: 3,
-            height: double.infinity,
-            margin: EdgeInsets.symmetric(vertical: context.appSpacing.small),
-            decoration: BoxDecoration(
-              color: context.appColors.outline,
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
+          const Expanded(child: ThreadView()),
+          const _Divider(),
 
           // Todoリスト
           Expanded(
@@ -83,6 +78,23 @@ class MainScreen extends ConsumerWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _Divider extends StatelessWidget {
+  const _Divider();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 3,
+      height: double.infinity,
+      margin: EdgeInsets.symmetric(vertical: context.appSpacing.small),
+      decoration: BoxDecoration(
+        color: context.appColors.outline,
+        borderRadius: BorderRadius.circular(10),
       ),
     );
   }
