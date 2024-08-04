@@ -23,6 +23,9 @@ class _ChatList extends HookConsumerWidget {
                 ref.watch(readAllProvider).valueOrNull == true ? 0 : 32,
             readTime: ref.watch(readControllerProvider).valueOrNull,
             onRead: ref.read(readControllerProvider.notifier).markAsReadAsChat,
+            onThread: (chat) {
+              // TODO
+            },
           ),
         );
       },
