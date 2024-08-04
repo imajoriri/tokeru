@@ -34,9 +34,23 @@ class _SystemHash {
 const readRepositoryProvider = ReadRepositoryFamily();
 
 /// See also [readRepository].
-class ReadRepositoryFamily extends Family<ReadRepository> {
+class ReadRepositoryFamily extends Family {
   /// See also [readRepository].
   const ReadRepositoryFamily();
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'readRepositoryProvider';
 
   /// See also [readRepository].
   ReadRepositoryProvider call(
@@ -47,6 +61,7 @@ class ReadRepositoryFamily extends Family<ReadRepository> {
     );
   }
 
+  @visibleForOverriding
   @override
   ReadRepositoryProvider getProviderOverride(
     covariant ReadRepositoryProvider provider,
@@ -56,19 +71,26 @@ class ReadRepositoryFamily extends Family<ReadRepository> {
     );
   }
 
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
+  /// Enables overriding the behavior of this provider, no matter the parameters.
+  Override overrideWith(ReadRepository Function(ReadRepositoryRef ref) create) {
+    return _$ReadRepositoryFamilyOverride(this, create);
+  }
+}
+
+class _$ReadRepositoryFamilyOverride implements FamilyOverride {
+  _$ReadRepositoryFamilyOverride(this.overriddenFamily, this.create);
+
+  final ReadRepository Function(ReadRepositoryRef ref) create;
 
   @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+  final ReadRepositoryFamily overriddenFamily;
 
   @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'readRepositoryProvider';
+  ReadRepositoryProvider getProviderOverride(
+    covariant ReadRepositoryProvider provider,
+  ) {
+    return provider._copyWith(create);
+  }
 }
 
 /// See also [readRepository].
@@ -94,7 +116,7 @@ class ReadRepositoryProvider extends AutoDisposeProvider<ReadRepository> {
         );
 
   ReadRepositoryProvider._internal(
-    super._createNotifier, {
+    super.create, {
     required super.name,
     required super.dependencies,
     required super.allTransitiveDependencies,
@@ -107,7 +129,7 @@ class ReadRepositoryProvider extends AutoDisposeProvider<ReadRepository> {
 
   @override
   Override overrideWith(
-    ReadRepository Function(ReadRepositoryRef provider) create,
+    ReadRepository Function(ReadRepositoryRef ref) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -124,8 +146,27 @@ class ReadRepositoryProvider extends AutoDisposeProvider<ReadRepository> {
   }
 
   @override
+  (String,) get argument {
+    return (userId,);
+  }
+
+  @override
   AutoDisposeProviderElement<ReadRepository> createElement() {
     return _ReadRepositoryProviderElement(this);
+  }
+
+  ReadRepositoryProvider _copyWith(
+    ReadRepository Function(ReadRepositoryRef ref) create,
+  ) {
+    return ReadRepositoryProvider._internal(
+      (ref) => create(ref as ReadRepositoryRef),
+      name: name,
+      dependencies: dependencies,
+      allTransitiveDependencies: allTransitiveDependencies,
+      debugGetCreateSourceHash: debugGetCreateSourceHash,
+      from: from,
+      userId: userId,
+    );
   }
 
   @override
@@ -155,4 +196,4 @@ class _ReadRepositoryProviderElement
   String get userId => (origin as ReadRepositoryProvider).userId;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package

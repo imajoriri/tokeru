@@ -38,11 +38,25 @@ const appItemRepositoryProvider = AppItemRepositoryFamily();
 /// [AppItem]を扱うRepository
 ///
 /// Copied from [appItemRepository].
-class AppItemRepositoryFamily extends Family<AppItemRepository> {
+class AppItemRepositoryFamily extends Family {
   /// [AppItem]を扱うRepository
   ///
   /// Copied from [appItemRepository].
   const AppItemRepositoryFamily();
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'appItemRepositoryProvider';
 
   /// [AppItem]を扱うRepository
   ///
@@ -55,6 +69,7 @@ class AppItemRepositoryFamily extends Family<AppItemRepository> {
     );
   }
 
+  @visibleForOverriding
   @override
   AppItemRepositoryProvider getProviderOverride(
     covariant AppItemRepositoryProvider provider,
@@ -64,19 +79,27 @@ class AppItemRepositoryFamily extends Family<AppItemRepository> {
     );
   }
 
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
+  /// Enables overriding the behavior of this provider, no matter the parameters.
+  Override overrideWith(
+      AppItemRepository Function(AppItemRepositoryRef ref) create) {
+    return _$AppItemRepositoryFamilyOverride(this, create);
+  }
+}
+
+class _$AppItemRepositoryFamilyOverride implements FamilyOverride {
+  _$AppItemRepositoryFamilyOverride(this.overriddenFamily, this.create);
+
+  final AppItemRepository Function(AppItemRepositoryRef ref) create;
 
   @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+  final AppItemRepositoryFamily overriddenFamily;
 
   @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'appItemRepositoryProvider';
+  AppItemRepositoryProvider getProviderOverride(
+    covariant AppItemRepositoryProvider provider,
+  ) {
+    return provider._copyWith(create);
+  }
 }
 
 /// [AppItem]を扱うRepository
@@ -106,7 +129,7 @@ class AppItemRepositoryProvider extends AutoDisposeProvider<AppItemRepository> {
         );
 
   AppItemRepositoryProvider._internal(
-    super._createNotifier, {
+    super.create, {
     required super.name,
     required super.dependencies,
     required super.allTransitiveDependencies,
@@ -119,7 +142,7 @@ class AppItemRepositoryProvider extends AutoDisposeProvider<AppItemRepository> {
 
   @override
   Override overrideWith(
-    AppItemRepository Function(AppItemRepositoryRef provider) create,
+    AppItemRepository Function(AppItemRepositoryRef ref) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -136,8 +159,27 @@ class AppItemRepositoryProvider extends AutoDisposeProvider<AppItemRepository> {
   }
 
   @override
+  (String,) get argument {
+    return (userId,);
+  }
+
+  @override
   AutoDisposeProviderElement<AppItemRepository> createElement() {
     return _AppItemRepositoryProviderElement(this);
+  }
+
+  AppItemRepositoryProvider _copyWith(
+    AppItemRepository Function(AppItemRepositoryRef ref) create,
+  ) {
+    return AppItemRepositoryProvider._internal(
+      (ref) => create(ref as AppItemRepositoryRef),
+      name: name,
+      dependencies: dependencies,
+      allTransitiveDependencies: allTransitiveDependencies,
+      debugGetCreateSourceHash: debugGetCreateSourceHash,
+      from: from,
+      userId: userId,
+    );
   }
 
   @override
@@ -168,4 +210,4 @@ class _AppItemRepositoryProviderElement
   String get userId => (origin as AppItemRepositoryProvider).userId;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package

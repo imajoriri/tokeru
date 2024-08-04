@@ -28,9 +28,12 @@ dependencies:
   shared_preferences: ^2.2.3
 
   # Riverpod
-  riverpod: ^2.5.1
-  riverpod_annotation: ^2.2.1
-  riverpod_generator: ^2.3.11
+  riverpod: ^3.0.0-dev.3
+  riverpod_annotation: ^3.0.0-dev.3
+  riverpod_generator: ^3.0.0-dev.11
+  # riverpod: ^2.5.1
+  # riverpod_annotation: ^2.2.1
+  # riverpod_generator: ^2.3.11
 
   # freezed
   freezed_annotation: ^2.4.1

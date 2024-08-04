@@ -50,13 +50,27 @@ const ogpControllerProvider = OgpControllerFamily();
 /// 表示のたびにAPIを叩くのは非効率なので、keepAliveをtrueにしている。
 ///
 /// Copied from [OgpController].
-class OgpControllerFamily extends Family<AsyncValue<Ogp>> {
+class OgpControllerFamily extends Family {
   /// OGP情報を取得するコントローラー。
   ///
   /// 表示のたびにAPIを叩くのは非効率なので、keepAliveをtrueにしている。
   ///
   /// Copied from [OgpController].
   const OgpControllerFamily();
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'ogpControllerProvider';
 
   /// OGP情報を取得するコントローラー。
   ///
@@ -71,6 +85,7 @@ class OgpControllerFamily extends Family<AsyncValue<Ogp>> {
     );
   }
 
+  @visibleForOverriding
   @override
   OgpControllerProvider getProviderOverride(
     covariant OgpControllerProvider provider,
@@ -80,19 +95,26 @@ class OgpControllerFamily extends Family<AsyncValue<Ogp>> {
     );
   }
 
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
+  /// Enables overriding the behavior of this provider, no matter the parameters.
+  Override overrideWith(OgpController Function() create) {
+    return _$OgpControllerFamilyOverride(this, create);
+  }
+}
+
+class _$OgpControllerFamilyOverride implements FamilyOverride {
+  _$OgpControllerFamilyOverride(this.overriddenFamily, this.create);
+
+  final OgpController Function() create;
 
   @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+  final OgpControllerFamily overriddenFamily;
 
   @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'ogpControllerProvider';
+  OgpControllerProvider getProviderOverride(
+    covariant OgpControllerProvider provider,
+  ) {
+    return provider._copyWith(create);
+  }
 }
 
 /// OGP情報を取得するコントローラー。
@@ -124,7 +146,7 @@ class OgpControllerProvider
         );
 
   OgpControllerProvider._internal(
-    super._createNotifier, {
+    super.create, {
     required super.name,
     required super.dependencies,
     required super.allTransitiveDependencies,
@@ -161,8 +183,29 @@ class OgpControllerProvider
   }
 
   @override
+  ({
+    String url,
+  }) get argument {
+    return (url: url,);
+  }
+
+  @override
   AsyncNotifierProviderElement<OgpController, Ogp> createElement() {
     return _OgpControllerProviderElement(this);
+  }
+
+  OgpControllerProvider _copyWith(
+    OgpController Function() create,
+  ) {
+    return OgpControllerProvider._internal(
+      () => create()..url = url,
+      name: name,
+      dependencies: dependencies,
+      allTransitiveDependencies: allTransitiveDependencies,
+      debugGetCreateSourceHash: debugGetCreateSourceHash,
+      from: from,
+      url: url,
+    );
   }
 
   @override
@@ -193,4 +236,4 @@ class _OgpControllerProviderElement
   String get url => (origin as OgpControllerProvider).url;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package
