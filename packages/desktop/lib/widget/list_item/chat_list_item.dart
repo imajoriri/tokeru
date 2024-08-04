@@ -155,9 +155,7 @@ class _ChatListItemChat extends ConsumerWidget {
           throw Exception('Could not launch ${link.toString()}');
         }
       },
-      onRead: () {
-        onRead?.call(chat);
-      },
+      onRead: onRead != null ? () => onRead?.call(chat) : null,
       bottomWidget: SelectionContainer.disabled(
         child: links.isEmpty
             ? const SizedBox.shrink()
