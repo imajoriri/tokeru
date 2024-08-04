@@ -10,13 +10,13 @@ class ThreadView extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final thread = ref.watch(selectedThreadProvider);
+    final chat = ref.watch(selectedThreadProvider);
     // スレッドが選択されていない場合は何も表示しない。
-    if (thread == null) {
+    if (chat == null) {
       return const SizedBox.shrink();
     }
 
-    final provider = threadsProvider(chatId: thread.chatId);
+    final provider = threadsProvider(chatId: chat.id);
     final chats = ref.watch(provider);
 
     return Column(
