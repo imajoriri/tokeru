@@ -11,7 +11,7 @@ class AppIconButton extends HookWidget {
   final void Function() onPressed;
 
   /// ツールチップ。
-  final String tooltip;
+  final String? tooltip;
 
   /// アイコンのサイズ。
   final double iconSize;
@@ -26,7 +26,7 @@ class AppIconButton extends HookWidget {
     super.key,
     required this.icon,
     required this.onPressed,
-    required this.tooltip,
+    this.tooltip,
     this.showBorder = false,
   })  : iconSize = 20,
         padding = const EdgeInsets.all(8);
@@ -42,26 +42,29 @@ class AppIconButton extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppButton(
-      onPressed: onPressed,
-      containerColor: context.appColors.onSurface,
-      backgroundColor: context.appColors.surface,
-      child: Container(
-        padding: EdgeInsets.all(context.appSpacing.smallX),
-        // border
-        decoration: showBorder
-            ? BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: context.appColors.outline,
-                ),
-              )
-            : null,
-        child: IconTheme.merge(
-          child: icon,
-          data: IconThemeData(
-            size: iconSize,
-            color: context.appColors.onSurface,
+    return Tooltip(
+      message: tooltip,
+      child: AppButton(
+        onPressed: onPressed,
+        containerColor: context.appColors.onSurface,
+        backgroundColor: context.appColors.surface,
+        child: Container(
+          padding: EdgeInsets.all(context.appSpacing.smallX),
+          // border
+          decoration: showBorder
+              ? BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: context.appColors.outline,
+                  ),
+                )
+              : null,
+          child: IconTheme.merge(
+            child: icon,
+            data: IconThemeData(
+              size: iconSize,
+              color: context.appColors.onSurface,
+            ),
           ),
         ),
       ),

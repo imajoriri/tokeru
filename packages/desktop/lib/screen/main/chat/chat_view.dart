@@ -1,31 +1,28 @@
-import 'package:collection/collection.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:tokeru_model/controller/app_item/app_items.dart';
-import 'package:tokeru_model/controller/ogp_controller/ogp_controller.dart';
+import 'package:tokeru_desktop/widget/list_items/chat_list_items.dart';
+import 'package:tokeru_desktop/widget/text_field/chat_text_field.dart';
+import 'package:tokeru_model/controller/chats/chats.dart';
 import 'package:tokeru_model/controller/read/read_controller.dart';
 import 'package:tokeru_model/controller/read_all/read_all_controller.dart';
 import 'package:tokeru_model/model.dart';
 import 'package:tokeru_desktop/widget/focus_nodes.dart';
 import 'package:tokeru_widgets/widgets.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 part 'chat_list.dart';
-part 'chat_text_field.dart';
 
 class ChatView extends HookConsumerWidget {
   const ChatView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const Column(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Expanded(
+        const Expanded(
           child: Stack(
+            fit: StackFit.expand,
             alignment: Alignment.bottomCenter,
             children: [
               _ChatList(),
@@ -34,8 +31,16 @@ class ChatView extends HookConsumerWidget {
           ),
         ),
         Padding(
-          padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
-          child: _ChatTextField(),
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+          child: ChatTextField(
+            focusNode: chatFocusNode,
+            onSubmit: (message) {
+              ref.read(chatsProvider.notifier).addChat(message: message);
+              FirebaseAnalytics.instance.logEvent(
+                name: AnalyticsEventName.addChat.name,
+              );
+            },
+          ),
         ),
       ],
     );
