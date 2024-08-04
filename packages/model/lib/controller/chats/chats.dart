@@ -10,12 +10,14 @@ import 'package:tokeru_model/model.dart';
 import 'package:tokeru_model/repository/app_item/app_item_repository.dart';
 import 'package:uuid/uuid.dart';
 
-part 'app_items.g.dart';
+part 'chats.g.dart';
 
 @riverpod
-class AppItems extends _$AppItems {
+class Chats extends _$Chats {
   @override
-  FutureOr<List<AppItem>> build() async {
+  FutureOr<List<AppChatItem>> build({
+    String? appItemId,
+  }) async {
     ref.watch(refreshControllerProvider);
 
     final user = ref.watch(userControllerProvider);
@@ -33,12 +35,12 @@ class AppItems extends _$AppItems {
         return null;
       }
 
-      final appItem = AppItem.fromJson(data..['id'] = doc.id);
+      final appItem = AppChatItem.fromJson(data..['id'] = doc.id);
       return appItem;
     }).toList();
 
     // nullを除外。
-    return items.whereType<AppItem>().toList();
+    return items.whereType<AppChatItem>().toList();
   }
 
   void fetchNext() {

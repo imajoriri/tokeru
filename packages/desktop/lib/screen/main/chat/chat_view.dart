@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:tokeru_model/controller/app_item/app_items.dart';
+import 'package:tokeru_model/controller/chats/chats.dart';
 import 'package:tokeru_model/controller/ogp_controller/ogp_controller.dart';
 import 'package:tokeru_model/controller/read/read_controller.dart';
 import 'package:tokeru_model/controller/read_all/read_all_controller.dart';
