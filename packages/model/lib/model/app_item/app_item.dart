@@ -10,8 +10,19 @@ part 'app_item.g.dart';
 sealed class AppItem with _$AppItem {
   @FreezedUnionValue('chat')
   const factory AppItem.chat({
+    /// ID。
     required String id,
+
+    /// メッセージ。
     required String message,
+
+    /// 親のチャットID。
+    ///
+    /// このチャットがスレッドの場合、親のチャットIDが設定される。
+    /// このチャットがスレッドでない場合、nullが設定される。
+    String? chatId,
+
+    /// 作成日時。
     @TimestampConverter() required DateTime createdAt,
   }) = AppChatItem;
 

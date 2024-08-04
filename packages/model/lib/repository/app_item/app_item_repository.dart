@@ -21,6 +21,7 @@ class AppItemRepository {
   final Ref ref;
   final String userId;
 
+  /// [AppItem]のクエリを返す。
   Query<Map<String, dynamic>> chatQuery({
     required String userId,
   }) {
@@ -29,6 +30,22 @@ class AppItemRepository {
         .doc(userId)
         .collection(_collectionName)
         .where('type', isEqualTo: 'chat')
+        .where('chatId', isNull: true)
+        .limit(50)
+        .orderBy('createdAt', descending: true);
+  }
+
+  /// スレッドのクエリを返す。
+  Query<Map<String, dynamic>> threadQuery({
+    required String userId,
+    required String chatId,
+  }) {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection(_collectionName)
+        .where('type', isEqualTo: 'chat')
+        .where('chatId', isEqualTo: chatId)
         .orderBy('createdAt', descending: true);
   }
 

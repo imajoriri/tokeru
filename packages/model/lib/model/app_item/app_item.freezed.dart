@@ -31,13 +31,16 @@ AppItem _$AppItemFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$AppItem {
+  /// ID。
   String get id => throw _privateConstructorUsedError;
+
+  /// 作成日時。
   @TimestampConverter()
   DateTime get createdAt => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(
-            String id, String message, @TimestampConverter() DateTime createdAt)
+    required TResult Function(String id, String message, String? chatId,
+            @TimestampConverter() DateTime createdAt)
         chat,
     required TResult Function(String id, String title, bool isDone, int index,
             @TimestampConverter() DateTime createdAt)
@@ -49,7 +52,7 @@ mixin _$AppItem {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String id, String message,
+    TResult? Function(String id, String message, String? chatId,
             @TimestampConverter() DateTime createdAt)?
         chat,
     TResult? Function(String id, String title, bool isDone, int index,
@@ -62,7 +65,7 @@ mixin _$AppItem {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String id, String message,
+    TResult Function(String id, String message, String? chatId,
             @TimestampConverter() DateTime createdAt)?
         chat,
     TResult Function(String id, String title, bool isDone, int index,
@@ -147,7 +150,10 @@ abstract class _$$AppChatItemImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id, String message, @TimestampConverter() DateTime createdAt});
+      {String id,
+      String message,
+      String? chatId,
+      @TimestampConverter() DateTime createdAt});
 }
 
 /// @nodoc
@@ -163,6 +169,7 @@ class __$$AppChatItemImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? message = null,
+    Object? chatId = freezed,
     Object? createdAt = null,
   }) {
     return _then(_$AppChatItemImpl(
@@ -174,6 +181,10 @@ class __$$AppChatItemImplCopyWithImpl<$Res>
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
+      chatId: freezed == chatId
+          ? _value.chatId
+          : chatId // ignore: cast_nullable_to_non_nullable
+              as String?,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -188,6 +199,7 @@ class _$AppChatItemImpl implements AppChatItem {
   const _$AppChatItemImpl(
       {required this.id,
       required this.message,
+      this.chatId,
       @TimestampConverter() required this.createdAt,
       final String? $type})
       : $type = $type ?? 'chat';
@@ -195,10 +207,22 @@ class _$AppChatItemImpl implements AppChatItem {
   factory _$AppChatItemImpl.fromJson(Map<String, dynamic> json) =>
       _$$AppChatItemImplFromJson(json);
 
+  /// ID。
   @override
   final String id;
+
+  /// メッセージ。
   @override
   final String message;
+
+  /// 親のチャットID。
+  ///
+  /// このチャットがスレッドの場合、親のチャットIDが設定される。
+  /// このチャットがスレッドでない場合、nullが設定される。
+  @override
+  final String? chatId;
+
+  /// 作成日時。
   @override
   @TimestampConverter()
   final DateTime createdAt;
@@ -208,7 +232,7 @@ class _$AppChatItemImpl implements AppChatItem {
 
   @override
   String toString() {
-    return 'AppItem.chat(id: $id, message: $message, createdAt: $createdAt)';
+    return 'AppItem.chat(id: $id, message: $message, chatId: $chatId, createdAt: $createdAt)';
   }
 
   @override
@@ -218,13 +242,14 @@ class _$AppChatItemImpl implements AppChatItem {
             other is _$AppChatItemImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.message, message) || other.message == message) &&
+            (identical(other.chatId, chatId) || other.chatId == chatId) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, message, createdAt);
+  int get hashCode => Object.hash(runtimeType, id, message, chatId, createdAt);
 
   @JsonKey(ignore: true)
   @override
@@ -235,8 +260,8 @@ class _$AppChatItemImpl implements AppChatItem {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(
-            String id, String message, @TimestampConverter() DateTime createdAt)
+    required TResult Function(String id, String message, String? chatId,
+            @TimestampConverter() DateTime createdAt)
         chat,
     required TResult Function(String id, String title, bool isDone, int index,
             @TimestampConverter() DateTime createdAt)
@@ -245,13 +270,13 @@ class _$AppChatItemImpl implements AppChatItem {
             String id, int index, @TimestampConverter() DateTime createdAt)
         divider,
   }) {
-    return chat(id, message, createdAt);
+    return chat(id, message, chatId, createdAt);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String id, String message,
+    TResult? Function(String id, String message, String? chatId,
             @TimestampConverter() DateTime createdAt)?
         chat,
     TResult? Function(String id, String title, bool isDone, int index,
@@ -261,13 +286,13 @@ class _$AppChatItemImpl implements AppChatItem {
             String id, int index, @TimestampConverter() DateTime createdAt)?
         divider,
   }) {
-    return chat?.call(id, message, createdAt);
+    return chat?.call(id, message, chatId, createdAt);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String id, String message,
+    TResult Function(String id, String message, String? chatId,
             @TimestampConverter() DateTime createdAt)?
         chat,
     TResult Function(String id, String title, bool isDone, int index,
@@ -279,7 +304,7 @@ class _$AppChatItemImpl implements AppChatItem {
     required TResult orElse(),
   }) {
     if (chat != null) {
-      return chat(id, message, createdAt);
+      return chat(id, message, chatId, createdAt);
     }
     return orElse();
   }
@@ -330,6 +355,7 @@ abstract class AppChatItem implements AppItem {
   const factory AppChatItem(
           {required final String id,
           required final String message,
+          final String? chatId,
           @TimestampConverter() required final DateTime createdAt}) =
       _$AppChatItemImpl;
 
@@ -337,9 +363,21 @@ abstract class AppChatItem implements AppItem {
       _$AppChatItemImpl.fromJson;
 
   @override
+
+  /// ID。
   String get id;
+
+  /// メッセージ。
   String get message;
+
+  /// 親のチャットID。
+  ///
+  /// このチャットがスレッドの場合、親のチャットIDが設定される。
+  /// このチャットがスレッドでない場合、nullが設定される。
+  String? get chatId;
   @override
+
+  /// 作成日時。
   @TimestampConverter()
   DateTime get createdAt;
   @override
@@ -468,8 +506,8 @@ class _$AppTodoItemImpl implements AppTodoItem {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(
-            String id, String message, @TimestampConverter() DateTime createdAt)
+    required TResult Function(String id, String message, String? chatId,
+            @TimestampConverter() DateTime createdAt)
         chat,
     required TResult Function(String id, String title, bool isDone, int index,
             @TimestampConverter() DateTime createdAt)
@@ -484,7 +522,7 @@ class _$AppTodoItemImpl implements AppTodoItem {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String id, String message,
+    TResult? Function(String id, String message, String? chatId,
             @TimestampConverter() DateTime createdAt)?
         chat,
     TResult? Function(String id, String title, bool isDone, int index,
@@ -500,7 +538,7 @@ class _$AppTodoItemImpl implements AppTodoItem {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String id, String message,
+    TResult Function(String id, String message, String? chatId,
             @TimestampConverter() DateTime createdAt)?
         chat,
     TResult Function(String id, String title, bool isDone, int index,
@@ -682,8 +720,8 @@ class _$AppDividerItemImpl implements AppDividerItem {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(
-            String id, String message, @TimestampConverter() DateTime createdAt)
+    required TResult Function(String id, String message, String? chatId,
+            @TimestampConverter() DateTime createdAt)
         chat,
     required TResult Function(String id, String title, bool isDone, int index,
             @TimestampConverter() DateTime createdAt)
@@ -698,7 +736,7 @@ class _$AppDividerItemImpl implements AppDividerItem {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String id, String message,
+    TResult? Function(String id, String message, String? chatId,
             @TimestampConverter() DateTime createdAt)?
         chat,
     TResult? Function(String id, String title, bool isDone, int index,
@@ -714,7 +752,7 @@ class _$AppDividerItemImpl implements AppDividerItem {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String id, String message,
+    TResult Function(String id, String message, String? chatId,
             @TimestampConverter() DateTime createdAt)?
         chat,
     TResult Function(String id, String title, bool isDone, int index,
