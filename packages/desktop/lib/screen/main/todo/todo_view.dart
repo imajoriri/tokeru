@@ -19,7 +19,6 @@ class TodoView extends StatelessWidget {
     return FocusScope(
       node: todoViewFocusNode,
       child: CustomScrollView(
-        semanticChildCount: 3,
         slivers: [
           SliverList(
             delegate: SliverChildListDelegate([const TodayTodoList()]),
