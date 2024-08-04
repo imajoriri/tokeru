@@ -2,19 +2,32 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tokeru_model/controller/ogp_controller/ogp_controller.dart';
+import 'package:tokeru_model/controller/read/read_controller.dart';
+import 'package:tokeru_model/controller/thread/thread.dart';
 import 'package:tokeru_model/model/app_item/app_item.dart';
 import 'package:tokeru_widgets/widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ChatListItems extends StatelessWidget {
-  const ChatListItems({
+  /// メインのチャットで表示するチャットのリスト。
+  const ChatListItems.main({
     Key? key,
     required this.chats,
     this.bottomSpace = 0,
     this.readTime,
-    this.onRead,
-    this.onThread,
-  }) : super(key: key);
+  })  : showRead = true,
+        showThread = true,
+        super(key: key);
+
+  /// スレッドで表示するチャットのリスト。
+  const ChatListItems.thread({
+    Key? key,
+    required this.chats,
+  })  : showRead = false,
+        showThread = false,
+        bottomSpace = 0,
+        readTime = null,
+        super(key: key);
 
   final List<AppChatItem> chats;
 
@@ -26,11 +39,11 @@ class ChatListItems extends StatelessWidget {
   /// nullの場合は既読のDividerを表示しない。
   final DateTime? readTime;
 
-  /// チャットの既読ボタンを押した時のコールバック。
-  final void Function(AppChatItem chat)? onRead;
+  /// 既読ボタンを表示するかどうか。
+  final bool showRead;
 
-  /// スレッドを押した時のコールバック。
-  final void Function(AppChatItem chat)? onThread;
+  /// スレッドを表示するボタンを表示するかどうか。
+  final bool showThread;
 
   @override
   Widget build(BuildContext context) {
@@ -52,8 +65,8 @@ class ChatListItems extends StatelessWidget {
               ),
               _ChatListItemChat(
                 chat: chat,
-                onRead: onRead,
-                onThread: onThread,
+                showRead: showRead,
+                showThread: showThread,
               ),
               if (isLast) const SizedBox(height: 16),
               if (isLast) _BottomSpace(bottomSpace: bottomSpace),
@@ -147,13 +160,13 @@ class _UnreadDivider extends StatelessWidget {
 class _ChatListItemChat extends ConsumerWidget {
   const _ChatListItemChat({
     required this.chat,
-    required this.onRead,
-    required this.onThread,
+    required this.showRead,
+    required this.showThread,
   });
 
   final AppChatItem chat;
-  final void Function(AppChatItem chat)? onRead;
-  final void Function(AppChatItem chat)? onThread;
+  final bool showThread;
+  final bool showRead;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -165,8 +178,19 @@ class _ChatListItemChat extends ConsumerWidget {
           throw Exception('Could not launch ${link.toString()}');
         }
       },
-      onRead: onRead != null ? () => onRead?.call(chat) : null,
-      onThread: onThread != null ? () => onThread?.call(chat) : null,
+      onRead: showRead
+          ? () {
+              ref.read(readControllerProvider.notifier).markAsReadAsChat(chat);
+            }
+          : null,
+      onThread: showThread
+          ? () {
+              ref.read(selectedThreadProvider.notifier).setThread(
+                    chatId: chat.id,
+                    message: chat.message,
+                  );
+            }
+          : null,
       bottomWidget: SelectionContainer.disabled(
         child: links.isEmpty
             ? const SizedBox.shrink()
