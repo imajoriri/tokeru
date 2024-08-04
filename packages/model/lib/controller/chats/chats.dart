@@ -15,9 +15,7 @@ part 'chats.g.dart';
 @riverpod
 class Chats extends _$Chats {
   @override
-  FutureOr<List<AppChatItem>> build({
-    String? appItemId,
-  }) async {
+  FutureOr<List<AppChatItem>> build() async {
     ref.watch(refreshControllerProvider);
 
     final user = ref.watch(userControllerProvider);

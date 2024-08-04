@@ -16,7 +16,7 @@ class ChatScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final showLoginButton =
         ref.watch(userControllerProvider).valueOrNull?.isAnonymous ?? true;
-    final chats = ref.watch(chatsProvider());
+    final chats = ref.watch(chatsProvider);
     final textEditingController = useTextEditingController();
 
     return Scaffold(
@@ -101,7 +101,7 @@ class ChatScreen extends HookConsumerWidget {
               SubmitButton(
                 onPressed: () {
                   ref
-                      .read(chatsProvider().notifier)
+                      .read(chatsProvider.notifier)
                       .addChat(message: textEditingController.text);
                   textEditingController.clear();
                 },

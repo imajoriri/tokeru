@@ -1,7 +1,10 @@
-part of 'chat_view.dart';
+import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:tokeru_desktop/widget/list_item/chat_list_item.dart';
+import 'package:tokeru_model/controller/chats/chats.dart';
 
-class _ChatList extends HookConsumerWidget {
-  const _ChatList();
+class ThreadView extends HookConsumerWidget {
+  const ThreadView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -19,10 +22,6 @@ class _ChatList extends HookConsumerWidget {
           },
           child: ChatListItems(
             chats: chats,
-            bottomSpace:
-                ref.watch(readAllProvider).valueOrNull == true ? 0 : 32,
-            readTime: ref.watch(readControllerProvider).valueOrNull,
-            onRead: ref.read(readControllerProvider.notifier).markAsReadAsChat,
           ),
         );
       },
