@@ -13,6 +13,7 @@ class ChatListItems extends StatelessWidget {
     this.bottomSpace = 0,
     this.readTime,
     this.onRead,
+    this.onThread,
   }) : super(key: key);
 
   final List<AppChatItem> chats;
@@ -27,6 +28,9 @@ class ChatListItems extends StatelessWidget {
 
   /// チャットの既読ボタンを押した時のコールバック。
   final void Function(AppChatItem chat)? onRead;
+
+  /// スレッドを押した時のコールバック。
+  final void Function(AppChatItem chat)? onThread;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +50,11 @@ class ChatListItems extends StatelessWidget {
                 chats: chats,
                 readTime: readTime,
               ),
-              _ChatListItemChat(chat: chat, onRead: onRead),
+              _ChatListItemChat(
+                chat: chat,
+                onRead: onRead,
+                onThread: onThread,
+              ),
               if (isLast) const SizedBox(height: 16),
               if (isLast) _BottomSpace(bottomSpace: bottomSpace),
             ],
@@ -140,10 +148,12 @@ class _ChatListItemChat extends ConsumerWidget {
   const _ChatListItemChat({
     required this.chat,
     required this.onRead,
+    required this.onThread,
   });
 
   final AppChatItem chat;
   final void Function(AppChatItem chat)? onRead;
+  final void Function(AppChatItem chat)? onThread;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -156,6 +166,7 @@ class _ChatListItemChat extends ConsumerWidget {
         }
       },
       onRead: onRead != null ? () => onRead?.call(chat) : null,
+      onThread: onThread != null ? () => onThread?.call(chat) : null,
       bottomWidget: SelectionContainer.disabled(
         child: links.isEmpty
             ? const SizedBox.shrink()
