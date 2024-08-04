@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tokeru_desktop/widget/list_item/chat_list_item.dart';
 import 'package:tokeru_desktop/widget/text_field/chat_text_field.dart';
+import 'package:tokeru_model/controller/thread/thread.dart';
 import 'package:tokeru_model/controller/threads/threads.dart';
 
 class ThreadView extends HookConsumerWidget {
@@ -9,7 +10,13 @@ class ThreadView extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider = threadsProvider(chatId: 'chatId');
+    final thread = ref.watch(selectedThreadProvider);
+    // スレッドが選択されていない場合は何も表示しない。
+    if (thread == null) {
+      return const SizedBox.shrink();
+    }
+
+    final provider = threadsProvider(chatId: thread.chatId);
     final chats = ref.watch(provider);
 
     return Column(
@@ -18,7 +25,7 @@ class ThreadView extends HookConsumerWidget {
           child: chats.when(
             skipLoadingOnReload: true,
             data: (chats) {
-              return ChatListItems(
+              return ChatListItems.thread(
                 chats: chats,
               );
             },
