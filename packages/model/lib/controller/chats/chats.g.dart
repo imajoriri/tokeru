@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'app_items.dart';
+part of 'chats.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$appItemsHash() => r'cfe2cbed12b76c89d246cf7b5f63163f3f7e9ca9';
+String _$chatsHash() => r'bc3bee5b64d7dd18a19c861068776b6ee4d2eebe';
 
-/// See also [AppItems].
-@ProviderFor(AppItems)
-final appItemsProvider =
-    AutoDisposeAsyncNotifierProvider<AppItems, List<AppItem>>.internal(
-  AppItems.new,
-  name: r'appItemsProvider',
+/// See also [Chats].
+@ProviderFor(Chats)
+final chatsProvider =
+    AutoDisposeAsyncNotifierProvider<Chats, List<AppChatItem>>.internal(
+  Chats.new,
+  name: r'chatsProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$appItemsHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : _$chatsHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$AppItems = AutoDisposeAsyncNotifier<List<AppItem>>;
+typedef _$Chats = AutoDisposeAsyncNotifier<List<AppChatItem>>;
 String _$appItemsPaginationHash() =>
     r'9e47affd31aee2ea4ec515c0f7f512b2a4c87170';
 

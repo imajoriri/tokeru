@@ -1,4 +1,4 @@
-import 'package:tokeru_model/controller/app_item/app_items.dart';
+import 'package:tokeru_model/controller/chats/chats.dart';
 import 'package:tokeru_model/controller/read/read_controller.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -7,7 +7,7 @@ part 'read_all_controller.g.dart';
 /// 全てのチャットを既読したかどうかを管理するコントローラー。
 @riverpod
 Future<bool> readAll(ReadAllRef ref) async {
-  final appItems = await ref.watch(appItemsProvider.future);
+  final appItems = await ref.watch(chatsProvider.future);
   final latestAppItem = appItems.firstOrNull;
   // チャットがない場合はfalseを返す。
   if (latestAppItem == null) {

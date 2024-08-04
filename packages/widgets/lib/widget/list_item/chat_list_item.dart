@@ -10,6 +10,7 @@ class ChatListItem extends HookWidget {
     required this.launchUrl,
     this.bottomWidget,
     this.onRead,
+    this.onThread,
   });
 
   final String text;
@@ -22,6 +23,9 @@ class ChatListItem extends HookWidget {
 
   /// 既読ボタンを押した時の処理。
   final void Function()? onRead;
+
+  /// スレッドを押した時の処理。
+  final void Function()? onThread;
 
   @override
   Widget build(BuildContext context) {
@@ -38,9 +42,6 @@ class ChatListItem extends HookWidget {
         child: OverlayPortal(
           controller: tooltipController,
           overlayChildBuilder: (context) {
-            if (onRead == null) {
-              return const SizedBox.shrink();
-            }
             return Align(
               child: CompositedTransformFollower(
                 link: link,
@@ -56,11 +57,24 @@ class ChatListItem extends HookWidget {
                     hover.value = false;
                     tooltipController.hide();
                   },
-                  child: AppIconButton.small(
-                    showBorder: true,
-                    icon: const Icon(Icons.read_more),
-                    onPressed: onRead!,
-                    tooltip: "",
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (onRead != null)
+                        AppIconButton.small(
+                          showBorder: true,
+                          icon: const Icon(Icons.read_more),
+                          onPressed: onRead!,
+                          tooltip: "mark as read",
+                        ),
+                      if (onThread != null)
+                        AppIconButton.small(
+                          showBorder: true,
+                          icon: const Icon(Icons.chat_outlined),
+                          onPressed: onThread!,
+                          tooltip: "Thread",
+                        ),
+                    ],
                   ),
                 ),
               ),
