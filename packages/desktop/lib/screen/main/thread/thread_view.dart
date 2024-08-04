@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:tokeru_desktop/widget/chat_and_ogp_list_item.dart';
 import 'package:tokeru_desktop/widget/list_items/chat_list_items.dart';
 import 'package:tokeru_desktop/widget/text_field/chat_text_field.dart';
 import 'package:tokeru_model/controller/thread/thread.dart';
@@ -21,6 +22,12 @@ class ThreadView extends HookConsumerWidget {
 
     return Column(
       children: [
+        const SizedBox(height: 8),
+        ChatAndOgpListItem(
+          chat: chat,
+          showRead: false,
+          showThread: false,
+        ),
         Expanded(
           child: chats.when(
             skipLoadingOnReload: true,
