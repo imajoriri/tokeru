@@ -1,8 +1,21 @@
-part of 'chat_view.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:tokeru_widgets/widgets.dart';
 
 /// チャットのTextField。
-class _ChatTextField extends HookConsumerWidget {
-  const _ChatTextField();
+class ChatTextField extends HookConsumerWidget {
+  const ChatTextField({
+    Key? key,
+    required this.focusNode,
+    required this.onSubmit,
+  }) : super(key: key);
+
+  final FocusNode focusNode;
+
+  /// submitボタンを押した時の処理。
+  final void Function(String message) onSubmit;
 
   Future<void> _send({
     required TextEditingController textEditingController,
@@ -10,12 +23,8 @@ class _ChatTextField extends HookConsumerWidget {
   }) async {
     if (textEditingController.text.isEmpty) return;
 
-    final provider = chatsProvider;
-    ref.read(provider.notifier).addChat(message: textEditingController.text);
+    onSubmit(textEditingController.text);
     textEditingController.clear();
-    FirebaseAnalytics.instance.logEvent(
-      name: AnalyticsEventName.addChat.name,
-    );
   }
 
   @override
@@ -51,7 +60,7 @@ class _ChatTextField extends HookConsumerWidget {
         },
         child: Focus(
           onFocusChange: (value) {
-            hasFocus.value = chatFocusNode.hasFocus;
+            hasFocus.value = focusNode.hasFocus;
             if (value) {
               animationController.forward();
             } else {
@@ -69,7 +78,7 @@ class _ChatTextField extends HookConsumerWidget {
                       child: TextField(
                         controller: textEditingController,
                         maxLines: null,
-                        focusNode: chatFocusNode,
+                        focusNode: focusNode,
                         style: context.appTextTheme.bodyMedium,
                         cursorColor: Colors.black,
                         decoration: const InputDecoration(
