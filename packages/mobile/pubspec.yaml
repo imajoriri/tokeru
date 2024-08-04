@@ -15,10 +15,14 @@ dependencies:
   firebase_core: ^2.31.0
 
   # Riverpod
-  hooks_riverpod: 2.5.1
+  hooks_riverpod: ^3.0.0-dev.3
+  riverpod_annotation: ^3.0.0-dev.3
+  riverpod_generator: ^3.0.0-dev.11
   flutter_hooks: ^0.20.5
-  riverpod_annotation: ^2.2.1
-  riverpod_generator: ^2.3.11
+  # hooks_riverpod: 2.5.1
+  # flutter_hooks: ^0.20.5
+  # riverpod_annotation: ^2.2.1
+  # riverpod_generator: ^2.3.11
 
   # freezed
   freezed_annotation: ^2.4.1
