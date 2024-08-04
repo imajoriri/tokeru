@@ -186,8 +186,7 @@ class _ChatListItemChat extends ConsumerWidget {
       onThread: showThread
           ? () {
               ref.read(selectedThreadProvider.notifier).setThread(
-                    chatId: chat.id,
-                    message: chat.message,
+                chat: chat,
                   );
             }
           : null,

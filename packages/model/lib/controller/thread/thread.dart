@@ -1,31 +1,18 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:tokeru_model/model.dart';
 
 part 'thread.g.dart';
-part 'thread.freezed.dart';
-
-@freezed
-class Thread with _$Thread {
-  const factory Thread({
-    required String chatId,
-    required String message,
-  }) = _Thread;
-}
 
 @riverpod
 class SelectedThread extends _$SelectedThread {
   @override
-  Thread? build() {
+  AppChatItem? build() {
     return null;
   }
 
   void setThread({
-    required String chatId,
-    required String message,
+    required AppChatItem chat,
   }) {
-    state = Thread(
-      chatId: chatId,
-      message: message,
-    );
+    state = chat.copyWith();
   }
 }
