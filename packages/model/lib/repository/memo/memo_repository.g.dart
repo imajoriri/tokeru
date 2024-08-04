@@ -34,9 +34,23 @@ class _SystemHash {
 const memoRepositoryProvider = MemoRepositoryFamily();
 
 /// See also [memoRepository].
-class MemoRepositoryFamily extends Family<MemoRepository> {
+class MemoRepositoryFamily extends Family {
   /// See also [memoRepository].
   const MemoRepositoryFamily();
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'memoRepositoryProvider';
 
   /// See also [memoRepository].
   MemoRepositoryProvider call(
@@ -47,6 +61,7 @@ class MemoRepositoryFamily extends Family<MemoRepository> {
     );
   }
 
+  @visibleForOverriding
   @override
   MemoRepositoryProvider getProviderOverride(
     covariant MemoRepositoryProvider provider,
@@ -56,19 +71,26 @@ class MemoRepositoryFamily extends Family<MemoRepository> {
     );
   }
 
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
+  /// Enables overriding the behavior of this provider, no matter the parameters.
+  Override overrideWith(MemoRepository Function(MemoRepositoryRef ref) create) {
+    return _$MemoRepositoryFamilyOverride(this, create);
+  }
+}
+
+class _$MemoRepositoryFamilyOverride implements FamilyOverride {
+  _$MemoRepositoryFamilyOverride(this.overriddenFamily, this.create);
+
+  final MemoRepository Function(MemoRepositoryRef ref) create;
 
   @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+  final MemoRepositoryFamily overriddenFamily;
 
   @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'memoRepositoryProvider';
+  MemoRepositoryProvider getProviderOverride(
+    covariant MemoRepositoryProvider provider,
+  ) {
+    return provider._copyWith(create);
+  }
 }
 
 /// See also [memoRepository].
@@ -94,7 +116,7 @@ class MemoRepositoryProvider extends AutoDisposeProvider<MemoRepository> {
         );
 
   MemoRepositoryProvider._internal(
-    super._createNotifier, {
+    super.create, {
     required super.name,
     required super.dependencies,
     required super.allTransitiveDependencies,
@@ -107,7 +129,7 @@ class MemoRepositoryProvider extends AutoDisposeProvider<MemoRepository> {
 
   @override
   Override overrideWith(
-    MemoRepository Function(MemoRepositoryRef provider) create,
+    MemoRepository Function(MemoRepositoryRef ref) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -124,8 +146,27 @@ class MemoRepositoryProvider extends AutoDisposeProvider<MemoRepository> {
   }
 
   @override
+  (String,) get argument {
+    return (userId,);
+  }
+
+  @override
   AutoDisposeProviderElement<MemoRepository> createElement() {
     return _MemoRepositoryProviderElement(this);
+  }
+
+  MemoRepositoryProvider _copyWith(
+    MemoRepository Function(MemoRepositoryRef ref) create,
+  ) {
+    return MemoRepositoryProvider._internal(
+      (ref) => create(ref as MemoRepositoryRef),
+      name: name,
+      dependencies: dependencies,
+      allTransitiveDependencies: allTransitiveDependencies,
+      debugGetCreateSourceHash: debugGetCreateSourceHash,
+      from: from,
+      userId: userId,
+    );
   }
 
   @override
@@ -155,4 +196,4 @@ class _MemoRepositoryProviderElement
   String get userId => (origin as MemoRepositoryProvider).userId;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package
