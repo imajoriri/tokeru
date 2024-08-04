@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:swipeable_page_route/swipeable_page_route.dart';
-import 'package:tokeru_model/controller/app_item/app_items.dart';
+import 'package:tokeru_model/controller/chats/chats.dart';
 import 'package:tokeru_model/controller/ogp_controller/ogp_controller.dart';
 import 'package:tokeru_model/controller/user/user_controller.dart';
 import 'package:tokeru_model/model/app_item/app_item.dart';
@@ -16,7 +16,7 @@ class ChatScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final showLoginButton =
         ref.watch(userControllerProvider).valueOrNull?.isAnonymous ?? true;
-    final chats = ref.watch(appItemsProvider);
+    final chats = ref.watch(chatsProvider());
     final textEditingController = useTextEditingController();
 
     return Scaffold(
@@ -63,10 +63,7 @@ class ChatScreen extends HookConsumerWidget {
                   reverse: true,
                   itemBuilder: (context, index) {
                     final appItem = chats[index];
-                    return switch (appItem) {
-                      AppChatItem() => _ChatListItemChat(appItem: appItem),
-                      _ => const SizedBox.shrink(),
-                    };
+                    return _ChatListItemChat(appItem: appItem);
                   },
                 );
               },
@@ -104,7 +101,7 @@ class ChatScreen extends HookConsumerWidget {
               SubmitButton(
                 onPressed: () {
                   ref
-                      .read(appItemsProvider.notifier)
+                      .read(chatsProvider().notifier)
                       .addChat(message: textEditingController.text);
                   textEditingController.clear();
                 },

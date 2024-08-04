@@ -5,7 +5,7 @@ class _ChatList extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appItems = ref.watch(appItemsProvider);
+    final appItems = ref.watch(chatsProvider());
 
     return appItems.when(
       skipLoadingOnReload: true,
@@ -13,7 +13,7 @@ class _ChatList extends HookConsumerWidget {
         return NotificationListener<ScrollNotification>(
           onNotification: (notification) {
             if (notification.metrics.extentAfter < 300) {
-              ref.read(appItemsProvider.notifier).fetchNext();
+              ref.read(chatsProvider().notifier).fetchNext();
             }
             return false;
           },
@@ -29,10 +29,7 @@ class _ChatList extends HookConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _TodoDivider(index: index),
-                    switch (appItem) {
-                      AppChatItem() => _ChatListItemChat(appItem: appItem),
-                      _ => throw UnimplementedError(),
-                    },
+                    _ChatListItemChat(appItem: appItem),
                     if (isLast) const _BottomSpace(),
                   ],
                 );
@@ -86,9 +83,9 @@ class _TodoDivider extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final item = ref.watch(appItemsProvider).valueOrNull?[index] as AppItem;
+    final item = ref.watch(chatsProvider()).valueOrNull?[index] as AppItem;
     final next = ref
-        .watch(appItemsProvider)
+        .watch(chatsProvider())
         .valueOrNull
         ?.firstWhereIndexedOrNull((i, _) => i == index + 1);
     // 次のAppItemが日付が変わるかどうか。
