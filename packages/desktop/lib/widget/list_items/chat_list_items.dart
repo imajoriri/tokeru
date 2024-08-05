@@ -13,6 +13,7 @@ class ChatListItems extends StatelessWidget {
     this.readTime,
   })  : showRead = true,
         showThread = true,
+        showConvertTodo = true,
         super(key: key);
 
   /// スレッドで表示するチャットのリスト。
@@ -23,6 +24,7 @@ class ChatListItems extends StatelessWidget {
         showThread = false,
         bottomSpace = 0,
         readTime = null,
+        showConvertTodo = false,
         super(key: key);
 
   final List<AppChatItem> chats;
@@ -40,6 +42,9 @@ class ChatListItems extends StatelessWidget {
 
   /// スレッドを表示するボタンを表示するかどうか。
   final bool showThread;
+
+  /// Todoへの変換ボタンを表示するかどうか。
+  final bool showConvertTodo;
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +68,7 @@ class ChatListItems extends StatelessWidget {
                 chat: chat,
                 showRead: showRead,
                 showThread: showThread,
+                showConvertTodo: showConvertTodo,
               ),
               if (isLast) const SizedBox(height: 16),
               if (isLast) _BottomSpace(bottomSpace: bottomSpace),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:tokeru_model/controller/chats/chats.dart';
 import 'package:tokeru_model/controller/ogp_controller/ogp_controller.dart';
 import 'package:tokeru_model/controller/read/read_controller.dart';
 import 'package:tokeru_model/controller/thread/thread.dart';
@@ -13,11 +14,13 @@ class ChatAndOgpListItem extends ConsumerWidget {
     required this.chat,
     required this.showRead,
     required this.showThread,
+    required this.showConvertTodo,
   });
 
   final AppChatItem chat;
   final bool showThread;
   final bool showRead;
+  final bool showConvertTodo;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -39,6 +42,11 @@ class ChatAndOgpListItem extends ConsumerWidget {
               ref.read(selectedThreadProvider.notifier).setThread(
                     chat: chat,
                   );
+            }
+          : null,
+      onConvertTodo: showConvertTodo
+          ? () {
+              ref.read(chatsProvider.notifier).convertToTodoItem(chat);
             }
           : null,
       bottomWidget: SelectionContainer.disabled(

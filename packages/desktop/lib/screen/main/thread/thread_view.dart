@@ -28,6 +28,7 @@ class ThreadView extends HookConsumerWidget {
           chat: chat,
           showRead: false,
           showThread: false,
+          showConvertTodo: false,
         ),
         Expanded(
           child: chats.when(

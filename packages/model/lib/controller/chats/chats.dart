@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:tokeru_model/controller/refresh/refresh_controller.dart';
+import 'package:tokeru_model/controller/todo/todo_controller.dart';
 import 'package:tokeru_model/controller/user/user_controller.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tokeru_model/model.dart';
@@ -64,6 +65,31 @@ class Chats extends _$Chats {
     final repository = ref.read(appItemRepositoryProvider(user.id));
     try {
       await repository.add(chat);
+    } on Exception catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+    }
+  }
+
+  /// [AppChatItem]を[AppTodoItem]に変換する。
+  Future<void> convertToTodoItem(AppChatItem chat) async {
+    final todos = await ref.read(todoControllerProvider.future);
+    if (todos.isEmpty) {
+      return;
+    }
+
+    final lastIndex = todos.last.index;
+    final todo = AppTodoItem(
+      id: chat.id,
+      title: chat.message,
+      createdAt: chat.createdAt,
+      isDone: false,
+      index: lastIndex + 1,
+    );
+
+    final user = ref.read(userControllerProvider).requireValue;
+    final repository = ref.read(appItemRepositoryProvider(user.id));
+    try {
+      await repository.update(item: todo);
     } on Exception catch (e, s) {
       await FirebaseCrashlytics.instance.recordError(e, s);
     }
