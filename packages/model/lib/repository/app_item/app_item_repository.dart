@@ -30,7 +30,6 @@ class AppItemRepository {
         .doc(userId)
         .collection(_collectionName)
         .where('type', isEqualTo: 'chat')
-        .where('chatId', isNull: true)
         .limit(50)
         .orderBy('createdAt', descending: true);
   }
