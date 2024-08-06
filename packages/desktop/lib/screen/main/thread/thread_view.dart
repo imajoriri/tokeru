@@ -25,16 +25,14 @@ class ThreadView extends HookConsumerWidget {
       children: [
         const SizedBox(height: 8),
         ChatAndOgpListItem(
-          chat: chat,
-          showRead: false,
-          showThread: false,
+          message: chat.message,
         ),
         Expanded(
           child: chats.when(
             skipLoadingOnReload: true,
             data: (chats) {
               return ChatListItems.thread(
-                chats: chats,
+                threads: chats,
               );
             },
             loading: () {

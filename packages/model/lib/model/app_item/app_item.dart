@@ -16,15 +16,24 @@ sealed class AppItem with _$AppItem {
     /// メッセージ。
     required String message,
 
-    /// 親のチャットID。
-    ///
-    /// このチャットがスレッドの場合、親のチャットIDが設定される。
-    /// このチャットがスレッドでない場合、nullが設定される。
-    String? chatId,
-
     /// 作成日時。
     @TimestampConverter() required DateTime createdAt,
   }) = AppChatItem;
+
+  @FreezedUnionValue('thread')
+  const factory AppItem.thread({
+    /// ID。
+    required String id,
+
+    /// メッセージ。
+    required String message,
+
+    /// 親の[AppItem.id]ID。
+    required String parentId,
+
+    /// 作成日時。
+    @TimestampConverter() required DateTime createdAt,
+  }) = AppThreadItem;
 
   @FreezedUnionValue('todo')
   const factory AppItem.todo({

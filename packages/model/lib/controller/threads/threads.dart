@@ -11,7 +11,7 @@ part 'threads.g.dart';
 @riverpod
 class Threads extends _$Threads {
   @override
-  Stream<List<AppChatItem>> build({
+  Stream<List<AppThreadItem>> build({
     required String chatId,
   }) {
     ref.watch(refreshControllerProvider);
@@ -34,12 +34,12 @@ class Threads extends _$Threads {
           return null;
         }
 
-        final appItem = AppChatItem.fromJson(data..['id'] = doc.id);
+        final appItem = AppThreadItem.fromJson(data..['id'] = doc.id);
         return appItem;
       }).toList();
 
       // nullを除外。
-      return items.whereType<AppChatItem>().toList();
+      return items.whereType<AppThreadItem>().toList();
     });
   }
 
@@ -47,16 +47,16 @@ class Threads extends _$Threads {
   Future<void> add({
     required String message,
   }) async {
-    final chat = AppChatItem(
+    final tread = AppThreadItem(
       id: const Uuid().v4(),
       message: message,
       createdAt: DateTime.now(),
-      chatId: chatId,
+      parentId: chatId,
     );
     final user = ref.read(userControllerProvider).requireValue;
     final repository = ref.read(appItemRepositoryProvider(user.id));
     try {
-      await repository.add(chat);
+      await repository.add(tread);
     } on Exception catch (e, s) {
       await FirebaseCrashlytics.instance.recordError(e, s);
     }

@@ -6,7 +6,7 @@ part of 'threads.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$threadsHash() => r'e9fe994b6b4f6d236c0f510e4f4e9a94180fe1fa';
+String _$threadsHash() => r'4e106ea22f58262c758c39c60b940c7adbd23f95';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -30,10 +30,10 @@ class _SystemHash {
 }
 
 abstract class _$Threads
-    extends BuildlessAutoDisposeStreamNotifier<List<AppChatItem>> {
+    extends BuildlessAutoDisposeStreamNotifier<List<AppThreadItem>> {
   late final String chatId;
 
-  Stream<List<AppChatItem>> build({
+  Stream<List<AppThreadItem>> build({
     required String chatId,
   });
 }
@@ -103,8 +103,8 @@ class _$ThreadsFamilyOverride implements FamilyOverride {
 }
 
 /// See also [Threads].
-class ThreadsProvider
-    extends AutoDisposeStreamNotifierProviderImpl<Threads, List<AppChatItem>> {
+class ThreadsProvider extends AutoDisposeStreamNotifierProviderImpl<Threads,
+    List<AppThreadItem>> {
   /// See also [Threads].
   ThreadsProvider({
     required String chatId,
@@ -134,7 +134,7 @@ class ThreadsProvider
   final String chatId;
 
   @override
-  Stream<List<AppChatItem>> runNotifierBuild(
+  Stream<List<AppThreadItem>> runNotifierBuild(
     covariant Threads notifier,
   ) {
     return notifier.build(
@@ -166,7 +166,7 @@ class ThreadsProvider
   }
 
   @override
-  AutoDisposeStreamNotifierProviderElement<Threads, List<AppChatItem>>
+  AutoDisposeStreamNotifierProviderElement<Threads, List<AppThreadItem>>
       createElement() {
     return _ThreadsProviderElement(this);
   }
@@ -199,14 +199,13 @@ class ThreadsProvider
   }
 }
 
-mixin ThreadsRef on AutoDisposeStreamNotifierProviderRef<List<AppChatItem>> {
+mixin ThreadsRef on AutoDisposeStreamNotifierProviderRef<List<AppThreadItem>> {
   /// The parameter `chatId` of this provider.
   String get chatId;
 }
 
-class _ThreadsProviderElement
-    extends AutoDisposeStreamNotifierProviderElement<Threads, List<AppChatItem>>
-    with ThreadsRef {
+class _ThreadsProviderElement extends AutoDisposeStreamNotifierProviderElement<
+    Threads, List<AppThreadItem>> with ThreadsRef {
   _ThreadsProviderElement(super.provider);
 
   @override

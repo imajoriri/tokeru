@@ -1,46 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tokeru_model/controller/ogp_controller/ogp_controller.dart';
-import 'package:tokeru_model/controller/read/read_controller.dart';
-import 'package:tokeru_model/controller/thread/thread.dart';
-import 'package:tokeru_model/model/app_item/app_item.dart';
 import 'package:tokeru_widgets/widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ChatAndOgpListItem extends ConsumerWidget {
   const ChatAndOgpListItem({
     super.key,
-    required this.chat,
-    required this.showRead,
-    required this.showThread,
+    required this.message,
+    this.onRead,
+    this.onThread,
+    this.onConvertTodo,
   });
 
-  final AppChatItem chat;
-  final bool showThread;
-  final bool showRead;
-
+  final String message;
+  final void Function()? onRead;
+  final void Function()? onThread;
+  final void Function()? onConvertTodo;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final links = getLinks(text: chat.message);
+    final links = getLinks(text: message);
     return ChatListItem.chat(
-      text: chat.message,
+      text: message,
       launchUrl: (link) async {
         if (!await launchUrl(link)) {
           throw Exception('Could not launch ${link.toString()}');
         }
       },
-      onRead: showRead
-          ? () {
-              ref.read(readControllerProvider.notifier).markAsReadAsChat(chat);
-            }
-          : null,
-      onThread: showThread
-          ? () {
-              ref.read(selectedThreadProvider.notifier).setThread(
-                    chat: chat,
-                  );
-            }
-          : null,
+      onRead: onRead,
+      onThread: onThread,
+      onConvertTodo: onConvertTodo,
       bottomWidget: SelectionContainer.disabled(
         child: links.isEmpty
             ? const SizedBox.shrink()

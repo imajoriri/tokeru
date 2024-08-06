@@ -17,11 +17,18 @@ class _ChatList extends HookConsumerWidget {
             }
             return false;
           },
-          child: ChatListItems.main(
+          child: ChatListItems<AppChatItem>.main(
             chats: chats,
             bottomSpace:
                 ref.watch(readAllProvider).valueOrNull == true ? 0 : 32,
             readTime: ref.watch(readControllerProvider).valueOrNull,
+            onRead: (item) => ref
+                .read(readControllerProvider.notifier)
+                .markAsReadAsChat(item),
+            onThread: (chat) =>
+                ref.read(selectedThreadProvider.notifier).setThread(chat: chat),
+            onConvertTodo: (chat) =>
+                ref.read(chatsProvider.notifier).convertToTodoItem(chat),
           ),
         );
       },

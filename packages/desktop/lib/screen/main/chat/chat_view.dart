@@ -6,6 +6,7 @@ import 'package:tokeru_desktop/widget/text_field/chat_text_field.dart';
 import 'package:tokeru_model/controller/chats/chats.dart';
 import 'package:tokeru_model/controller/read/read_controller.dart';
 import 'package:tokeru_model/controller/read_all/read_all_controller.dart';
+import 'package:tokeru_model/controller/thread/thread.dart';
 import 'package:tokeru_model/model.dart';
 import 'package:tokeru_desktop/widget/focus_nodes.dart';
 import 'package:tokeru_widgets/widgets.dart';

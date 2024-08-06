@@ -11,6 +11,7 @@ class ChatListItem extends HookWidget {
     this.bottomWidget,
     this.onRead,
     this.onThread,
+    this.onConvertTodo,
   });
 
   final String text;
@@ -26,6 +27,9 @@ class ChatListItem extends HookWidget {
 
   /// スレッドを押した時の処理。
   final void Function()? onThread;
+
+  /// Todoへの変換を押した時の処理。
+  final void Function()? onConvertTodo;
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +77,13 @@ class ChatListItem extends HookWidget {
                           icon: const Icon(Icons.chat_outlined),
                           onPressed: onThread!,
                           tooltip: "Thread",
+                        ),
+                      if (onConvertTodo != null)
+                        AppIconButton.small(
+                          showBorder: true,
+                          icon: const Icon(Icons.checklist),
+                          onPressed: onConvertTodo!,
+                          tooltip: "Convert to Todo",
                         ),
                     ],
                   ),
