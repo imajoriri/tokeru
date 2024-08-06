@@ -1,33 +1,36 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tokeru_desktop/widget/chat_and_ogp_list_item.dart';
 import 'package:tokeru_model/model/app_item/app_item.dart';
 import 'package:tokeru_widgets/widgets.dart';
 
-class ChatListItems extends StatelessWidget {
+class ChatListItems<T extends AppItem> extends ConsumerWidget {
   /// メインのチャットで表示するチャットのリスト。
   const ChatListItems.main({
     Key? key,
-    required this.chats,
+    required List<AppChatItem> chats,
     this.bottomSpace = 0,
     this.readTime,
-  })  : showRead = true,
-        showThread = true,
-        showConvertTodo = true,
+    required this.onRead,
+    required this.onThread,
+    required this.onConvertTodo,
+  })  : appItems = chats,
         super(key: key);
 
   /// スレッドで表示するチャットのリスト。
   const ChatListItems.thread({
     Key? key,
-    required this.chats,
-  })  : showRead = false,
-        showThread = false,
+    required List<AppThreadItem> threads,
+  })  : appItems = threads,
+        onConvertTodo = null,
+        onRead = null,
+        onThread = null,
         bottomSpace = 0,
         readTime = null,
-        showConvertTodo = false,
         super(key: key);
 
-  final List<AppChatItem> chats;
+  final List<AppItem> appItems;
 
   final double bottomSpace;
 
@@ -37,39 +40,43 @@ class ChatListItems extends StatelessWidget {
   /// nullの場合は既読のDividerを表示しない。
   final DateTime? readTime;
 
-  /// 既読ボタンを表示するかどうか。
-  final bool showRead;
-
-  /// スレッドを表示するボタンを表示するかどうか。
-  final bool showThread;
-
-  /// Todoへの変換ボタンを表示するかどうか。
-  final bool showConvertTodo;
+  final void Function(T)? onRead;
+  final void Function(T)? onThread;
+  final void Function(T)? onConvertTodo;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SelectionArea(
       child: ListView.builder(
-        itemCount: chats.length,
+        itemCount: appItems.length,
         shrinkWrap: true,
         reverse: true,
         itemBuilder: (context, index) {
-          final chat = chats[index];
+          final item = appItems[index];
           final isLast = index == 0;
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _TodoDivider(
                 index: index,
-                chats: chats,
+                items: appItems,
                 readTime: readTime,
               ),
-              ChatAndOgpListItem(
-                chat: chat,
-                showRead: showRead,
-                showThread: showThread,
-                showConvertTodo: showConvertTodo,
-              ),
+              switch (item) {
+                AppChatItem() => ChatAndOgpListItem(
+                    message: item.message,
+                    onRead: onRead != null ? () => onRead!(item as T) : null,
+                    onThread:
+                        onThread != null ? () => onThread!(item as T) : null,
+                    onConvertTodo: onConvertTodo != null
+                        ? () => onConvertTodo!(item as T)
+                        : null,
+                  ),
+                AppThreadItem() => ChatAndOgpListItem(
+                    message: item.message,
+                  ),
+                _ => const SizedBox.shrink(),
+              },
               if (isLast) const SizedBox(height: 16),
               if (isLast) _BottomSpace(bottomSpace: bottomSpace),
             ],
@@ -100,19 +107,19 @@ class _BottomSpace extends StatelessWidget {
 
 class _TodoDivider extends StatelessWidget {
   const _TodoDivider({
-    required this.chats,
+    required this.items,
     required this.index,
     required this.readTime,
   });
 
   final int index;
-  final List<AppChatItem> chats;
+  final List<AppItem> items;
   final DateTime? readTime;
 
   @override
   Widget build(BuildContext context) {
-    final item = chats[index];
-    final next = chats.firstWhereIndexedOrNull((i, _) => i == index + 1);
+    final item = items[index];
+    final next = items.firstWhereIndexedOrNull((i, _) => i == index + 1);
     // 次のAppItemが日付が変わるかどうか。
     final isNextDay = next != null && item.createdAt.day != next.createdAt.day;
 

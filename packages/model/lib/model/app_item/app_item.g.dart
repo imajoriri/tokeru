@@ -10,7 +10,6 @@ _$AppChatItemImpl _$$AppChatItemImplFromJson(Map<String, dynamic> json) =>
     _$AppChatItemImpl(
       id: json['id'] as String,
       message: json['message'] as String,
-      chatId: json['chatId'] as String?,
       createdAt:
           const TimestampConverter().fromJson(json['createdAt'] as Timestamp),
       $type: json['type'] as String?,
@@ -20,7 +19,25 @@ Map<String, dynamic> _$$AppChatItemImplToJson(_$AppChatItemImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'message': instance.message,
-      'chatId': instance.chatId,
+      'createdAt': const TimestampConverter().toJson(instance.createdAt),
+      'type': instance.$type,
+    };
+
+_$AppThreadItemImpl _$$AppThreadItemImplFromJson(Map<String, dynamic> json) =>
+    _$AppThreadItemImpl(
+      id: json['id'] as String,
+      message: json['message'] as String,
+      parentId: json['parentId'] as String,
+      createdAt:
+          const TimestampConverter().fromJson(json['createdAt'] as Timestamp),
+      $type: json['type'] as String?,
+    );
+
+Map<String, dynamic> _$$AppThreadItemImplToJson(_$AppThreadItemImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'message': instance.message,
+      'parentId': instance.parentId,
       'createdAt': const TimestampConverter().toJson(instance.createdAt),
       'type': instance.$type,
     };

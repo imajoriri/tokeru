@@ -44,8 +44,8 @@ class AppItemRepository {
         .collection('users')
         .doc(userId)
         .collection(_collectionName)
-        .where('type', isEqualTo: 'chat')
-        .where('chatId', isEqualTo: chatId)
+        .where('type', isEqualTo: 'thread')
+        .where('parentId', isEqualTo: chatId)
         .orderBy('createdAt', descending: true);
   }
 
