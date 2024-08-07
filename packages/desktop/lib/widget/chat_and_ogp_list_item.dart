@@ -33,60 +33,75 @@ class ChatAndOgpListItem extends ConsumerWidget {
       onThread: onThread,
       onConvertTodo: onConvertTodo,
       bottomWidget: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SelectionContainer.disabled(
-            child: links.isEmpty
-                ? const SizedBox.shrink()
-                : ListView.separated(
-                    padding: EdgeInsets.symmetric(
-                        vertical: context.appSpacing.small),
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      final uri = links[index];
-                      final asyncValue =
-                          ref.watch(ogpControllerProvider(url: uri.toString()));
-                      return AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 150),
-                        child: asyncValue.when(
-                          data: (ogp) {
-                            return UrlPreviewCard(
-                              key: ValueKey(uri.toString()),
-                              title: ogp.title,
-                              description: ogp.description,
-                              imageUrl: ogp.imageUrl,
-                              url: uri.toString(),
-                              onTap: () async {
-                                if (await canLaunchUrl(uri)) {
-                                  await launchUrl(uri);
-                                }
-                              },
-                            );
-                          },
-                          loading: () {
-                            return const UrlPreviewCard.loading();
-                          },
-                          error: (error, _) {
-                            return const SizedBox.shrink();
-                          },
-                        ),
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return SizedBox(height: context.appSpacing.small);
-                    },
-                    itemCount: links.length,
-                  ),
-          ),
+          _UrlPreviewCard(links: links),
 
           // スレッドの件数。0件の場合は表示しない。
-          if (threadCount != 0)
+          if (threadCount != null && threadCount != 0)
             Text(
               'Thread: $threadCount',
               style: context.appTextTheme.labelMidium,
             ),
         ],
       ),
+    );
+  }
+}
+
+class _UrlPreviewCard extends ConsumerWidget {
+  const _UrlPreviewCard({
+    required this.links,
+  });
+
+  final List<Uri> links;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SelectionContainer.disabled(
+      child: links.isEmpty
+          ? const SizedBox.shrink()
+          : ListView.separated(
+              padding: EdgeInsets.symmetric(
+                vertical: context.appSpacing.small,
+              ),
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                final uri = links[index];
+                final asyncValue =
+                    ref.watch(ogpControllerProvider(url: uri.toString()));
+                return AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 150),
+                  child: asyncValue.when(
+                    data: (ogp) {
+                      return UrlPreviewCard(
+                        key: ValueKey(uri.toString()),
+                        title: ogp.title,
+                        description: ogp.description,
+                        imageUrl: ogp.imageUrl,
+                        url: uri.toString(),
+                        onTap: () async {
+                          if (await canLaunchUrl(uri)) {
+                            await launchUrl(uri);
+                          }
+                        },
+                      );
+                    },
+                    loading: () {
+                      return const UrlPreviewCard.loading();
+                    },
+                    error: (error, _) {
+                      return const SizedBox.shrink();
+                    },
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) {
+                return SizedBox(height: context.appSpacing.small);
+              },
+              itemCount: links.length,
+            ),
     );
   }
 }
