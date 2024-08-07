@@ -10,6 +10,7 @@ _$AppChatItemImpl _$$AppChatItemImplFromJson(Map<String, dynamic> json) =>
     _$AppChatItemImpl(
       id: json['id'] as String,
       message: json['message'] as String,
+      threadCount: (json['threadCount'] as num?)?.toInt() ?? 0,
       createdAt:
           const TimestampConverter().fromJson(json['createdAt'] as Timestamp),
       $type: json['type'] as String?,
@@ -19,6 +20,7 @@ Map<String, dynamic> _$$AppChatItemImplToJson(_$AppChatItemImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'message': instance.message,
+      'threadCount': instance.threadCount,
       'createdAt': const TimestampConverter().toJson(instance.createdAt),
       'type': instance.$type,
     };
@@ -48,6 +50,7 @@ _$AppTodoItemImpl _$$AppTodoItemImplFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String,
       isDone: json['isDone'] as bool,
       index: (json['index'] as num).toInt(),
+      threadCount: (json['threadCount'] as num?)?.toInt() ?? 0,
       createdAt:
           const TimestampConverter().fromJson(json['createdAt'] as Timestamp),
       $type: json['type'] as String?,
@@ -59,6 +62,7 @@ Map<String, dynamic> _$$AppTodoItemImplToJson(_$AppTodoItemImpl instance) =>
       'title': instance.title,
       'isDone': instance.isDone,
       'index': instance.index,
+      'threadCount': instance.threadCount,
       'createdAt': const TimestampConverter().toJson(instance.createdAt),
       'type': instance.$type,
     };

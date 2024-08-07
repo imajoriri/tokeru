@@ -63,14 +63,27 @@ class ChatListItems<T extends AppItem> extends ConsumerWidget {
                 readTime: readTime,
               ),
               switch (item) {
-                AppChatItem() => ChatAndOgpListItem(
-                    message: item.message,
-                    onRead: onRead != null ? () => onRead!(item as T) : null,
-                    onThread:
-                        onThread != null ? () => onThread!(item as T) : null,
-                    onConvertTodo: onConvertTodo != null
-                        ? () => onConvertTodo!(item as T)
-                        : null,
+                AppChatItem() => Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // スレッドの件数。0件の場合は表示しない。
+                      if (item.threadCount != 0)
+                        Text(
+                          'Thread: ${item.threadCount}',
+                          style: context.appTextTheme.labelMidium,
+                        ),
+                      ChatAndOgpListItem(
+                        message: item.message,
+                        onRead:
+                            onRead != null ? () => onRead!(item as T) : null,
+                        onThread: onThread != null
+                            ? () => onThread!(item as T)
+                            : null,
+                        onConvertTodo: onConvertTodo != null
+                            ? () => onConvertTodo!(item as T)
+                            : null,
+                      ),
+                    ],
                   ),
                 AppThreadItem() => ChatAndOgpListItem(
                     message: item.message,

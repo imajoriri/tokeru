@@ -8,6 +8,10 @@ part 'app_item_repository.g.dart';
 
 const _collectionName = 'todos';
 
+// TODO: リファクタリング
+// - typeがAppItemのtypeを参照したい。
+// - AppItemのサブクラスごとにリポジトリを分けたい。
+
 /// [AppItem]を扱うRepository
 @riverpod
 AppItemRepository appItemRepository(AppItemRepositoryRef ref, String userId) =>
@@ -37,14 +41,14 @@ class AppItemRepository {
   /// スレッドのクエリを返す。
   Query<Map<String, dynamic>> threadQuery({
     required String userId,
-    required String chatId,
+    required String parentId,
   }) {
     return FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
         .collection(_collectionName)
         .where('type', isEqualTo: 'thread')
-        .where('parentId', isEqualTo: chatId)
+        .where('parentId', isEqualTo: parentId)
         .orderBy('createdAt', descending: true);
   }
 
@@ -115,6 +119,17 @@ class AppItemRepository {
         .collection(_collectionName)
         .doc(item.id)
         .update(json);
+  }
+
+  /// スレッドの件数を+1する。
+  Future<void> incrementThreadCount({required String id}) async {
+    await ref
+        .read(userDocumentProvider(userId))
+        .collection(_collectionName)
+        .doc(id)
+        .update({
+      'threadCount': FieldValue.increment(1),
+    });
   }
 
   /// Todoを削除する
