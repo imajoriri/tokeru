@@ -16,6 +16,9 @@ sealed class AppItem with _$AppItem {
     /// メッセージ。
     required String message,
 
+    /// スレッドの件数。
+    @Default(0) int threadCount,
+
     /// 作成日時。
     @TimestampConverter() required DateTime createdAt,
   }) = AppChatItem;
@@ -37,10 +40,20 @@ sealed class AppItem with _$AppItem {
 
   @FreezedUnionValue('todo')
   const factory AppItem.todo({
+    /// ID。
     required String id,
+
+    /// タイトル。
     required String title,
+
+    /// 完了フラグ。
     required bool isDone,
+
+    /// インデックス。
     required int index,
+
+    /// スレッドの件数。
+    @Default(0) int threadCount,
     @TimestampConverter() required DateTime createdAt,
   }) = AppTodoItem;
 

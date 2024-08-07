@@ -19,8 +19,7 @@ class ThreadView extends HookConsumerWidget {
       return const SizedBox.shrink();
     }
 
-    final provider = threadsProvider(appItemId: item.id);
-    final appItems = ref.watch(provider);
+    final appItems = ref.watch(threadsProvider);
 
     return Column(
       children: [
@@ -57,7 +56,7 @@ class ThreadView extends HookConsumerWidget {
           child: ChatTextField(
             focusNode: useFocusNode(),
             onSubmit: (message) {
-              ref.read(provider.notifier).add(message: message);
+              ref.read(threadsProvider.notifier).add(message: message);
             },
           ),
         ),

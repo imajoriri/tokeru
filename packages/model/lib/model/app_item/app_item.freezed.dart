@@ -41,14 +41,14 @@ mixin _$AppItem {
   DateTime get createdAt => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(
-            String id, String message, @TimestampConverter() DateTime createdAt)
+    required TResult Function(String id, String message, int threadCount,
+            @TimestampConverter() DateTime createdAt)
         chat,
     required TResult Function(String id, String message, String parentId,
             @TimestampConverter() DateTime createdAt)
         thread,
     required TResult Function(String id, String title, bool isDone, int index,
-            @TimestampConverter() DateTime createdAt)
+            int threadCount, @TimestampConverter() DateTime createdAt)
         todo,
     required TResult Function(
             String id, int index, @TimestampConverter() DateTime createdAt)
@@ -57,14 +57,14 @@ mixin _$AppItem {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String id, String message,
+    TResult? Function(String id, String message, int threadCount,
             @TimestampConverter() DateTime createdAt)?
         chat,
     TResult? Function(String id, String message, String parentId,
             @TimestampConverter() DateTime createdAt)?
         thread,
     TResult? Function(String id, String title, bool isDone, int index,
-            @TimestampConverter() DateTime createdAt)?
+            int threadCount, @TimestampConverter() DateTime createdAt)?
         todo,
     TResult? Function(
             String id, int index, @TimestampConverter() DateTime createdAt)?
@@ -73,14 +73,14 @@ mixin _$AppItem {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String id, String message,
+    TResult Function(String id, String message, int threadCount,
             @TimestampConverter() DateTime createdAt)?
         chat,
     TResult Function(String id, String message, String parentId,
             @TimestampConverter() DateTime createdAt)?
         thread,
     TResult Function(String id, String title, bool isDone, int index,
-            @TimestampConverter() DateTime createdAt)?
+            int threadCount, @TimestampConverter() DateTime createdAt)?
         todo,
     TResult Function(
             String id, int index, @TimestampConverter() DateTime createdAt)?
@@ -164,7 +164,10 @@ abstract class _$$AppChatItemImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id, String message, @TimestampConverter() DateTime createdAt});
+      {String id,
+      String message,
+      int threadCount,
+      @TimestampConverter() DateTime createdAt});
 }
 
 /// @nodoc
@@ -180,6 +183,7 @@ class __$$AppChatItemImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? message = null,
+    Object? threadCount = null,
     Object? createdAt = null,
   }) {
     return _then(_$AppChatItemImpl(
@@ -191,6 +195,10 @@ class __$$AppChatItemImplCopyWithImpl<$Res>
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
+      threadCount: null == threadCount
+          ? _value.threadCount
+          : threadCount // ignore: cast_nullable_to_non_nullable
+              as int,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -205,6 +213,7 @@ class _$AppChatItemImpl implements AppChatItem {
   const _$AppChatItemImpl(
       {required this.id,
       required this.message,
+      this.threadCount = 0,
       @TimestampConverter() required this.createdAt,
       final String? $type})
       : $type = $type ?? 'chat';
@@ -220,6 +229,11 @@ class _$AppChatItemImpl implements AppChatItem {
   @override
   final String message;
 
+  /// スレッドの件数。
+  @override
+  @JsonKey()
+  final int threadCount;
+
   /// 作成日時。
   @override
   @TimestampConverter()
@@ -230,7 +244,7 @@ class _$AppChatItemImpl implements AppChatItem {
 
   @override
   String toString() {
-    return 'AppItem.chat(id: $id, message: $message, createdAt: $createdAt)';
+    return 'AppItem.chat(id: $id, message: $message, threadCount: $threadCount, createdAt: $createdAt)';
   }
 
   @override
@@ -240,13 +254,16 @@ class _$AppChatItemImpl implements AppChatItem {
             other is _$AppChatItemImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.message, message) || other.message == message) &&
+            (identical(other.threadCount, threadCount) ||
+                other.threadCount == threadCount) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, message, createdAt);
+  int get hashCode =>
+      Object.hash(runtimeType, id, message, threadCount, createdAt);
 
   @JsonKey(ignore: true)
   @override
@@ -257,52 +274,52 @@ class _$AppChatItemImpl implements AppChatItem {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(
-            String id, String message, @TimestampConverter() DateTime createdAt)
+    required TResult Function(String id, String message, int threadCount,
+            @TimestampConverter() DateTime createdAt)
         chat,
     required TResult Function(String id, String message, String parentId,
             @TimestampConverter() DateTime createdAt)
         thread,
     required TResult Function(String id, String title, bool isDone, int index,
-            @TimestampConverter() DateTime createdAt)
+            int threadCount, @TimestampConverter() DateTime createdAt)
         todo,
     required TResult Function(
             String id, int index, @TimestampConverter() DateTime createdAt)
         divider,
   }) {
-    return chat(id, message, createdAt);
+    return chat(id, message, threadCount, createdAt);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String id, String message,
+    TResult? Function(String id, String message, int threadCount,
             @TimestampConverter() DateTime createdAt)?
         chat,
     TResult? Function(String id, String message, String parentId,
             @TimestampConverter() DateTime createdAt)?
         thread,
     TResult? Function(String id, String title, bool isDone, int index,
-            @TimestampConverter() DateTime createdAt)?
+            int threadCount, @TimestampConverter() DateTime createdAt)?
         todo,
     TResult? Function(
             String id, int index, @TimestampConverter() DateTime createdAt)?
         divider,
   }) {
-    return chat?.call(id, message, createdAt);
+    return chat?.call(id, message, threadCount, createdAt);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String id, String message,
+    TResult Function(String id, String message, int threadCount,
             @TimestampConverter() DateTime createdAt)?
         chat,
     TResult Function(String id, String message, String parentId,
             @TimestampConverter() DateTime createdAt)?
         thread,
     TResult Function(String id, String title, bool isDone, int index,
-            @TimestampConverter() DateTime createdAt)?
+            int threadCount, @TimestampConverter() DateTime createdAt)?
         todo,
     TResult Function(
             String id, int index, @TimestampConverter() DateTime createdAt)?
@@ -310,7 +327,7 @@ class _$AppChatItemImpl implements AppChatItem {
     required TResult orElse(),
   }) {
     if (chat != null) {
-      return chat(id, message, createdAt);
+      return chat(id, message, threadCount, createdAt);
     }
     return orElse();
   }
@@ -364,6 +381,7 @@ abstract class AppChatItem implements AppItem {
   const factory AppChatItem(
           {required final String id,
           required final String message,
+          final int threadCount,
           @TimestampConverter() required final DateTime createdAt}) =
       _$AppChatItemImpl;
 
@@ -377,6 +395,9 @@ abstract class AppChatItem implements AppItem {
 
   /// メッセージ。
   String get message;
+
+  /// スレッドの件数。
+  int get threadCount;
   @override
 
   /// 作成日時。
@@ -506,14 +527,14 @@ class _$AppThreadItemImpl implements AppThreadItem {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(
-            String id, String message, @TimestampConverter() DateTime createdAt)
+    required TResult Function(String id, String message, int threadCount,
+            @TimestampConverter() DateTime createdAt)
         chat,
     required TResult Function(String id, String message, String parentId,
             @TimestampConverter() DateTime createdAt)
         thread,
     required TResult Function(String id, String title, bool isDone, int index,
-            @TimestampConverter() DateTime createdAt)
+            int threadCount, @TimestampConverter() DateTime createdAt)
         todo,
     required TResult Function(
             String id, int index, @TimestampConverter() DateTime createdAt)
@@ -525,14 +546,14 @@ class _$AppThreadItemImpl implements AppThreadItem {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String id, String message,
+    TResult? Function(String id, String message, int threadCount,
             @TimestampConverter() DateTime createdAt)?
         chat,
     TResult? Function(String id, String message, String parentId,
             @TimestampConverter() DateTime createdAt)?
         thread,
     TResult? Function(String id, String title, bool isDone, int index,
-            @TimestampConverter() DateTime createdAt)?
+            int threadCount, @TimestampConverter() DateTime createdAt)?
         todo,
     TResult? Function(
             String id, int index, @TimestampConverter() DateTime createdAt)?
@@ -544,14 +565,14 @@ class _$AppThreadItemImpl implements AppThreadItem {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String id, String message,
+    TResult Function(String id, String message, int threadCount,
             @TimestampConverter() DateTime createdAt)?
         chat,
     TResult Function(String id, String message, String parentId,
             @TimestampConverter() DateTime createdAt)?
         thread,
     TResult Function(String id, String title, bool isDone, int index,
-            @TimestampConverter() DateTime createdAt)?
+            int threadCount, @TimestampConverter() DateTime createdAt)?
         todo,
     TResult Function(
             String id, int index, @TimestampConverter() DateTime createdAt)?
@@ -654,6 +675,7 @@ abstract class _$$AppTodoItemImplCopyWith<$Res>
       String title,
       bool isDone,
       int index,
+      int threadCount,
       @TimestampConverter() DateTime createdAt});
 }
 
@@ -672,6 +694,7 @@ class __$$AppTodoItemImplCopyWithImpl<$Res>
     Object? title = null,
     Object? isDone = null,
     Object? index = null,
+    Object? threadCount = null,
     Object? createdAt = null,
   }) {
     return _then(_$AppTodoItemImpl(
@@ -691,6 +714,10 @@ class __$$AppTodoItemImplCopyWithImpl<$Res>
           ? _value.index
           : index // ignore: cast_nullable_to_non_nullable
               as int,
+      threadCount: null == threadCount
+          ? _value.threadCount
+          : threadCount // ignore: cast_nullable_to_non_nullable
+              as int,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -707,6 +734,7 @@ class _$AppTodoItemImpl implements AppTodoItem {
       required this.title,
       required this.isDone,
       required this.index,
+      this.threadCount = 0,
       @TimestampConverter() required this.createdAt,
       final String? $type})
       : $type = $type ?? 'todo';
@@ -714,14 +742,26 @@ class _$AppTodoItemImpl implements AppTodoItem {
   factory _$AppTodoItemImpl.fromJson(Map<String, dynamic> json) =>
       _$$AppTodoItemImplFromJson(json);
 
+  /// ID。
   @override
   final String id;
+
+  /// タイトル。
   @override
   final String title;
+
+  /// 完了フラグ。
   @override
   final bool isDone;
+
+  /// インデックス。
   @override
   final int index;
+
+  /// スレッドの件数。
+  @override
+  @JsonKey()
+  final int threadCount;
   @override
   @TimestampConverter()
   final DateTime createdAt;
@@ -731,7 +771,7 @@ class _$AppTodoItemImpl implements AppTodoItem {
 
   @override
   String toString() {
-    return 'AppItem.todo(id: $id, title: $title, isDone: $isDone, index: $index, createdAt: $createdAt)';
+    return 'AppItem.todo(id: $id, title: $title, isDone: $isDone, index: $index, threadCount: $threadCount, createdAt: $createdAt)';
   }
 
   @override
@@ -743,14 +783,16 @@ class _$AppTodoItemImpl implements AppTodoItem {
             (identical(other.title, title) || other.title == title) &&
             (identical(other.isDone, isDone) || other.isDone == isDone) &&
             (identical(other.index, index) || other.index == index) &&
+            (identical(other.threadCount, threadCount) ||
+                other.threadCount == threadCount) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, title, isDone, index, createdAt);
+  int get hashCode => Object.hash(
+      runtimeType, id, title, isDone, index, threadCount, createdAt);
 
   @JsonKey(ignore: true)
   @override
@@ -761,52 +803,52 @@ class _$AppTodoItemImpl implements AppTodoItem {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(
-            String id, String message, @TimestampConverter() DateTime createdAt)
+    required TResult Function(String id, String message, int threadCount,
+            @TimestampConverter() DateTime createdAt)
         chat,
     required TResult Function(String id, String message, String parentId,
             @TimestampConverter() DateTime createdAt)
         thread,
     required TResult Function(String id, String title, bool isDone, int index,
-            @TimestampConverter() DateTime createdAt)
+            int threadCount, @TimestampConverter() DateTime createdAt)
         todo,
     required TResult Function(
             String id, int index, @TimestampConverter() DateTime createdAt)
         divider,
   }) {
-    return todo(id, title, isDone, index, createdAt);
+    return todo(id, title, isDone, index, threadCount, createdAt);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String id, String message,
+    TResult? Function(String id, String message, int threadCount,
             @TimestampConverter() DateTime createdAt)?
         chat,
     TResult? Function(String id, String message, String parentId,
             @TimestampConverter() DateTime createdAt)?
         thread,
     TResult? Function(String id, String title, bool isDone, int index,
-            @TimestampConverter() DateTime createdAt)?
+            int threadCount, @TimestampConverter() DateTime createdAt)?
         todo,
     TResult? Function(
             String id, int index, @TimestampConverter() DateTime createdAt)?
         divider,
   }) {
-    return todo?.call(id, title, isDone, index, createdAt);
+    return todo?.call(id, title, isDone, index, threadCount, createdAt);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String id, String message,
+    TResult Function(String id, String message, int threadCount,
             @TimestampConverter() DateTime createdAt)?
         chat,
     TResult Function(String id, String message, String parentId,
             @TimestampConverter() DateTime createdAt)?
         thread,
     TResult Function(String id, String title, bool isDone, int index,
-            @TimestampConverter() DateTime createdAt)?
+            int threadCount, @TimestampConverter() DateTime createdAt)?
         todo,
     TResult Function(
             String id, int index, @TimestampConverter() DateTime createdAt)?
@@ -814,7 +856,7 @@ class _$AppTodoItemImpl implements AppTodoItem {
     required TResult orElse(),
   }) {
     if (todo != null) {
-      return todo(id, title, isDone, index, createdAt);
+      return todo(id, title, isDone, index, threadCount, createdAt);
     }
     return orElse();
   }
@@ -870,6 +912,7 @@ abstract class AppTodoItem implements AppItem {
           required final String title,
           required final bool isDone,
           required final int index,
+          final int threadCount,
           @TimestampConverter() required final DateTime createdAt}) =
       _$AppTodoItemImpl;
 
@@ -877,10 +920,21 @@ abstract class AppTodoItem implements AppItem {
       _$AppTodoItemImpl.fromJson;
 
   @override
+
+  /// ID。
   String get id;
+
+  /// タイトル。
   String get title;
+
+  /// 完了フラグ。
   bool get isDone;
+
+  /// インデックス。
   int get index;
+
+  /// スレッドの件数。
+  int get threadCount;
   @override
   @TimestampConverter()
   DateTime get createdAt;
@@ -987,14 +1041,14 @@ class _$AppDividerItemImpl implements AppDividerItem {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(
-            String id, String message, @TimestampConverter() DateTime createdAt)
+    required TResult Function(String id, String message, int threadCount,
+            @TimestampConverter() DateTime createdAt)
         chat,
     required TResult Function(String id, String message, String parentId,
             @TimestampConverter() DateTime createdAt)
         thread,
     required TResult Function(String id, String title, bool isDone, int index,
-            @TimestampConverter() DateTime createdAt)
+            int threadCount, @TimestampConverter() DateTime createdAt)
         todo,
     required TResult Function(
             String id, int index, @TimestampConverter() DateTime createdAt)
@@ -1006,14 +1060,14 @@ class _$AppDividerItemImpl implements AppDividerItem {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String id, String message,
+    TResult? Function(String id, String message, int threadCount,
             @TimestampConverter() DateTime createdAt)?
         chat,
     TResult? Function(String id, String message, String parentId,
             @TimestampConverter() DateTime createdAt)?
         thread,
     TResult? Function(String id, String title, bool isDone, int index,
-            @TimestampConverter() DateTime createdAt)?
+            int threadCount, @TimestampConverter() DateTime createdAt)?
         todo,
     TResult? Function(
             String id, int index, @TimestampConverter() DateTime createdAt)?
@@ -1025,14 +1079,14 @@ class _$AppDividerItemImpl implements AppDividerItem {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String id, String message,
+    TResult Function(String id, String message, int threadCount,
             @TimestampConverter() DateTime createdAt)?
         chat,
     TResult Function(String id, String message, String parentId,
             @TimestampConverter() DateTime createdAt)?
         thread,
     TResult Function(String id, String title, bool isDone, int index,
-            @TimestampConverter() DateTime createdAt)?
+            int threadCount, @TimestampConverter() DateTime createdAt)?
         todo,
     TResult Function(
             String id, int index, @TimestampConverter() DateTime createdAt)?

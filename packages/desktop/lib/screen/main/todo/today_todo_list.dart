@@ -38,7 +38,14 @@ class TodayTodoList extends HookConsumerWidget {
                 itemBuilder: (context, index) {
                   final key = ValueKey(todos[index].id);
                   final todo = todos[index];
-                  return _TodoListItem(key: key, todo: todo, index: index);
+                  return _TodoListItem(
+                    key: key,
+                    todo: todo,
+                    index: index,
+                    onFocus: () {
+                      ref.read(selectedThreadProvider.notifier).open(todo.id);
+                    },
+                  );
                 },
               ),
             ),
@@ -59,10 +66,12 @@ class _TodoListItem extends HookConsumerWidget {
     super.key,
     required this.todo,
     required this.index,
+    required this.onFocus,
   });
 
   final AppTodoItem todo;
   final int index;
+  final Function() onFocus;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -73,7 +82,7 @@ class _TodoListItem extends HookConsumerWidget {
       () {
         void listener() {
           if (focusNode.hasFocus) {
-            ref.read(selectedThreadProvider.notifier).open(todo);
+            onFocus();
           }
         }
 

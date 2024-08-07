@@ -71,6 +71,7 @@ class ChatListItems<T extends AppItem> extends ConsumerWidget {
                     onConvertTodo: onConvertTodo != null
                         ? () => onConvertTodo!(item as T)
                         : null,
+                    threadCount: item.threadCount,
                   ),
                 AppThreadItem() => ChatAndOgpListItem(
                     message: item.message,
