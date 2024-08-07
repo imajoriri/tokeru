@@ -42,7 +42,6 @@ class PanelScreen extends HookConsumerWidget {
             focusNode.requestFocus();
             break;
           case OsHandlerType.windowInactive:
-
             // ロックしている場合はウィンドウを閉じない。
             if (!isLocked.value) {
               panelMethodChannel.closeWindow();
@@ -177,15 +176,15 @@ class _Todo extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final firstTodo = ref.watch(todoControllerProvider).valueOrNull?.first;
-
-    if (firstTodo == null) {
+    final todos = ref.watch(todoControllerProvider).valueOrNull;
+    if (todos == null || todos.isEmpty) {
       return const SizedBox();
     }
+    final firstTodo = todos.first;
 
     return TodoListItem(
-      // Todoが変わった時にtitleも更新されてほしいので、keyを設定する。
-      key: ValueKey(firstTodo.id),
+      // Todoが変わった時にtitleも更新されてほしいので、keyとtitleを設定する。
+      key: ValueKey(firstTodo.id + firstTodo.title),
       isDone: firstTodo.isDone,
       title: firstTodo.title,
       onToggleDone: (value) {

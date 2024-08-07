@@ -6,7 +6,7 @@ part of 'threads.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$threadsHash() => r'4e106ea22f58262c758c39c60b940c7adbd23f95';
+String _$threadsHash() => r'4f6361d1ab2e3569e36a103301c363b953f21e12';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -31,10 +31,10 @@ class _SystemHash {
 
 abstract class _$Threads
     extends BuildlessAutoDisposeStreamNotifier<List<AppThreadItem>> {
-  late final String chatId;
+  late final String appItemId;
 
   Stream<List<AppThreadItem>> build({
-    required String chatId,
+    required String appItemId,
   });
 }
 
@@ -63,10 +63,10 @@ class ThreadsFamily extends Family {
 
   /// See also [Threads].
   ThreadsProvider call({
-    required String chatId,
+    required String appItemId,
   }) {
     return ThreadsProvider(
-      chatId: chatId,
+      appItemId: appItemId,
     );
   }
 
@@ -76,7 +76,7 @@ class ThreadsFamily extends Family {
     covariant ThreadsProvider provider,
   ) {
     return call(
-      chatId: provider.chatId,
+      appItemId: provider.appItemId,
     );
   }
 
@@ -107,9 +107,9 @@ class ThreadsProvider extends AutoDisposeStreamNotifierProviderImpl<Threads,
     List<AppThreadItem>> {
   /// See also [Threads].
   ThreadsProvider({
-    required String chatId,
+    required String appItemId,
   }) : this._internal(
-          () => Threads()..chatId = chatId,
+          () => Threads()..appItemId = appItemId,
           from: threadsProvider,
           name: r'threadsProvider',
           debugGetCreateSourceHash:
@@ -118,7 +118,7 @@ class ThreadsProvider extends AutoDisposeStreamNotifierProviderImpl<Threads,
                   : _$threadsHash,
           dependencies: ThreadsFamily._dependencies,
           allTransitiveDependencies: ThreadsFamily._allTransitiveDependencies,
-          chatId: chatId,
+          appItemId: appItemId,
         );
 
   ThreadsProvider._internal(
@@ -128,17 +128,17 @@ class ThreadsProvider extends AutoDisposeStreamNotifierProviderImpl<Threads,
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.chatId,
+    required this.appItemId,
   }) : super.internal();
 
-  final String chatId;
+  final String appItemId;
 
   @override
   Stream<List<AppThreadItem>> runNotifierBuild(
     covariant Threads notifier,
   ) {
     return notifier.build(
-      chatId: chatId,
+      appItemId: appItemId,
     );
   }
 
@@ -147,22 +147,22 @@ class ThreadsProvider extends AutoDisposeStreamNotifierProviderImpl<Threads,
     return ProviderOverride(
       origin: this,
       override: ThreadsProvider._internal(
-        () => create()..chatId = chatId,
+        () => create()..appItemId = appItemId,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        chatId: chatId,
+        appItemId: appItemId,
       ),
     );
   }
 
   @override
   ({
-    String chatId,
+    String appItemId,
   }) get argument {
-    return (chatId: chatId,);
+    return (appItemId: appItemId,);
   }
 
   @override
@@ -175,33 +175,33 @@ class ThreadsProvider extends AutoDisposeStreamNotifierProviderImpl<Threads,
     Threads Function() create,
   ) {
     return ThreadsProvider._internal(
-      () => create()..chatId = chatId,
+      () => create()..appItemId = appItemId,
       name: name,
       dependencies: dependencies,
       allTransitiveDependencies: allTransitiveDependencies,
       debugGetCreateSourceHash: debugGetCreateSourceHash,
       from: from,
-      chatId: chatId,
+      appItemId: appItemId,
     );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is ThreadsProvider && other.chatId == chatId;
+    return other is ThreadsProvider && other.appItemId == appItemId;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, chatId.hashCode);
+    hash = _SystemHash.combine(hash, appItemId.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
 mixin ThreadsRef on AutoDisposeStreamNotifierProviderRef<List<AppThreadItem>> {
-  /// The parameter `chatId` of this provider.
-  String get chatId;
+  /// The parameter `appItemId` of this provider.
+  String get appItemId;
 }
 
 class _ThreadsProviderElement extends AutoDisposeStreamNotifierProviderElement<
@@ -209,7 +209,7 @@ class _ThreadsProviderElement extends AutoDisposeStreamNotifierProviderElement<
   _ThreadsProviderElement(super.provider);
 
   @override
-  String get chatId => (origin as ThreadsProvider).chatId;
+  String get appItemId => (origin as ThreadsProvider).appItemId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package

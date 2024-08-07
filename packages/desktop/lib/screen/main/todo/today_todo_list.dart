@@ -38,76 +38,7 @@ class TodayTodoList extends HookConsumerWidget {
                 itemBuilder: (context, index) {
                   final key = ValueKey(todos[index].id);
                   final todo = todos[index];
-                  return HookBuilder(
-                    key: key,
-                    builder: (context) {
-                      return Padding(
-                        padding:
-                            EdgeInsets.only(bottom: context.appSpacing.smallX),
-                        child: TodoListItem(
-                          isDone: todo.isDone,
-                          index: index,
-                          // 新規作成されたときに自動でフォーカスする。
-                          // autofocus: true,
-                          title: todo.title,
-                          onDeleted: () async {
-                            ref
-                                .read(todoControllerProvider.notifier)
-                                .deleteTodo(todoId: todo.id);
-                          },
-                          onUpdatedTitle: (value) {
-                            ref
-                                .read(todoControllerProvider.notifier)
-                                .updateTodoTitle(todoId: todo.id, title: value);
-                          },
-                          onToggleDone: (value) {
-                            ref
-                                .read(todoControllerProvider.notifier)
-                                .toggleTodoDone(todoId: todo.id);
-                            FirebaseAnalytics.instance.logEvent(
-                              name: AnalyticsEventName.toggleTodoDone.name,
-                            );
-                          },
-                          focusDown: () {
-                            FocusScope.of(context).nextFocus();
-                          },
-                          focusUp: () {
-                            FocusScope.of(context).previousFocus();
-                          },
-                          onNewTodoBelow: () async {
-                            await ref
-                                .read(todoControllerProvider.notifier)
-                                .addTodoWithIndex(index: index + 1);
-                            WidgetsBinding.instance
-                                .addPostFrameCallback((_) async {
-                              FocusScope.of(context).nextFocus();
-                            });
-                          },
-                          // 一番上のTodoは上に移動できない
-                          onSortUp: index != 0
-                              ? () {
-                                  ref
-                                      .read(todoControllerProvider.notifier)
-                                      .reorder(index, index - 1);
-                                }
-                              : null,
-                          // 一番下のTodoは下に移動できない
-                          onSortDown: index !=
-                                  ref
-                                          .read(todoControllerProvider)
-                                          .valueOrNull!
-                                          .length -
-                                      1
-                              ? () {
-                                  ref
-                                      .read(todoControllerProvider.notifier)
-                                      .reorder(index, index + 1);
-                                }
-                              : null,
-                        ),
-                      );
-                    },
-                  );
+                  return _TodoListItem(key: key, todo: todo, index: index);
                 },
               ),
             ),
@@ -118,6 +49,98 @@ class TodayTodoList extends HookConsumerWidget {
       loading: () => const Padding(
         padding: EdgeInsets.all(16.0),
         child: Text('Loading...'),
+      ),
+    );
+  }
+}
+
+class _TodoListItem extends HookConsumerWidget {
+  const _TodoListItem({
+    super.key,
+    required this.todo,
+    required this.index,
+  });
+
+  final AppTodoItem todo;
+  final int index;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final focusNode = useFocusNode();
+
+    // フォーカスしたらスレッドを開く。
+    useEffect(
+      () {
+        void listener() {
+          if (focusNode.hasFocus) {
+            ref.read(selectedThreadProvider.notifier).open(todo);
+          }
+        }
+
+        focusNode.addListener(listener);
+        return () {
+          focusNode.removeListener(listener);
+        };
+      },
+      const [],
+    );
+
+    return Padding(
+      padding: EdgeInsets.only(bottom: context.appSpacing.smallX),
+      child: TodoListItem(
+        focusNode: focusNode,
+        isDone: todo.isDone,
+        index: index,
+        // 新規作成されたときに自動でフォーカスする。
+        // autofocus: true,
+        title: todo.title,
+        onDeleted: () async {
+          ref.read(todoControllerProvider.notifier).deleteTodo(todoId: todo.id);
+        },
+        onUpdatedTitle: (value) {
+          ref
+              .read(todoControllerProvider.notifier)
+              .updateTodoTitle(todoId: todo.id, title: value);
+        },
+        onToggleDone: (value) {
+          ref
+              .read(todoControllerProvider.notifier)
+              .toggleTodoDone(todoId: todo.id);
+          FirebaseAnalytics.instance.logEvent(
+            name: AnalyticsEventName.toggleTodoDone.name,
+          );
+        },
+        focusDown: () {
+          FocusScope.of(context).nextFocus();
+        },
+        focusUp: () {
+          FocusScope.of(context).previousFocus();
+        },
+        onNewTodoBelow: () async {
+          await ref
+              .read(todoControllerProvider.notifier)
+              .addTodoWithIndex(index: index + 1);
+          WidgetsBinding.instance.addPostFrameCallback((_) async {
+            FocusScope.of(context).nextFocus();
+          });
+        },
+        // 一番上のTodoは上に移動できない
+        onSortUp: index != 0
+            ? () {
+                ref
+                    .read(todoControllerProvider.notifier)
+                    .reorder(index, index - 1);
+              }
+            : null,
+        // 一番下のTodoは下に移動できない
+        onSortDown:
+            index != ref.read(todoControllerProvider).valueOrNull!.length - 1
+                ? () {
+                    ref
+                        .read(todoControllerProvider.notifier)
+                        .reorder(index, index + 1);
+                  }
+                : null,
       ),
     );
   }

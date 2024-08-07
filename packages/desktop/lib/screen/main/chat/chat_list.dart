@@ -26,7 +26,7 @@ class _ChatList extends HookConsumerWidget {
                 .read(readControllerProvider.notifier)
                 .markAsReadAsChat(item),
             onThread: (chat) =>
-                ref.read(selectedThreadProvider.notifier).setThread(chat: chat),
+                ref.read(selectedThreadProvider.notifier).open(chat),
             onConvertTodo: (chat) =>
                 ref.read(chatsProvider.notifier).convertToTodoItem(chat),
           ),
