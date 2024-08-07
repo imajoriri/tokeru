@@ -6,12 +6,12 @@ part of 'thread.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$selectedThreadHash() => r'2e67f4e118b5d824b60c00cd1ea0cb273fc2d4db';
+String _$selectedThreadHash() => r'1edc02da4ddcaef91da934a51c1fac0f76b09bfc';
 
 /// See also [SelectedThread].
 @ProviderFor(SelectedThread)
 final selectedThreadProvider =
-    AutoDisposeNotifierProvider<SelectedThread, AppChatItem?>.internal(
+    AutoDisposeNotifierProvider<SelectedThread, AppItem?>.internal(
   SelectedThread.new,
   name: r'selectedThreadProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -21,6 +21,6 @@ final selectedThreadProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$SelectedThread = AutoDisposeNotifier<AppChatItem?>;
+typedef _$SelectedThread = AutoDisposeNotifier<AppItem?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package

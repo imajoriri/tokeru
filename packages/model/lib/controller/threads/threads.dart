@@ -12,7 +12,7 @@ part 'threads.g.dart';
 class Threads extends _$Threads {
   @override
   Stream<List<AppThreadItem>> build({
-    required String chatId,
+    required String appItemId,
   }) {
     ref.watch(refreshControllerProvider);
 
@@ -24,7 +24,7 @@ class Threads extends _$Threads {
         ref.watch(appItemRepositoryProvider(user.requireValue.id));
     final query = repository.threadQuery(
       userId: user.requireValue.id,
-      chatId: chatId,
+      chatId: appItemId,
     );
 
     return query.snapshots().map((snapshot) {
@@ -51,7 +51,7 @@ class Threads extends _$Threads {
       id: const Uuid().v4(),
       message: message,
       createdAt: DateTime.now(),
-      parentId: chatId,
+      parentId: appItemId,
     );
     final user = ref.read(userControllerProvider).requireValue;
     final repository = ref.read(appItemRepositoryProvider(user.id));

@@ -6,13 +6,11 @@ part 'thread.g.dart';
 @riverpod
 class SelectedThread extends _$SelectedThread {
   @override
-  AppChatItem? build() {
+  AppItem? build() {
     return null;
   }
 
-  void setThread({
-    required AppChatItem chat,
-  }) {
-    state = chat.copyWith();
+  void open(AppItem item) {
+    state = item.copyWith();
   }
 }
