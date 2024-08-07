@@ -11,6 +11,7 @@ const _collectionName = 'todos';
 // TODO: リファクタリング
 // - typeがAppItemのtypeを参照したい。
 // - AppItemのサブクラスごとにリポジトリを分けたい。
+// - userIdをメソッドごとに受け取りたい。
 
 /// [AppItem]を扱うRepository
 @riverpod
@@ -24,6 +25,22 @@ class AppItemRepository {
   });
   final Ref ref;
   final String userId;
+
+  /// [AppItem.id]から[AppItem]を取得する。
+  Future<AppItem?> fetchById({
+    required String userId,
+    required String id,
+  }) async {
+    final response = await ref
+        .read(userDocumentProvider(userId))
+        .collection(_collectionName)
+        .doc(id)
+        .get();
+    if (!response.exists) {
+      return null;
+    }
+    return AppItem.fromJson(response.data()!..['id'] = response.id);
+  }
 
   /// [AppItem]のクエリを返す。
   Query<Map<String, dynamic>> chatQuery({
