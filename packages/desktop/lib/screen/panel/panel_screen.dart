@@ -176,11 +176,11 @@ class _Todo extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final firstTodo = ref.watch(todoControllerProvider).valueOrNull?.first;
-
-    if (firstTodo == null) {
+    final todos = ref.watch(todoControllerProvider).valueOrNull;
+    if (todos == null || todos.isEmpty) {
       return const SizedBox();
     }
+    final firstTodo = todos.first;
 
     return TodoListItem(
       // Todoが変わった時にtitleも更新されてほしいので、keyとtitleを設定する。
