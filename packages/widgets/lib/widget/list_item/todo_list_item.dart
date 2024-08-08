@@ -192,7 +192,7 @@ class TodoListItem extends HookWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 10, top: 10, left: 8),
+                  padding: const EdgeInsets.only(bottom: 10, top: 11, left: 8),
                   child: CheckButton(
                     onPressed: onToggleDone,
                     checked: isDone,
@@ -206,7 +206,7 @@ class TodoListItem extends HookWidget {
                       effectiveFocusNode.requestFocus();
                     },
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                       child: Focus(
                         skipTraversal: true,
                         onKeyEvent: (node, event) {
