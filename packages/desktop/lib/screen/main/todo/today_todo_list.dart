@@ -100,9 +100,8 @@ class _TodoListItem extends HookConsumerWidget {
         focusNode: focusNode,
         isDone: todo.isDone,
         index: index,
-        // 新規作成されたときに自動でフォーカスする。
-        // autofocus: true,
         title: todo.title,
+        threadCount: todo.threadCount,
         onDeleted: () async {
           ref.read(todoControllerProvider.notifier).deleteTodo(todoId: todo.id);
         },
