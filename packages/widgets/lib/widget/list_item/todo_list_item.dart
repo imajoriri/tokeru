@@ -11,6 +11,7 @@ class TodoListItem extends HookWidget {
     required this.isDone,
     this.title,
     this.index,
+    this.threadCount = 0,
     this.focusNode,
     this.autofocus = false,
     this.onDeleted,
@@ -32,6 +33,9 @@ class TodoListItem extends HookWidget {
   ///
   /// nullの場合、ドラッグアンドドロップのアイコンが表示されない。
   final int? index;
+
+  /// スレッド数。
+  final int threadCount;
 
   final FocusNode? focusNode;
 
@@ -246,6 +250,18 @@ class TodoListItem extends HookWidget {
                     ),
                   ),
                 ),
+                // スレッド数。
+                // TODO: UIは超適当なのでそのうち修正する。
+                if (threadCount > 0)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8, top: 8),
+                    child: Text(
+                      '[$threadCount]',
+                      style: context.appTextTheme.bodySmall.copyWith(
+                        color: context.appColors.onSurfaceSubtle,
+                      ),
+                    ),
+                  ),
               ],
             ),
             if (onHover.value && index != null) _DraggableWidget(index: index),
