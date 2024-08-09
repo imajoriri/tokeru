@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  intl:
+  intl: ^0.18.0
 
   # collection
   collection: ^1.17.0
