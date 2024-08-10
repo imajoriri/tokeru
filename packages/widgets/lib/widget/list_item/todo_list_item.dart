@@ -210,7 +210,7 @@ class TodoListItem extends HookWidget {
                       effectiveFocusNode.requestFocus();
                     },
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                       child: Focus(
                         skipTraversal: true,
                         onKeyEvent: (node, event) {

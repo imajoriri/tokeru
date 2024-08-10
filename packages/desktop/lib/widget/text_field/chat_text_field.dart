@@ -10,12 +10,15 @@ class ChatTextField extends HookConsumerWidget {
     Key? key,
     required this.focusNode,
     required this.onSubmit,
+    this.textEditingController,
   }) : super(key: key);
 
   final FocusNode focusNode;
 
   /// submitボタンを押した時の処理。
   final void Function(String message) onSubmit;
+
+  final TextEditingController? textEditingController;
 
   Future<void> _send({
     required TextEditingController textEditingController,
@@ -29,12 +32,13 @@ class ChatTextField extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final textEditingController = useTextEditingController();
+    final effectiveTextController =
+        textEditingController ?? useTextEditingController();
     final hasFocus = useState(false);
     final canSubmit = useState(false);
 
-    textEditingController.addListener(() {
-      canSubmit.value = textEditingController.text.isNotEmpty;
+    effectiveTextController.addListener(() {
+      canSubmit.value = effectiveTextController.text.isNotEmpty;
     });
 
     final animationController =
@@ -54,7 +58,7 @@ class ChatTextField extends HookConsumerWidget {
         bindings: <ShortcutActivator, VoidCallback>{
           const SingleActivator(LogicalKeyboardKey.enter, meta: true): () =>
               _send(
-                textEditingController: textEditingController,
+                textEditingController: effectiveTextController,
                 ref: ref,
               ),
         },
@@ -73,10 +77,11 @@ class ChatTextField extends HookConsumerWidget {
               vertical: context.appSpacing.small,
             ),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Expanded(
                   child: TextField(
-                    controller: textEditingController,
+                    controller: effectiveTextController,
                     maxLines: null,
                     focusNode: focusNode,
                     style: context.appTextTheme.bodyMedium,
@@ -91,7 +96,7 @@ class ChatTextField extends HookConsumerWidget {
                 SubmitButton(
                   onPressed: canSubmit.value
                       ? () => _send(
-                            textEditingController: textEditingController,
+                            textEditingController: effectiveTextController,
                             ref: ref,
                           )
                       : null,

@@ -5,6 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tokeru_desktop/controller/panel_screen/panel_screen_controller.dart';
 import 'package:tokeru_desktop/utils/panel_method_channel.dart';
+import 'package:tokeru_desktop/widget/text_field/chat_text_field.dart';
 import 'package:tokeru_model/controller/todo/todo_controller.dart';
 import 'package:tokeru_model/model/analytics_event/analytics_event_name.dart';
 import 'package:tokeru_widgets/widgets.dart';
@@ -133,35 +134,20 @@ class PanelScreen extends HookConsumerWidget {
                   ],
                 ),
                 const SizedBox(height: 8),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        autofocus: true,
-                        focusNode: focusNode,
-                        controller: textEditingConroller,
-                        maxLines: null,
-                        cursorColor: Colors.black,
-                        style: context.appTextTheme.bodyMedium,
-                        decoration: const InputDecoration(
-                          isDense: true,
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                    SubmitButton(
-                      onPressed: canSubmit.value
-                          ? () {
-                              _send(textEditingConroller, ref);
-                            }
-                          : null,
-                    ),
-                  ],
-                ),
 
                 // todo。
                 const _Todo(),
+
+                SizedBox(height: context.appSpacing.smallX),
+
+                // Chat text field
+                ChatTextField(
+                  focusNode: focusNode,
+                  textEditingController: textEditingConroller,
+                  onSubmit: (value) {
+                    _send(textEditingConroller, ref);
+                  },
+                ),
               ],
             ),
           ),
