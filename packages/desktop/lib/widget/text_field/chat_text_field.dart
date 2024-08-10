@@ -40,8 +40,8 @@ class ChatTextField extends HookConsumerWidget {
     final animationController =
         useAnimationController(duration: const Duration(milliseconds: 150));
     final colorTween = ColorTween(
-      begin: context.appColors.outline,
-      end: context.appColors.outlineStrong,
+      begin: context.appColors.outlineSubtle,
+      end: context.appColors.outline,
     );
     final shadowColorTween = ColorTween(
       begin: Colors.transparent,
@@ -68,40 +68,33 @@ class ChatTextField extends HookConsumerWidget {
             }
           },
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+            padding: EdgeInsets.symmetric(
+              horizontal: context.appSpacing.small,
+              vertical: context.appSpacing.small,
+            ),
+            child: Row(
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: textEditingController,
-                        maxLines: null,
-                        focusNode: focusNode,
-                        style: context.appTextTheme.bodyMedium,
-                        cursorColor: Colors.black,
-                        decoration: const InputDecoration(
-                          isDense: true,
-                          border: InputBorder.none,
-                          hintText: 'Talk to myself',
-                        ),
-                      ),
+                Expanded(
+                  child: TextField(
+                    controller: textEditingController,
+                    maxLines: null,
+                    focusNode: focusNode,
+                    style: context.appTextTheme.bodyMedium,
+                    cursorColor: Colors.black,
+                    decoration: const InputDecoration(
+                      isDense: true,
+                      border: InputBorder.none,
+                      hintText: 'Talk to myself',
                     ),
-                  ],
+                  ),
                 ),
-                Row(
-                  children: [
-                    const Spacer(),
-                    SubmitButton(
-                      onPressed: canSubmit.value
-                          ? () => _send(
-                                textEditingController: textEditingController,
-                                ref: ref,
-                              )
-                          : null,
-                    ),
-                  ],
+                SubmitButton(
+                  onPressed: canSubmit.value
+                      ? () => _send(
+                            textEditingController: textEditingController,
+                            ref: ref,
+                          )
+                      : null,
                 ),
               ],
             ),
@@ -113,8 +106,9 @@ class ChatTextField extends HookConsumerWidget {
           decoration: BoxDecoration(
             border: Border.all(
               color: colorTween.evaluate(animationController)!,
+              width: 2,
             ),
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(8),
             color: context.appColors.surface,
             boxShadow: [
               BoxShadow(
