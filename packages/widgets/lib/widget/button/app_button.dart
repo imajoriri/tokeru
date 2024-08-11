@@ -13,6 +13,7 @@ class AppButton extends HookWidget {
       borderRadius: BorderRadius.all(Radius.circular(8)),
     ),
     this.onPressed,
+    this.bounce = true,
   });
 
   final Widget child;
@@ -30,6 +31,9 @@ class AppButton extends HookWidget {
   bool get enabled => onPressed != null;
 
   final ShapeBorder shape;
+
+  /// Pressed状態の時にbounceするかどうか。
+  final bool bounce;
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +93,7 @@ class AppButton extends HookWidget {
           child: AnimatedScale(
             duration: bounceDuration,
             curve: Curves.easeOutExpo,
-            scale: pressed.value && enabled ? 0.95 : 1.0,
+            scale: pressed.value && enabled && bounce ? 0.95 : 1.0,
             child: Stack(
               children: [
                 // Container layer

@@ -19,8 +19,13 @@ class AppIconButton extends HookWidget {
   /// パディング。
   final EdgeInsets padding;
 
+  /// ボタンの角の丸み。
+  final double radius;
+
   /// Borderを表示するかどうか。
   final bool showBorder;
+
+  final bool bounce;
 
   const AppIconButton.medium({
     super.key,
@@ -28,8 +33,10 @@ class AppIconButton extends HookWidget {
     required this.onPressed,
     this.tooltip,
     this.showBorder = false,
+    this.bounce = true,
   })  : iconSize = 20,
-        padding = const EdgeInsets.all(8);
+        padding = const EdgeInsets.all(8),
+        radius = 8;
 
   const AppIconButton.small({
     super.key,
@@ -37,23 +44,28 @@ class AppIconButton extends HookWidget {
     required this.onPressed,
     this.tooltip,
     this.showBorder = false,
+    this.bounce = true,
   })  : iconSize = 16,
-        padding = const EdgeInsets.all(8);
+        padding = const EdgeInsets.all(8),
+        radius = 8;
 
   @override
   Widget build(BuildContext context) {
     return Tooltip(
       message: tooltip,
       child: AppButton(
+        bounce: bounce,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(radius)),
+        ),
         onPressed: onPressed,
         containerColor: context.appColors.onSurface,
         backgroundColor: context.appColors.surface,
         child: Container(
           padding: EdgeInsets.all(context.appSpacing.smallX),
-          // border
           decoration: showBorder
               ? BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(radius),
                   border: Border.all(
                     color: context.appColors.outline,
                   ),

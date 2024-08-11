@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
@@ -51,7 +52,7 @@ class ChatListItem extends HookWidget {
                 link: link,
                 targetAnchor: Alignment.topRight,
                 followerAnchor: Alignment.center,
-                offset: const Offset(-40, 0),
+                offset: const Offset(-60, 0),
                 child: MouseRegion(
                   onEnter: (event) {
                     hover.value = true;
@@ -61,31 +62,10 @@ class ChatListItem extends HookWidget {
                     hover.value = false;
                     tooltipController.hide();
                   },
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (onRead != null)
-                        AppIconButton.small(
-                          showBorder: true,
-                          icon: const Icon(Icons.read_more),
-                          onPressed: onRead!,
-                          tooltip: "mark as read",
-                        ),
-                      if (onThread != null)
-                        AppIconButton.small(
-                          showBorder: true,
-                          icon: const Icon(Icons.chat_outlined),
-                          onPressed: onThread!,
-                          tooltip: "Thread",
-                        ),
-                      if (onConvertTodo != null)
-                        AppIconButton.small(
-                          showBorder: true,
-                          icon: const Icon(Icons.checklist),
-                          onPressed: onConvertTodo!,
-                          tooltip: "Convert to Todo",
-                        ),
-                    ],
+                  child: _ChatActionButtons(
+                    onRead: onRead,
+                    onThread: onThread,
+                    onConvertTodo: onConvertTodo,
                   ),
                 ),
               ),
@@ -111,6 +91,63 @@ class ChatListItem extends HookWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _ChatActionButtons extends StatelessWidget {
+  const _ChatActionButtons({
+    required this.onRead,
+    required this.onThread,
+    required this.onConvertTodo,
+  });
+
+  final void Function()? onRead;
+  final void Function()? onThread;
+  final void Function()? onConvertTodo;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: context.appColors.surface,
+        border: Border.all(
+          color: context.appColors.outline,
+        ),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      padding: const EdgeInsets.all(2),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (onRead != null) ...[
+            AppIconButton.small(
+              icon: const Icon(CupertinoIcons.eye),
+              onPressed: onRead!,
+              tooltip: "Mark as read",
+              bounce: false,
+            ),
+            SizedBox(width: context.appSpacing.smallX),
+          ],
+          if (onThread != null) ...[
+            AppIconButton.small(
+              icon: const Icon(CupertinoIcons.chat_bubble_text),
+              onPressed: onThread!,
+              tooltip: "Thread",
+              bounce: false,
+            ),
+            SizedBox(width: context.appSpacing.smallX),
+          ],
+          if (onConvertTodo != null) ...[
+            AppIconButton.small(
+              icon: const Icon(CupertinoIcons.checkmark_alt_circle),
+              onPressed: onConvertTodo!,
+              tooltip: "Convert to Todo",
+              bounce: false,
+            ),
+          ],
+        ],
       ),
     );
   }
