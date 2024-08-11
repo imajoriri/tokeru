@@ -29,7 +29,7 @@ class SkeletonText extends StatelessWidget {
       children: [
         for (int i = 0; i < lineLength; i++)
           Container(
-            width: width,
+            constraints: BoxConstraints(maxWidth: width),
             padding: EdgeInsets.symmetric(vertical: padding),
             child: Container(
               height: style.fontSize!,
