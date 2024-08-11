@@ -28,7 +28,7 @@ class AppButton extends HookWidget {
 
   /// ボタンのコンテンツ(中身)のカラー。
   ///
-  /// アイコンやテキストのカラーとして使用される。
+  /// [IconTheme]、[DefaultTextStyle]を使用してコンテンツのカラーとして使用される。
   /// ホバーやフォーカス時のカラーは、このカラーを元に計算される。
   final Color contentColor;
 
