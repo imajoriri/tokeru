@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 class AppIcons {
   /// 既読を表すアイコン。
-  static const IconData read = CupertinoIcons.eye;
+  static const IconData read = CupertinoIcons.stopwatch;
 
   /// スレッドを表すアイコン。
   static const IconData thread = CupertinoIcons.chat_bubble_text;
