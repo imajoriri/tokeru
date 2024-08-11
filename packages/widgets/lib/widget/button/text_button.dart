@@ -2,16 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:tokeru_widgets/widgets.dart';
 
+enum _AppTextButtonType {
+  small,
+  medium,
+}
+
 /// テキストボタン。
 class AppTextButton extends HookWidget {
-  const AppTextButton({
+  const AppTextButton.medium({
     super.key,
     required this.onPressed,
     required this.text,
-  });
+  }) : type = _AppTextButtonType.medium;
 
-  final void Function() onPressed;
+  const AppTextButton.small({
+    super.key,
+    required this.onPressed,
+    required this.text,
+  }) : type = _AppTextButtonType.small;
+
+  final void Function()? onPressed;
+
   final Widget text;
+
+  // ignore: library_private_types_in_public_api
+  final _AppTextButtonType type;
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +38,18 @@ class AppTextButton extends HookWidget {
         borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
       child: Padding(
-        padding: EdgeInsets.all(context.appSpacing.small),
+        padding: switch (type) {
+          _AppTextButtonType.small => EdgeInsets.symmetric(
+              vertical: context.appSpacing.smallX,
+              horizontal: context.appSpacing.small,
+            ),
+          _AppTextButtonType.medium => EdgeInsets.all(context.appSpacing.small),
+        },
         child: DefaultTextStyle(
-          style: context.appTextTheme.labelLarge,
+          style: switch (type) {
+            _AppTextButtonType.small => context.appTextTheme.labelSmall,
+            _AppTextButtonType.medium => context.appTextTheme.labelMidium,
+          },
           child: text,
         ),
       ),

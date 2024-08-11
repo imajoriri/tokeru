@@ -12,6 +12,7 @@ class TodoListItem extends HookWidget {
     this.title,
     this.index,
     this.threadCount = 0,
+    this.onOpenThread,
     this.focusNode,
     this.autofocus = false,
     this.onDeleted,
@@ -36,6 +37,9 @@ class TodoListItem extends HookWidget {
 
   /// スレッド数。
   final int threadCount;
+
+  /// スレッドを開くボタンを押した時のコールバック。
+  final void Function()? onOpenThread;
 
   final FocusNode? focusNode;
 
@@ -266,7 +270,11 @@ class TodoListItem extends HookWidget {
                   ),
               ],
             ),
-            if (onHover.value && index != null) _DraggableWidget(index: index),
+            if (onHover.value)
+              _HoveredWidget(
+                index: index,
+                onOpenThread: onOpenThread,
+              ),
           ],
         ),
       ),
@@ -298,12 +306,14 @@ class _Background extends StatelessWidget {
   }
 }
 
-class _DraggableWidget extends StatelessWidget {
-  const _DraggableWidget({
+class _HoveredWidget extends StatelessWidget {
+  const _HoveredWidget({
     required this.index,
+    this.onOpenThread,
   });
 
   final int? index;
+  final void Function()? onOpenThread;
 
   @override
   Widget build(BuildContext context) {
@@ -314,15 +324,26 @@ class _DraggableWidget extends StatelessWidget {
       end: 8,
       child: Align(
         alignment: AlignmentDirectional.centerEnd,
-        child: ReorderableDragStartListener(
-          index: index!,
-          child: const MouseRegion(
-            cursor: SystemMouseCursors.grab,
-            child: Icon(
-              Icons.drag_indicator_outlined,
-              color: Colors.grey,
-            ),
-          ),
+        child: Row(
+          children: [
+            if (onOpenThread != null)
+              AppTextButton.small(
+                onPressed: onOpenThread,
+                text: const Text('Open thread'),
+              ),
+            SizedBox(width: context.appSpacing.small),
+            if (index != null)
+              ReorderableDragStartListener(
+                index: index!,
+                child: const MouseRegion(
+                  cursor: SystemMouseCursors.grab,
+                  child: Icon(
+                    Icons.drag_indicator_outlined,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+          ],
         ),
       ),
     );

@@ -57,7 +57,7 @@ class MainScreen extends ConsumerWidget {
                 // login button
                 Padding(
                   padding: EdgeInsets.all(context.appSpacing.medium),
-                  child: AppTextButton(
+                  child: AppTextButton.medium(
                     onPressed: () {
                       if (showLoginButton) {
                         ref

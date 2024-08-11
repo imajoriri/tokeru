@@ -28,7 +28,7 @@ class ChatScreen extends HookConsumerWidget {
         children: [
           Padding(
             padding: EdgeInsets.all(context.appSpacing.medium),
-            child: AppTextButton(
+            child: AppTextButton.medium(
               onPressed: () {
                 if (showLoginButton) {
                   ref.read(userControllerProvider.notifier).signInWithApple();
@@ -40,7 +40,7 @@ class ChatScreen extends HookConsumerWidget {
               text: Text(showLoginButton ? 'Login' : 'Logout'),
             ),
           ),
-          AppTextButton(
+          AppTextButton.medium(
             onPressed: () {
               Navigator.of(context).push(SwipeablePageRoute(
                 builder: (BuildContext context) => Scaffold(

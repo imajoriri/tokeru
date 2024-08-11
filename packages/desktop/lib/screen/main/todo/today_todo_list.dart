@@ -75,30 +75,13 @@ class _TodoListItem extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final focusNode = useFocusNode();
-
-    // フォーカスしたらスレッドを開く。
-    useEffect(
-      () {
-        void listener() {
-          if (focusNode.hasFocus) {
-            onFocus();
-          }
-        }
-
-        focusNode.addListener(listener);
-        return () {
-          focusNode.removeListener(listener);
-        };
-      },
-      const [],
-    );
-
     return Padding(
       padding: EdgeInsets.only(bottom: context.appSpacing.smallX),
       child: TodoListItem(
-        focusNode: focusNode,
         isDone: todo.isDone,
+        onOpenThread: () {
+          ref.read(selectedThreadProvider.notifier).open(todo.id);
+        },
         index: index,
         title: todo.title,
         threadCount: todo.threadCount,
@@ -177,7 +160,7 @@ class _EmptyState extends ConsumerWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
-            AppTextButton(
+            AppTextButton.medium(
               onPressed: () {
                 ref
                     .read(todoControllerProvider.notifier)
