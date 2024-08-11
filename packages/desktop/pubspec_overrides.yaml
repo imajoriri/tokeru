@@ -1,5 +1,7 @@
-# melos_managed_dependency_overrides: tokeru_model,tokeru_widgets
+# melos_managed_dependency_overrides: tokeru_haptics,tokeru_model,tokeru_widgets
 dependency_overrides:
+  tokeru_haptics:
+    path: ../haptics
   tokeru_model:
     path: ../model
   tokeru_widgets:
