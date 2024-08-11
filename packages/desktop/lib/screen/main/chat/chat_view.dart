@@ -1,4 +1,5 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tokeru_desktop/widget/list_items/chat_list_items.dart';
@@ -62,11 +63,37 @@ class _ReadButton extends ConsumerWidget {
         }
         return Positioned(
           bottom: context.appSpacing.small,
-          child: ElevatedButton(
+          child: AppButton(
             onPressed: () => ref
                 .read(readControllerProvider.notifier)
                 .markAsRead(DateTime.now()),
-            child: const Text('Mark as read'),
+            contentColor: context.appColors.onPrimary,
+            backgroundColor: context.appColors.primary,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+            ),
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+              child: Text.rich(
+                TextSpan(
+                  children: [
+                    // icon
+                    WidgetSpan(
+                      child: Icon(
+                        CupertinoIcons.eye,
+                        size: 16,
+                      ),
+                    ),
+                    WidgetSpan(
+                      child: SizedBox(width: 4),
+                    ),
+                    TextSpan(
+                      text: 'Mark all as read',
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
         );
       },
