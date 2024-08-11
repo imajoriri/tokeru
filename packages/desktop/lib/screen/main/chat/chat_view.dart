@@ -80,7 +80,7 @@ class _ReadButton extends ConsumerWidget {
                     // icon
                     WidgetSpan(
                       child: Icon(
-                        CupertinoIcons.eye,
+                        AppIcons.read,
                         size: 16,
                       ),
                     ),

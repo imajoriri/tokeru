@@ -133,7 +133,7 @@ class _ChatActionButtons extends StatelessWidget {
         children: [
           if (onRead != null) ...[
             AppIconButton.small(
-              icon: const Icon(CupertinoIcons.eye),
+              icon: const Icon(AppIcons.read),
               onPressed: onRead!,
               tooltip: "Mark as read",
               bounce: false,
@@ -142,7 +142,7 @@ class _ChatActionButtons extends StatelessWidget {
           ],
           if (onThread != null) ...[
             AppIconButton.small(
-              icon: const Icon(CupertinoIcons.chat_bubble_text),
+              icon: const Icon(AppIcons.thread),
               onPressed: onThread!,
               tooltip: "Thread",
               bounce: false,
@@ -151,7 +151,7 @@ class _ChatActionButtons extends StatelessWidget {
           ],
           if (onConvertTodo != null) ...[
             AppIconButton.small(
-              icon: const Icon(CupertinoIcons.checkmark_alt_circle),
+              icon: const Icon(AppIcons.check),
               onPressed: onConvertTodo!,
               tooltip: "Convert to Todo",
               bounce: false,
