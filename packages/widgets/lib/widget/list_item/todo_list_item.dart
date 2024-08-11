@@ -326,6 +326,7 @@ class _HoveredWidget extends StatelessWidget {
         alignment: AlignmentDirectional.centerEnd,
         child: Row(
           children: [
+            // TODO: ホバー時のカラーをsurfaceのままにしたい。
             if (onOpenThread != null)
               AppTextButton.small(
                 onPressed: onOpenThread,
