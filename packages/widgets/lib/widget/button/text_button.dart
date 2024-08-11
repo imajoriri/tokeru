@@ -17,8 +17,11 @@ class AppTextButton extends HookWidget {
   Widget build(BuildContext context) {
     return AppButton(
       onPressed: onPressed,
-      containerColor: context.appColors.onSurface,
+      contentColor: context.appColors.onSurface,
       backgroundColor: context.appColors.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+      ),
       child: Padding(
         padding: EdgeInsets.all(context.appSpacing.small),
         child: DefaultTextStyle(

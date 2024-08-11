@@ -17,7 +17,7 @@ class SubmitButton extends HookWidget {
     final shape = AppSmoothRectangleBorder();
     return AppButton(
       onPressed: onPressed,
-      containerColor: context.appColors.onPrimary,
+      contentColor: context.appColors.onPrimary,
       backgroundColor: context.appColors.primary,
       shape: shape,
       child: Container(

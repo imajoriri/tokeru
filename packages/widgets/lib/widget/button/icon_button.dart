@@ -59,7 +59,7 @@ class AppIconButton extends HookWidget {
           borderRadius: BorderRadius.all(Radius.circular(radius)),
         ),
         onPressed: onPressed,
-        containerColor: context.appColors.onSurface,
+        contentColor: context.appColors.onSurface,
         backgroundColor: context.appColors.surface,
         child: Container(
           padding: EdgeInsets.all(context.appSpacing.smallX),

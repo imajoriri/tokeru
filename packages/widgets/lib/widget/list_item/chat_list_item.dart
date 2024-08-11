@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:tokeru_widgets/widgets.dart';
@@ -9,6 +8,7 @@ class ChatListItem extends HookWidget {
     super.key,
     required this.text,
     required this.launchUrl,
+    this.threadCount = 0,
     this.bottomWidget,
     this.onRead,
     this.onThread,
@@ -19,6 +19,9 @@ class ChatListItem extends HookWidget {
 
   /// URLをタップした時の処理。
   final void Function(Uri)? launchUrl;
+
+  /// スレッドの件数。
+  final int threadCount;
 
   /// Widget下部に表示するWidget。
   final Widget? bottomWidget;
@@ -78,15 +81,20 @@ class ChatListItem extends HookWidget {
                   : null,
             ),
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: _Chat(
-                    message: text,
-                    bottomWidget: bottomWidget,
-                    launchUrl: launchUrl!,
-                  ),
+                _Chat(
+                  message: text,
+                  bottomWidget: bottomWidget,
+                  launchUrl: launchUrl!,
                 ),
+                if (threadCount != 0)
+                  _ThreadButton(
+                    threadCount: threadCount,
+                    onThread: onThread,
+                    chatHovered: hover.value,
+                  ),
               ],
             ),
           ),
@@ -187,6 +195,52 @@ class _Chat extends StatelessWidget {
             bottomWidget!,
           ],
         ],
+      ),
+    );
+  }
+}
+
+class _ThreadButton extends StatelessWidget {
+  const _ThreadButton({
+    required this.threadCount,
+    required this.onThread,
+    required this.chatHovered,
+  });
+
+  final int threadCount;
+  final void Function()? onThread;
+  final bool chatHovered;
+
+  @override
+  Widget build(BuildContext context) {
+    final backgroundColor = chatHovered
+        ? context.appColors.surface.hovered
+        : context.appColors.surface;
+    return SelectionContainer.disabled(
+      child: AppButton(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+        ),
+        onPressed: onThread,
+        contentColor: context.appColors.link,
+        backgroundColor: backgroundColor,
+        bounce: false,
+        backgroundColorAnimated: false,
+        // ホバー時などのカラーは、チャットのホバーとかぶってしまうので、
+        // 意図的に指定している。
+        hoveredColor: context.appColors.surface,
+        focusedColor: context.appColors.surface,
+        pressedColor: context.appColors.surface,
+        child: Container(
+          padding: EdgeInsets.all(context.appSpacing.smallX),
+          width: double.infinity,
+          child: Text(
+            '$threadCount replies',
+            style: context.appTextTheme.labelMidium.copyWith(
+              color: context.appColors.link,
+            ),
+          ),
+        ),
       ),
     );
   }

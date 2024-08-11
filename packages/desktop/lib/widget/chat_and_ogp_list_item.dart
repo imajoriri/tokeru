@@ -11,14 +11,14 @@ class ChatAndOgpListItem extends ConsumerWidget {
     this.onRead,
     this.onThread,
     this.onConvertTodo,
-    this.threadCount,
+    this.threadCount = 0,
   });
 
   final String message;
   final void Function()? onRead;
   final void Function()? onThread;
   final void Function()? onConvertTodo;
-  final int? threadCount;
+  final int threadCount;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final links = getLinks(text: message);
@@ -29,22 +29,11 @@ class ChatAndOgpListItem extends ConsumerWidget {
           throw Exception('Could not launch ${link.toString()}');
         }
       },
+      threadCount: threadCount,
       onRead: onRead,
       onThread: onThread,
       onConvertTodo: onConvertTodo,
-      bottomWidget: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _UrlPreviewCard(links: links),
-
-          // スレッドの件数。0件の場合は表示しない。
-          if (threadCount != null && threadCount != 0)
-            Text(
-              'Thread: $threadCount',
-              style: context.appTextTheme.labelMidium,
-            ),
-        ],
-      ),
+      bottomWidget: _UrlPreviewCard(links: links),
     );
   }
 }
