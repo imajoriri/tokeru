@@ -89,12 +89,14 @@ class ChatListItem extends HookWidget {
                   bottomWidget: bottomWidget,
                   launchUrl: launchUrl!,
                 ),
-                if (threadCount != 0)
+                if (threadCount != 0) ...[
+                  SizedBox(height: context.appSpacing.smallX),
                   _ThreadButton(
                     threadCount: threadCount,
                     onThread: onThread,
                     chatHovered: hover.value,
                   ),
+                ],
               ],
             ),
           ),
