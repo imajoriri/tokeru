@@ -20,3 +20,6 @@ export 'widget/theme/app_theme.dart';
 
 // skeleton
 export 'widget/skeleton/skeleton_card.dart';
+
+// icons
+export 'widget/icon/icons.dart';

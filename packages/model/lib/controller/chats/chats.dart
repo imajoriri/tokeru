@@ -84,6 +84,7 @@ class Chats extends _$Chats {
       createdAt: chat.createdAt,
       isDone: false,
       index: lastIndex + 1,
+      threadCount: chat.threadCount,
     );
 
     final user = ref.read(userControllerProvider).requireValue;

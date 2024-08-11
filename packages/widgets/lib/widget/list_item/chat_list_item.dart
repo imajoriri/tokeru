@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:tokeru_widgets/widgets.dart';
@@ -8,6 +8,7 @@ class ChatListItem extends HookWidget {
     super.key,
     required this.text,
     required this.launchUrl,
+    this.threadCount = 0,
     this.bottomWidget,
     this.onRead,
     this.onThread,
@@ -18,6 +19,9 @@ class ChatListItem extends HookWidget {
 
   /// URLをタップした時の処理。
   final void Function(Uri)? launchUrl;
+
+  /// スレッドの件数。
+  final int threadCount;
 
   /// Widget下部に表示するWidget。
   final Widget? bottomWidget;
@@ -51,7 +55,7 @@ class ChatListItem extends HookWidget {
                 link: link,
                 targetAnchor: Alignment.topRight,
                 followerAnchor: Alignment.center,
-                offset: const Offset(-40, 0),
+                offset: const Offset(-60, 0),
                 child: MouseRegion(
                   onEnter: (event) {
                     hover.value = true;
@@ -61,31 +65,10 @@ class ChatListItem extends HookWidget {
                     hover.value = false;
                     tooltipController.hide();
                   },
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (onRead != null)
-                        AppIconButton.small(
-                          showBorder: true,
-                          icon: const Icon(Icons.read_more),
-                          onPressed: onRead!,
-                          tooltip: "mark as read",
-                        ),
-                      if (onThread != null)
-                        AppIconButton.small(
-                          showBorder: true,
-                          icon: const Icon(Icons.chat_outlined),
-                          onPressed: onThread!,
-                          tooltip: "Thread",
-                        ),
-                      if (onConvertTodo != null)
-                        AppIconButton.small(
-                          showBorder: true,
-                          icon: const Icon(Icons.checklist),
-                          onPressed: onConvertTodo!,
-                          tooltip: "Convert to Todo",
-                        ),
-                    ],
+                  child: _ChatActionButtons(
+                    onRead: onRead,
+                    onThread: onThread,
+                    onConvertTodo: onConvertTodo,
                   ),
                 ),
               ),
@@ -98,19 +81,83 @@ class ChatListItem extends HookWidget {
                   : null,
             ),
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: _Chat(
-                    message: text,
-                    bottomWidget: bottomWidget,
-                    launchUrl: launchUrl!,
-                  ),
+                _Chat(
+                  message: text,
+                  bottomWidget: bottomWidget,
+                  launchUrl: launchUrl!,
                 ),
+                if (threadCount != 0) ...[
+                  SizedBox(height: context.appSpacing.smallX),
+                  _ThreadButton(
+                    threadCount: threadCount,
+                    onThread: onThread,
+                    chatHovered: hover.value,
+                  ),
+                ],
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _ChatActionButtons extends StatelessWidget {
+  const _ChatActionButtons({
+    required this.onRead,
+    required this.onThread,
+    required this.onConvertTodo,
+  });
+
+  final void Function()? onRead;
+  final void Function()? onThread;
+  final void Function()? onConvertTodo;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: context.appColors.surface,
+        border: Border.all(
+          color: context.appColors.outline,
+        ),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      padding: const EdgeInsets.all(2),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (onRead != null) ...[
+            AppIconButton.small(
+              icon: const Icon(AppIcons.read),
+              onPressed: onRead!,
+              tooltip: "Mark as read",
+              bounce: false,
+            ),
+            SizedBox(width: context.appSpacing.smallX),
+          ],
+          if (onThread != null) ...[
+            AppIconButton.small(
+              icon: const Icon(AppIcons.thread),
+              onPressed: onThread!,
+              tooltip: "Thread",
+              bounce: false,
+            ),
+            SizedBox(width: context.appSpacing.smallX),
+          ],
+          if (onConvertTodo != null) ...[
+            AppIconButton.small(
+              icon: const Icon(AppIcons.check),
+              onPressed: onConvertTodo!,
+              tooltip: "Convert to Todo",
+              bounce: false,
+            ),
+          ],
+        ],
       ),
     );
   }
@@ -150,6 +197,52 @@ class _Chat extends StatelessWidget {
             bottomWidget!,
           ],
         ],
+      ),
+    );
+  }
+}
+
+class _ThreadButton extends StatelessWidget {
+  const _ThreadButton({
+    required this.threadCount,
+    required this.onThread,
+    required this.chatHovered,
+  });
+
+  final int threadCount;
+  final void Function()? onThread;
+  final bool chatHovered;
+
+  @override
+  Widget build(BuildContext context) {
+    final backgroundColor = chatHovered
+        ? context.appColors.surface.hovered
+        : context.appColors.surface;
+    return SelectionContainer.disabled(
+      child: AppButton(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+        ),
+        onPressed: onThread,
+        contentColor: context.appColors.link,
+        backgroundColor: backgroundColor,
+        bounce: false,
+        backgroundColorAnimated: false,
+        // ホバー時などのカラーは、チャットのホバーとかぶってしまうので、
+        // 意図的に指定している。
+        hoveredColor: context.appColors.surface,
+        focusedColor: context.appColors.surface,
+        pressedColor: context.appColors.surface,
+        child: Container(
+          padding: EdgeInsets.all(context.appSpacing.smallX),
+          width: double.infinity,
+          child: Text(
+            '$threadCount replies',
+            style: context.appTextTheme.labelMidium.copyWith(
+              color: context.appColors.link,
+            ),
+          ),
+        ),
       ),
     );
   }

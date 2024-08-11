@@ -10,12 +10,15 @@ class ChatTextField extends HookConsumerWidget {
     Key? key,
     required this.focusNode,
     required this.onSubmit,
+    this.textEditingController,
   }) : super(key: key);
 
   final FocusNode focusNode;
 
   /// submitボタンを押した時の処理。
   final void Function(String message) onSubmit;
+
+  final TextEditingController? textEditingController;
 
   Future<void> _send({
     required TextEditingController textEditingController,
@@ -29,19 +32,20 @@ class ChatTextField extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final textEditingController = useTextEditingController();
+    final effectiveTextController =
+        textEditingController ?? useTextEditingController();
     final hasFocus = useState(false);
     final canSubmit = useState(false);
 
-    textEditingController.addListener(() {
-      canSubmit.value = textEditingController.text.isNotEmpty;
+    effectiveTextController.addListener(() {
+      canSubmit.value = effectiveTextController.text.isNotEmpty;
     });
 
     final animationController =
         useAnimationController(duration: const Duration(milliseconds: 150));
     final colorTween = ColorTween(
-      begin: context.appColors.outline,
-      end: context.appColors.outlineStrong,
+      begin: context.appColors.outlineSubtle,
+      end: context.appColors.outline,
     );
     final shadowColorTween = ColorTween(
       begin: Colors.transparent,
@@ -54,7 +58,7 @@ class ChatTextField extends HookConsumerWidget {
         bindings: <ShortcutActivator, VoidCallback>{
           const SingleActivator(LogicalKeyboardKey.enter, meta: true): () =>
               _send(
-                textEditingController: textEditingController,
+                textEditingController: effectiveTextController,
                 ref: ref,
               ),
         },
@@ -68,40 +72,34 @@ class ChatTextField extends HookConsumerWidget {
             }
           },
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            child: Column(
+            padding: EdgeInsets.symmetric(
+              horizontal: context.appSpacing.small,
+              vertical: context.appSpacing.small,
+            ),
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: textEditingController,
-                        maxLines: null,
-                        focusNode: focusNode,
-                        style: context.appTextTheme.bodyMedium,
-                        cursorColor: Colors.black,
-                        decoration: const InputDecoration(
-                          isDense: true,
-                          border: InputBorder.none,
-                          hintText: 'Talk to myself',
-                        ),
-                      ),
+                Expanded(
+                  child: TextField(
+                    controller: effectiveTextController,
+                    maxLines: null,
+                    focusNode: focusNode,
+                    style: context.appTextTheme.bodyMedium,
+                    cursorColor: Colors.black,
+                    decoration: const InputDecoration(
+                      isDense: true,
+                      border: InputBorder.none,
+                      hintText: 'Talk to myself',
                     ),
-                  ],
+                  ),
                 ),
-                Row(
-                  children: [
-                    const Spacer(),
-                    SubmitButton(
-                      onPressed: canSubmit.value
-                          ? () => _send(
-                                textEditingController: textEditingController,
-                                ref: ref,
-                              )
-                          : null,
-                    ),
-                  ],
+                SubmitButton(
+                  onPressed: canSubmit.value
+                      ? () => _send(
+                            textEditingController: effectiveTextController,
+                            ref: ref,
+                          )
+                      : null,
                 ),
               ],
             ),
@@ -113,8 +111,9 @@ class ChatTextField extends HookConsumerWidget {
           decoration: BoxDecoration(
             border: Border.all(
               color: colorTween.evaluate(animationController)!,
+              width: 2,
             ),
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(8),
             color: context.appColors.surface,
             boxShadow: [
               BoxShadow(

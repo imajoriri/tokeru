@@ -12,6 +12,7 @@ class TodoListItem extends HookWidget {
     this.title,
     this.index,
     this.threadCount = 0,
+    this.onOpenThread,
     this.focusNode,
     this.autofocus = false,
     this.onDeleted,
@@ -36,6 +37,9 @@ class TodoListItem extends HookWidget {
 
   /// スレッド数。
   final int threadCount;
+
+  /// スレッドを開くボタンを押した時のコールバック。
+  final void Function()? onOpenThread;
 
   final FocusNode? focusNode;
 
@@ -210,7 +214,7 @@ class TodoListItem extends HookWidget {
                       effectiveFocusNode.requestFocus();
                     },
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                       child: Focus(
                         skipTraversal: true,
                         onKeyEvent: (node, event) {
@@ -251,20 +255,26 @@ class TodoListItem extends HookWidget {
                   ),
                 ),
                 // スレッド数。
-                // TODO: UIは超適当なのでそのうち修正する。
-                if (threadCount > 0)
+                if (threadCount > 0 && !onHover.value)
                   Padding(
-                    padding: const EdgeInsets.only(right: 8, top: 8),
+                    padding: EdgeInsets.only(
+                      right: context.appSpacing.medium,
+                      top: context.appSpacing.small,
+                    ),
                     child: Text(
-                      '[$threadCount]',
-                      style: context.appTextTheme.bodySmall.copyWith(
+                      '$threadCount',
+                      style: context.appTextTheme.bodyMedium.copyWith(
                         color: context.appColors.onSurfaceSubtle,
                       ),
                     ),
                   ),
               ],
             ),
-            if (onHover.value && index != null) _DraggableWidget(index: index),
+            if (onHover.value)
+              _HoveredWidget(
+                index: index,
+                onOpenThread: onOpenThread,
+              ),
           ],
         ),
       ),
@@ -296,12 +306,14 @@ class _Background extends StatelessWidget {
   }
 }
 
-class _DraggableWidget extends StatelessWidget {
-  const _DraggableWidget({
+class _HoveredWidget extends StatelessWidget {
+  const _HoveredWidget({
     required this.index,
+    this.onOpenThread,
   });
 
   final int? index;
+  final void Function()? onOpenThread;
 
   @override
   Widget build(BuildContext context) {
@@ -312,15 +324,27 @@ class _DraggableWidget extends StatelessWidget {
       end: 8,
       child: Align(
         alignment: AlignmentDirectional.centerEnd,
-        child: ReorderableDragStartListener(
-          index: index!,
-          child: const MouseRegion(
-            cursor: SystemMouseCursors.grab,
-            child: Icon(
-              Icons.drag_indicator_outlined,
-              color: Colors.grey,
-            ),
-          ),
+        child: Row(
+          children: [
+            // TODO: ホバー時のカラーをsurfaceのままにしたい。
+            if (onOpenThread != null)
+              AppTextButton.small(
+                onPressed: onOpenThread,
+                text: const Text('Open thread'),
+              ),
+            SizedBox(width: context.appSpacing.small),
+            if (index != null)
+              ReorderableDragStartListener(
+                index: index!,
+                child: const MouseRegion(
+                  cursor: SystemMouseCursors.grab,
+                  child: Icon(
+                    Icons.drag_indicator_outlined,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+          ],
         ),
       ),
     );
