@@ -251,13 +251,15 @@ class TodoListItem extends HookWidget {
                   ),
                 ),
                 // スレッド数。
-                // TODO: UIは超適当なのでそのうち修正する。
-                if (threadCount > 0)
+                if (threadCount > 0 && !onHover.value)
                   Padding(
-                    padding: const EdgeInsets.only(right: 8, top: 8),
+                    padding: EdgeInsets.only(
+                      right: context.appSpacing.medium,
+                      top: context.appSpacing.small,
+                    ),
                     child: Text(
-                      '[$threadCount]',
-                      style: context.appTextTheme.bodySmall.copyWith(
+                      '$threadCount',
+                      style: context.appTextTheme.bodyMedium.copyWith(
                         color: context.appColors.onSurfaceSubtle,
                       ),
                     ),
