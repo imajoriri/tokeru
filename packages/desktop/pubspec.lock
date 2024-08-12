@@ -1173,7 +1173,7 @@ packages:
   tokeru_haptics:
     dependency: "direct main"
     description:
-      path: "../haptics"
+      path: "../tokeru_haptics"
       relative: true
     source: path
     version: "0.0.1"

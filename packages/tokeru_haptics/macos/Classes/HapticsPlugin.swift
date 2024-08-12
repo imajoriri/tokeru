@@ -12,6 +12,10 @@ public class HapticsPlugin: NSObject, FlutterPlugin {
     switch call.method {
     case "getPlatformVersion":
       result("macOS " + ProcessInfo.processInfo.operatingSystemVersionString)
+    case "hovered":
+      let performer = NSHapticFeedbackManager.defaultPerformer
+      performer.perform(.generic, performanceTime: .now)
+      result(nil)
     default:
       result(FlutterMethodNotImplemented)
     }

@@ -26,4 +26,8 @@ abstract class HapticsPlatform extends PlatformInterface {
   Future<String?> getPlatformVersion() {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
+
+  void hovered() {
+    throw UnimplementedError('hovered() has not been implemented.');
+  }
 }

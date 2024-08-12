@@ -5,6 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tokeru_desktop/widget/list_items/chat_list_items.dart';
 import 'package:tokeru_desktop/widget/text_field/chat_text_field.dart';
+import 'package:tokeru_haptics/haptics.dart';
 import 'package:tokeru_model/controller/chats/chats.dart';
 import 'package:tokeru_model/controller/read/read_controller.dart';
 import 'package:tokeru_model/controller/read_all/read_all_controller.dart';
@@ -65,7 +66,7 @@ class _TodoModal extends HookWidget {
     return MouseRegion(
       onEnter: (_) {
         isHovered.value = true;
-        HapticFeedback.lightImpact();
+        TokeruHaptics().hovered();
       },
       onExit: (_) => isHovered.value = false,
       child: AnimatedContainer(
