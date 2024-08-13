@@ -3,8 +3,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tokeru_desktop/screen/main/thread/thread_view.dart';
 import 'package:tokeru_model/controller/url/url_controller.dart';
 import 'package:tokeru_desktop/screen/main/chat/chat_view.dart';
-import 'package:tokeru_desktop/screen/main/todo/todo_view.dart';
-import 'package:tokeru_model/controller/user/user_controller.dart';
 import 'package:tokeru_widgets/widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -13,8 +11,6 @@ class MainScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final showLoginButton =
-        ref.watch(userControllerProvider).valueOrNull?.isAnonymous ?? true;
     return Scaffold(
       backgroundColor: context.appColors.surface,
       floatingActionButton: FloatingActionButton.small(
@@ -39,45 +35,48 @@ class MainScreen extends ConsumerWidget {
           color: context.appColors.onSurfaceSubtle,
         ),
       ),
-      body: Row(
+      body: const Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Chat
-          const Expanded(child: ChatView()),
+          Expanded(child: ChatView()),
 
-          const _Divider(),
+          _Divider(),
 
-          const Expanded(child: ThreadView()),
-          const _Divider(),
+          Expanded(child: ThreadView()),
+          _Divider(),
 
           // Todoリスト
-          Expanded(
-            child: Column(
-              children: [
-                // login button
-                Padding(
-                  padding: EdgeInsets.all(context.appSpacing.medium),
-                  child: AppTextButton.medium(
-                    onPressed: () {
-                      if (showLoginButton) {
-                        ref
-                            .read(userControllerProvider.notifier)
-                            .signInWithApple();
-                        return;
-                      }
+          // TODO: 不要だと感じたら削除する。
+          // final showLoginButton =
+          // ref.watch(userControllerProvider).valueOrNull?.isAnonymous ?? true;
+          // Expanded(
+          //   child: Column(
+          //     children: [
+          //       // login button
+          //       Padding(
+          //         padding: EdgeInsets.all(context.appSpacing.medium),
+          //         child: AppTextButton.medium(
+          //           onPressed: () {
+          //             if (showLoginButton) {
+          //               ref
+          //                   .read(userControllerProvider.notifier)
+          //                   .signInWithApple();
+          //               return;
+          //             }
 
-                      ref.read(userControllerProvider.notifier).signOut();
-                    },
-                    text: Text(showLoginButton ? 'Login' : 'Logout'),
-                  ),
-                ),
-                // todo list
-                const Expanded(
-                  child: TodoView(),
-                ),
-              ],
-            ),
-          ),
+          //             ref.read(userControllerProvider.notifier).signOut();
+          //           },
+          //           text: Text(showLoginButton ? 'Login' : 'Logout'),
+          //         ),
+          //       ),
+          //       // todo list
+          //       const Expanded(
+          //         child: TodoView(),
+          //       ),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );

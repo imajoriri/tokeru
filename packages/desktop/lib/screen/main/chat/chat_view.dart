@@ -1,20 +1,23 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:tokeru_desktop/widget/actions/new_todo.dart/new_todo_action.dart';
 import 'package:tokeru_desktop/widget/list_items/chat_list_items.dart';
+import 'package:tokeru_desktop/widget/shortcutkey.dart';
 import 'package:tokeru_desktop/widget/text_field/chat_text_field.dart';
 import 'package:tokeru_haptics/haptics.dart';
 import 'package:tokeru_model/controller/chats/chats.dart';
 import 'package:tokeru_model/controller/read/read_controller.dart';
 import 'package:tokeru_model/controller/read_all/read_all_controller.dart';
 import 'package:tokeru_model/controller/thread/thread.dart';
+import 'package:tokeru_model/controller/todo/todo_controller.dart';
 import 'package:tokeru_model/model.dart';
 import 'package:tokeru_desktop/widget/focus_nodes.dart';
 import 'package:tokeru_widgets/widgets.dart';
 
 part 'chat_list.dart';
+part 'todo_modal.dart';
 
 class ChatView extends HookConsumerWidget {
   const ChatView({super.key});
@@ -26,13 +29,12 @@ class ChatView extends HookConsumerWidget {
       children: [
         const Expanded(
           child: Stack(
-            // fit: StackFit.expand,
             alignment: Alignment.bottomCenter,
             children: [
               _ChatList(),
               _ReadButton(),
               Positioned(
-                top: 16,
+                top: 24,
                 left: 16,
                 right: 16,
                 child: _TodoModal(),
@@ -53,50 +55,6 @@ class ChatView extends HookConsumerWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _TodoModal extends HookWidget {
-  const _TodoModal();
-
-  @override
-  Widget build(BuildContext context) {
-    final isHovered = useState(false);
-    return MouseRegion(
-      onEnter: (_) {
-        isHovered.value = true;
-        TokeruHaptics().hovered();
-      },
-      onExit: (_) => isHovered.value = false,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.all(16),
-        curve: Curves.easeInOut,
-        decoration: BoxDecoration(
-          color: context.appColors.surface,
-          borderRadius: const BorderRadius.all(
-            Radius.circular(16),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 4,
-              spreadRadius: 0,
-              offset: const Offset(0, 0),
-            ),
-          ],
-        ),
-        height: isHovered.value ? 300 : 100,
-        child: const Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
-              child: Text('fff'),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
