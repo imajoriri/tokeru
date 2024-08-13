@@ -1,18 +1,23 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:tokeru_desktop/widget/actions/new_todo.dart/new_todo_action.dart';
 import 'package:tokeru_desktop/widget/list_items/chat_list_items.dart';
+import 'package:tokeru_desktop/widget/shortcutkey.dart';
 import 'package:tokeru_desktop/widget/text_field/chat_text_field.dart';
+import 'package:tokeru_haptics/haptics.dart';
 import 'package:tokeru_model/controller/chats/chats.dart';
 import 'package:tokeru_model/controller/read/read_controller.dart';
 import 'package:tokeru_model/controller/read_all/read_all_controller.dart';
 import 'package:tokeru_model/controller/thread/thread.dart';
+import 'package:tokeru_model/controller/todo/todo_controller.dart';
 import 'package:tokeru_model/model.dart';
 import 'package:tokeru_desktop/widget/focus_nodes.dart';
 import 'package:tokeru_widgets/widgets.dart';
 
 part 'chat_list.dart';
+part 'todo_modal.dart';
 
 class ChatView extends HookConsumerWidget {
   const ChatView({super.key});
@@ -24,11 +29,16 @@ class ChatView extends HookConsumerWidget {
       children: [
         const Expanded(
           child: Stack(
-            fit: StackFit.expand,
             alignment: Alignment.bottomCenter,
             children: [
               _ChatList(),
               _ReadButton(),
+              Positioned(
+                top: 24,
+                left: 16,
+                right: 16,
+                child: _TodoModal(),
+              ),
             ],
           ),
         ),
