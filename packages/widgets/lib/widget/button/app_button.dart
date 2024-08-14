@@ -22,6 +22,7 @@ class AppButton extends HookWidget {
     this.disabledColor,
     this.stateColorAnimated = true,
     this.backgroundColorAnimated = true,
+    this.skipTraversal = false,
   });
 
   final Widget child;
@@ -69,6 +70,8 @@ class AppButton extends HookWidget {
 
   /// Pressed状態の時にbounceするかどうか。
   final bool bounce;
+
+  final bool skipTraversal;
 
   bool get enabled => onPressed != null;
 
@@ -119,7 +122,7 @@ class AppButton extends HookWidget {
     return Semantics(
       container: true,
       child: FocusableActionDetector(
-        focusNode: useFocusNode(skipTraversal: !enabled),
+        focusNode: useFocusNode(skipTraversal: skipTraversal || !enabled),
         onShowHoverHighlight: (value) => hover.value = value,
         onShowFocusHighlight: (value) => focus.value = value,
         mouseCursor:

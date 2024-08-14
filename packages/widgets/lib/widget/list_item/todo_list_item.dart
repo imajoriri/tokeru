@@ -331,6 +331,7 @@ class _HoveredWidget extends StatelessWidget {
               AppTextButton.small(
                 onPressed: onOpenThread,
                 text: const Text('Open thread'),
+                skipTraversal: true,
               ),
             SizedBox(width: context.appSpacing.small),
             if (index != null)

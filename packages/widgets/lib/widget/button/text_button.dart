@@ -13,17 +13,21 @@ class AppTextButton extends HookWidget {
     super.key,
     required this.onPressed,
     required this.text,
+    this.skipTraversal = false,
   }) : type = _AppTextButtonType.medium;
 
   const AppTextButton.small({
     super.key,
     required this.onPressed,
     required this.text,
+    this.skipTraversal = false,
   }) : type = _AppTextButtonType.small;
 
   final void Function()? onPressed;
 
   final Widget text;
+
+  final bool skipTraversal;
 
   // ignore: library_private_types_in_public_api
   final _AppTextButtonType type;
@@ -32,6 +36,7 @@ class AppTextButton extends HookWidget {
   Widget build(BuildContext context) {
     return AppButton(
       onPressed: onPressed,
+      skipTraversal: skipTraversal,
       contentColor: context.appColors.onSurface,
       backgroundColor: context.appColors.surface,
       shape: const RoundedRectangleBorder(
