@@ -9,36 +9,48 @@ class _TodoModal extends HookWidget {
     // ウィンドウサイズによって変化させる。
     final max = MediaQuery.of(context).size.height * 0.75;
 
-    return MouseRegion(
-      onEnter: (_) {
-        isHovered.value = true;
-        TokeruHaptics().hovered();
-      },
-      onExit: (_) {
-        isHovered.value = false;
-      },
-      child: Container(
-        constraints: BoxConstraints(maxHeight: max),
-        decoration: BoxDecoration(
-          color: context.appColors.surface,
-          borderRadius: const BorderRadius.all(
-            Radius.circular(16),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 4,
-              spreadRadius: 0,
-              offset: const Offset(0, 0),
+    return FocusScope(
+      node: todoViewFocusNode,
+      child: MouseRegion(
+        onEnter: (_) {
+          isHovered.value = true;
+          TokeruHaptics().hovered();
+        },
+        onExit: (_) {
+          isHovered.value = false;
+        },
+        child: Container(
+          constraints: BoxConstraints(maxHeight: max),
+          decoration: BoxDecoration(
+            color: context.appColors.surface,
+            borderRadius: const BorderRadius.all(
+              Radius.circular(16),
             ),
-          ],
-        ),
-        child: AnimatedSize(
-          alignment: Alignment.topCenter,
-          duration: const Duration(milliseconds: 400),
-          curve: Curves.easeOutExpo,
-          child: _TodoList(
-            hovered: isHovered.value,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 4,
+                spreadRadius: 0,
+                offset: const Offset(0, 0),
+              ),
+            ],
+          ),
+          child: AnimatedSize(
+            alignment: Alignment.topCenter,
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.easeOutExpo,
+            child: CustomScrollView(
+              shrinkWrap: true,
+              slivers: [
+                SliverList(
+                  delegate: SliverChildListDelegate([
+                    _TodoList(
+                      hovered: isHovered.value,
+                    ),
+                  ]),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -62,47 +74,46 @@ class _TodoList extends HookConsumerWidget {
         if (todos.isEmpty) {
           return const _EmptyState();
         }
-        return SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // title
-              const _Header(),
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // title
+            const _Header(),
 
-              // TodoList
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: ReorderableListView.builder(
-                  buildDefaultDragHandles: false,
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: hovered ? todos.length : 1,
-                  onReorder: (oldIndex, newIndex) {
-                    // NOTE: なぜか上から下に移動するときはnewIndexが1つずれるので
-                    // その分を補正する
-                    if (oldIndex < newIndex) {
-                      newIndex -= 1;
-                    }
-                    ref
-                        .read(todoControllerProvider.notifier)
-                        .reorder(oldIndex, newIndex);
-                  },
-                  itemBuilder: (context, index) {
-                    final key = ValueKey(todos[index].id);
-                    final todo = todos[index];
-                    return _TodoListItem(
-                      key: key,
-                      todo: todo,
-                      index: index,
-                      onFocus: () {
-                        ref.read(selectedThreadProvider.notifier).open(todo.id);
-                      },
-                    );
-                  },
-                ),
+            // TodoList
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: ReorderableListView.builder(
+                buildDefaultDragHandles: false,
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: hovered ? todos.length : 1,
+                onReorder: (oldIndex, newIndex) {
+                  // NOTE: なぜか上から下に移動するときはnewIndexが1つずれるので
+                  // その分を補正する
+                  if (oldIndex < newIndex) {
+                    newIndex -= 1;
+                  }
+                  ref
+                      .read(todoControllerProvider.notifier)
+                      .reorder(oldIndex, newIndex);
+                },
+                itemBuilder: (context, index) {
+                  final key = ValueKey(todos[index].id);
+                  final todo = todos[index];
+                  return _TodoListItem(
+                    key: key,
+                    todo: todo,
+                    index: index,
+                    onFocus: () {
+                      ref.read(selectedThreadProvider.notifier).open(todo.id);
+                    },
+                  );
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         );
       },
       error: (e, s) => const Text('Error'),
