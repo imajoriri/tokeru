@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tokeru_desktop/widget/chat_and_ogp_list_item.dart';
+import 'package:tokeru_desktop/widget/focus_nodes.dart';
 import 'package:tokeru_desktop/widget/list_items/chat_list_items.dart';
 import 'package:tokeru_desktop/widget/text_field/chat_text_field.dart';
 import 'package:tokeru_model/controller/thread/thread.dart';
@@ -54,7 +54,7 @@ class ThreadView extends HookConsumerWidget {
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
           child: ChatTextField(
-            focusNode: useFocusNode(),
+            focusNode: threadViewFocusNode,
             onSubmit: (message) {
               ref.read(threadsProvider.notifier).add(message: message);
             },

@@ -44,6 +44,7 @@ class TodayTodoList extends HookConsumerWidget {
                     index: index,
                     onFocus: () {
                       ref.read(selectedThreadProvider.notifier).open(todo.id);
+                      threadViewFocusNode.requestFocus();
                     },
                   );
                 },
@@ -81,6 +82,7 @@ class _TodoListItem extends HookConsumerWidget {
         isDone: todo.isDone,
         onOpenThread: () {
           ref.read(selectedThreadProvider.notifier).open(todo.id);
+          threadViewFocusNode.requestFocus();
         },
         index: index,
         title: todo.title,
