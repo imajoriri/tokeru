@@ -33,12 +33,13 @@ class ChatView extends HookConsumerWidget {
             children: [
               _ChatList(),
               _ReadButton(),
-              Positioned(
-                top: 24,
-                left: 16,
-                right: 16,
-                child: _TodoModal(),
-              ),
+              // TODO: TodoModal。不要だと感じたら削除する。
+              // Positioned(
+              //   top: 24,
+              //   left: 16,
+              //   right: 16,
+              //   child: _TodoModal(),
+              // ),
             ],
           ),
         ),
