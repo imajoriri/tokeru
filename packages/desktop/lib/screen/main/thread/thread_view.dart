@@ -134,8 +134,13 @@ class _HeaderDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const SizedBox(width: 16),
-        Text('replies', style: context.appTextTheme.labelSmall),
+        const SizedBox(width: 20),
+        Text(
+          'memo',
+          style: context.appTextTheme.labelSmall.copyWith(
+            color: context.appColors.onSurfaceSubtle,
+          ),
+        ),
         const SizedBox(width: 8),
         const Expanded(
           child: Divider(

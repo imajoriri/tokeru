@@ -22,7 +22,7 @@ class MainScreen extends HookConsumerWidget {
     final maxWidth = MediaQuery.of(context).size.width - 200;
     const minWidth = 300.0;
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: Colors.grey[300],
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
