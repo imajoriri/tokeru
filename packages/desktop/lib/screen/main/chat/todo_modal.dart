@@ -1,5 +1,7 @@
 part of 'chat_view.dart';
 
+// TODO: 不要になったら消す。でもモーダルの実装はもったいないからどっかに取っておきたい。
+// ignore: unused_element
 class _TodoModal extends HookWidget {
   const _TodoModal();
 

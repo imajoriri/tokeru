@@ -46,7 +46,7 @@ class AppIconButton extends HookWidget {
     this.showBorder = false,
     this.bounce = true,
   })  : iconSize = 16,
-        padding = const EdgeInsets.all(8),
+        padding = const EdgeInsets.all(4),
         radius = 8;
 
   @override
@@ -62,7 +62,7 @@ class AppIconButton extends HookWidget {
         contentColor: context.appColors.onSurface,
         backgroundColor: context.appColors.surface,
         child: Container(
-          padding: EdgeInsets.all(context.appSpacing.smallX),
+          padding: padding,
           decoration: showBorder
               ? BoxDecoration(
                   borderRadius: BorderRadius.circular(radius),

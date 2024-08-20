@@ -63,7 +63,7 @@ class CheckButton extends HookWidget {
             : SystemMouseCursors.basic,
         child: AnimatedScale(
           duration: animationDuration,
-          scale: pressed.value ? minScale : 1.0,
+          scale: onPressed == null ? 1.0 : (pressed.value ? minScale : 1.0),
           child: AnimatedContainer(
             duration: animationDuration,
             width: widgetSize,

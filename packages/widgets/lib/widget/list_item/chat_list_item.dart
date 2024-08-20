@@ -3,19 +3,34 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:tokeru_widgets/widgets.dart';
 
+/// チャットアイテムリストの作成時刻を表示するタイプ。
+enum ChatCreatedDateType {
+  /// messageの上部に常に表示する。
+  always,
+
+  /// messageの横にHover時のみ表示する。
+  hover,
+}
+
 class ChatListItem extends HookWidget {
-  const ChatListItem.chat({
+  const ChatListItem({
     super.key,
     required this.text,
+    required this.createdAt,
     required this.launchUrl,
     this.threadCount = 0,
     this.bottomWidget,
     this.onRead,
     this.onThread,
     this.onConvertTodo,
+    this.createdDateType = ChatCreatedDateType.always,
   });
 
+  /// チャットのメッセージ。
   final String text;
+
+  /// 作成日時。
+  final DateTime createdAt;
 
   /// URLをタップした時の処理。
   final void Function(Uri)? launchUrl;
@@ -34,6 +49,9 @@ class ChatListItem extends HookWidget {
 
   /// Todoへの変換を押した時の処理。
   final void Function()? onConvertTodo;
+
+  /// 作成日時の表示タイプ。
+  final ChatCreatedDateType createdDateType;
 
   @override
   Widget build(BuildContext context) {
@@ -84,6 +102,10 @@ class ChatListItem extends HookWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // 時刻
+                if (createdDateType == ChatCreatedDateType.always) ...[
+                  _CreatedDate(date: createdAt),
+                ],
                 _Chat(
                   message: text,
                   bottomWidget: bottomWidget,
@@ -106,6 +128,27 @@ class ChatListItem extends HookWidget {
   }
 }
 
+class _CreatedDate extends StatelessWidget {
+  final DateTime date;
+
+  const _CreatedDate({required this.date});
+
+  @override
+  Widget build(BuildContext context) {
+    final formattedDate =
+        '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
+    return Padding(
+      padding: const EdgeInsets.only(top: 4),
+      child: Text(
+        formattedDate,
+        style: context.appTextTheme.bodySmall.copyWith(
+          color: context.appColors.onSurfaceSubtle,
+        ),
+      ),
+    );
+  }
+}
+
 class _ChatActionButtons extends StatelessWidget {
   const _ChatActionButtons({
     required this.onRead,
@@ -119,6 +162,11 @@ class _ChatActionButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 全てのコールバックがnullの場合は表示しない。
+    if (onRead == null && onThread == null && onConvertTodo == null) {
+      return const SizedBox.shrink();
+    }
+
     return Container(
       decoration: BoxDecoration(
         color: context.appColors.surface,

@@ -5,25 +5,61 @@ import 'package:tokeru_widgets/widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ChatAndOgpListItem extends ConsumerWidget {
-  const ChatAndOgpListItem({
+  const ChatAndOgpListItem.chat({
     super.key,
     required this.message,
+    required this.createdAt,
     this.onRead,
     this.onThread,
     this.onConvertTodo,
     this.threadCount = 0,
-  });
+
+    /// 直前の投稿から10分以上経過しているかどうか。
+    required bool isAfter10Minutes,
+  }) : createdDateType = isAfter10Minutes
+            ? ChatCreatedDateType.hover
+            : ChatCreatedDateType.always;
+
+  const ChatAndOgpListItem.thread({
+    super.key,
+    required this.message,
+    required this.createdAt,
+
+    /// 直前の投稿から10分以上経過しているかどうか。
+    required bool isAfter10Minutes,
+  })  : onRead = null,
+        onThread = null,
+        onConvertTodo = null,
+        threadCount = 0,
+        createdDateType = isAfter10Minutes
+            ? ChatCreatedDateType.hover
+            : ChatCreatedDateType.always;
+
+  const ChatAndOgpListItem.threadTop({
+    super.key,
+    required this.message,
+    required this.createdAt,
+  })  : onRead = null,
+        onThread = null,
+        onConvertTodo = null,
+        threadCount = 0,
+        createdDateType = ChatCreatedDateType.always;
 
   final String message;
+  final DateTime createdAt;
   final void Function()? onRead;
   final void Function()? onThread;
   final void Function()? onConvertTodo;
   final int threadCount;
+  final ChatCreatedDateType createdDateType;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final links = getLinks(text: message);
-    return ChatListItem.chat(
+    return ChatListItem(
       text: message,
+      createdAt: createdAt,
+      createdDateType: createdDateType,
       launchUrl: (link) async {
         if (!await launchUrl(link)) {
           throw Exception('Could not launch ${link.toString()}');

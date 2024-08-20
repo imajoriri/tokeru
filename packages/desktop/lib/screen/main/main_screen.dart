@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tokeru_desktop/screen/main/thread/thread_view.dart';
 import 'package:tokeru_desktop/screen/main/chat/chat_view.dart';
 import 'package:tokeru_desktop/screen/main/todo/todo_view.dart';
+import 'package:tokeru_model/controller/thread/thread.dart';
 import 'package:tokeru_widgets/widgets.dart';
 
 class MainScreen extends ConsumerWidget {
@@ -10,13 +11,14 @@ class MainScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final threadOpen = ref.watch(selectedThreadProvider) != null;
     return Scaffold(
       backgroundColor: context.appColors.surface,
-      body: const Row(
+      body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Chat
-          Expanded(
+          const Expanded(
             child: Column(
               children: [
                 Expanded(child: TodoView()),
@@ -28,9 +30,10 @@ class MainScreen extends ConsumerWidget {
             ),
           ),
 
-          _Divider(),
-
-          Expanded(child: ThreadView()),
+          if (threadOpen) ...[
+            const _Divider(),
+            const Expanded(child: ThreadView()),
+          ],
 
           // Todoリスト
           // TODO: 不要だと感じたら削除する。

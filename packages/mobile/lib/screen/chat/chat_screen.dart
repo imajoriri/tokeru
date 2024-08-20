@@ -125,8 +125,9 @@ class _ChatListItemChat extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final links = getLinks(text: appItem.message);
-    return ChatListItem.chat(
+    return ChatListItem(
       text: appItem.message,
+      createdAt: appItem.createdAt,
       launchUrl: (link) async {
         if (!await launchUrl(link)) {
           throw Exception('Could not launch ${link.toString()}');

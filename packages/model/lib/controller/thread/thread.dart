@@ -12,6 +12,10 @@ class SelectedThread extends _$SelectedThread {
     return null;
   }
 
+  void close() {
+    state = null;
+  }
+
   void open(String appItemId) async {
     // TODO: streamにしてリアルタイムでデータを更新するようにしたい。
     final user = ref.read(userControllerProvider).requireValue;

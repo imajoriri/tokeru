@@ -7,6 +7,7 @@ import 'package:tokeru_desktop/widget/text_field/chat_text_field.dart';
 import 'package:tokeru_model/controller/thread/thread.dart';
 import 'package:tokeru_model/controller/threads/threads.dart';
 import 'package:tokeru_model/model/app_item/app_item.dart';
+import 'package:tokeru_widgets/widgets.dart';
 
 class ThreadView extends HookConsumerWidget {
   const ThreadView({super.key});
@@ -23,33 +24,29 @@ class ThreadView extends HookConsumerWidget {
 
     return Column(
       children: [
+        _ThreadHeader(item: item),
+        if (appItems.valueOrNull?.isNotEmpty == true) ...[
+          const SizedBox(height: 8),
+          const _HeaderDivider(),
+        ],
         const SizedBox(height: 8),
-        switch (item) {
-          AppChatItem() => ChatAndOgpListItem(
-              message: item.message,
-            ),
-          AppTodoItem() => Text(item.title),
-          _ => throw UnimplementedError(),
-        },
-        Expanded(
-          child: appItems.when(
-            skipLoadingOnReload: true,
-            data: (appItems) {
-              return ChatListItems.thread(
-                threads: appItems,
-              );
-            },
-            loading: () {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            },
-            error: (error, _) {
-              return Center(
-                child: Text('Error: $error'),
-              );
-            },
-          ),
+        appItems.when(
+          skipLoadingOnReload: true,
+          data: (appItems) {
+            return ChatListItems.thread(
+              threads: appItems,
+            );
+          },
+          loading: () {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          },
+          error: (error, _) {
+            return Center(
+              child: Text('Error: $error'),
+            );
+          },
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
@@ -60,6 +57,90 @@ class ThreadView extends HookConsumerWidget {
             },
           ),
         ),
+      ],
+    );
+  }
+}
+
+class _ThreadHeader extends ConsumerWidget {
+  final AppItem item;
+
+  const _ThreadHeader({Key? key, required this.item}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+            left: context.appSpacing.medium,
+            right: context.appSpacing.medium,
+            top: context.appSpacing.medium,
+            bottom: context.appSpacing.small,
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text('Thread', style: context.appTextTheme.titleMedium),
+              ),
+              // close button
+              AppIconButton.medium(
+                icon: const Icon(Icons.close),
+                onPressed: () {
+                  ref.read(selectedThreadProvider.notifier).close();
+                },
+                tooltip: 'Close',
+              ),
+            ],
+          ),
+        ),
+        switch (item) {
+          AppChatItem(:final message, :final createdAt) =>
+            ChatAndOgpListItem.threadTop(
+              message: message,
+              createdAt: createdAt,
+            ),
+          AppTodoItem(:final isDone, :final title) => Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: TodoListItem(
+                key: ValueKey(item.id),
+                isDone: isDone,
+                title: title,
+                // TODO: threadControllerがリアルタイム更新されるようになったら
+                // onToggleDoneを実装する。
+                // onToggleDone: (value) {
+                //   ref
+                //       .read(todoControllerProvider.notifier)
+                //       .toggleTodoDone(todoId: id);
+                //   FirebaseAnalytics.instance.logEvent(
+                //     name: AnalyticsEventName.toggleTodoDone.name,
+                //   );
+                // },
+              ),
+            ),
+          _ => throw UnimplementedError(),
+        },
+      ],
+    );
+  }
+}
+
+class _HeaderDivider extends StatelessWidget {
+  const _HeaderDivider();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const SizedBox(width: 16),
+        Text('replies', style: context.appTextTheme.labelSmall),
+        const SizedBox(width: 8),
+        const Expanded(
+          child: Divider(
+            height: 1,
+          ),
+        ),
+        const SizedBox(width: 16),
       ],
     );
   }

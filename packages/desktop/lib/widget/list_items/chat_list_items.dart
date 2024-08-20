@@ -1,11 +1,10 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tokeru_desktop/widget/chat_and_ogp_list_item.dart';
 import 'package:tokeru_model/model/app_item/app_item.dart';
 import 'package:tokeru_widgets/widgets.dart';
 
-class ChatListItems<T extends AppItem> extends ConsumerWidget {
+class ChatListItems<T extends AppItem> extends StatelessWidget {
   /// メインのチャットで表示するチャットのリスト。
   const ChatListItems.main({
     Key? key,
@@ -45,7 +44,7 @@ class ChatListItems<T extends AppItem> extends ConsumerWidget {
   final void Function(T)? onConvertTodo;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return SelectionArea(
       child: ListView.builder(
         itemCount: appItems.length,
@@ -54,6 +53,13 @@ class ChatListItems<T extends AppItem> extends ConsumerWidget {
         itemBuilder: (context, index) {
           final item = appItems[index];
           final isLast = index == 0;
+
+          final next =
+              appItems.firstWhereIndexedOrNull((i, _) => i == index + 1);
+          // 現在時刻を表示するかどうか。直前のアイテムのの作成時刻から10分以上経過している場合は表示する。
+          final isShowCreatedDate = next != null &&
+              item.createdAt
+                  .isBefore(next.createdAt.add(const Duration(minutes: 10)));
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -63,8 +69,9 @@ class ChatListItems<T extends AppItem> extends ConsumerWidget {
                 readTime: readTime,
               ),
               switch (item) {
-                AppChatItem() => ChatAndOgpListItem(
+                AppChatItem(:final createdAt) => ChatAndOgpListItem.chat(
                     message: item.message,
+                    createdAt: createdAt,
                     onRead: onRead != null ? () => onRead!(item as T) : null,
                     onThread:
                         onThread != null ? () => onThread!(item as T) : null,
@@ -72,9 +79,12 @@ class ChatListItems<T extends AppItem> extends ConsumerWidget {
                         ? () => onConvertTodo!(item as T)
                         : null,
                     threadCount: item.threadCount,
+                    isAfter10Minutes: isShowCreatedDate,
                   ),
-                AppThreadItem() => ChatAndOgpListItem(
+                AppThreadItem(:final createdAt) => ChatAndOgpListItem.thread(
                     message: item.message,
+                    createdAt: createdAt,
+                    isAfter10Minutes: isShowCreatedDate,
                   ),
                 _ => const SizedBox.shrink(),
               },
@@ -143,6 +153,7 @@ class _TodoDivider extends StatelessWidget {
   }
 }
 
+/// 「New」マークの未読のDivider。
 class _UnreadDivider extends StatelessWidget {
   const _UnreadDivider();
 
@@ -192,15 +203,10 @@ class _DayDividerItem extends StatelessWidget {
       children: [
         Expanded(child: Divider(color: context.appColors.outline)),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: context.appColors.outline,
-            ),
-            borderRadius: BorderRadius.circular(16),
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           child: Text(
             text,
+            style: context.appTextTheme.labelSmall,
           ),
         ),
         Expanded(child: Divider(color: context.appColors.outline)),
