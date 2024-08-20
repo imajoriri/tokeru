@@ -63,9 +63,9 @@ class ChatListItems<T extends AppItem> extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _TodoDivider(
-                index: index,
-                items: appItems,
+              _Divider(
+                item: appItems[index],
+                next: next,
                 readTime: readTime,
               ),
               switch (item) {
@@ -116,29 +116,27 @@ class _BottomSpace extends StatelessWidget {
   }
 }
 
-class _TodoDivider extends StatelessWidget {
-  const _TodoDivider({
-    required this.items,
-    required this.index,
+class _Divider extends StatelessWidget {
+  const _Divider({
+    required this.item,
+    required this.next,
     required this.readTime,
   });
 
-  final int index;
-  final List<AppItem> items;
+  final AppItem item;
+  final AppItem? next;
   final DateTime? readTime;
 
   @override
   Widget build(BuildContext context) {
-    final item = items[index];
-    final next = items.firstWhereIndexedOrNull((i, _) => i == index + 1);
     // 次のAppItemが日付が変わるかどうか。
-    final isNextDay = next != null && item.createdAt.day != next.createdAt.day;
+    final isNextDay = next != null && item.createdAt.day != next!.createdAt.day;
 
     // 未読のラインを表示するかどうか。
     final isUnreadLine = readTime != null &&
         next != null &&
         item.createdAt.isAfter(readTime!) &&
-        next.createdAt.isBefore(readTime!);
+        next!.createdAt.isBefore(readTime!);
     return Column(
       children: [
         if (isNextDay)
