@@ -22,7 +22,7 @@ class MainScreen extends HookConsumerWidget {
     final maxWidth = MediaQuery.of(context).size.width - 200;
     const minWidth = 300.0;
     return Scaffold(
-      backgroundColor: context.appColors.surface,
+      backgroundColor: Colors.grey[200],
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -30,7 +30,7 @@ class MainScreen extends HookConsumerWidget {
           Expanded(
             child: Column(
               children: [
-                SizedBox(
+                _PanelContainer(
                   height: todoHeight.value,
                   child: const TodoView(),
                 ),
@@ -43,7 +43,11 @@ class MainScreen extends HookConsumerWidget {
                     }
                   },
                 ),
-                const Expanded(child: ChatView()),
+                const Expanded(
+                  child: _PanelContainer(
+                    child: ChatView(),
+                  ),
+                ),
               ],
             ),
           ),
@@ -58,7 +62,7 @@ class MainScreen extends HookConsumerWidget {
                 }
               },
             ),
-            SizedBox(
+            _PanelContainer(
               width: threadWidth.value,
               child: const ThreadView(),
             ),
@@ -69,7 +73,34 @@ class MainScreen extends HookConsumerWidget {
   }
 }
 
-class _Divider extends StatelessWidget {
+class _PanelContainer extends StatelessWidget {
+  const _PanelContainer({
+    super.key,
+    required this.child,
+    this.width,
+    this.height,
+  });
+
+  final Widget child;
+
+  final double? width;
+  final double? height;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: context.appColors.surface,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: child,
+    );
+  }
+}
+
+class _Divider extends HookWidget {
   const _Divider({
     this.isVertical = true,
     this.onVerticalDragUpdate,
@@ -82,23 +113,54 @@ class _Divider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 外側のDividerの幅
+    const dividerWidth = 10.0;
+
+    // borderの幅
+    const borderWidth = 4.0;
+    // borderの高さ
+    const borderHeight = 60.0;
+
+    final hovered = useState(false);
+
+    final border = Container(
+      width: isVertical ? borderWidth : borderHeight,
+      height: isVertical ? borderHeight : borderWidth,
+      decoration: BoxDecoration(
+        color: hovered.value
+            ? context.appColors.outlineStrong
+            // 色を変えたい場合に残しておく。
+            : context.appColors.outlineStrong.withOpacity(0),
+        borderRadius: BorderRadius.circular(10),
+      ),
+    );
+
     return MouseRegion(
       cursor: _getCursor(),
+      onEnter: (_) => hovered.value = true,
+      onExit: (_) => hovered.value = false,
       child: GestureDetector(
         onVerticalDragUpdate: onVerticalDragUpdate,
         onHorizontalDragUpdate: onHorizontalDragUpdate,
         behavior: HitTestBehavior.opaque,
-        child: Padding(
-          padding: _getPadding(),
-          child: Container(
-            width: isVertical ? 3 : double.infinity,
-            height: isVertical ? double.infinity : 3,
-            margin: _getMargin(context),
-            decoration: BoxDecoration(
-              color: context.appColors.outline,
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
+        child: SizedBox(
+          width: isVertical ? dividerWidth : double.infinity,
+          height: isVertical ? double.infinity : dividerWidth,
+          child: isVertical
+              ? Column(
+                  children: [
+                    const Spacer(),
+                    border,
+                    const Spacer(),
+                  ],
+                )
+              : Row(
+                  children: [
+                    const Spacer(),
+                    border,
+                    const Spacer(),
+                  ],
+                ),
         ),
       ),
     );
@@ -108,18 +170,5 @@ class _Divider extends StatelessWidget {
     return isVertical
         ? SystemMouseCursors.resizeLeftRight
         : SystemMouseCursors.resizeUpDown;
-  }
-
-  EdgeInsets _getPadding() {
-    return EdgeInsets.symmetric(
-      vertical: isVertical ? 0 : 2,
-      horizontal: isVertical ? 2 : 0,
-    );
-  }
-
-  EdgeInsets _getMargin(BuildContext context) {
-    return isVertical
-        ? EdgeInsets.symmetric(vertical: context.appSpacing.small)
-        : EdgeInsets.symmetric(horizontal: context.appSpacing.small);
   }
 }

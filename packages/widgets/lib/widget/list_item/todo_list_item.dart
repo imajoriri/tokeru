@@ -258,16 +258,19 @@ class TodoListItem extends HookWidget {
                   ),
                 ),
                 // スレッド数。
-                if (threadCount > 0 && !onHover.value)
-                  Padding(
-                    padding: EdgeInsets.only(
-                      right: context.appSpacing.medium,
-                      top: context.appSpacing.small,
-                    ),
-                    child: Text(
-                      '$threadCount',
-                      style: context.appTextTheme.bodyMedium.copyWith(
-                        color: context.appColors.onSurfaceSubtle,
+                if (threadCount > 0)
+                  Visibility(
+                    visible: threadCount > 0,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        right: context.appSpacing.medium,
+                        top: context.appSpacing.small,
+                      ),
+                      child: Text(
+                        '$threadCount',
+                        style: context.appTextTheme.bodyMedium.copyWith(
+                          color: context.appColors.onSurfaceSubtle,
+                        ),
                       ),
                     ),
                   ),

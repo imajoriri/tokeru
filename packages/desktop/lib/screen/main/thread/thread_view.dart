@@ -30,23 +30,25 @@ class ThreadView extends HookConsumerWidget {
           const _HeaderDivider(),
         ],
         const SizedBox(height: 8),
-        appItems.when(
-          skipLoadingOnReload: true,
-          data: (appItems) {
-            return ChatListItems.thread(
-              threads: appItems,
-            );
-          },
-          loading: () {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          },
-          error: (error, _) {
-            return Center(
-              child: Text('Error: $error'),
-            );
-          },
+        Flexible(
+          child: appItems.when(
+            skipLoadingOnReload: true,
+            data: (appItems) {
+              return ChatListItems.thread(
+                threads: appItems,
+              );
+            },
+            loading: () {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            },
+            error: (error, _) {
+              return Center(
+                child: Text('Error: $error'),
+              );
+            },
+          ),
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
