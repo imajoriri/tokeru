@@ -3,7 +3,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tokeru_model/controller/url/url_controller.dart';
 import 'package:tokeru_desktop/utils/method_channel.dart';
 import 'package:tokeru_desktop/widget/actions/new_todo.dart/new_todo_action.dart';
-import 'package:tokeru_desktop/widget/actions/reload/reload_action.dart';
 import 'package:tokeru_desktop/widget/shortcutkey.dart';
 import 'package:tokeru_model/controller/user/user_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -61,27 +60,6 @@ class AppPlatformMenuBar extends ConsumerWidget {
                       const NewTodoIntent(),
                     );
                   },
-                ),
-              ],
-            ),
-          ],
-        ),
-
-        // window
-        PlatformMenu(
-          label: "Window",
-          menus: [
-            PlatformMenuItemGroup(
-              members: [
-                PlatformMenuItem(
-                  label: ShortcutActivatorType.reload.label,
-                  onSelected: () {
-                    Actions.maybeInvoke<ReloadIntent>(
-                      context,
-                      const ReloadIntent(),
-                    );
-                  },
-                  shortcut: ShortcutActivatorType.reload.shortcutActivator,
                 ),
               ],
             ),
