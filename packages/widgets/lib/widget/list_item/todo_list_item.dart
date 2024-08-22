@@ -258,7 +258,7 @@ class TodoListItem extends HookWidget {
                   ),
                 ),
                 // スレッド数。
-                if (threadCount > 0)
+                if (threadCount > 0 && !onHover.value)
                   Visibility(
                     visible: threadCount > 0,
                     child: Padding(
