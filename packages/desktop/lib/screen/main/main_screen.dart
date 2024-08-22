@@ -4,7 +4,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tokeru_desktop/screen/main/thread/thread_view.dart';
 import 'package:tokeru_desktop/screen/main/todo/todo_view.dart';
-import 'package:tokeru_model/controller/thread/thread.dart';
 import 'package:tokeru_widgets/widgets.dart';
 
 class MainScreen extends HookConsumerWidget {
@@ -12,7 +11,6 @@ class MainScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final threadOpen = ref.watch(selectedThreadProvider) != null;
     final threadWidth = useState(500.0);
 
     final maxWidth = MediaQuery.of(context).size.width - 200;
@@ -35,21 +33,19 @@ class MainScreen extends HookConsumerWidget {
             ),
           ),
 
-          if (threadOpen) ...[
-            _Divider(
-              onHorizontalDragUpdate: (event) {
-                // 右側のpanelにwidthを指定しているのでプラスではなくマイナスにしている。
-                final newWidth = threadWidth.value - event.delta.dx;
-                if (newWidth >= minWidth && newWidth <= maxWidth) {
-                  threadWidth.value = newWidth;
-                }
-              },
-            ),
-            _PanelContainer(
-              width: threadWidth.value,
-              child: const ThreadView(),
-            ),
-          ],
+          _Divider(
+            onHorizontalDragUpdate: (event) {
+              // 右側のpanelにwidthを指定しているのでプラスではなくマイナスにしている。
+              final newWidth = threadWidth.value - event.delta.dx;
+              if (newWidth >= minWidth && newWidth <= maxWidth) {
+                threadWidth.value = newWidth;
+              }
+            },
+          ),
+          _PanelContainer(
+            width: threadWidth.value,
+            child: const ThreadView(),
+          ),
         ],
       ),
     );

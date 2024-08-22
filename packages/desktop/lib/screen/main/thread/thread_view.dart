@@ -17,7 +17,15 @@ class ThreadView extends HookConsumerWidget {
     final item = ref.watch(selectedThreadProvider);
     // スレッドが選択されていない場合は何も表示しない。
     if (item == null) {
-      return const SizedBox.shrink();
+      return const SizedBox(
+        width: double.infinity,
+        height: double.infinity,
+        child: Center(
+          child: Text(
+            'No todo selected',
+          ),
+        ),
+      );
     }
 
     final appItems = ref.watch(threadsProvider);
