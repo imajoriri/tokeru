@@ -76,9 +76,11 @@ class _TodoListItem extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isSelected = ref.watch(selectedThreadProvider)?.id == todo.id;
     return Padding(
       padding: EdgeInsets.only(bottom: context.appSpacing.smallX),
       child: TodoListItem(
+        isSelected: isSelected,
         isDone: todo.isDone,
         onOpenThread: () {
           ref.read(selectedThreadProvider.notifier).open(todo.id);

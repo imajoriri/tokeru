@@ -15,6 +15,7 @@ class TodoListItem extends HookWidget {
     this.onOpenThread,
     this.focusNode,
     this.autofocus = false,
+    this.isSelected = false,
     this.onDeleted,
     this.onUpdatedTitle,
     this.onToggleDone,
@@ -40,6 +41,8 @@ class TodoListItem extends HookWidget {
 
   /// スレッドを開くボタンを押した時のコールバック。
   final void Function()? onOpenThread;
+
+  final bool isSelected;
 
   final FocusNode? focusNode;
 
@@ -146,7 +149,7 @@ class TodoListItem extends HookWidget {
       [effectiveController],
     );
 
-    final backgroundColor = hasFocus.value && !readOnly
+    final backgroundColor = isSelected
         ? context.appColors.primary.withOpacity(0.08)
         : onHover.value
             ? context.appColors.onSurface.hovered
