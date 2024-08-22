@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tokeru_desktop/screen/main/thread/thread_view.dart';
-import 'package:tokeru_desktop/screen/main/chat/chat_view.dart';
 import 'package:tokeru_desktop/screen/main/todo/todo_view.dart';
 import 'package:tokeru_model/controller/thread/thread.dart';
 import 'package:tokeru_widgets/widgets.dart';
@@ -14,11 +13,8 @@ class MainScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final threadOpen = ref.watch(selectedThreadProvider) != null;
-    final todoHeight = useState(300.0);
     final threadWidth = useState(500.0);
 
-    final maxHeight = MediaQuery.of(context).size.height - 100;
-    const minHeight = 100.0;
     final maxWidth = MediaQuery.of(context).size.width - 200;
     const minWidth = 300.0;
     return Scaffold(
@@ -27,25 +23,12 @@ class MainScreen extends HookConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Chat
-          Expanded(
+          const Expanded(
             child: Column(
               children: [
-                _PanelContainer(
-                  height: todoHeight.value,
-                  child: const TodoView(),
-                ),
-                _Divider(
-                  isVertical: false,
-                  onVerticalDragUpdate: (event) {
-                    final newHeight = todoHeight.value + event.delta.dy;
-                    if (newHeight >= minHeight && newHeight <= maxHeight) {
-                      todoHeight.value = newHeight;
-                    }
-                  },
-                ),
-                const Expanded(
+                Expanded(
                   child: _PanelContainer(
-                    child: ChatView(),
+                    child: TodoView(),
                   ),
                 ),
               ],
