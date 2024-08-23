@@ -5,7 +5,7 @@ import FlutterMacOS
 class AppDelegate: FlutterAppDelegate {
   override func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
     // falseにすることで、closeされてもバックグラウンドで動き続ける(アプリが終了しない)
-    return false
+    return true
   }
 
   // accessoryにすることで、menu barが表示されない
