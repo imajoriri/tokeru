@@ -29,12 +29,15 @@ dependencies:
   cached_network_image: ^3.3.1
   flutter_animate: ^4.5.0
 
-  # firebase
-  firebase_auth: ^4.17.4
-  firebase_core: ^2.31.0
-  firebase_crashlytics: ^3.4.14
-  firebase_analytics: ^10.8.7
   hotkey_manager: ^0.2.2
+
+  # firebase & google
+  # TODO: descktopからは削除して、modelに移動する
+  firebase_core: ^3.3.0
+  firebase_auth: ^5.1.4
+  firebase_crashlytics: ^4.0.4
+  cloud_firestore: ^5.2.1
+  firebase_analytics: ^11.2.1
 
   url_launcher: ^6.2.5
 

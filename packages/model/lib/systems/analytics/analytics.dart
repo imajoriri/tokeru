@@ -12,7 +12,7 @@ class AppAnalytics {
   const AppAnalytics({required this.analytics});
   final FirebaseAnalytics analytics;
 
-  Future<void> logEvent(String name, Map<String, dynamic> parameters) async {
+  Future<void> logEvent(String name, Map<String, Object> parameters) async {
     await analytics.logEvent(name: name, parameters: parameters);
   }
 }

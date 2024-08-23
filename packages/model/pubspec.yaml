@@ -43,13 +43,13 @@ dependencies:
   crypto: ^3.0.3
 
   # firebase & google
-  firebase_auth: ^4.17.4
-  firebase_core: ^2.31.0
-  firebase_crashlytics: ^3.4.14
-  cloud_firestore: ^4.15.8
-  firebase_analytics: ^10.8.7
+  firebase_core: ^3.3.0
+  firebase_auth: ^5.1.4
+  firebase_crashlytics: ^4.0.4
+  cloud_firestore: ^5.2.1
+  firebase_analytics: ^11.2.1
+  firebase_vertexai: ^0.2.2+4
   google_sign_in: ^6.2.1
-  # sign_in_with_apple: ^6.1.1
 
 dev_dependencies:
   flutter_test:

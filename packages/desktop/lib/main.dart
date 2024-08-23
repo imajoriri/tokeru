@@ -14,9 +14,7 @@ import 'package:tokeru_widgets/widgets.dart';
 @pragma('vm:entry-point')
 void panel() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await initializeFirebase();
   runApp(
     ProviderScope(
       observers: [_AppObserver()],

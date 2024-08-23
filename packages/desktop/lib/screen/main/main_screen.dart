@@ -54,9 +54,9 @@ class MainScreen extends HookConsumerWidget {
 
 class _PanelContainer extends StatelessWidget {
   const _PanelContainer({
-    super.key,
     required this.child,
     this.width,
+    // ignore: unused_element
     this.height,
   });
 
@@ -81,7 +81,9 @@ class _PanelContainer extends StatelessWidget {
 
 class _Divider extends HookWidget {
   const _Divider({
+    // ignore: unused_element
     this.isVertical = true,
+    // ignore: unused_element
     this.onVerticalDragUpdate,
     this.onHorizontalDragUpdate,
   });
