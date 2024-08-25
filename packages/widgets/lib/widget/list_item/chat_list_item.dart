@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:tokeru_widgets/widgets.dart';
 
 /// チャットアイテムリストの作成時刻を表示するタイプ。
@@ -229,17 +229,14 @@ class _Chat extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Linkify(
-            onOpen: (link) async {
-              launchUrl(Uri.parse(link.url));
+          Markdown(
+            data: message,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.zero,
+            onTapLink: (text, href, title) {
+              launchUrl(Uri.parse(href ?? ''));
             },
-            options: const LinkifyOptions(humanize: false),
-            text: message,
-            style: context.appTextTheme.bodyMedium,
-            linkStyle: context.appTextTheme.bodyMedium.copyWith(
-              color: context.appColors.link,
-              decoration: TextDecoration.none,
-            ),
           ),
           if (bottomWidget != null) ...[
             bottomWidget!,
