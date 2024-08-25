@@ -53,7 +53,6 @@ class ChatListItems<T extends AppItem> extends StatelessWidget {
         reverse: true,
         itemBuilder: (context, index) {
           final item = appItems[index];
-          print(item);
           final isLast = index == 0;
 
           final next =
