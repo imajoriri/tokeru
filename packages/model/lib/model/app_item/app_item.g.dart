@@ -44,6 +44,29 @@ Map<String, dynamic> _$$AppThreadItemImplToJson(_$AppThreadItemImpl instance) =>
       'type': instance.$type,
     };
 
+_$AppAiCommentItemImpl _$$AppAiCommentItemImplFromJson(
+        Map<String, dynamic> json) =>
+    _$AppAiCommentItemImpl(
+      id: json['id'] as String,
+      userMessage: json['userMessage'] as String,
+      aiMessage: json['aiMessage'] as String,
+      parentId: json['parentId'] as String,
+      createdAt:
+          const TimestampConverter().fromJson(json['createdAt'] as Timestamp),
+      $type: json['type'] as String?,
+    );
+
+Map<String, dynamic> _$$AppAiCommentItemImplToJson(
+        _$AppAiCommentItemImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'userMessage': instance.userMessage,
+      'aiMessage': instance.aiMessage,
+      'parentId': instance.parentId,
+      'createdAt': const TimestampConverter().toJson(instance.createdAt),
+      'type': instance.$type,
+    };
+
 _$AppTodoItemImpl _$$AppTodoItemImplFromJson(Map<String, dynamic> json) =>
     _$AppTodoItemImpl(
       id: json['id'] as String,

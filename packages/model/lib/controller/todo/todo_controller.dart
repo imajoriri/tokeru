@@ -41,7 +41,11 @@ class TodoController extends _$TodoController {
   _listen() {
     final user = ref.watch(userControllerProvider);
     final repository = ref.read(appItemRepositoryProvider(user.value!.id));
-    final todoQuery = repository.todoQuery(userId: user.requireValue.id);
+    final todoQuery = repository.query(
+      userId: user.requireValue.id,
+      type: const ['todo'],
+      isDone: false,
+    );
     _streamSub = todoQuery.snapshots().listen((event) async {
       state = AsyncData(
         event.docs

@@ -25,7 +25,10 @@ class Chats extends _$Chats {
     }
     final repository =
         ref.watch(appItemRepositoryProvider(user.requireValue.id));
-    final query = repository.chatQuery(userId: user.requireValue.id);
+    final query = repository.query(
+      userId: user.requireValue.id,
+      type: const ['chat'],
+    );
 
     final documents = ref.watch(_appItemsPaginationProvider(query));
     final items = documents.map((doc) {
@@ -49,7 +52,10 @@ class Chats extends _$Chats {
     }
     final repository =
         ref.read(appItemRepositoryProvider(user.requireValue.id));
-    final query = repository.chatQuery(userId: user.requireValue.id);
+    final query = repository.query(
+      userId: user.requireValue.id,
+      type: const ['chat'],
+    );
     ref.read(_appItemsPaginationProvider(query).notifier).loadDocuments();
   }
 

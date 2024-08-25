@@ -38,6 +38,24 @@ sealed class AppItem with _$AppItem {
     @TimestampConverter() required DateTime createdAt,
   }) = AppThreadItem;
 
+  @FreezedUnionValue('ai_comment')
+  const factory AppItem.aiComment({
+    /// ID。
+    required String id,
+
+    /// ユーザーが入力したメッセージ。
+    required String userMessage,
+
+    /// AIのメッセージ。
+    required String aiMessage,
+
+    /// 親の[AppItem.id]ID。
+    required String parentId,
+
+    /// 作成日時。
+    @TimestampConverter() required DateTime createdAt,
+  }) = AppAiCommentItem;
+
   @FreezedUnionValue('todo')
   const factory AppItem.todo({
     /// ID。

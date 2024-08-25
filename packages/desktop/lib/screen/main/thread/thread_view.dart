@@ -5,7 +5,6 @@ import 'package:tokeru_desktop/widget/chat_and_ogp_list_item.dart';
 import 'package:tokeru_desktop/widget/focus_nodes.dart';
 import 'package:tokeru_desktop/widget/list_items/chat_list_items.dart';
 import 'package:tokeru_desktop/widget/text_field/chat_text_field.dart';
-import 'package:tokeru_model/controller/ai/ai.dart';
 import 'package:tokeru_model/controller/thread/thread.dart';
 import 'package:tokeru_model/controller/threads/threads.dart';
 import 'package:tokeru_model/model/app_item/app_item.dart';
@@ -30,10 +29,9 @@ class ThreadView extends HookConsumerWidget {
       );
     }
 
-    final appItems = ref.watch(threadsProvider);
+    final provider = threadsProvider(item);
+    final appItems = ref.watch(provider);
     final switchValue = useState(false);
-
-    final chat = ref.watch(aiChatProvider(item).notifier);
 
     return Column(
       children: [
@@ -78,11 +76,10 @@ class ThreadView extends HookConsumerWidget {
                 focusNode: threadViewFocusNode,
                 onSubmit: (message) async {
                   if (switchValue.value) {
-                    final text = await chat.sendMessage(message);
-                    ref.read(threadsProvider.notifier).add(message: text);
+                    await ref.read(provider.notifier).sendMessageToAi(message);
                     return;
                   }
-                  ref.read(threadsProvider.notifier).add(message: message);
+                  ref.read(provider.notifier).add(message: message);
                 },
               ),
             ],

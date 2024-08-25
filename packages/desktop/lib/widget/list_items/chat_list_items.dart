@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:tokeru_desktop/widget/chat_and_ogp_list_item.dart';
+import 'package:tokeru_model/model.dart';
 import 'package:tokeru_model/model/app_item/app_item.dart';
 import 'package:tokeru_widgets/widgets.dart';
 
@@ -20,7 +21,7 @@ class ChatListItems<T extends AppItem> extends StatelessWidget {
   /// スレッドで表示するチャットのリスト。
   const ChatListItems.thread({
     Key? key,
-    required List<AppThreadItem> threads,
+    required List<AppItem> threads,
   })  : appItems = threads,
         onConvertTodo = null,
         onRead = null,
@@ -52,6 +53,7 @@ class ChatListItems<T extends AppItem> extends StatelessWidget {
         reverse: true,
         itemBuilder: (context, index) {
           final item = appItems[index];
+          print(item);
           final isLast = index == 0;
 
           final next =
@@ -85,6 +87,12 @@ class ChatListItems<T extends AppItem> extends StatelessWidget {
                     message: item.message,
                     createdAt: createdAt,
                     isAfter10Minutes: isShowCreatedDate,
+                  ),
+                AppAiCommentItem(:final createdAt) =>
+                  ChatAndOgpListItem.aiComment(
+                    userMessage: item.userMessage,
+                    aiMessage: item.aiMessage,
+                    createdAt: createdAt,
                   ),
                 _ => const SizedBox.shrink(),
               },

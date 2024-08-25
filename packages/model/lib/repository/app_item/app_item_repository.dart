@@ -9,7 +9,6 @@ part 'app_item_repository.g.dart';
 const _collectionName = 'todos';
 
 // TODO: リファクタリング
-// - typeがAppItemのtypeを参照したい。
 // - AppItemのサブクラスごとにリポジトリを分けたい。
 // - userIdをメソッドごとに受け取りたい。
 
@@ -42,61 +41,29 @@ class AppItemRepository {
     return AppItem.fromJson(response.data()!..['id'] = response.id);
   }
 
-  /// [AppItem]のクエリを返す。
-  Query<Map<String, dynamic>> chatQuery({
+  /// [AppItem]のクエリ。
+  Query<Map<String, dynamic>> query({
     required String userId,
+    List<String> type = const [],
+    String? parentId,
+    bool? isDone,
   }) {
-    return FirebaseFirestore.instance
+    var query = FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
         .collection(_collectionName)
-        .where('type', isEqualTo: 'chat')
-        .limit(50)
         .orderBy('createdAt', descending: true);
-  }
+    if (type.isNotEmpty) {
+      query = query.where('type', whereIn: type);
+    }
+    if (parentId != null) {
+      query = query.where('parentId', isEqualTo: parentId);
+    }
+    if (isDone != null) {
+      query = query.where('isDone', isEqualTo: isDone);
+    }
 
-  /// スレッドのクエリを返す。
-  Query<Map<String, dynamic>> threadQuery({
-    required String userId,
-    required String parentId,
-  }) {
-    return FirebaseFirestore.instance
-        .collection('users')
-        .doc(userId)
-        .collection(_collectionName)
-        .where('type', isEqualTo: 'thread')
-        .where('parentId', isEqualTo: parentId)
-        .orderBy('createdAt', descending: true);
-  }
-
-  Query<Map<String, dynamic>> todoQuery({
-    required String userId,
-    bool isDone = false,
-  }) {
-    return FirebaseFirestore.instance
-        .collection('users')
-        .doc(userId)
-        .collection(_collectionName)
-        .where('isDone', isEqualTo: isDone)
-        .where('type', isEqualTo: 'todo');
-  }
-
-  Future<List<AppTodoItem>> fetchTodos({
-    bool isDone = false,
-  }) {
-    // NOTE: ここでorderBy indexをすると、intではなく文字列でソートされてしまう。
-    final response = ref
-        .read(userDocumentProvider(userId))
-        .collection(_collectionName)
-        .where('isDone', isEqualTo: isDone)
-        .where('type', isEqualTo: 'todo')
-        .get();
-
-    return response.then((snapshot) {
-      return snapshot.docs.map((doc) {
-        return AppTodoItem.fromJson(doc.data()..['id'] = doc.id);
-      }).toList();
-    });
+    return query;
   }
 
   /// [AppItem]を追加する。

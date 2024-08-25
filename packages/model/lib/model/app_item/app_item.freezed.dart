@@ -20,6 +20,8 @@ AppItem _$AppItemFromJson(Map<String, dynamic> json) {
       return AppChatItem.fromJson(json);
     case 'thread':
       return AppThreadItem.fromJson(json);
+    case 'ai_comment':
+      return AppAiCommentItem.fromJson(json);
     case 'todo':
       return AppTodoItem.fromJson(json);
     case 'divider':
@@ -47,6 +49,9 @@ mixin _$AppItem {
     required TResult Function(String id, String message, String parentId,
             @TimestampConverter() DateTime createdAt)
         thread,
+    required TResult Function(String id, String userMessage, String aiMessage,
+            String parentId, @TimestampConverter() DateTime createdAt)
+        aiComment,
     required TResult Function(String id, String title, bool isDone, int index,
             int threadCount, @TimestampConverter() DateTime createdAt)
         todo,
@@ -63,6 +68,9 @@ mixin _$AppItem {
     TResult? Function(String id, String message, String parentId,
             @TimestampConverter() DateTime createdAt)?
         thread,
+    TResult? Function(String id, String userMessage, String aiMessage,
+            String parentId, @TimestampConverter() DateTime createdAt)?
+        aiComment,
     TResult? Function(String id, String title, bool isDone, int index,
             int threadCount, @TimestampConverter() DateTime createdAt)?
         todo,
@@ -79,6 +87,9 @@ mixin _$AppItem {
     TResult Function(String id, String message, String parentId,
             @TimestampConverter() DateTime createdAt)?
         thread,
+    TResult Function(String id, String userMessage, String aiMessage,
+            String parentId, @TimestampConverter() DateTime createdAt)?
+        aiComment,
     TResult Function(String id, String title, bool isDone, int index,
             int threadCount, @TimestampConverter() DateTime createdAt)?
         todo,
@@ -92,6 +103,7 @@ mixin _$AppItem {
   TResult map<TResult extends Object?>({
     required TResult Function(AppChatItem value) chat,
     required TResult Function(AppThreadItem value) thread,
+    required TResult Function(AppAiCommentItem value) aiComment,
     required TResult Function(AppTodoItem value) todo,
     required TResult Function(AppDividerItem value) divider,
   }) =>
@@ -100,6 +112,7 @@ mixin _$AppItem {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(AppChatItem value)? chat,
     TResult? Function(AppThreadItem value)? thread,
+    TResult? Function(AppAiCommentItem value)? aiComment,
     TResult? Function(AppTodoItem value)? todo,
     TResult? Function(AppDividerItem value)? divider,
   }) =>
@@ -108,6 +121,7 @@ mixin _$AppItem {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AppChatItem value)? chat,
     TResult Function(AppThreadItem value)? thread,
+    TResult Function(AppAiCommentItem value)? aiComment,
     TResult Function(AppTodoItem value)? todo,
     TResult Function(AppDividerItem value)? divider,
     required TResult orElse(),
@@ -280,6 +294,9 @@ class _$AppChatItemImpl implements AppChatItem {
     required TResult Function(String id, String message, String parentId,
             @TimestampConverter() DateTime createdAt)
         thread,
+    required TResult Function(String id, String userMessage, String aiMessage,
+            String parentId, @TimestampConverter() DateTime createdAt)
+        aiComment,
     required TResult Function(String id, String title, bool isDone, int index,
             int threadCount, @TimestampConverter() DateTime createdAt)
         todo,
@@ -299,6 +316,9 @@ class _$AppChatItemImpl implements AppChatItem {
     TResult? Function(String id, String message, String parentId,
             @TimestampConverter() DateTime createdAt)?
         thread,
+    TResult? Function(String id, String userMessage, String aiMessage,
+            String parentId, @TimestampConverter() DateTime createdAt)?
+        aiComment,
     TResult? Function(String id, String title, bool isDone, int index,
             int threadCount, @TimestampConverter() DateTime createdAt)?
         todo,
@@ -318,6 +338,9 @@ class _$AppChatItemImpl implements AppChatItem {
     TResult Function(String id, String message, String parentId,
             @TimestampConverter() DateTime createdAt)?
         thread,
+    TResult Function(String id, String userMessage, String aiMessage,
+            String parentId, @TimestampConverter() DateTime createdAt)?
+        aiComment,
     TResult Function(String id, String title, bool isDone, int index,
             int threadCount, @TimestampConverter() DateTime createdAt)?
         todo,
@@ -337,6 +360,7 @@ class _$AppChatItemImpl implements AppChatItem {
   TResult map<TResult extends Object?>({
     required TResult Function(AppChatItem value) chat,
     required TResult Function(AppThreadItem value) thread,
+    required TResult Function(AppAiCommentItem value) aiComment,
     required TResult Function(AppTodoItem value) todo,
     required TResult Function(AppDividerItem value) divider,
   }) {
@@ -348,6 +372,7 @@ class _$AppChatItemImpl implements AppChatItem {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(AppChatItem value)? chat,
     TResult? Function(AppThreadItem value)? thread,
+    TResult? Function(AppAiCommentItem value)? aiComment,
     TResult? Function(AppTodoItem value)? todo,
     TResult? Function(AppDividerItem value)? divider,
   }) {
@@ -359,6 +384,7 @@ class _$AppChatItemImpl implements AppChatItem {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AppChatItem value)? chat,
     TResult Function(AppThreadItem value)? thread,
+    TResult Function(AppAiCommentItem value)? aiComment,
     TResult Function(AppTodoItem value)? todo,
     TResult Function(AppDividerItem value)? divider,
     required TResult orElse(),
@@ -533,6 +559,9 @@ class _$AppThreadItemImpl implements AppThreadItem {
     required TResult Function(String id, String message, String parentId,
             @TimestampConverter() DateTime createdAt)
         thread,
+    required TResult Function(String id, String userMessage, String aiMessage,
+            String parentId, @TimestampConverter() DateTime createdAt)
+        aiComment,
     required TResult Function(String id, String title, bool isDone, int index,
             int threadCount, @TimestampConverter() DateTime createdAt)
         todo,
@@ -552,6 +581,9 @@ class _$AppThreadItemImpl implements AppThreadItem {
     TResult? Function(String id, String message, String parentId,
             @TimestampConverter() DateTime createdAt)?
         thread,
+    TResult? Function(String id, String userMessage, String aiMessage,
+            String parentId, @TimestampConverter() DateTime createdAt)?
+        aiComment,
     TResult? Function(String id, String title, bool isDone, int index,
             int threadCount, @TimestampConverter() DateTime createdAt)?
         todo,
@@ -571,6 +603,9 @@ class _$AppThreadItemImpl implements AppThreadItem {
     TResult Function(String id, String message, String parentId,
             @TimestampConverter() DateTime createdAt)?
         thread,
+    TResult Function(String id, String userMessage, String aiMessage,
+            String parentId, @TimestampConverter() DateTime createdAt)?
+        aiComment,
     TResult Function(String id, String title, bool isDone, int index,
             int threadCount, @TimestampConverter() DateTime createdAt)?
         todo,
@@ -590,6 +625,7 @@ class _$AppThreadItemImpl implements AppThreadItem {
   TResult map<TResult extends Object?>({
     required TResult Function(AppChatItem value) chat,
     required TResult Function(AppThreadItem value) thread,
+    required TResult Function(AppAiCommentItem value) aiComment,
     required TResult Function(AppTodoItem value) todo,
     required TResult Function(AppDividerItem value) divider,
   }) {
@@ -601,6 +637,7 @@ class _$AppThreadItemImpl implements AppThreadItem {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(AppChatItem value)? chat,
     TResult? Function(AppThreadItem value)? thread,
+    TResult? Function(AppAiCommentItem value)? aiComment,
     TResult? Function(AppTodoItem value)? todo,
     TResult? Function(AppDividerItem value)? divider,
   }) {
@@ -612,6 +649,7 @@ class _$AppThreadItemImpl implements AppThreadItem {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AppChatItem value)? chat,
     TResult Function(AppThreadItem value)? thread,
+    TResult Function(AppAiCommentItem value)? aiComment,
     TResult Function(AppTodoItem value)? todo,
     TResult Function(AppDividerItem value)? divider,
     required TResult orElse(),
@@ -659,6 +697,290 @@ abstract class AppThreadItem implements AppItem {
   @override
   @JsonKey(ignore: true)
   _$$AppThreadItemImplCopyWith<_$AppThreadItemImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$AppAiCommentItemImplCopyWith<$Res>
+    implements $AppItemCopyWith<$Res> {
+  factory _$$AppAiCommentItemImplCopyWith(_$AppAiCommentItemImpl value,
+          $Res Function(_$AppAiCommentItemImpl) then) =
+      __$$AppAiCommentItemImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String id,
+      String userMessage,
+      String aiMessage,
+      String parentId,
+      @TimestampConverter() DateTime createdAt});
+}
+
+/// @nodoc
+class __$$AppAiCommentItemImplCopyWithImpl<$Res>
+    extends _$AppItemCopyWithImpl<$Res, _$AppAiCommentItemImpl>
+    implements _$$AppAiCommentItemImplCopyWith<$Res> {
+  __$$AppAiCommentItemImplCopyWithImpl(_$AppAiCommentItemImpl _value,
+      $Res Function(_$AppAiCommentItemImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? userMessage = null,
+    Object? aiMessage = null,
+    Object? parentId = null,
+    Object? createdAt = null,
+  }) {
+    return _then(_$AppAiCommentItemImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      userMessage: null == userMessage
+          ? _value.userMessage
+          : userMessage // ignore: cast_nullable_to_non_nullable
+              as String,
+      aiMessage: null == aiMessage
+          ? _value.aiMessage
+          : aiMessage // ignore: cast_nullable_to_non_nullable
+              as String,
+      parentId: null == parentId
+          ? _value.parentId
+          : parentId // ignore: cast_nullable_to_non_nullable
+              as String,
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$AppAiCommentItemImpl implements AppAiCommentItem {
+  const _$AppAiCommentItemImpl(
+      {required this.id,
+      required this.userMessage,
+      required this.aiMessage,
+      required this.parentId,
+      @TimestampConverter() required this.createdAt,
+      final String? $type})
+      : $type = $type ?? 'ai_comment';
+
+  factory _$AppAiCommentItemImpl.fromJson(Map<String, dynamic> json) =>
+      _$$AppAiCommentItemImplFromJson(json);
+
+  /// ID。
+  @override
+  final String id;
+
+  /// ユーザーが入力したメッセージ。
+  @override
+  final String userMessage;
+
+  /// AIのメッセージ。
+  @override
+  final String aiMessage;
+
+  /// 親の[AppItem.id]ID。
+  @override
+  final String parentId;
+
+  /// 作成日時。
+  @override
+  @TimestampConverter()
+  final DateTime createdAt;
+
+  @JsonKey(name: 'type')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'AppItem.aiComment(id: $id, userMessage: $userMessage, aiMessage: $aiMessage, parentId: $parentId, createdAt: $createdAt)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AppAiCommentItemImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.userMessage, userMessage) ||
+                other.userMessage == userMessage) &&
+            (identical(other.aiMessage, aiMessage) ||
+                other.aiMessage == aiMessage) &&
+            (identical(other.parentId, parentId) ||
+                other.parentId == parentId) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, id, userMessage, aiMessage, parentId, createdAt);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AppAiCommentItemImplCopyWith<_$AppAiCommentItemImpl> get copyWith =>
+      __$$AppAiCommentItemImplCopyWithImpl<_$AppAiCommentItemImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String id, String message, int threadCount,
+            @TimestampConverter() DateTime createdAt)
+        chat,
+    required TResult Function(String id, String message, String parentId,
+            @TimestampConverter() DateTime createdAt)
+        thread,
+    required TResult Function(String id, String userMessage, String aiMessage,
+            String parentId, @TimestampConverter() DateTime createdAt)
+        aiComment,
+    required TResult Function(String id, String title, bool isDone, int index,
+            int threadCount, @TimestampConverter() DateTime createdAt)
+        todo,
+    required TResult Function(
+            String id, int index, @TimestampConverter() DateTime createdAt)
+        divider,
+  }) {
+    return aiComment(id, userMessage, aiMessage, parentId, createdAt);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String id, String message, int threadCount,
+            @TimestampConverter() DateTime createdAt)?
+        chat,
+    TResult? Function(String id, String message, String parentId,
+            @TimestampConverter() DateTime createdAt)?
+        thread,
+    TResult? Function(String id, String userMessage, String aiMessage,
+            String parentId, @TimestampConverter() DateTime createdAt)?
+        aiComment,
+    TResult? Function(String id, String title, bool isDone, int index,
+            int threadCount, @TimestampConverter() DateTime createdAt)?
+        todo,
+    TResult? Function(
+            String id, int index, @TimestampConverter() DateTime createdAt)?
+        divider,
+  }) {
+    return aiComment?.call(id, userMessage, aiMessage, parentId, createdAt);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String id, String message, int threadCount,
+            @TimestampConverter() DateTime createdAt)?
+        chat,
+    TResult Function(String id, String message, String parentId,
+            @TimestampConverter() DateTime createdAt)?
+        thread,
+    TResult Function(String id, String userMessage, String aiMessage,
+            String parentId, @TimestampConverter() DateTime createdAt)?
+        aiComment,
+    TResult Function(String id, String title, bool isDone, int index,
+            int threadCount, @TimestampConverter() DateTime createdAt)?
+        todo,
+    TResult Function(
+            String id, int index, @TimestampConverter() DateTime createdAt)?
+        divider,
+    required TResult orElse(),
+  }) {
+    if (aiComment != null) {
+      return aiComment(id, userMessage, aiMessage, parentId, createdAt);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(AppChatItem value) chat,
+    required TResult Function(AppThreadItem value) thread,
+    required TResult Function(AppAiCommentItem value) aiComment,
+    required TResult Function(AppTodoItem value) todo,
+    required TResult Function(AppDividerItem value) divider,
+  }) {
+    return aiComment(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(AppChatItem value)? chat,
+    TResult? Function(AppThreadItem value)? thread,
+    TResult? Function(AppAiCommentItem value)? aiComment,
+    TResult? Function(AppTodoItem value)? todo,
+    TResult? Function(AppDividerItem value)? divider,
+  }) {
+    return aiComment?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(AppChatItem value)? chat,
+    TResult Function(AppThreadItem value)? thread,
+    TResult Function(AppAiCommentItem value)? aiComment,
+    TResult Function(AppTodoItem value)? todo,
+    TResult Function(AppDividerItem value)? divider,
+    required TResult orElse(),
+  }) {
+    if (aiComment != null) {
+      return aiComment(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$AppAiCommentItemImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class AppAiCommentItem implements AppItem {
+  const factory AppAiCommentItem(
+          {required final String id,
+          required final String userMessage,
+          required final String aiMessage,
+          required final String parentId,
+          @TimestampConverter() required final DateTime createdAt}) =
+      _$AppAiCommentItemImpl;
+
+  factory AppAiCommentItem.fromJson(Map<String, dynamic> json) =
+      _$AppAiCommentItemImpl.fromJson;
+
+  @override
+
+  /// ID。
+  String get id;
+
+  /// ユーザーが入力したメッセージ。
+  String get userMessage;
+
+  /// AIのメッセージ。
+  String get aiMessage;
+
+  /// 親の[AppItem.id]ID。
+  String get parentId;
+  @override
+
+  /// 作成日時。
+  @TimestampConverter()
+  DateTime get createdAt;
+  @override
+  @JsonKey(ignore: true)
+  _$$AppAiCommentItemImplCopyWith<_$AppAiCommentItemImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -809,6 +1131,9 @@ class _$AppTodoItemImpl implements AppTodoItem {
     required TResult Function(String id, String message, String parentId,
             @TimestampConverter() DateTime createdAt)
         thread,
+    required TResult Function(String id, String userMessage, String aiMessage,
+            String parentId, @TimestampConverter() DateTime createdAt)
+        aiComment,
     required TResult Function(String id, String title, bool isDone, int index,
             int threadCount, @TimestampConverter() DateTime createdAt)
         todo,
@@ -828,6 +1153,9 @@ class _$AppTodoItemImpl implements AppTodoItem {
     TResult? Function(String id, String message, String parentId,
             @TimestampConverter() DateTime createdAt)?
         thread,
+    TResult? Function(String id, String userMessage, String aiMessage,
+            String parentId, @TimestampConverter() DateTime createdAt)?
+        aiComment,
     TResult? Function(String id, String title, bool isDone, int index,
             int threadCount, @TimestampConverter() DateTime createdAt)?
         todo,
@@ -847,6 +1175,9 @@ class _$AppTodoItemImpl implements AppTodoItem {
     TResult Function(String id, String message, String parentId,
             @TimestampConverter() DateTime createdAt)?
         thread,
+    TResult Function(String id, String userMessage, String aiMessage,
+            String parentId, @TimestampConverter() DateTime createdAt)?
+        aiComment,
     TResult Function(String id, String title, bool isDone, int index,
             int threadCount, @TimestampConverter() DateTime createdAt)?
         todo,
@@ -866,6 +1197,7 @@ class _$AppTodoItemImpl implements AppTodoItem {
   TResult map<TResult extends Object?>({
     required TResult Function(AppChatItem value) chat,
     required TResult Function(AppThreadItem value) thread,
+    required TResult Function(AppAiCommentItem value) aiComment,
     required TResult Function(AppTodoItem value) todo,
     required TResult Function(AppDividerItem value) divider,
   }) {
@@ -877,6 +1209,7 @@ class _$AppTodoItemImpl implements AppTodoItem {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(AppChatItem value)? chat,
     TResult? Function(AppThreadItem value)? thread,
+    TResult? Function(AppAiCommentItem value)? aiComment,
     TResult? Function(AppTodoItem value)? todo,
     TResult? Function(AppDividerItem value)? divider,
   }) {
@@ -888,6 +1221,7 @@ class _$AppTodoItemImpl implements AppTodoItem {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AppChatItem value)? chat,
     TResult Function(AppThreadItem value)? thread,
+    TResult Function(AppAiCommentItem value)? aiComment,
     TResult Function(AppTodoItem value)? todo,
     TResult Function(AppDividerItem value)? divider,
     required TResult orElse(),
@@ -1047,6 +1381,9 @@ class _$AppDividerItemImpl implements AppDividerItem {
     required TResult Function(String id, String message, String parentId,
             @TimestampConverter() DateTime createdAt)
         thread,
+    required TResult Function(String id, String userMessage, String aiMessage,
+            String parentId, @TimestampConverter() DateTime createdAt)
+        aiComment,
     required TResult Function(String id, String title, bool isDone, int index,
             int threadCount, @TimestampConverter() DateTime createdAt)
         todo,
@@ -1066,6 +1403,9 @@ class _$AppDividerItemImpl implements AppDividerItem {
     TResult? Function(String id, String message, String parentId,
             @TimestampConverter() DateTime createdAt)?
         thread,
+    TResult? Function(String id, String userMessage, String aiMessage,
+            String parentId, @TimestampConverter() DateTime createdAt)?
+        aiComment,
     TResult? Function(String id, String title, bool isDone, int index,
             int threadCount, @TimestampConverter() DateTime createdAt)?
         todo,
@@ -1085,6 +1425,9 @@ class _$AppDividerItemImpl implements AppDividerItem {
     TResult Function(String id, String message, String parentId,
             @TimestampConverter() DateTime createdAt)?
         thread,
+    TResult Function(String id, String userMessage, String aiMessage,
+            String parentId, @TimestampConverter() DateTime createdAt)?
+        aiComment,
     TResult Function(String id, String title, bool isDone, int index,
             int threadCount, @TimestampConverter() DateTime createdAt)?
         todo,
@@ -1104,6 +1447,7 @@ class _$AppDividerItemImpl implements AppDividerItem {
   TResult map<TResult extends Object?>({
     required TResult Function(AppChatItem value) chat,
     required TResult Function(AppThreadItem value) thread,
+    required TResult Function(AppAiCommentItem value) aiComment,
     required TResult Function(AppTodoItem value) todo,
     required TResult Function(AppDividerItem value) divider,
   }) {
@@ -1115,6 +1459,7 @@ class _$AppDividerItemImpl implements AppDividerItem {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(AppChatItem value)? chat,
     TResult? Function(AppThreadItem value)? thread,
+    TResult? Function(AppAiCommentItem value)? aiComment,
     TResult? Function(AppTodoItem value)? todo,
     TResult? Function(AppDividerItem value)? divider,
   }) {
@@ -1126,6 +1471,7 @@ class _$AppDividerItemImpl implements AppDividerItem {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(AppChatItem value)? chat,
     TResult Function(AppThreadItem value)? thread,
+    TResult Function(AppAiCommentItem value)? aiComment,
     TResult Function(AppTodoItem value)? todo,
     TResult Function(AppDividerItem value)? divider,
     required TResult orElse(),

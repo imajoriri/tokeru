@@ -35,6 +35,18 @@ class ChatAndOgpListItem extends ConsumerWidget {
             ? ChatCreatedDateType.hover
             : ChatCreatedDateType.always;
 
+  const ChatAndOgpListItem.aiComment({
+    super.key,
+    required String userMessage,
+    required String aiMessage,
+    required this.createdAt,
+  })  : message = '$userMessage\n$aiMessage',
+        onRead = null,
+        onThread = null,
+        onConvertTodo = null,
+        threadCount = 0,
+        createdDateType = ChatCreatedDateType.always;
+
   const ChatAndOgpListItem.threadTop({
     super.key,
     required this.message,
