@@ -17,8 +17,6 @@ class Threads extends _$Threads {
   Stream<List<AppItem>> build(AppItem parent) {
     ref.watch(refreshControllerProvider);
 
-    _setChatSession(parent);
-
     final user = ref.watch(userControllerProvider);
     if (user.hasError || user.valueOrNull == null) {
       return const Stream.empty();
@@ -31,22 +29,27 @@ class Threads extends _$Threads {
       parentId: parent.id,
     );
 
-    return query.snapshots().map((snapshot) {
-      final items = snapshot.docs.map((doc) {
-        final data = doc.data() as Map<String, dynamic>?;
-        if (data == null) {
-          return null;
-        }
+    final result = query.snapshots().map((snapshot) {
+      final items = snapshot.docs
+          .map((doc) {
+            final data = doc.data() as Map<String, dynamic>?;
+            if (data == null) {
+              return null;
+            }
 
-        final appItem = AppItem.fromJson(data..['id'] = doc.id);
-        return appItem;
-      }).toList();
-      // nullを除外。
-      return items.whereType<AppItem>().toList();
+            final appItem = AppItem.fromJson(data..['id'] = doc.id);
+            return appItem;
+          })
+          // nullを除外。
+          .whereType<AppItem>()
+          .toList();
+      _setChatSession(parent, items.whereType<AppAiCommentItem>().toList());
+      return items;
     });
+    return result;
   }
 
-  void _setChatSession(AppItem parent) {
+  void _setChatSession(AppItem parent, List<AppAiCommentItem> histories) {
     final system = switch (parent) {
       AppTodoItem(title: final title) => ''''
 あなたはユーザーのタスクのサポートをするために、ユーザーの発散した内容を整理し、タスクのサポートをすることができます。
@@ -54,10 +57,21 @@ class Threads extends _$Threads {
     ''',
       _ => throw UnimplementedError(),
     };
+
+    final history = histories
+        .map((e) => [
+              Content.text(e.userMessage),
+              Content.text(e.aiMessage),
+            ])
+        .toList()
+        .expand((e) => e)
+        .toList();
     chatSession = FirebaseVertexAI.instance
         .generativeModel(
             model: 'gemini-1.5-flash', systemInstruction: Content.text(system))
-        .startChat();
+        .startChat(
+          history: history,
+        );
   }
 
   /// チャットを追加する。
