@@ -2,10 +2,6 @@ name: Deploy macoOS
 
 on:
   workflow_dispatch:
-  # mainにマージされた時に走らせる
-  push:
-    branches:
-      - main
 
 env:
   CERT_KEY: ${{ secrets.CERT_KEY }}

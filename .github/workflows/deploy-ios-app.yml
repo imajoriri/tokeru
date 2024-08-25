@@ -2,9 +2,6 @@ name: Deploy iOS
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
 
 env:
   CERT_KEY: ${{ secrets.CERT_KEY }}
