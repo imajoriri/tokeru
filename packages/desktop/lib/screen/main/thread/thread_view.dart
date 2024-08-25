@@ -66,12 +66,12 @@ class ThreadView extends HookConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Switch.adaptive(
-                value: switchValue.value,
-                onChanged: (value) {
-                  switchValue.value = value;
-                },
-              ),
+              // Switch.adaptive(
+              //   value: switchValue.value,
+              //   onChanged: (value) {
+              //     switchValue.value = value;
+              //   },
+              // ),
               ChatTextField(
                 focusNode: threadViewFocusNode,
                 onSubmit: (message) async {
