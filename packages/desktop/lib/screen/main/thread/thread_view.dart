@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tokeru_desktop/widget/chat_and_ogp_list_item.dart';
 import 'package:tokeru_desktop/widget/focus_nodes.dart';
 import 'package:tokeru_desktop/widget/list_items/chat_list_items.dart';
 import 'package:tokeru_desktop/widget/text_field/chat_text_field.dart';
+import 'package:tokeru_model/controller/ai/ai.dart';
 import 'package:tokeru_model/controller/thread/thread.dart';
 import 'package:tokeru_model/controller/threads/threads.dart';
 import 'package:tokeru_model/model/app_item/app_item.dart';
@@ -29,6 +31,9 @@ class ThreadView extends HookConsumerWidget {
     }
 
     final appItems = ref.watch(threadsProvider);
+    final switchValue = useState(false);
+
+    final chat = ref.watch(aiChatProvider(item).notifier);
 
     return Column(
       children: [
@@ -60,11 +65,27 @@ class ThreadView extends HookConsumerWidget {
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-          child: ChatTextField(
-            focusNode: threadViewFocusNode,
-            onSubmit: (message) {
-              ref.read(threadsProvider.notifier).add(message: message);
-            },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Switch.adaptive(
+                value: switchValue.value,
+                onChanged: (value) {
+                  switchValue.value = value;
+                },
+              ),
+              ChatTextField(
+                focusNode: threadViewFocusNode,
+                onSubmit: (message) async {
+                  if (switchValue.value) {
+                    final text = await chat.sendMessage(message);
+                    ref.read(threadsProvider.notifier).add(message: text);
+                    return;
+                  }
+                  ref.read(threadsProvider.notifier).add(message: message);
+                },
+              ),
+            ],
           ),
         ),
       ],

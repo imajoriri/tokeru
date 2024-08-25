@@ -6,7 +6,7 @@ part of 'thread.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$selectedThreadHash() => r'1edc02da4ddcaef91da934a51c1fac0f76b09bfc';
+String _$selectedThreadHash() => r'30e136d004e6ab20995a89a8104a366adaeed5cb';
 
 /// See also [SelectedThread].
 @ProviderFor(SelectedThread)

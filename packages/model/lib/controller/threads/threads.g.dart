@@ -6,7 +6,7 @@ part of 'threads.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$threadsHash() => r'b622e18c2fa46287ba868fc80e71699d46938a51';
+String _$threadsHash() => r'79c21a650722de601329aff421e3a2b4b8131a35';
 
 /// See also [Threads].
 @ProviderFor(Threads)
