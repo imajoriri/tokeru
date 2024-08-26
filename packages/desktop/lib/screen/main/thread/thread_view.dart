@@ -5,10 +5,13 @@ import 'package:tokeru_desktop/widget/chat_and_ogp_list_item.dart';
 import 'package:tokeru_desktop/widget/focus_nodes.dart';
 import 'package:tokeru_desktop/widget/list_items/chat_list_items.dart';
 import 'package:tokeru_desktop/widget/text_field/chat_text_field.dart';
+import 'package:tokeru_model/controller/sub_todos/sub_todos.dart';
 import 'package:tokeru_model/controller/thread/thread.dart';
 import 'package:tokeru_model/controller/threads/threads.dart';
 import 'package:tokeru_model/model/app_item/app_item.dart';
 import 'package:tokeru_widgets/widgets.dart';
+
+part 'sub_todo.dart';
 
 class ThreadView extends HookConsumerWidget {
   const ThreadView({super.key});
@@ -36,6 +39,7 @@ class ThreadView extends HookConsumerWidget {
     return Column(
       children: [
         _ThreadHeader(item: item),
+        const _SubTodoView(),
         if (appItems.valueOrNull?.isNotEmpty == true) ...[
           const SizedBox(height: 8),
           const _HeaderDivider(),
@@ -134,6 +138,13 @@ class _ThreadHeader extends ConsumerWidget {
                 key: ValueKey(item.id),
                 isDone: isDone,
                 title: title,
+                onNewTodoBelow: () {
+                  ref.read(subTodosProvider(item.id).notifier).addWithIndex(0);
+                  WidgetsBinding.instance.addPostFrameCallback((_) async {
+                    FocusScope.of(context).nextFocus();
+                  });
+                },
+                onUpdatedTitle: (value) {},
                 // TODO: threadControllerがリアルタイム更新されるようになったら
                 // onToggleDoneを実装する。
                 // onToggleDone: (value) {

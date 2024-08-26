@@ -89,6 +89,7 @@ class _TodoListItem extends HookConsumerWidget {
         index: index,
         title: todo.title,
         threadCount: todo.threadCount,
+        subTodoCount: todo.subTodoCount,
         onDeleted: () async {
           ref.read(todoControllerProvider.notifier).deleteTodo(todoId: todo.id);
         },

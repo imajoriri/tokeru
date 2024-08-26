@@ -12,6 +12,7 @@ class TodoListItem extends HookWidget {
     this.title,
     this.index,
     this.threadCount = 0,
+    this.subTodoCount = 0,
     this.onOpenThread,
     this.focusNode,
     this.autofocus = false,
@@ -38,6 +39,9 @@ class TodoListItem extends HookWidget {
 
   /// スレッド数。
   final int threadCount;
+
+  /// サブTodoの件数。
+  final int subTodoCount;
 
   /// スレッドを開くボタンを押した時のコールバック。
   final void Function()? onOpenThread;
@@ -261,22 +265,11 @@ class TodoListItem extends HookWidget {
                   ),
                 ),
                 // スレッド数。
-                if (threadCount > 0 && !onHover.value)
-                  Visibility(
-                    visible: threadCount > 0,
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        right: context.appSpacing.medium,
-                        top: context.appSpacing.small,
-                      ),
-                      child: Text(
-                        '$threadCount',
-                        style: context.appTextTheme.bodyMedium.copyWith(
-                          color: context.appColors.onSurfaceSubtle,
-                        ),
-                      ),
-                    ),
-                  ),
+                _Count(
+                  onHover: onHover.value,
+                  threadCount: threadCount,
+                  subTodoCount: subTodoCount,
+                ),
               ],
             ),
             if (onHover.value)
@@ -287,6 +280,79 @@ class TodoListItem extends HookWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// スレッド数とサブTodoの件数を表示するWidget
+class _Count extends StatelessWidget {
+  const _Count({
+    required this.onHover,
+    required this.threadCount,
+    required this.subTodoCount,
+  });
+
+  final bool onHover;
+  final int threadCount;
+  final int subTodoCount;
+
+  @override
+  Widget build(BuildContext context) {
+    if (onHover) {
+      return const SizedBox.shrink();
+    }
+
+    return Row(
+      children: [
+        if (threadCount > 0)
+          Padding(
+            padding: EdgeInsets.only(
+              right: context.appSpacing.medium,
+              top: context.appSpacing.small,
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(
+                  AppIcons.thread,
+                  size: 12,
+                  color: context.appColors.onSurfaceSubtle,
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  '$threadCount',
+                  style: context.appTextTheme.bodyMedium.copyWith(
+                    color: context.appColors.onSurfaceSubtle,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        if (subTodoCount > 0)
+          Padding(
+            padding: EdgeInsets.only(
+              right: context.appSpacing.medium,
+              top: context.appSpacing.small,
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(
+                  AppIcons.check,
+                  size: 12,
+                  color: context.appColors.onSurfaceSubtle,
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  '$subTodoCount',
+                  style: context.appTextTheme.bodyMedium.copyWith(
+                    color: context.appColors.onSurfaceSubtle,
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
     );
   }
 }

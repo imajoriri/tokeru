@@ -6,7 +6,7 @@ part of 'todo_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$todoControllerHash() => r'a8b3acf53d0681143ac0b36f29bf54227e9b7c24';
+String _$todoControllerHash() => r'935cf461400aa1f9b3eb7d989e86716b7152a21d';
 
 /// 未完了の[AppTodoItem]を返すController。
 ///

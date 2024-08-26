@@ -6,10 +6,12 @@ import 'package:tokeru_model/model.dart';
 
 part 'app_item_repository.g.dart';
 
+part 'sub_todo.dart';
+part 'todo.dart';
+
 const _collectionName = 'todos';
 
 // TODO: リファクタリング
-// - AppItemのサブクラスごとにリポジトリを分けたい。
 // - userIdをメソッドごとに受け取りたい。
 
 /// [AppItem]を扱うRepository
@@ -116,63 +118,12 @@ class AppItemRepository {
     });
   }
 
-  /// Todoを削除する
+  /// 削除する
   Future<void> delete({required String id}) async {
     await ref
         .read(userDocumentProvider(userId))
         .collection(_collectionName)
         .doc(id)
         .delete();
-  }
-
-  /// 並び順を更新する
-  ///
-  /// [todos]の順番で 'index' を一気に更新する
-  Future<void> updateTodoOrder({required List<AppTodoItem> todos}) async {
-    final firestore = ref.read(firestoreProvider);
-    final batch = firestore.batch();
-
-    for (final todo in todos) {
-      batch.update(
-          ref
-              .read(userDocumentProvider(userId))
-              .collection(_collectionName)
-              .doc(todo.id),
-          {
-            'index': todo.index,
-          });
-    }
-    await batch.commit();
-  }
-
-  /// 追加とソートを同時に行う。
-  Future<void> addAndUpdateOrder(
-      {required AppTodoItem addedTodo,
-      required List<AppTodoItem> todos}) async {
-    final firestore = ref.read(firestoreProvider);
-    final batch = firestore.batch();
-
-    // todoを追加する。
-    batch.set(
-      ref
-          .read(userDocumentProvider(userId))
-          .collection(_collectionName)
-          .doc(addedTodo.id),
-      addedTodo.toJson(),
-    );
-
-    // 並び順を更新する。
-    for (final todo in todos) {
-      batch.update(
-          ref
-              .read(userDocumentProvider(userId))
-              .collection(_collectionName)
-              .doc(todo.id),
-          {
-            'index': todo.index,
-          });
-    }
-
-    await batch.commit();
   }
 }

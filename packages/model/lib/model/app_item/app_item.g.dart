@@ -74,6 +74,7 @@ _$AppTodoItemImpl _$$AppTodoItemImplFromJson(Map<String, dynamic> json) =>
       isDone: json['isDone'] as bool,
       index: (json['index'] as num).toInt(),
       threadCount: (json['threadCount'] as num?)?.toInt() ?? 0,
+      subTodoCount: (json['subTodoCount'] as num?)?.toInt() ?? 0,
       createdAt:
           const TimestampConverter().fromJson(json['createdAt'] as Timestamp),
       $type: json['type'] as String?,
@@ -86,6 +87,31 @@ Map<String, dynamic> _$$AppTodoItemImplToJson(_$AppTodoItemImpl instance) =>
       'isDone': instance.isDone,
       'index': instance.index,
       'threadCount': instance.threadCount,
+      'subTodoCount': instance.subTodoCount,
+      'createdAt': const TimestampConverter().toJson(instance.createdAt),
+      'type': instance.$type,
+    };
+
+_$AppSubTodoItemImpl _$$AppSubTodoItemImplFromJson(Map<String, dynamic> json) =>
+    _$AppSubTodoItemImpl(
+      id: json['id'] as String,
+      parentId: json['parentId'] as String,
+      title: json['title'] as String,
+      isDone: json['isDone'] as bool,
+      index: (json['index'] as num).toInt(),
+      createdAt:
+          const TimestampConverter().fromJson(json['createdAt'] as Timestamp),
+      $type: json['type'] as String?,
+    );
+
+Map<String, dynamic> _$$AppSubTodoItemImplToJson(
+        _$AppSubTodoItemImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'parentId': instance.parentId,
+      'title': instance.title,
+      'isDone': instance.isDone,
+      'index': instance.index,
       'createdAt': const TimestampConverter().toJson(instance.createdAt),
       'type': instance.$type,
     };

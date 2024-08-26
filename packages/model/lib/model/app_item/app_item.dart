@@ -72,8 +72,34 @@ sealed class AppItem with _$AppItem {
 
     /// スレッドの件数。
     @Default(0) int threadCount,
+
+    /// サブTodoの件数。
+    @Default(0) int subTodoCount,
+
+    /// 作成日時。
     @TimestampConverter() required DateTime createdAt,
   }) = AppTodoItem;
+
+  @FreezedUnionValue('sub_todo')
+  const factory AppItem.subTodo({
+    /// ID。
+    required String id,
+
+    /// 親の[AppItem.id]ID。
+    required String parentId,
+
+    /// タイトル。
+    required String title,
+
+    /// 完了フラグ。
+    required bool isDone,
+
+    /// インデックス。
+    required int index,
+
+    /// 作成日時。
+    @TimestampConverter() required DateTime createdAt,
+  }) = AppSubTodoItem;
 
   @FreezedUnionValue('divider')
   const factory AppItem.divider({

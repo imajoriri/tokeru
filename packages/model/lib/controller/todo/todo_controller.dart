@@ -25,10 +25,6 @@ class TodoController extends _$TodoController {
   @override
   Stream<List<AppTodoItem>> build() {
     ref.watch(refreshControllerProvider);
-    final user = ref.watch(userControllerProvider);
-    if (user.hasError || user.valueOrNull == null) {
-      return const Stream.empty();
-    }
 
     _listen();
 
@@ -40,6 +36,10 @@ class TodoController extends _$TodoController {
 
   _listen() {
     final user = ref.watch(userControllerProvider);
+    if (user.hasError || user.valueOrNull == null) {
+      return const Stream.empty();
+    }
+
     final repository = ref.read(appItemRepositoryProvider(user.value!.id));
     final todoQuery = repository.query(
       userId: user.requireValue.id,
@@ -61,12 +61,6 @@ class TodoController extends _$TodoController {
   /// 新規作成後や削除後に並び替えをリセットするために使用する。
   /// ショートカットでの移動時に連続で呼ばれる可能性があるため、APIの呼び出しはデバウンスしている。
   Future<void> updateCurrentOrder({bool delay = true}) async {
-    final user = ref.read(userControllerProvider);
-    if (user.valueOrNull == null) {
-      assert(false, 'user is null');
-      return;
-    }
-
     final tmp = state.value!;
     for (var i = 0; i < tmp.length; i++) {
       tmp[i] = tmp[i].copyWith(index: i);
@@ -77,8 +71,9 @@ class TodoController extends _$TodoController {
 
     _updateOrderDebounce =
         Timer(Duration(milliseconds: delay ? 500 : 0), () async {
-      final repository = ref.read(appItemRepositoryProvider(user.value!.id));
-      await repository.updateTodoOrder(todos: tmp);
+      final user = ref.read(userControllerProvider).requireValue;
+      final repository = ref.read(appItemRepositoryProvider(user.id));
+      await repository.updateTodoOrder(userId: user.id, todos: tmp);
     });
   }
 
@@ -89,12 +84,6 @@ class TodoController extends _$TodoController {
   Future<void> addTodoWithIndex({
     required int index,
   }) async {
-    final user = ref.read(userControllerProvider);
-    if (user.valueOrNull == null) {
-      assert(false, 'user is null');
-      return;
-    }
-
     final todo = AppTodoItem(
       id: const Uuid().v4(),
       title: '',
@@ -110,9 +99,14 @@ class TodoController extends _$TodoController {
       todos[i] = todos[i].copyWith(index: i);
     }
 
-    final repository = ref.read(appItemRepositoryProvider(user.value!.id));
+    final user = ref.read(userControllerProvider).requireValue;
+    final repository = ref.read(appItemRepositoryProvider(user.id));
     try {
-      await repository.addAndUpdateOrder(addedTodo: todo, todos: todos);
+      await repository.addAndUpdateOrder(
+        userId: user.id,
+        addedTodo: todo,
+        todos: todos,
+      );
     } on Exception catch (e, s) {
       await FirebaseCrashlytics.instance.recordError(e, s);
     }
