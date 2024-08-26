@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_vertexai/firebase_vertexai.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -61,14 +63,19 @@ class Threads extends _$Threads {
     final history = histories
         .map((e) => [
               Content.text(e.userMessage),
-              Content.text(e.aiMessage),
+              Content.model([TextPart(e.aiMessage)]),
             ])
         .toList()
         .expand((e) => e)
         .toList();
-    chatSession = FirebaseVertexAI.instance
+    chatSession = FirebaseVertexAI.instanceFor(
+      auth: FirebaseAuth.instance,
+      app: Firebase.app(),
+    )
         .generativeModel(
-            model: 'gemini-1.5-flash', systemInstruction: Content.text(system))
+          model: 'gemini-1.5-flash',
+          systemInstruction: Content.system(system),
+        )
         .startChat(
           history: history,
         );
