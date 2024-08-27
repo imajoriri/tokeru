@@ -39,11 +39,8 @@ class ThreadView extends HookConsumerWidget {
     return Column(
       children: [
         _ThreadHeader(item: item),
+        const _HeaderDivider(),
         const _SubTodoView(),
-        if (appItems.valueOrNull?.isNotEmpty == true) ...[
-          const SizedBox(height: 8),
-          const _HeaderDivider(),
-        ],
         const SizedBox(height: 8),
         Flexible(
           child: appItems.when(
@@ -103,29 +100,7 @@ class _ThreadHeader extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
-        Padding(
-          padding: EdgeInsets.only(
-            left: context.appSpacing.medium,
-            right: context.appSpacing.medium,
-            top: context.appSpacing.medium,
-            bottom: context.appSpacing.small,
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text('Thread', style: context.appTextTheme.titleMedium),
-              ),
-              // close button
-              AppIconButton.medium(
-                icon: const Icon(Icons.close),
-                onPressed: () {
-                  ref.read(selectedThreadProvider.notifier).close();
-                },
-                tooltip: 'Close',
-              ),
-            ],
-          ),
-        ),
+        SizedBox(height: context.appSpacing.medium),
         switch (item) {
           AppChatItem(:final message, :final createdAt) =>
             ChatAndOgpListItem.threadTop(

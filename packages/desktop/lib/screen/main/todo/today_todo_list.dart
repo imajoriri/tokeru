@@ -40,10 +40,6 @@ class TodayTodoList extends HookConsumerWidget {
                     key: key,
                     todo: todo,
                     index: index,
-                    onFocus: () {
-                      ref.read(selectedThreadProvider.notifier).open(todo.id);
-                      threadViewFocusNode.requestFocus();
-                    },
                   );
                 },
               ),
@@ -65,12 +61,10 @@ class _TodoListItem extends HookConsumerWidget {
     super.key,
     required this.todo,
     required this.index,
-    required this.onFocus,
   });
 
   final AppTodoItem todo;
   final int index;
-  final Function() onFocus;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
