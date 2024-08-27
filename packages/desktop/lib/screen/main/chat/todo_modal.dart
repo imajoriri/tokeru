@@ -70,7 +70,7 @@ class _TodoList extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final todos = ref.watch(todoControllerProvider);
+    final todos = ref.watch(todosProvider);
     return todos.when(
       data: (todos) {
         if (todos.isEmpty) {
@@ -97,9 +97,7 @@ class _TodoList extends HookConsumerWidget {
                   if (oldIndex < newIndex) {
                     newIndex -= 1;
                   }
-                  ref
-                      .read(todoControllerProvider.notifier)
-                      .reorder(oldIndex, newIndex);
+                  ref.read(todosProvider.notifier).reorder(oldIndex, newIndex);
                 },
                 itemBuilder: (context, index) {
                   final key = ValueKey(todos[index].id);
@@ -154,17 +152,15 @@ class _TodoListItem extends HookConsumerWidget {
         title: todo.title,
         threadCount: todo.threadCount,
         onDeleted: () async {
-          ref.read(todoControllerProvider.notifier).deleteTodo(todoId: todo.id);
+          ref.read(todosProvider.notifier).deleteTodo(todoId: todo.id);
         },
         onUpdatedTitle: (value) {
           ref
-              .read(todoControllerProvider.notifier)
+              .read(todosProvider.notifier)
               .updateTodoTitle(todoId: todo.id, title: value);
         },
         onToggleDone: (value) {
-          ref
-              .read(todoControllerProvider.notifier)
-              .toggleTodoDone(todoId: todo.id);
+          ref.read(todosProvider.notifier).toggleTodoDone(todoId: todo.id);
           FirebaseAnalytics.instance.logEvent(
             name: AnalyticsEventName.toggleTodoDone.name,
           );
@@ -177,7 +173,7 @@ class _TodoListItem extends HookConsumerWidget {
         },
         onNewTodoBelow: () async {
           await ref
-              .read(todoControllerProvider.notifier)
+              .read(todosProvider.notifier)
               .addTodoWithIndex(index: index + 1);
           WidgetsBinding.instance.addPostFrameCallback((_) async {
             FocusScope.of(context).nextFocus();
@@ -186,20 +182,15 @@ class _TodoListItem extends HookConsumerWidget {
         // 一番上のTodoは上に移動できない
         onSortUp: index != 0
             ? () {
-                ref
-                    .read(todoControllerProvider.notifier)
-                    .reorder(index, index - 1);
+                ref.read(todosProvider.notifier).reorder(index, index - 1);
               }
             : null,
         // 一番下のTodoは下に移動できない
-        onSortDown:
-            index != ref.read(todoControllerProvider).valueOrNull!.length - 1
-                ? () {
-                    ref
-                        .read(todoControllerProvider.notifier)
-                        .reorder(index, index + 1);
-                  }
-                : null,
+        onSortDown: index != ref.read(todosProvider).valueOrNull!.length - 1
+            ? () {
+                ref.read(todosProvider.notifier).reorder(index, index + 1);
+              }
+            : null,
       ),
     );
   }
@@ -230,9 +221,7 @@ class _EmptyState extends ConsumerWidget {
             const SizedBox(height: 16),
             AppTextButton.medium(
               onPressed: () {
-                ref
-                    .read(todoControllerProvider.notifier)
-                    .addTodoWithIndex(index: 0);
+                ref.read(todosProvider.notifier).addTodoWithIndex(index: 0);
               },
               text: const Text('Add To-Do'),
             ),
@@ -261,9 +250,7 @@ class _Header extends ConsumerWidget {
             icon: const Icon(Icons.add),
             tooltip: ShortcutActivatorType.newTodo.longLabel,
             onPressed: () async {
-              await ref
-                  .read(todoControllerProvider.notifier)
-                  .addTodoWithIndex(index: 0);
+              await ref.read(todosProvider.notifier).addTodoWithIndex(index: 0);
               await FirebaseAnalytics.instance.logEvent(
                 name: AnalyticsEventName.addTodo.name,
               );

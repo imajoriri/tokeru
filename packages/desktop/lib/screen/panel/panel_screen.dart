@@ -6,7 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tokeru_desktop/controller/panel_screen/panel_screen_controller.dart';
 import 'package:tokeru_desktop/utils/panel_method_channel.dart';
 import 'package:tokeru_desktop/widget/text_field/chat_text_field.dart';
-import 'package:tokeru_model/controller/todo/todo_controller.dart';
+import 'package:tokeru_model/controller/todos/todos.dart';
 import 'package:tokeru_model/model/analytics_event/analytics_event_name.dart';
 import 'package:tokeru_widgets/widgets.dart';
 
@@ -78,7 +78,7 @@ class PanelScreen extends HookConsumerWidget {
     });
 
     // todoが更新されたらリサイズする。
-    ref.listen(todoControllerProvider, (pre, next) {
+    ref.listen(todosProvider, (pre, next) {
       resize();
     });
 
@@ -162,7 +162,7 @@ class _Todo extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final todos = ref.watch(todoControllerProvider).valueOrNull;
+    final todos = ref.watch(todosProvider).valueOrNull;
     if (todos == null || todos.isEmpty) {
       return const SizedBox();
     }
@@ -174,9 +174,7 @@ class _Todo extends ConsumerWidget {
       isDone: firstTodo.isDone,
       title: firstTodo.title,
       onToggleDone: (value) {
-        ref
-            .read(todoControllerProvider.notifier)
-            .toggleTodoDone(todoId: firstTodo.id);
+        ref.read(todosProvider.notifier).toggleTodoDone(todoId: firstTodo.id);
         FirebaseAnalytics.instance.logEvent(
           name: AnalyticsEventName.toggleTodoDone.name,
         );

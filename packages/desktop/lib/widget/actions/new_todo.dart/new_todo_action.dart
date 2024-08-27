@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:tokeru_model/controller/todo/todo_controller.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:tokeru_model/controller/todos/todos.dart';
 
 part 'new_todo_action.g.dart';
 
@@ -20,7 +20,7 @@ class NewTodoAction extends Action<NewTodoIntent> {
 
   @override
   Object? invoke(covariant NewTodoIntent intent) async {
-    await ref.read(todoControllerProvider.notifier).addTodoWithIndex(index: 0);
+    await ref.read(todosProvider.notifier).addTodoWithIndex(index: 0);
     return null;
   }
 }

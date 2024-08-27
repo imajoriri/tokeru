@@ -10,13 +10,13 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tokeru_model/repository/app_item/app_item_repository.dart';
 import 'package:uuid/uuid.dart';
 
-part 'todo_controller.g.dart';
+part 'todos.g.dart';
 
 /// 未完了の[AppTodoItem]を返すController。
 ///
 /// ユーザーがログインしていない場合は空を返す。
 @Riverpod(keepAlive: true)
-class TodoController extends _$TodoController {
+class Todos extends _$Todos {
   Timer? _deleteDonesDebounce;
   Timer? _updateOrderDebounce;
 

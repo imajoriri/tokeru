@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:tokeru_model/controller/refresh/refresh_controller.dart';
-import 'package:tokeru_model/controller/todo/todo_controller.dart';
+import 'package:tokeru_model/controller/todos/todos.dart';
 import 'package:tokeru_model/controller/user/user_controller.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tokeru_model/model.dart';
@@ -78,7 +78,7 @@ class Chats extends _$Chats {
 
   /// [AppChatItem]を[AppTodoItem]に変換する。
   Future<void> convertToTodoItem(AppChatItem chat) async {
-    final todos = await ref.read(todoControllerProvider.future);
+    final todos = await ref.read(todosProvider.future);
     if (todos.isEmpty) {
       return;
     }

@@ -2,20 +2,6 @@ part of 'app_item_repository.dart';
 
 /// [AppSubTodoItem]を扱うRepository
 extension AppSubTodoItemRepository on AppItemRepository {
-  /// サブTodoを追加する。
-  Future<void> addSubTodo({
-    required String userId,
-    required String parentId,
-    required AppSubTodoItem subTodo,
-  }) async {
-    final json = subTodo.toJson();
-    await ref
-        .read(userDocumentProvider(userId))
-        .collection(_collectionName)
-        .doc(subTodo.id)
-        .set(json);
-  }
-
   /// 追加とソートを同時に行う。
   ///
   /// - [addedTodo] 追加するTodo
