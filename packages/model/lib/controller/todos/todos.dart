@@ -15,7 +15,7 @@ part 'todos.g.dart';
 /// 未完了の[AppTodoItem]を返すController。
 ///
 /// ユーザーがログインしていない場合は空を返す。
-@Riverpod(keepAlive: true)
+@riverpod
 class Todos extends _$Todos {
   Timer? _deleteDonesDebounce;
   Timer? _updateOrderDebounce;
