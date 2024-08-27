@@ -86,12 +86,17 @@ class SubTodos extends _$SubTodos {
     required String todoId,
   }) async {
     final subTodo = state.valueOrNull!.firstWhere((e) => e.id == todoId);
+    final updatedSubTodo = subTodo.copyWith(isDone: !subTodo.isDone);
 
     final user = ref.read(userControllerProvider).requireValue;
     final repository = ref.read(appItemRepositoryProvider(user.id));
     try {
-      await repository.update(item: subTodo.copyWith(isDone: !subTodo.isDone));
-      await repository.decrementSubTodoCount(id: parentId);
+      await repository.update(item: updatedSubTodo);
+      if (updatedSubTodo.isDone) {
+        await repository.decrementSubTodoCount(id: parentId);
+      } else {
+        await repository.incrementSubTodoCount(id: parentId);
+      }
     } on Exception catch (e, s) {
       await FirebaseCrashlytics.instance.recordError(e, s);
     }
