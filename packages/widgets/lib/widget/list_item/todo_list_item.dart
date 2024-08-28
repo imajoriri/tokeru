@@ -9,7 +9,7 @@ class TodoListItem extends HookWidget {
   const TodoListItem({
     super.key,
     required this.isDone,
-    this.title,
+    this.textEditingController,
     this.index,
     this.threadCount = 0,
     this.subTodoCount = 0,
@@ -29,8 +29,7 @@ class TodoListItem extends HookWidget {
 
   final bool isDone;
 
-  /// Todoのタイトル。nullの場合は空文字が表示される。
-  final String? title;
+  final TextEditingController? textEditingController;
 
   /// [AppTodoItem]のリストのIndex。
   ///
@@ -101,10 +100,11 @@ class TodoListItem extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final readOnly = onUpdatedTitle == null;
-    final effectiveController = useTextEditingController(text: title);
+    final effectiveController =
+        textEditingController ?? useTextEditingController();
     final effectiveFocusNode = focusNode ?? useFocusNode();
     effectiveFocusNode.skipTraversal = readOnly;
-    var text = title ?? '';
+    var text = effectiveController.text;
     final hasFocus = useState(effectiveFocusNode.hasFocus);
     final onHover = useState(false);
 

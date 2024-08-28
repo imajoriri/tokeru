@@ -28,19 +28,17 @@ class AppItemRepository {
   final String userId;
 
   /// [AppItem.id]から[AppItem]を取得する。
-  Future<AppItem?> fetchById({
+  Stream<AppItem?> streamById({
     required String userId,
     required String id,
-  }) async {
-    final response = await ref
+  }) {
+    final response = ref
         .read(userDocumentProvider(userId))
         .collection(_collectionName)
         .doc(id)
-        .get();
-    if (!response.exists) {
-      return null;
-    }
-    return AppItem.fromJson(response.data()!..['id'] = response.id);
+        .snapshots();
+    return response
+        .map((event) => AppItem.fromJson(event.data()!..['id'] = event.id));
   }
 
   /// [AppItem]のクエリ。

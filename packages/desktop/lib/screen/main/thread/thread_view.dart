@@ -12,6 +12,7 @@ import 'package:tokeru_model/model/app_item/app_item.dart';
 import 'package:tokeru_widgets/widgets.dart';
 
 part 'sub_todo.dart';
+part 'header.dart';
 
 class ThreadView extends HookConsumerWidget {
   const ThreadView({super.key});
@@ -38,7 +39,7 @@ class ThreadView extends HookConsumerWidget {
 
     return Column(
       children: [
-        _ThreadHeader(item: item),
+        const _ThreadHeader(),
         const SizedBox(height: 8),
         const _SubTodoView(),
         const SizedBox(height: 8),
@@ -88,53 +89,6 @@ class ThreadView extends HookConsumerWidget {
             ],
           ),
         ),
-      ],
-    );
-  }
-}
-
-class _ThreadHeader extends ConsumerWidget {
-  final AppItem item;
-
-  const _ThreadHeader({Key? key, required this.item}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
-      children: [
-        SizedBox(height: context.appSpacing.medium),
-        switch (item) {
-          AppChatItem(:final message, :final createdAt) =>
-            ChatAndOgpListItem.threadTop(
-              message: message,
-              createdAt: createdAt,
-            ),
-          AppTodoItem(:final isDone, :final title) => Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: TodoListItem(
-                key: ValueKey(item.id),
-                isDone: isDone,
-                title: title,
-                onNewTodoBelow: () {
-                  ref.read(subTodosProvider(item.id).notifier).addWithIndex(0);
-                  WidgetsBinding.instance.addPostFrameCallback((_) async {
-                    FocusScope.of(context).nextFocus();
-                  });
-                },
-                // TODO: threadControllerがリアルタイム更新されるようになったら
-                // onToggleDoneを実装する。
-                // onToggleDone: (value) {
-                //   ref
-                //       .read(todoControllerProvider.notifier)
-                //       .toggleTodoDone(todoId: id);
-                //   FirebaseAnalytics.instance.logEvent(
-                //     name: AnalyticsEventName.toggleTodoDone.name,
-                //   );
-                // },
-              ),
-            ),
-          _ => throw UnimplementedError(),
-        },
       ],
     );
   }

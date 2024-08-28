@@ -69,6 +69,8 @@ class _TodoListItem extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isSelected = ref.watch(selectedThreadProvider)?.id == todo.id;
+    final textEditingController = useTextEditingController(text: todo.title);
+
     return Padding(
       padding: EdgeInsets.only(bottom: context.appSpacing.smallX),
       child: TodoListItem(
@@ -79,7 +81,7 @@ class _TodoListItem extends HookConsumerWidget {
           threadViewFocusNode.requestFocus();
         },
         index: index,
-        title: todo.title,
+        textEditingController: textEditingController,
         threadCount: todo.threadCount,
         subTodoCount: todo.subTodoCount,
         onDeleted: () async {

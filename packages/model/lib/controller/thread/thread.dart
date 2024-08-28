@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tokeru_model/controller/user/user_controller.dart';
 import 'package:tokeru_model/model.dart';
@@ -7,20 +9,29 @@ part 'thread.g.dart';
 
 @riverpod
 class SelectedThread extends _$SelectedThread {
+  StreamSubscription? _streamSub;
+
   @override
   AppItem? build() {
+    ref.onDispose(() {
+      _streamSub?.cancel();
+    });
     return null;
   }
 
   void close() {
     state = null;
+    _streamSub?.cancel();
   }
 
   void open(String appItemId) async {
-    // TODO: streamにしてリアルタイムでデータを更新するようにしたい。
+    _streamSub?.cancel();
+
     final user = ref.read(userControllerProvider).requireValue;
     final repository = ref.watch(appItemRepositoryProvider(user.id));
-    final item = await repository.fetchById(userId: user.id, id: appItemId);
-    state = item;
+    final stream = repository.streamById(userId: user.id, id: appItemId);
+    _streamSub = stream.listen((event) {
+      state = event;
+    });
   }
 }

@@ -157,7 +157,7 @@ class PanelScreen extends HookConsumerWidget {
   }
 }
 
-class _Todo extends ConsumerWidget {
+class _Todo extends HookConsumerWidget {
   const _Todo();
 
   @override
@@ -168,11 +168,22 @@ class _Todo extends ConsumerWidget {
     }
     final firstTodo = todos.first;
 
+    final textEditingController =
+        useTextEditingController(text: firstTodo.title);
+
+    useEffect(
+      () {
+        textEditingController.text = firstTodo.title;
+        return null;
+      },
+      [firstTodo.title],
+    );
+
     return TodoListItem(
       // Todoが変わった時にtitleも更新されてほしいので、keyとtitleを設定する。
       key: ValueKey(firstTodo.id + firstTodo.title),
       isDone: firstTodo.isDone,
-      title: firstTodo.title,
+      textEditingController: textEditingController,
       onToggleDone: (value) {
         ref.read(todosProvider.notifier).toggleTodoDone(todoId: firstTodo.id);
         FirebaseAnalytics.instance.logEvent(

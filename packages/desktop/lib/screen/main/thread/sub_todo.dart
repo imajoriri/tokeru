@@ -73,10 +73,15 @@ class _SubTodoView extends HookConsumerWidget {
                                       currentFocusIndex.value = null;
                                     });
                                   }
+                                  final textEditingController =
+                                      useTextEditingController(
+                                    text: todo.title,
+                                  );
                                   return TodoListItem(
                                     isDone: todo.isDone,
                                     index: index,
-                                    title: todo.title,
+                                    textEditingController:
+                                        textEditingController,
                                     focusNode: focusNode,
                                     onDeleted: () async {
                                       ref
