@@ -39,8 +39,10 @@ class ThreadView extends HookConsumerWidget {
     return Column(
       children: [
         _ThreadHeader(item: item),
-        const _HeaderDivider(),
+        const SizedBox(height: 8),
         const _SubTodoView(),
+        const SizedBox(height: 8),
+        const _HeaderDivider(),
         const SizedBox(height: 8),
         Flexible(
           child: appItems.when(
@@ -119,7 +121,6 @@ class _ThreadHeader extends ConsumerWidget {
                     FocusScope.of(context).nextFocus();
                   });
                 },
-                onUpdatedTitle: (value) {},
                 // TODO: threadControllerがリアルタイム更新されるようになったら
                 // onToggleDoneを実装する。
                 // onToggleDone: (value) {
@@ -144,22 +145,13 @@ class _HeaderDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return const Row(
       children: [
-        const SizedBox(width: 20),
-        Text(
-          'memo',
-          style: context.appTextTheme.labelSmall.copyWith(
-            color: context.appColors.onSurfaceSubtle,
-          ),
-        ),
-        const SizedBox(width: 8),
-        const Expanded(
+        Expanded(
           child: Divider(
             height: 1,
           ),
         ),
-        const SizedBox(width: 16),
       ],
     );
   }

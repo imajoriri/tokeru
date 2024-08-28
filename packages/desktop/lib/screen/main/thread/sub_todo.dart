@@ -39,6 +39,7 @@ class _SubTodoView extends HookConsumerWidget {
             child: subTodos.when(
               data: (todos) {
                 return CustomScrollView(
+                  shrinkWrap: true,
                   slivers: [
                     SliverList(
                       delegate: SliverChildListDelegate(
