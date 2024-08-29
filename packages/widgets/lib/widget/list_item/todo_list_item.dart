@@ -306,12 +306,15 @@ class _Count extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Icon(
-                  AppIcons.check,
-                  size: 12,
-                  color: context.appColors.onSurfaceSubtle,
+                Padding(
+                  padding: const EdgeInsets.only(top: 1.0),
+                  child: Icon(
+                    AppIcons.check,
+                    size: 12,
+                    color: context.appColors.onSurfaceSubtle,
+                  ),
                 ),
-                const SizedBox(width: 4),
+                const SizedBox(width: 2),
                 Text(
                   '$subTodoCount',
                   style: context.appTextTheme.bodyMedium.copyWith(

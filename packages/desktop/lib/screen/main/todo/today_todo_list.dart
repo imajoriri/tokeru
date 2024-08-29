@@ -77,7 +77,6 @@ class _TodoListItem extends HookConsumerWidget {
         focusNode.addListener(() {
           if (focusNode.hasFocus) {
             ref.read(selectedThreadProvider.notifier).open(todo.id);
-            // threadViewFocusNode.requestFocus();
           }
         });
         return null;
@@ -91,10 +90,7 @@ class _TodoListItem extends HookConsumerWidget {
         isSelected: isSelected,
         isDone: todo.isDone,
         focusNode: focusNode,
-        onOpenThread: () {
-          ref.read(selectedThreadProvider.notifier).open(todo.id);
-          threadViewFocusNode.requestFocus();
-        },
+
         index: index,
         textEditingController: textEditingController,
         subTodoCount: todo.subTodoCount,
