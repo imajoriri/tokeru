@@ -4,7 +4,6 @@ import 'package:tokeru_model/controller/url/url_controller.dart';
 import 'package:tokeru_desktop/utils/method_channel.dart';
 import 'package:tokeru_desktop/widget/actions/new_todo.dart/new_todo_action.dart';
 import 'package:tokeru_desktop/widget/shortcutkey.dart';
-import 'package:tokeru_model/controller/user/user_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// [PlatformMenuBar]の中でRefを使うためにラップしたWidgetクラス
@@ -27,18 +26,18 @@ class AppPlatformMenuBar extends ConsumerWidget {
                     mainMethodChannel.quit();
                   },
                 ),
-                PlatformMenuItem(
-                  label: 'Login',
-                  onSelected: () {
-                    ref.read(userControllerProvider.notifier).signInWithApple();
-                  },
-                ),
-                PlatformMenuItem(
-                  label: 'Logout',
-                  onSelected: () {
-                    ref.read(userControllerProvider.notifier).signOut();
-                  },
-                ),
+                // PlatformMenuItem(
+                //   label: 'Login',
+                //   onSelected: () {
+                //     ref.read(userControllerProvider.notifier).signInWithApple();
+                //   },
+                // ),
+                // PlatformMenuItem(
+                //   label: 'Logout',
+                //   onSelected: () {
+                //     ref.read(userControllerProvider.notifier).signOut();
+                //   },
+                // ),
               ],
             ),
           ],
