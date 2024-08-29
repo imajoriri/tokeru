@@ -16,7 +16,7 @@ class Threads extends _$Threads {
   late ChatSession chatSession;
 
   @override
-  Stream<List<AppItem>> build(AppItem parent) {
+  Stream<List<AppItem>> build(String parentId) {
     ref.watch(refreshControllerProvider);
 
     final user = ref.watch(userControllerProvider);
@@ -28,7 +28,7 @@ class Threads extends _$Threads {
     final query = repository.query(
       userId: user.requireValue.id,
       type: const ['thread', 'ai_comment'],
-      parentId: parent.id,
+      parentId: parentId,
     );
 
     final result = query.snapshots().map((snapshot) {
@@ -45,20 +45,17 @@ class Threads extends _$Threads {
           // nullを除外。
           .whereType<AppItem>()
           .toList();
-      _setChatSession(parent, items.whereType<AppAiCommentItem>().toList());
+      _setChatSession(parentId, items.whereType<AppAiCommentItem>().toList());
       return items;
     });
     return result;
   }
 
-  void _setChatSession(AppItem parent, List<AppAiCommentItem> histories) {
-    final system = switch (parent) {
-      AppTodoItem(title: final title) => ''''
+  void _setChatSession(String parentId, List<AppAiCommentItem> histories) {
+    final system = '''
 あなたはユーザーのタスクのサポートをするために、ユーザーの発散した内容を整理し、タスクのサポートをすることができます。
-今回のタスクは`$title`です。
-    ''',
-      _ => throw UnimplementedError(),
-    };
+今回のタスクは`title`です。
+    ''';
 
     final history = histories
         .map((e) => [
@@ -89,7 +86,7 @@ class Threads extends _$Threads {
       id: const Uuid().v4(),
       message: message,
       createdAt: DateTime.now(),
-      parentId: parent.id,
+      parentId: parentId,
     );
 
     final user = ref.read(userControllerProvider).requireValue;
@@ -97,21 +94,22 @@ class Threads extends _$Threads {
     try {
       await repository.add(tread);
       // スレッド件数を更新する。
-      await repository.incrementThreadCount(id: parent.id);
+      await repository.incrementThreadCount(id: parentId);
     } on Exception catch (e, s) {
       await FirebaseCrashlytics.instance.recordError(e, s);
     }
   }
 
   /// AIにメッセージを送信する。
-  Future<void> sendMessageToAi(String message) async {
+  // ignore: unused_element
+  Future<void> _sendMessageToAi(String message) async {
     final prompt = Content.text(message);
     final response = await chatSession.sendMessage(prompt);
     final aiComment = AppAiCommentItem(
       id: const Uuid().v4(),
       userMessage: message,
       aiMessage: response.text ?? '',
-      parentId: parent.id,
+      parentId: parentId,
       createdAt: DateTime.now(),
     );
     final user = ref.read(userControllerProvider).requireValue;
@@ -119,7 +117,7 @@ class Threads extends _$Threads {
     try {
       await repository.add(aiComment);
       // スレッド件数を更新する。
-      await repository.incrementThreadCount(id: parent.id);
+      await repository.incrementThreadCount(id: parentId);
     } on Exception catch (e, s) {
       await FirebaseCrashlytics.instance.recordError(e, s);
     }

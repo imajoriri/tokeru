@@ -6,7 +6,7 @@ part of 'threads.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$threadsHash() => r'37231297da0d864fa0e98d626258fd75bfbb4780';
+String _$threadsHash() => r'2a04fd4f5da8325600de2b01d5f69078d4910d7e';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -31,10 +31,10 @@ class _SystemHash {
 
 abstract class _$Threads
     extends BuildlessAutoDisposeStreamNotifier<List<AppItem>> {
-  late final AppItem parent;
+  late final String parentId;
 
   Stream<List<AppItem>> build(
-    AppItem parent,
+    String parentId,
   );
 }
 
@@ -63,10 +63,10 @@ class ThreadsFamily extends Family {
 
   /// See also [Threads].
   ThreadsProvider call(
-    AppItem parent,
+    String parentId,
   ) {
     return ThreadsProvider(
-      parent,
+      parentId,
     );
   }
 
@@ -76,7 +76,7 @@ class ThreadsFamily extends Family {
     covariant ThreadsProvider provider,
   ) {
     return call(
-      provider.parent,
+      provider.parentId,
     );
   }
 
@@ -107,9 +107,9 @@ class ThreadsProvider
     extends AutoDisposeStreamNotifierProviderImpl<Threads, List<AppItem>> {
   /// See also [Threads].
   ThreadsProvider(
-    AppItem parent,
+    String parentId,
   ) : this._internal(
-          () => Threads()..parent = parent,
+          () => Threads()..parentId = parentId,
           from: threadsProvider,
           name: r'threadsProvider',
           debugGetCreateSourceHash:
@@ -118,7 +118,7 @@ class ThreadsProvider
                   : _$threadsHash,
           dependencies: ThreadsFamily._dependencies,
           allTransitiveDependencies: ThreadsFamily._allTransitiveDependencies,
-          parent: parent,
+          parentId: parentId,
         );
 
   ThreadsProvider._internal(
@@ -128,17 +128,17 @@ class ThreadsProvider
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.parent,
+    required this.parentId,
   }) : super.internal();
 
-  final AppItem parent;
+  final String parentId;
 
   @override
   Stream<List<AppItem>> runNotifierBuild(
     covariant Threads notifier,
   ) {
     return notifier.build(
-      parent,
+      parentId,
     );
   }
 
@@ -147,20 +147,20 @@ class ThreadsProvider
     return ProviderOverride(
       origin: this,
       override: ThreadsProvider._internal(
-        () => create()..parent = parent,
+        () => create()..parentId = parentId,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        parent: parent,
+        parentId: parentId,
       ),
     );
   }
 
   @override
-  (AppItem,) get argument {
-    return (parent,);
+  (String,) get argument {
+    return (parentId,);
   }
 
   @override
@@ -173,33 +173,33 @@ class ThreadsProvider
     Threads Function() create,
   ) {
     return ThreadsProvider._internal(
-      () => create()..parent = parent,
+      () => create()..parentId = parentId,
       name: name,
       dependencies: dependencies,
       allTransitiveDependencies: allTransitiveDependencies,
       debugGetCreateSourceHash: debugGetCreateSourceHash,
       from: from,
-      parent: parent,
+      parentId: parentId,
     );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is ThreadsProvider && other.parent == parent;
+    return other is ThreadsProvider && other.parentId == parentId;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, parent.hashCode);
+    hash = _SystemHash.combine(hash, parentId.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
 mixin ThreadsRef on AutoDisposeStreamNotifierProviderRef<List<AppItem>> {
-  /// The parameter `parent` of this provider.
-  AppItem get parent;
+  /// The parameter `parentId` of this provider.
+  String get parentId;
 }
 
 class _ThreadsProviderElement
@@ -208,7 +208,7 @@ class _ThreadsProviderElement
   _ThreadsProviderElement(super.provider);
 
   @override
-  AppItem get parent => (origin as ThreadsProvider).parent;
+  String get parentId => (origin as ThreadsProvider).parentId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package

@@ -33,9 +33,8 @@ class ThreadView extends HookConsumerWidget {
       );
     }
 
-    final provider = threadsProvider(item);
+    final provider = threadsProvider(item.id);
     final appItems = ref.watch(provider);
-    final switchValue = useState(false);
 
     return Column(
       children: [
@@ -67,26 +66,11 @@ class ThreadView extends HookConsumerWidget {
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Switch.adaptive(
-              //   value: switchValue.value,
-              //   onChanged: (value) {
-              //     switchValue.value = value;
-              //   },
-              // ),
-              ChatTextField(
-                focusNode: threadViewFocusNode,
-                onSubmit: (message) async {
-                  if (switchValue.value) {
-                    await ref.read(provider.notifier).sendMessageToAi(message);
-                    return;
-                  }
-                  ref.read(provider.notifier).add(message: message);
-                },
-              ),
-            ],
+          child: ChatTextField(
+            focusNode: threadViewFocusNode,
+            onSubmit: (message) async {
+              ref.read(provider.notifier).add(message: message);
+            },
           ),
         ),
       ],
