@@ -70,19 +70,33 @@ class _TodoListItem extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isSelected = ref.watch(selectedThreadProvider)?.id == todo.id;
     final textEditingController = useTextEditingController(text: todo.title);
+    final focusNode = useFocusNode();
+
+    useEffect(
+      () {
+        focusNode.addListener(() {
+          if (focusNode.hasFocus) {
+            ref.read(selectedThreadProvider.notifier).open(todo.id);
+            // threadViewFocusNode.requestFocus();
+          }
+        });
+        return null;
+      },
+      const [],
+    );
 
     return Padding(
       padding: EdgeInsets.only(bottom: context.appSpacing.smallX),
       child: TodoListItem(
         isSelected: isSelected,
         isDone: todo.isDone,
+        focusNode: focusNode,
         onOpenThread: () {
           ref.read(selectedThreadProvider.notifier).open(todo.id);
           threadViewFocusNode.requestFocus();
         },
         index: index,
         textEditingController: textEditingController,
-        threadCount: todo.threadCount,
         subTodoCount: todo.subTodoCount,
         onDeleted: () async {
           ref.read(todosProvider.notifier).deleteTodo(todoId: todo.id);

@@ -24,11 +24,12 @@ class _SubTodoView extends HookConsumerWidget {
     // Todoを一番下や、Enterで1つ下に追加した時にフォーカスを当てるために使用する。
     // フォーカス後、リビルドごとにフォーカスが当たらないようにするために、nullにする。
     final currentFocusIndex = useState<int?>(null);
-    return Padding(
+    return Container(
       padding: EdgeInsets.only(
         left: context.appSpacing.small,
         right: context.appSpacing.small,
       ),
+      width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

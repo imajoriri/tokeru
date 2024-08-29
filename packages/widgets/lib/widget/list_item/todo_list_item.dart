@@ -11,7 +11,6 @@ class TodoListItem extends HookWidget {
     required this.isDone,
     this.textEditingController,
     this.index,
-    this.threadCount = 0,
     this.subTodoCount = 0,
     this.onOpenThread,
     this.focusNode,
@@ -35,9 +34,6 @@ class TodoListItem extends HookWidget {
   ///
   /// nullの場合、ドラッグアンドドロップのアイコンが表示されない。
   final int? index;
-
-  /// スレッド数。
-  final int threadCount;
 
   /// サブTodoの件数。
   final int subTodoCount;
@@ -267,7 +263,6 @@ class TodoListItem extends HookWidget {
                 // スレッド数。
                 _Count(
                   onHover: onHover.value,
-                  threadCount: threadCount,
                   subTodoCount: subTodoCount,
                 ),
               ],
@@ -288,12 +283,10 @@ class TodoListItem extends HookWidget {
 class _Count extends StatelessWidget {
   const _Count({
     required this.onHover,
-    required this.threadCount,
     required this.subTodoCount,
   });
 
   final bool onHover;
-  final int threadCount;
   final int subTodoCount;
 
   @override
@@ -304,30 +297,6 @@ class _Count extends StatelessWidget {
 
     return Row(
       children: [
-        if (threadCount > 0)
-          Padding(
-            padding: EdgeInsets.only(
-              right: context.appSpacing.medium,
-              top: context.appSpacing.small,
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(
-                  AppIcons.thread,
-                  size: 12,
-                  color: context.appColors.onSurfaceSubtle,
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  '$threadCount',
-                  style: context.appTextTheme.bodyMedium.copyWith(
-                    color: context.appColors.onSurfaceSubtle,
-                  ),
-                ),
-              ],
-            ),
-          ),
         if (subTodoCount > 0)
           Padding(
             padding: EdgeInsets.only(

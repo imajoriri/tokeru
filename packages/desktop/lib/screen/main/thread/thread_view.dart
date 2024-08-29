@@ -43,8 +43,7 @@ class ThreadView extends HookConsumerWidget {
         const _SubTodoView(),
         const SizedBox(height: 8),
         const _HeaderDivider(),
-        const SizedBox(height: 8),
-        Flexible(
+        Expanded(
           child: appItems.when(
             skipLoadingOnReload: true,
             data: (appItems) {
