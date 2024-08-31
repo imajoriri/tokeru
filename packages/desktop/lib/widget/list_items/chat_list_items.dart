@@ -89,8 +89,7 @@ class ChatListItems<T extends AppItem> extends StatelessWidget {
                   ),
                 AppAiCommentItem(:final createdAt) =>
                   ChatAndOgpListItem.aiComment(
-                    userMessage: item.userMessage,
-                    aiMessage: item.aiMessage,
+                    message: item.aiMessage,
                     createdAt: createdAt,
                   ),
                 _ => const SizedBox.shrink(),

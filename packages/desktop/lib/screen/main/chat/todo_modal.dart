@@ -149,7 +149,6 @@ class _TodoListItem extends HookConsumerWidget {
           threadViewFocusNode.requestFocus();
         },
         index: index,
-        threadCount: todo.threadCount,
         onDeleted: () async {
           ref.read(todosProvider.notifier).deleteTodo(todoId: todo.id);
         },

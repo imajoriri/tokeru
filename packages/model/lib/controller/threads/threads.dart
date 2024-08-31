@@ -100,9 +100,16 @@ class Threads extends _$Threads {
     }
   }
 
-  /// AIにメッセージを送信する。
-  // ignore: unused_element
-  Future<void> _sendMessageToAi(String message) async {
+  /// サブTodoをAIで生成する。
+  Future<void> generateSubTodo({required AppTodoItem todo}) async {
+    final chatSession = FirebaseVertexAI.instanceFor(
+      auth: FirebaseAuth.instance,
+      app: Firebase.app(),
+    ).generativeModel(model: 'gemini-1.5-flash').startChat();
+
+    final message =
+        '${todo.title}を実行するためのサブタスクを作成してください。箇条書きで回答し、それぞれ30文字以内でお願いします。';
+
     final prompt = Content.text(message);
     final response = await chatSession.sendMessage(prompt);
     final aiComment = AppAiCommentItem(
@@ -112,6 +119,7 @@ class Threads extends _$Threads {
       parentId: parentId,
       createdAt: DateTime.now(),
     );
+
     final user = ref.read(userControllerProvider).requireValue;
     final repository = ref.read(appItemRepositoryProvider(user.id));
     try {

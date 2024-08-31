@@ -37,11 +37,9 @@ class ChatAndOgpListItem extends ConsumerWidget {
 
   const ChatAndOgpListItem.aiComment({
     super.key,
-    required String userMessage,
-    required String aiMessage,
+    required this.message,
     required this.createdAt,
-  })  : message = '$userMessage\n$aiMessage',
-        onRead = null,
+  })  : onRead = null,
         onThread = null,
         onConvertTodo = null,
         threadCount = 0,

@@ -14,14 +14,16 @@ class AppTextButton extends HookWidget {
     required this.onPressed,
     required this.text,
     this.skipTraversal = false,
-  }) : type = _AppTextButtonType.medium;
+  })  : iconSize = 14,
+        type = _AppTextButtonType.medium;
 
   const AppTextButton.small({
     super.key,
     required this.onPressed,
     required this.text,
     this.skipTraversal = false,
-  }) : type = _AppTextButtonType.small;
+  })  : iconSize = 12,
+        type = _AppTextButtonType.small;
 
   final void Function()? onPressed;
 
@@ -29,11 +31,17 @@ class AppTextButton extends HookWidget {
 
   final bool skipTraversal;
 
+  final double iconSize;
+
   // ignore: library_private_types_in_public_api
   final _AppTextButtonType type;
 
   @override
   Widget build(BuildContext context) {
+    final textStyle = switch (type) {
+      _AppTextButtonType.small => context.appTextTheme.labelSmall,
+      _AppTextButtonType.medium => context.appTextTheme.labelMidium,
+    };
     return AppButton(
       onPressed: onPressed,
       skipTraversal: skipTraversal,
@@ -51,11 +59,14 @@ class AppTextButton extends HookWidget {
           _AppTextButtonType.medium => EdgeInsets.all(context.appSpacing.small),
         },
         child: DefaultTextStyle(
-          style: switch (type) {
-            _AppTextButtonType.small => context.appTextTheme.labelSmall,
-            _AppTextButtonType.medium => context.appTextTheme.labelMidium,
-          },
-          child: text,
+          style: textStyle,
+          child: IconTheme.merge(
+            child: text,
+            data: IconThemeData(
+              size: iconSize,
+              color: context.appColors.onSurface,
+            ),
+          ),
         ),
       ),
     );

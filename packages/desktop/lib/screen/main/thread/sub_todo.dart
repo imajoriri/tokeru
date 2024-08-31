@@ -145,22 +145,35 @@ class _SubTodoView extends HookConsumerWidget {
               },
             ),
           ),
-          AppTextButton.small(
-            onPressed: () async {
-              // Todoを一番下に追加する
-              await ref
-                  .read(provider.notifier)
-                  .addWithIndex(subTodos.valueOrNull?.length ?? 0);
-              currentFocusIndex.value = subTodos.valueOrNull?.length ?? 0;
-            },
-            text: const Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.add),
-                SizedBox(width: 8),
-                Text('Add sub todo'),
-              ],
-            ),
+          Row(
+            children: [
+              AppTextButton.medium(
+                onPressed: () async {
+                  // Todoを一番下に追加する
+                  await ref
+                      .read(provider.notifier)
+                      .addWithIndex(subTodos.valueOrNull?.length ?? 0);
+                  currentFocusIndex.value = subTodos.valueOrNull?.length ?? 0;
+                },
+                text: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.add),
+                    SizedBox(width: 4),
+                    Text('Add sub todo'),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              AppTextButton.medium(
+                onPressed: () async {
+                  ref.read(threadsProvider(parent.id).notifier).generateSubTodo(
+                        todo: parent as AppTodoItem,
+                      );
+                },
+                text: const Text('Generate with AI'),
+              ),
+            ],
           ),
         ],
       ),
