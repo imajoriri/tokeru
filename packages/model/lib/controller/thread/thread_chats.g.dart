@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'threads.dart';
+part of 'thread_chats.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$threadsHash() => r'733dbae688806e9b03161e54745febaf3efa7264';
+String _$threadChatsHash() => r'9f36c61caf508a2a927b4f9b8d3ae6f3fc6ab6ed';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-abstract class _$Threads
+abstract class _$ThreadChats
     extends BuildlessAutoDisposeStreamNotifier<List<AppItem>> {
   late final String parentId;
 
@@ -38,14 +38,20 @@ abstract class _$Threads
   );
 }
 
-/// See also [Threads].
-@ProviderFor(Threads)
-const threadsProvider = ThreadsFamily();
+/// スレッドのチャットのリストを扱うコントローラー。
+///
+/// Copied from [ThreadChats].
+@ProviderFor(ThreadChats)
+const threadChatsProvider = ThreadChatsFamily();
 
-/// See also [Threads].
-class ThreadsFamily extends Family {
-  /// See also [Threads].
-  const ThreadsFamily();
+/// スレッドのチャットのリストを扱うコントローラー。
+///
+/// Copied from [ThreadChats].
+class ThreadChatsFamily extends Family {
+  /// スレッドのチャットのリストを扱うコントローラー。
+  ///
+  /// Copied from [ThreadChats].
+  const ThreadChatsFamily();
 
   static const Iterable<ProviderOrFamily>? _dependencies = null;
 
@@ -59,21 +65,23 @@ class ThreadsFamily extends Family {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'threadsProvider';
+  String? get name => r'threadChatsProvider';
 
-  /// See also [Threads].
-  ThreadsProvider call(
+  /// スレッドのチャットのリストを扱うコントローラー。
+  ///
+  /// Copied from [ThreadChats].
+  ThreadChatsProvider call(
     String parentId,
   ) {
-    return ThreadsProvider(
+    return ThreadChatsProvider(
       parentId,
     );
   }
 
   @visibleForOverriding
   @override
-  ThreadsProvider getProviderOverride(
-    covariant ThreadsProvider provider,
+  ThreadChatsProvider getProviderOverride(
+    covariant ThreadChatsProvider provider,
   ) {
     return call(
       provider.parentId,
@@ -81,47 +89,52 @@ class ThreadsFamily extends Family {
   }
 
   /// Enables overriding the behavior of this provider, no matter the parameters.
-  Override overrideWith(Threads Function() create) {
-    return _$ThreadsFamilyOverride(this, create);
+  Override overrideWith(ThreadChats Function() create) {
+    return _$ThreadChatsFamilyOverride(this, create);
   }
 }
 
-class _$ThreadsFamilyOverride implements FamilyOverride {
-  _$ThreadsFamilyOverride(this.overriddenFamily, this.create);
+class _$ThreadChatsFamilyOverride implements FamilyOverride {
+  _$ThreadChatsFamilyOverride(this.overriddenFamily, this.create);
 
-  final Threads Function() create;
-
-  @override
-  final ThreadsFamily overriddenFamily;
+  final ThreadChats Function() create;
 
   @override
-  ThreadsProvider getProviderOverride(
-    covariant ThreadsProvider provider,
+  final ThreadChatsFamily overriddenFamily;
+
+  @override
+  ThreadChatsProvider getProviderOverride(
+    covariant ThreadChatsProvider provider,
   ) {
     return provider._copyWith(create);
   }
 }
 
-/// See also [Threads].
-class ThreadsProvider
-    extends AutoDisposeStreamNotifierProviderImpl<Threads, List<AppItem>> {
-  /// See also [Threads].
-  ThreadsProvider(
+/// スレッドのチャットのリストを扱うコントローラー。
+///
+/// Copied from [ThreadChats].
+class ThreadChatsProvider
+    extends AutoDisposeStreamNotifierProviderImpl<ThreadChats, List<AppItem>> {
+  /// スレッドのチャットのリストを扱うコントローラー。
+  ///
+  /// Copied from [ThreadChats].
+  ThreadChatsProvider(
     String parentId,
   ) : this._internal(
-          () => Threads()..parentId = parentId,
-          from: threadsProvider,
-          name: r'threadsProvider',
+          () => ThreadChats()..parentId = parentId,
+          from: threadChatsProvider,
+          name: r'threadChatsProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$threadsHash,
-          dependencies: ThreadsFamily._dependencies,
-          allTransitiveDependencies: ThreadsFamily._allTransitiveDependencies,
+                  : _$threadChatsHash,
+          dependencies: ThreadChatsFamily._dependencies,
+          allTransitiveDependencies:
+              ThreadChatsFamily._allTransitiveDependencies,
           parentId: parentId,
         );
 
-  ThreadsProvider._internal(
+  ThreadChatsProvider._internal(
     super.create, {
     required super.name,
     required super.dependencies,
@@ -135,7 +148,7 @@ class ThreadsProvider
 
   @override
   Stream<List<AppItem>> runNotifierBuild(
-    covariant Threads notifier,
+    covariant ThreadChats notifier,
   ) {
     return notifier.build(
       parentId,
@@ -143,10 +156,10 @@ class ThreadsProvider
   }
 
   @override
-  Override overrideWith(Threads Function() create) {
+  Override overrideWith(ThreadChats Function() create) {
     return ProviderOverride(
       origin: this,
-      override: ThreadsProvider._internal(
+      override: ThreadChatsProvider._internal(
         () => create()..parentId = parentId,
         from: from,
         name: null,
@@ -164,15 +177,15 @@ class ThreadsProvider
   }
 
   @override
-  AutoDisposeStreamNotifierProviderElement<Threads, List<AppItem>>
+  AutoDisposeStreamNotifierProviderElement<ThreadChats, List<AppItem>>
       createElement() {
-    return _ThreadsProviderElement(this);
+    return _ThreadChatsProviderElement(this);
   }
 
-  ThreadsProvider _copyWith(
-    Threads Function() create,
+  ThreadChatsProvider _copyWith(
+    ThreadChats Function() create,
   ) {
-    return ThreadsProvider._internal(
+    return ThreadChatsProvider._internal(
       () => create()..parentId = parentId,
       name: name,
       dependencies: dependencies,
@@ -185,7 +198,7 @@ class ThreadsProvider
 
   @override
   bool operator ==(Object other) {
-    return other is ThreadsProvider && other.parentId == parentId;
+    return other is ThreadChatsProvider && other.parentId == parentId;
   }
 
   @override
@@ -197,18 +210,18 @@ class ThreadsProvider
   }
 }
 
-mixin ThreadsRef on AutoDisposeStreamNotifierProviderRef<List<AppItem>> {
+mixin ThreadChatsRef on AutoDisposeStreamNotifierProviderRef<List<AppItem>> {
   /// The parameter `parentId` of this provider.
   String get parentId;
 }
 
-class _ThreadsProviderElement
-    extends AutoDisposeStreamNotifierProviderElement<Threads, List<AppItem>>
-    with ThreadsRef {
-  _ThreadsProviderElement(super.provider);
+class _ThreadChatsProviderElement
+    extends AutoDisposeStreamNotifierProviderElement<ThreadChats, List<AppItem>>
+    with ThreadChatsRef {
+  _ThreadChatsProviderElement(super.provider);
 
   @override
-  String get parentId => (origin as ThreadsProvider).parentId;
+  String get parentId => (origin as ThreadChatsProvider).parentId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package

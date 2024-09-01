@@ -6,7 +6,7 @@ part of 'generative_sub_todo.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$generativeSubTodoHash() => r'968e2911b212a8e04fa4ad4d5e4115287b139965';
+String _$generativeSubTodoHash() => r'd9edcfb631541d2fcdc92b2942359ece76d47f65';
 
 /// Copied from Dart SDK
 class _SystemHash {

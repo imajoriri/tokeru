@@ -11,7 +11,7 @@ class _ChatListItems extends ConsumerWidget {
       return const SizedBox.shrink();
     }
 
-    final provider = threadsProvider(selectedAppItem.id);
+    final provider = threadChatsProvider(selectedAppItem.id);
     final appItems = ref.watch(provider);
 
     return Expanded(

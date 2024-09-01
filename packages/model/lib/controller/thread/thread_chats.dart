@@ -1,5 +1,4 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:firebase_vertexai/firebase_vertexai.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tokeru_model/controller/refresh/refresh_controller.dart';
 import 'package:tokeru_model/controller/user/user_controller.dart';
@@ -7,12 +6,11 @@ import 'package:tokeru_model/model/app_item/app_item.dart';
 import 'package:tokeru_model/repository/app_item/app_item_repository.dart';
 import 'package:uuid/uuid.dart';
 
-part 'threads.g.dart';
+part 'thread_chats.g.dart';
 
+/// スレッドのチャットのリストを扱うコントローラー。
 @riverpod
-class Threads extends _$Threads {
-  late ChatSession chatSession;
-
+class ThreadChats extends _$ThreadChats {
   @override
   Stream<List<AppItem>> build(String parentId) {
     ref.watch(refreshControllerProvider);

@@ -15,7 +15,7 @@ class _ChatTextField extends ConsumerWidget {
           if (selectedAppItem == null) {
             return;
           }
-          final provider = threadsProvider(selectedAppItem.id);
+          final provider = threadChatsProvider(selectedAppItem.id);
           ref.read(provider.notifier).add(message: message);
         },
       ),
