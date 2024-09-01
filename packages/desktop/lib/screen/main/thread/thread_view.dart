@@ -37,11 +37,20 @@ class ThreadView extends HookConsumerWidget {
 
     return Column(
       children: [
-        const _ThreadHeader(),
-        const SizedBox(height: 8),
         Container(
           constraints: BoxConstraints(
             maxHeight: MediaQuery.of(context).size.height * 0.5,
+          ),
+          decoration: BoxDecoration(
+            color: context.appColors.surface,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                spreadRadius: 0,
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
           ),
           child: CustomScrollView(
             shrinkWrap: true,
@@ -50,6 +59,8 @@ class ThreadView extends HookConsumerWidget {
               SliverList(
                 delegate: SliverChildListDelegate(
                   [
+                    const _ThreadHeader(),
+                    const SizedBox(height: 8),
                     _SubTodoList(
                       currentFocusIndex: currentFocusIndex,
                     ),
@@ -62,16 +73,15 @@ class ThreadView extends HookConsumerWidget {
                 delegate: SliverChildListDelegate(
                   [
                     const _GeneratedSubTodo(),
+                    SizedBox(height: context.appSpacing.smallX),
+                    _AddSubTodoButton(currentFocusIndex: currentFocusIndex),
+                    SizedBox(height: context.appSpacing.smallX),
                   ],
                 ),
               ),
             ],
           ),
         ),
-        SizedBox(height: context.appSpacing.smallX),
-        _AddSubTodoButton(currentFocusIndex: currentFocusIndex),
-        SizedBox(height: context.appSpacing.smallX),
-        const Divider(height: 1),
         const _ChatListItems(),
         const _ChatTextField(),
       ],
