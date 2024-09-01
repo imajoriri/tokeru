@@ -13,12 +13,19 @@ class GenerativeSubTodo extends _$GenerativeSubTodo {
     Schema(
       SchemaType.object,
       properties: {
-        'parentTodoTitle': Schema(SchemaType.string,
-            description: 'The title of the parent task.'),
-        'subTodos': Schema(SchemaType.array,
-            description: 'The sub tasks for the parent task.'),
+        'parentTodoTitle': Schema(
+          SchemaType.string,
+          description: 'The title of the parent task.',
+        ),
+        'subTodos': Schema(
+          SchemaType.array,
+          description: 'The sub tasks for the parent task.',
+        ),
       },
-      requiredProperties: ['parentTodoTitle', 'subTodos'],
+      requiredProperties: [
+        'parentTodoTitle',
+        'subTodos',
+      ],
     ),
   );
 
@@ -43,7 +50,7 @@ class GenerativeSubTodo extends _$GenerativeSubTodo {
 
   Future<void> generateSubTodo() async {
     final message =
-        '$parentTodoTitleを完了するための具体的なサブタスクを作成してください。サブタスクはそれぞれ30文字以内でお願いします。';
+        '$parentTodoTitleを完了するための具体的なサブタスクを作成してください。サブタスクはより具体的なタスクで、動詞でお願いします。';
     final prompt = Content.text(message);
     var response = await chat.sendMessage(prompt);
 
