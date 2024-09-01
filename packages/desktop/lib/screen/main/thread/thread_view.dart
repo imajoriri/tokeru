@@ -14,6 +14,11 @@ import 'package:tokeru_widgets/widgets.dart';
 
 part 'sub_todo.dart';
 part 'header.dart';
+part 'empty_state.dart';
+part 'chat_text_field.dart';
+part 'chat_list_item.dart';
+part 'add_sub_todo_button.dart';
+part 'generated_sub_todo.dart';
 
 class ThreadView extends HookConsumerWidget {
   const ThreadView({super.key});
@@ -23,73 +28,52 @@ class ThreadView extends HookConsumerWidget {
     final item = ref.watch(selectedThreadProvider);
     // スレッドが選択されていない場合は何も表示しない。
     if (item == null) {
-      return const SizedBox(
-        width: double.infinity,
-        height: double.infinity,
-        child: Center(
-          child: Text(
-            'No todo selected',
-          ),
-        ),
-      );
+      return const _EmptyState();
     }
 
-    final provider = threadsProvider(item.id);
-    final appItems = ref.watch(provider);
+    // Todoを一番下や、Enterで1つ下に追加した時にフォーカスを当てるために使用する。
+    // フォーカス後、リビルドごとにフォーカスが当たらないようにするために、nullにする。
+    final currentFocusIndex = useState<int?>(null);
 
     return Column(
       children: [
         const _ThreadHeader(),
         const SizedBox(height: 8),
-        const _SubTodoView(),
-        const SizedBox(height: 8),
-        const _HeaderDivider(),
-        Expanded(
-          child: appItems.when(
-            skipLoadingOnReload: true,
-            data: (appItems) {
-              return ChatListItems.thread(
-                threads: appItems,
-              );
-            },
-            loading: () {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            },
-            error: (error, _) {
-              return Center(
-                child: Text('Error: $error'),
-              );
-            },
+        Container(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.5,
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-          child: ChatTextField(
-            focusNode: threadViewFocusNode,
-            onSubmit: (message) async {
-              ref.read(provider.notifier).add(message: message);
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}
+          child: CustomScrollView(
+            shrinkWrap: true,
+            slivers: [
+              // サブタスクのリスト
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    _SubTodoList(
+                      currentFocusIndex: currentFocusIndex,
+                    ),
+                  ],
+                ),
+              ),
 
-class _HeaderDivider extends StatelessWidget {
-  const _HeaderDivider();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Row(
-      children: [
-        Expanded(
-          child: Divider(
-            height: 1,
+              // 生成されたサブタスクのリスト
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    const _GeneratedSubTodo(),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
+        SizedBox(height: context.appSpacing.smallX),
+        _AddSubTodoButton(currentFocusIndex: currentFocusIndex),
+        SizedBox(height: context.appSpacing.smallX),
+        const Divider(height: 1),
+        const _ChatListItems(),
+        const _ChatTextField(),
       ],
     );
   }

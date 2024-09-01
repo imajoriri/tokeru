@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:tokeru_widgets/widgets.dart';
 
@@ -24,7 +25,30 @@ class TodoListItem extends HookWidget {
     this.onNewTodoBelow,
     this.onSortUp,
     this.onSortDown,
-  });
+  })  : backgroundColor = null,
+        textColor = null;
+
+  TodoListItem.generatedAi({
+    super.key,
+    required this.textEditingController,
+    required BuildContext context,
+  })  : isDone = false,
+        backgroundColor = context.appColors.primary.withOpacity(0.08),
+        textColor = null,
+        autofocus = false,
+        isSelected = false,
+        onDeleted = null,
+        onUpdatedTitle = null,
+        onToggleDone = null,
+        focusDown = null,
+        focusUp = null,
+        onNewTodoBelow = null,
+        onSortUp = null,
+        onSortDown = null,
+        index = null,
+        subTodoCount = 0,
+        onOpenThread = null,
+        focusNode = null;
 
   final bool isDone;
 
@@ -90,12 +114,52 @@ class TodoListItem extends HookWidget {
   /// nullの場合、下に移動できない。
   final Function()? onSortDown;
 
+  /// 背景カラー。
+  final Color? backgroundColor;
+
+  /// テキストのカラー。
+  final Color? textColor;
+
   /// debouce用のDuration
   static const _debounceDuration = Duration(milliseconds: 400);
 
+  bool get readOnly => onUpdatedTitle == null;
+
+  Color effectiveBackgroundColor({
+    required bool onHover,
+    required bool isSelected,
+    required BuildContext context,
+  }) {
+    if (backgroundColor != null) {
+      return backgroundColor!;
+    }
+
+    return isSelected
+        ? context.appColors.primary.withOpacity(0.08)
+        : onHover
+            ? context.appColors.onSurface.hovered
+            : Colors.transparent;
+  }
+
+  Color effectiveTextColor({
+    required bool onHover,
+    required bool isSelected,
+    required BuildContext context,
+  }) {
+    if (textColor != null) {
+      return textColor!;
+    }
+    if (isDone) {
+      return context.appColors.onSurfaceSubtle;
+    } else if (readOnly) {
+      return context.appColors.onSurface;
+    } else {
+      return context.appColors.onSurface;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final readOnly = onUpdatedTitle == null;
     final effectiveController =
         textEditingController ?? useTextEditingController();
     final effectiveFocusNode = focusNode ?? useFocusNode();
@@ -149,21 +213,6 @@ class TodoListItem extends HookWidget {
       [effectiveController],
     );
 
-    final backgroundColor = isSelected
-        ? context.appColors.primary.withOpacity(0.08)
-        : onHover.value
-            ? context.appColors.onSurface.hovered
-            : Colors.transparent;
-
-    late final Color textFieldColor;
-    if (isDone) {
-      textFieldColor = context.appColors.onSurfaceSubtle;
-    } else if (readOnly) {
-      textFieldColor = context.appColors.onSurface;
-    } else {
-      textFieldColor = context.appColors.onSurface;
-    }
-
     return CallbackShortcuts(
       bindings: <ShortcutActivator, VoidCallback>{
         if (onToggleDone != null)
@@ -198,7 +247,13 @@ class TodoListItem extends HookWidget {
           children: [
             // TextFieldを囲っているContainerに色を付けると
             // リビルド時にfocusが外れてしまうため、stackでContainerを分けている
-            _Background(backgroundColor: backgroundColor),
+            _Background(
+              backgroundColor: effectiveBackgroundColor(
+                onHover: onHover.value,
+                isSelected: isSelected,
+                context: context,
+              ),
+            ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -244,7 +299,11 @@ class TodoListItem extends HookWidget {
                           controller: effectiveController,
                           focusNode: effectiveFocusNode,
                           style: context.appTextTheme.bodyMedium.copyWith(
-                            color: textFieldColor,
+                            color: effectiveTextColor(
+                              onHover: onHover.value,
+                              isSelected: isSelected,
+                              context: context,
+                            ),
                           ),
                           autofocus: autofocus,
                           cursorHeight: 16,

@@ -50,21 +50,11 @@ class _Todo extends HookConsumerWidget {
     );
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+      padding: EdgeInsets.symmetric(horizontal: context.appSpacing.small),
       child: TodoListItem(
         key: ValueKey(todoItem.id),
         isDone: todoItem.isDone,
         textEditingController: textEditingController,
-        // TODO: threadControllerがリアルタイム更新されるようになったら
-        // onToggleDoneを実装する。
-        // onToggleDone: (value) {
-        //   ref
-        //       .read(todoControllerProvider.notifier)
-        //       .toggleTodoDone(todoId: id);
-        //   FirebaseAnalytics.instance.logEvent(
-        //     name: AnalyticsEventName.toggleTodoDone.name,
-        //   );
-        // },
       ),
     );
   }
