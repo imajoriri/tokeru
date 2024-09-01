@@ -1,9 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_vertexai/firebase_vertexai.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:tokeru_model/controller/generative_ai/generative_ai.dart';
 import 'package:tokeru_model/controller/refresh/refresh_controller.dart';
 import 'package:tokeru_model/controller/user/user_controller.dart';
 import 'package:tokeru_model/model/app_item/app_item.dart';
@@ -46,37 +43,9 @@ class Threads extends _$Threads {
           // nullを除外。
           .whereType<AppItem>()
           .toList();
-      _setChatSession(parentId, items.whereType<AppAiCommentItem>().toList());
       return items;
     });
     return result;
-  }
-
-  void _setChatSession(String parentId, List<AppAiCommentItem> histories) {
-    final system = '''
-あなたはユーザーのタスクのサポートをするために、ユーザーの発散した内容を整理し、タスクのサポートをすることができます。
-今回のタスクは`title`です。
-    ''';
-
-    final history = histories
-        .map((e) => [
-              Content.text(e.userMessage),
-              Content.model([TextPart(e.aiMessage)]),
-            ])
-        .toList()
-        .expand((e) => e)
-        .toList();
-    chatSession = FirebaseVertexAI.instanceFor(
-      auth: FirebaseAuth.instance,
-      app: Firebase.app(),
-    )
-        .generativeModel(
-          model: 'gemini-1.5-flash',
-          systemInstruction: Content.system(system),
-        )
-        .startChat(
-          history: history,
-        );
   }
 
   /// チャットを追加する。
@@ -96,22 +65,6 @@ class Threads extends _$Threads {
       await repository.add(tread);
       // スレッド件数を更新する。
       await repository.incrementThreadCount(id: parentId);
-    } on Exception catch (e, s) {
-      await FirebaseCrashlytics.instance.recordError(e, s);
-    }
-  }
-
-  /// サブTodoをAIで生成する。
-  Future<void> generateSubTodo({required AppTodoItem todo}) async {
-    final generativeAi = ref.read(generativeAiProvider);
-    final subTodos = await generativeAi.generateSubTodo(
-      parentTodoId: todo.id,
-      parentTodoTitle: todo.title,
-    );
-    final user = ref.read(userControllerProvider).requireValue;
-    final repository = ref.read(appItemRepositoryProvider(user.id));
-    try {
-      await repository.addAll(subTodos);
     } on Exception catch (e, s) {
       await FirebaseCrashlytics.instance.recordError(e, s);
     }

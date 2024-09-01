@@ -79,6 +79,7 @@ class _Buttons extends ConsumerWidget {
     final parent = ref.watch(selectedThreadProvider);
     final provider = subTodosProvider(parent!.id);
     final subTodos = ref.watch(provider);
+
     return Row(
       children: [
         AppTextButton.medium(
