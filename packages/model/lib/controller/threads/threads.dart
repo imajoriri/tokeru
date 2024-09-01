@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_vertexai/firebase_vertexai.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:tokeru_model/controller/generative_ai/generative_ai.dart';
 import 'package:tokeru_model/controller/refresh/refresh_controller.dart';
 import 'package:tokeru_model/controller/user/user_controller.dart';
 import 'package:tokeru_model/model/app_item/app_item.dart';
@@ -102,30 +103,15 @@ class Threads extends _$Threads {
 
   /// サブTodoをAIで生成する。
   Future<void> generateSubTodo({required AppTodoItem todo}) async {
-    final chatSession = FirebaseVertexAI.instanceFor(
-      auth: FirebaseAuth.instance,
-      app: Firebase.app(),
-    ).generativeModel(model: 'gemini-1.5-flash').startChat();
-
-    final message =
-        '${todo.title}を実行するためのサブタスクを作成してください。箇条書きで回答し、それぞれ30文字以内でお願いします。';
-
-    final prompt = Content.text(message);
-    final response = await chatSession.sendMessage(prompt);
-    final aiComment = AppAiCommentItem(
-      id: const Uuid().v4(),
-      userMessage: message,
-      aiMessage: response.text ?? '',
-      parentId: parentId,
-      createdAt: DateTime.now(),
+    final generativeAi = ref.read(generativeAiProvider);
+    final subTodos = await generativeAi.generateSubTodo(
+      parentTodoId: todo.id,
+      parentTodoTitle: todo.title,
     );
-
     final user = ref.read(userControllerProvider).requireValue;
     final repository = ref.read(appItemRepositoryProvider(user.id));
     try {
-      await repository.add(aiComment);
-      // スレッド件数を更新する。
-      await repository.incrementThreadCount(id: parentId);
+      await repository.addAll(subTodos);
     } on Exception catch (e, s) {
       await FirebaseCrashlytics.instance.recordError(e, s);
     }

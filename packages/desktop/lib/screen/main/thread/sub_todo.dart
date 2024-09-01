@@ -37,146 +37,221 @@ class _SubTodoView extends HookConsumerWidget {
             constraints: BoxConstraints(
               maxHeight: MediaQuery.of(context).size.height * 0.5,
             ),
-            child: subTodos.when(
-              data: (todos) {
-                return CustomScrollView(
-                  shrinkWrap: true,
-                  slivers: [
-                    SliverList(
-                      delegate: SliverChildListDelegate(
-                        [
-                          ReorderableListView.builder(
-                            buildDefaultDragHandles: false,
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: todos.length,
-                            onReorder: (oldIndex, newIndex) {
-                              // NOTE: なぜか上から下に移動するときはnewIndexが1つずれるので
-                              // その分を補正する
-                              if (oldIndex < newIndex) {
-                                newIndex -= 1;
-                              }
-                              ref
-                                  .read(provider.notifier)
-                                  .reorder(oldIndex, newIndex);
-                            },
-                            itemBuilder: (context, index) {
-                              final key = ValueKey(todos[index].id);
-                              final todo = todos[index];
-                              return HookBuilder(
-                                key: key,
-                                builder: (context) {
-                                  final focusNode = useFocusNode();
-                                  if (currentFocusIndex.value == index) {
-                                    WidgetsBinding.instance
-                                        .addPostFrameCallback((_) {
-                                      focusNode.requestFocus();
-                                      currentFocusIndex.value = null;
-                                    });
-                                  }
-                                  final textEditingController =
-                                      useTextEditingController(
-                                    text: todo.title,
-                                  );
-                                  return TodoListItem(
-                                    isDone: todo.isDone,
-                                    index: index,
-                                    textEditingController:
-                                        textEditingController,
-                                    focusNode: focusNode,
-                                    onDeleted: () async {
-                                      ref
-                                          .read(provider.notifier)
-                                          .delete(todoId: todo.id);
-                                    },
-                                    onUpdatedTitle: (value) {
-                                      ref.read(provider.notifier).updateTitle(
-                                          todoId: todo.id, title: value);
-                                    },
-                                    onToggleDone: (value) {
-                                      ref
-                                          .read(provider.notifier)
-                                          .toggleDone(todoId: todo.id);
-                                    },
-                                    focusDown: () {
-                                      FocusScope.of(context).nextFocus();
-                                    },
-                                    focusUp: () {
-                                      FocusScope.of(context).previousFocus();
-                                    },
-                                    onNewTodoBelow: () async {
-                                      await ref
-                                          .read(provider.notifier)
-                                          .addWithIndex(index + 1);
-                                      currentFocusIndex.value = index + 1;
-                                    },
-                                    // 一番上のTodoは上に移動できない
-                                    onSortUp: index != 0
-                                        ? () {
-                                            ref
-                                                .read(provider.notifier)
-                                                .reorder(index, index - 1);
-                                          }
-                                        : null,
-                                    // 一番下のTodoは下に移動できない
-                                    onSortDown: index != todos.length - 1
-                                        ? () {
-                                            ref
-                                                .read(provider.notifier)
-                                                .reorder(index, index + 1);
-                                          }
-                                        : null,
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                        ],
+            child: CustomScrollView(
+              shrinkWrap: true,
+              slivers: [
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      _SubTodoList(
+                        provider: provider,
+                        currentFocusIndex: currentFocusIndex,
                       ),
-                    ),
-                  ],
-                );
-              },
-              loading: () {
-                return const SizedBox();
-              },
-              error: (error, _) {
-                return const SizedBox();
-              },
+                    ],
+                  ),
+                ),
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      const _GeneratedSubTodo(),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
-          Row(
-            children: [
-              AppTextButton.medium(
-                onPressed: () async {
-                  // Todoを一番下に追加する
-                  await ref
-                      .read(provider.notifier)
-                      .addWithIndex(subTodos.valueOrNull?.length ?? 0);
-                  currentFocusIndex.value = subTodos.valueOrNull?.length ?? 0;
-                },
-                text: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.add),
-                    SizedBox(width: 4),
-                    Text('Add sub todo'),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 8),
-              AppTextButton.medium(
-                onPressed: () async {
-                  ref.read(threadsProvider(parent.id).notifier).generateSubTodo(
-                        todo: parent as AppTodoItem,
-                      );
-                },
-                text: const Text('Generate with AI'),
-              ),
-            ],
+          _Buttons(
+            provider: provider,
+            subTodos: subTodos,
+            currentFocusIndex: currentFocusIndex,
+            parent: parent,
           ),
         ],
       ),
+    );
+  }
+}
+
+class _Buttons extends ConsumerWidget {
+  const _Buttons({
+    required this.provider,
+    required this.subTodos,
+    required this.currentFocusIndex,
+    required this.parent,
+  });
+
+  final SubTodosProvider provider;
+  final AsyncValue<List<AppSubTodoItem>> subTodos;
+  final ValueNotifier<int?> currentFocusIndex;
+  final AppItem parent;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Row(
+      children: [
+        AppTextButton.medium(
+          onPressed: () async {
+            // Todoを一番下に追加する
+            await ref
+                .read(provider.notifier)
+                .addWithIndex(subTodos.valueOrNull?.length ?? 0);
+            currentFocusIndex.value = subTodos.valueOrNull?.length ?? 0;
+          },
+          text: const Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.add),
+              SizedBox(width: 4),
+              Text('Add sub todo'),
+            ],
+          ),
+        ),
+        const SizedBox(width: 8),
+        AppTextButton.medium(
+          onPressed: () async {
+            final parent = ref.watch(selectedThreadProvider) as AppTodoItem;
+            final provider =
+                generativeSubTodoProvider(parentTodoTitle: parent.title);
+            ref.read(provider.notifier).generateSubTodo();
+          },
+          text: const Text('Generate with AI'),
+        ),
+      ],
+    );
+  }
+}
+
+class _SubTodoList extends HookConsumerWidget {
+  const _SubTodoList({
+    required this.provider,
+    required this.currentFocusIndex,
+  });
+
+  final SubTodosProvider provider;
+  final ValueNotifier<int?> currentFocusIndex;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final parent = ref.watch(selectedThreadProvider)!;
+    final provider = subTodosProvider(parent.id);
+    final subTodos = ref.watch(provider);
+    return subTodos.when(
+      data: (todos) {
+        return ReorderableListView.builder(
+          buildDefaultDragHandles: false,
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: todos.length,
+          onReorder: (oldIndex, newIndex) {
+            // NOTE: なぜか上から下に移動するときはnewIndexが1つずれるので
+            // その分を補正する
+            if (oldIndex < newIndex) {
+              newIndex -= 1;
+            }
+            ref.read(provider.notifier).reorder(oldIndex, newIndex);
+          },
+          itemBuilder: (context, index) {
+            final key = ValueKey(todos[index].id);
+            final todo = todos[index];
+            return HookBuilder(
+              key: key,
+              builder: (context) {
+                final focusNode = useFocusNode();
+                if (currentFocusIndex.value == index) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    focusNode.requestFocus();
+                    currentFocusIndex.value = null;
+                  });
+                }
+                final textEditingController = useTextEditingController(
+                  text: todo.title,
+                );
+                return TodoListItem(
+                  isDone: todo.isDone,
+                  index: index,
+                  textEditingController: textEditingController,
+                  focusNode: focusNode,
+                  onDeleted: () async {
+                    ref.read(provider.notifier).delete(todoId: todo.id);
+                  },
+                  onUpdatedTitle: (value) {
+                    ref
+                        .read(provider.notifier)
+                        .updateTitle(todoId: todo.id, title: value);
+                  },
+                  onToggleDone: (value) {
+                    ref.read(provider.notifier).toggleDone(todoId: todo.id);
+                  },
+                  focusDown: () {
+                    FocusScope.of(context).nextFocus();
+                  },
+                  focusUp: () {
+                    FocusScope.of(context).previousFocus();
+                  },
+                  onNewTodoBelow: () async {
+                    await ref.read(provider.notifier).addWithIndex(index + 1);
+                    currentFocusIndex.value = index + 1;
+                  },
+                  // 一番上のTodoは上に移動できない
+                  onSortUp: index != 0
+                      ? () {
+                          ref.read(provider.notifier).reorder(index, index - 1);
+                        }
+                      : null,
+                  // 一番下のTodoは下に移動できない
+                  onSortDown: index != todos.length - 1
+                      ? () {
+                          ref.read(provider.notifier).reorder(index, index + 1);
+                        }
+                      : null,
+                );
+              },
+            );
+          },
+        );
+      },
+      loading: () {
+        return const SizedBox();
+      },
+      error: (error, _) {
+        return const SizedBox();
+      },
+    );
+  }
+}
+
+/// 生成されたサブタスクを表示するWidget。
+class _GeneratedSubTodo extends HookConsumerWidget {
+  const _GeneratedSubTodo();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final parent = ref.watch(selectedThreadProvider) as AppTodoItem;
+    final provider = generativeSubTodoProvider(parentTodoTitle: parent.title);
+    return ref.watch(provider).when(
+      data: (todos) {
+        if (todos.isEmpty) {
+          return const SizedBox();
+        }
+
+        return ListView.builder(
+          shrinkWrap: true,
+          itemCount: todos.length,
+          physics: const NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index) {
+            return TodoListItem(
+              isDone: false,
+              textEditingController: TextEditingController(text: todos[index]),
+            );
+          },
+        );
+      },
+      loading: () {
+        return const SizedBox();
+      },
+      error: (error, _) {
+        return const SizedBox();
+      },
     );
   }
 }
