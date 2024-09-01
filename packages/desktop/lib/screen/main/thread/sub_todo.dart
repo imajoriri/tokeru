@@ -18,12 +18,10 @@ class _SubTodoView extends HookConsumerWidget {
       );
     }
 
-    final provider = subTodosProvider(parent.id);
-    final subTodos = ref.watch(provider);
-
     // Todoを一番下や、Enterで1つ下に追加した時にフォーカスを当てるために使用する。
     // フォーカス後、リビルドごとにフォーカスが当たらないようにするために、nullにする。
     final currentFocusIndex = useState<int?>(null);
+
     return Container(
       padding: EdgeInsets.only(
         left: context.appSpacing.small,
@@ -40,16 +38,18 @@ class _SubTodoView extends HookConsumerWidget {
             child: CustomScrollView(
               shrinkWrap: true,
               slivers: [
+                // サブタスクのリスト
                 SliverList(
                   delegate: SliverChildListDelegate(
                     [
                       _SubTodoList(
-                        provider: provider,
                         currentFocusIndex: currentFocusIndex,
                       ),
                     ],
                   ),
                 ),
+
+                // 生成されたサブタスクのリスト
                 SliverList(
                   delegate: SliverChildListDelegate(
                     [
@@ -60,12 +60,7 @@ class _SubTodoView extends HookConsumerWidget {
               ],
             ),
           ),
-          _Buttons(
-            provider: provider,
-            subTodos: subTodos,
-            currentFocusIndex: currentFocusIndex,
-            parent: parent,
-          ),
+          _Buttons(currentFocusIndex: currentFocusIndex),
         ],
       ),
     );
@@ -74,19 +69,16 @@ class _SubTodoView extends HookConsumerWidget {
 
 class _Buttons extends ConsumerWidget {
   const _Buttons({
-    required this.provider,
-    required this.subTodos,
     required this.currentFocusIndex,
-    required this.parent,
   });
 
-  final SubTodosProvider provider;
-  final AsyncValue<List<AppSubTodoItem>> subTodos;
   final ValueNotifier<int?> currentFocusIndex;
-  final AppItem parent;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final parent = ref.watch(selectedThreadProvider);
+    final provider = subTodosProvider(parent!.id);
+    final subTodos = ref.watch(provider);
     return Row(
       children: [
         AppTextButton.medium(
@@ -123,11 +115,9 @@ class _Buttons extends ConsumerWidget {
 
 class _SubTodoList extends HookConsumerWidget {
   const _SubTodoList({
-    required this.provider,
     required this.currentFocusIndex,
   });
 
-  final SubTodosProvider provider;
   final ValueNotifier<int?> currentFocusIndex;
 
   @override
