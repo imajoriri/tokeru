@@ -17,12 +17,15 @@ class _GeneratedSubTodo extends HookConsumerWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ListView.builder(
+            ListView.separated(
               shrinkWrap: true,
               itemCount: todos.length,
               physics: const NeverScrollableScrollPhysics(),
               padding:
                   EdgeInsets.symmetric(horizontal: context.appSpacing.small),
+              separatorBuilder: (context, index) {
+                return SizedBox(height: context.appSpacing.smallX);
+              },
               itemBuilder: (context, index) {
                 return TodoListItem.generatedAi(
                   textEditingController:
