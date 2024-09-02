@@ -1,13 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_vertexai/firebase_vertexai.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:tokeru_model/controller/user/user_controller.dart';
+import 'package:tokeru_model/model/app_item/app_item.dart';
+import 'package:tokeru_model/repository/app_item/app_item_repository.dart';
+import 'package:uuid/uuid.dart';
 
 part 'generative_sub_todo.g.dart';
 
 @riverpod
 class GenerativeSubTodo extends _$GenerativeSubTodo {
-  final exchangeRateTool = FunctionDeclaration(
+  final generateSubTodoFunction = FunctionDeclaration(
     'generateSubTodo',
     'Returns sub tasks for the parent task.',
     Schema(
@@ -41,16 +46,23 @@ class GenerativeSubTodo extends _$GenerativeSubTodo {
     ).generativeModel(
       model: 'gemini-1.5-flash',
       tools: [
-        Tool(functionDeclarations: [exchangeRateTool]),
+        Tool(functionDeclarations: [generateSubTodoFunction]),
       ],
+      systemInstruction: Content.text(
+        '''
+あなたは特定のタスクを実行しやすくするためにサブタスクを生成するアシスタントです。
+Flutterエンジニアのサブタスクを想定して生成してください。
+なるべく具体的なサブタスクを生成してください。
+サブタスクは全て「〜〜する」のような動詞で生成してください。
+        ''',
+      ),
     );
     chat = model.startChat();
     return [];
   }
 
   Future<void> generateSubTodo() async {
-    final message =
-        '$parentTodoTitleを完了するための具体的なサブタスクを作成してください。サブタスクはより具体的なタスクで、動詞でお願いします。';
+    final message = parentTodoTitle;
     final prompt = Content.text(message);
     var response = await chat.sendMessage(prompt);
 
@@ -71,6 +83,33 @@ class GenerativeSubTodo extends _$GenerativeSubTodo {
 
   void clear() {
     state = const AsyncValue.data([]);
+  }
+
+  /// 生成されたサブタスクを保存する。
+  Future<void> accept({
+    required String parentId,
+  }) async {
+    final subTodos = state.requireValue
+        .map(
+          (e) => AppSubTodoItem(
+            id: const Uuid().v4(),
+            createdAt: DateTime.now(),
+            title: e,
+            isDone: false,
+            index: 0,
+            parentId: parentId,
+          ),
+        )
+        .toList();
+    final user = ref.watch(userControllerProvider).requireValue;
+    final repository = ref.read(appItemRepositoryProvider(user.id));
+
+    try {
+      await repository.addAll(subTodos);
+      state = const AsyncValue.data([]);
+    } catch (e, s) {
+      await FirebaseCrashlytics.instance.recordError(e, s);
+    }
   }
 }
 

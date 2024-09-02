@@ -14,17 +14,30 @@ class _GeneratedSubTodo extends HookConsumerWidget {
           return const SizedBox();
         }
 
-        return ListView.builder(
-          shrinkWrap: true,
-          itemCount: todos.length,
-          physics: const NeverScrollableScrollPhysics(),
-          padding: EdgeInsets.symmetric(horizontal: context.appSpacing.small),
-          itemBuilder: (context, index) {
-            return TodoListItem.generatedAi(
-              textEditingController: TextEditingController(text: todos[index]),
-              context: context,
-            );
-          },
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: todos.length,
+              physics: const NeverScrollableScrollPhysics(),
+              padding:
+                  EdgeInsets.symmetric(horizontal: context.appSpacing.small),
+              itemBuilder: (context, index) {
+                return TodoListItem.generatedAi(
+                  textEditingController:
+                      TextEditingController(text: todos[index]),
+                  context: context,
+                );
+              },
+            ),
+            FilledButton(
+              onPressed: () {
+                ref.read(provider.notifier).accept(parentId: parent.id);
+              },
+              child: const Text('Accept'),
+            ),
+          ],
         );
       },
       loading: () {
