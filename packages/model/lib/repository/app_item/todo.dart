@@ -58,13 +58,16 @@ extension AppTodoItemRepository on AppItemRepository {
   }
 
   /// サブTodoの件数を+1する。
-  Future<void> incrementSubTodoCount({required String id}) async {
+  Future<void> incrementSubTodoCount({
+    required String id,
+    int count = 1,
+  }) async {
     await ref
         .read(userDocumentProvider(userId))
         .collection(_collectionName)
         .doc(id)
         .update({
-      'subTodoCount': FieldValue.increment(1),
+      'subTodoCount': FieldValue.increment(count),
     });
   }
 

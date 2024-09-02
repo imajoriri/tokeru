@@ -106,6 +106,10 @@ Flutterエンジニアのサブタスクを想定して生成してください�
 
     try {
       await repository.addAll(subTodos);
+      await repository.incrementSubTodoCount(
+        id: parentId,
+        count: subTodos.length,
+      );
       state = const AsyncValue.data([]);
     } catch (e, s) {
       await FirebaseCrashlytics.instance.recordError(e, s);
