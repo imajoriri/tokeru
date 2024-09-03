@@ -11,9 +11,9 @@ class _GeneratedSubTodo extends HookConsumerWidget {
 
     return ref.watch(provider).when(
       data: (todos) {
-        if (todos.isEmpty) {
-          return const SizedBox();
-        }
+        // if (todos.isEmpty) {
+        //   return const SizedBox();
+        // }
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,26 +43,17 @@ class _GeneratedSubTodo extends HookConsumerWidget {
               child: Row(
                 children: [
                   AppTextButton.small(
-                    text: const Row(
-                      children: [
-                        Icon(CupertinoIcons.check_mark),
-                        SizedBox(width: 4),
-                        Text('Accept'),
-                      ],
-                    ),
+                    icon: const Icon(CupertinoIcons.check_mark),
+                    text: const Text('Accept'),
                     onPressed: () {
                       ref.read(provider.notifier).accept(parentId: parent.id);
                     },
+                    buttonType: AppTextButtonType.filled,
                   ),
                   const SizedBox(width: 8),
                   AppTextButton.small(
-                    text: const Row(
-                      children: [
-                        Icon(CupertinoIcons.xmark),
-                        SizedBox(width: 4),
-                        Text('Reject'),
-                      ],
-                    ),
+                    icon: const Icon(CupertinoIcons.xmark),
+                    text: const Text('Reject'),
                     onPressed: () {
                       ref.read(provider.notifier).reject();
                     },

@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:tokeru_widgets/widgets.dart';
 
-enum _AppTextButtonType {
+enum AppTextButtonSize {
   small,
   medium,
+}
+
+enum AppTextButtonType {
+  text,
+  filled,
 }
 
 /// テキストボタン。
@@ -14,16 +19,20 @@ class AppTextButton extends HookWidget {
     required this.onPressed,
     required this.text,
     this.skipTraversal = false,
-  })  : iconSize = 14,
-        type = _AppTextButtonType.medium;
+    this.buttonType = AppTextButtonType.text,
+    this.icon,
+  })  : iconSize = 16,
+        type = AppTextButtonSize.medium;
 
   const AppTextButton.small({
     super.key,
     required this.onPressed,
     required this.text,
     this.skipTraversal = false,
-  })  : iconSize = 12,
-        type = _AppTextButtonType.small;
+    this.buttonType = AppTextButtonType.text,
+    this.icon,
+  })  : iconSize = 16,
+        type = AppTextButtonSize.small;
 
   final void Function()? onPressed;
 
@@ -33,18 +42,28 @@ class AppTextButton extends HookWidget {
 
   final double iconSize;
 
-  // ignore: library_private_types_in_public_api
-  final _AppTextButtonType type;
+  final Widget? icon;
+
+  final AppTextButtonType buttonType;
+
+  final AppTextButtonSize type;
 
   @override
   Widget build(BuildContext context) {
     final textStyle = switch (type) {
-      _AppTextButtonType.small => context.appTextTheme.labelSmall,
-      _AppTextButtonType.medium => context.appTextTheme.labelMidium,
+      AppTextButtonSize.small => context.appTextTheme.labelSmall,
+      AppTextButtonSize.medium => context.appTextTheme.labelMidium,
+    };
+    final containerColor = switch (buttonType) {
+      AppTextButtonType.text => context.appColors.onSurface,
+      AppTextButtonType.filled => context.appColors.onPrimary,
     };
     final style = AppButtonStyle(
-      contentColor: context.appColors.onSurface,
-      backgroundColor: context.appColors.surface,
+      contentColor: containerColor,
+      backgroundColor: switch (buttonType) {
+        AppTextButtonType.text => context.appColors.surface,
+        AppTextButtonType.filled => context.appColors.primary,
+      },
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
@@ -55,19 +74,26 @@ class AppTextButton extends HookWidget {
       style: style,
       child: Padding(
         padding: switch (type) {
-          _AppTextButtonType.small => EdgeInsets.symmetric(
+          AppTextButtonSize.small => EdgeInsets.symmetric(
               vertical: context.appSpacing.smallX,
               horizontal: context.appSpacing.small,
             ),
-          _AppTextButtonType.medium => EdgeInsets.all(context.appSpacing.small),
+          AppTextButtonSize.medium => EdgeInsets.all(context.appSpacing.small),
         },
         child: DefaultTextStyle.merge(
           style: textStyle,
           child: IconTheme.merge(
-            child: text,
             data: IconThemeData(
               size: iconSize,
-              color: context.appColors.onSurface,
+            ),
+            child: Row(
+              children: [
+                if (icon != null) ...[
+                  icon!,
+                  SizedBox(width: context.appSpacing.smallX),
+                ],
+                text,
+              ],
             ),
           ),
         ),
