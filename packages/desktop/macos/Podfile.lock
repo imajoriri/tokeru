@@ -1161,7 +1161,7 @@ PODS:
   - BoringSSL-GRPC/Implementation (0.0.36):
     - BoringSSL-GRPC/Interface (= 0.0.36)
   - BoringSSL-GRPC/Interface (0.0.36)
-  - cloud_firestore (5.2.1):
+  - cloud_firestore (5.3.0):
     - Firebase/CoreOnly (~> 11.0.0)
     - Firebase/Firestore (~> 11.0.0)
     - firebase_core
@@ -1185,7 +1185,7 @@ PODS:
   - Firebase/Firestore (11.0.0):
     - Firebase/CoreOnly
     - FirebaseFirestore (~> 11.0.0)
-  - firebase_analytics (11.2.1):
+  - firebase_analytics (11.3.0):
     - Firebase/Analytics (= 11.0.0)
     - firebase_core
     - FlutterMacOS
@@ -1194,7 +1194,7 @@ PODS:
     - Firebase/CoreOnly (~> 11.0.0)
     - firebase_core
     - FlutterMacOS
-  - firebase_auth (5.1.4):
+  - firebase_auth (5.2.0):
     - Firebase/Auth (~> 11.0.0)
     - Firebase/CoreOnly (~> 11.0.0)
     - firebase_core
@@ -1202,7 +1202,7 @@ PODS:
   - firebase_core (3.4.0):
     - Firebase/CoreOnly (~> 11.0.0)
     - FlutterMacOS
-  - firebase_crashlytics (4.0.4):
+  - firebase_crashlytics (4.1.0):
     - Firebase/CoreOnly (~> 11.0.0)
     - Firebase/Crashlytics (~> 11.0.0)
     - firebase_core
@@ -1568,13 +1568,13 @@ SPEC CHECKSUMS:
   AppAuth: 501c04eda8a8d11f179dbe8637b7a91bb7e5d2fa
   AppCheckCore: e25aaaac234b333320b0bebb8fc21ed3576819ba
   BoringSSL-GRPC: ca6a8e5d04812fce8ffd6437810c2d46f925eaeb
-  cloud_firestore: 42b095591d08b54fed1b5b7c9949d1fec78c5072
+  cloud_firestore: bc68350c32732fd722e7da1aeacefdbb9f0f30da
   Firebase: 9f574c08c2396885b5e7e100ed4293d956218af9
-  firebase_analytics: a9784b200d1a7aa28bdabc6e31275d219b2fc517
+  firebase_analytics: e9ae2af44afdaecf076797dcf9f3cd9c71ad8ac6
   firebase_app_check: f81ae587c6cce436663aa19c29dafe23445106fe
-  firebase_auth: 08c111fe0bf76dbb63e2764230ae17dc324a94a0
+  firebase_auth: 1fecddb4d192c26ed714b29e3906891cd3c2683b
   firebase_core: ca9bcfb9835e1bcd5ff205e24a541f6bc04e7a35
-  firebase_crashlytics: 8113bc6355a9c5aa0f18b2c5148e7f40a22f8fc6
+  firebase_crashlytics: 87ec8afd46aeceddb565f7469df437c83fb0e01f
   FirebaseAnalytics: 27eb78b97880ea4a004839b9bac0b58880f5a92a
   FirebaseAppCheck: 7cc2fe7e72d8205320734be2a98e20e24770bfd4
   FirebaseAppCheckInterop: e59b52f2c0e188e6ba77b9e3f6acead2117f2abf

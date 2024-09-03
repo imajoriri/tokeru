@@ -40,12 +40,12 @@ dependencies:
   crypto: ^3.0.3
 
   # firebase & google
-  firebase_core: ^3.3.0
-  firebase_auth: ^5.1.4
-  firebase_crashlytics: ^4.0.4
-  cloud_firestore: ^5.2.1
-  firebase_analytics: ^11.2.1
-  firebase_vertexai: ^0.2.2+4
+  firebase_core: ^3.4.0
+  firebase_auth: ^5.2.0
+  firebase_crashlytics: ^4.1.0
+  cloud_firestore: ^5.3.0
+  firebase_analytics: ^11.3.0
+  firebase_vertexai: ^0.2.3
   google_sign_in: ^6.2.1
   firebase_app_check: ^0.3.0+5
 
