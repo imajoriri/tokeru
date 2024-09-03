@@ -81,7 +81,7 @@ Flutterエンジニアのサブタスクを想定して生成してください�
 
   Future<void> regenerate() async {}
 
-  void clear() {
+  void reject() {
     state = const AsyncValue.data([]);
   }
 

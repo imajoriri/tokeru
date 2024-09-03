@@ -58,7 +58,7 @@ class AppTextButton extends HookWidget {
             ),
           _AppTextButtonType.medium => EdgeInsets.all(context.appSpacing.small),
         },
-        child: DefaultTextStyle(
+        child: DefaultTextStyle.merge(
           style: textStyle,
           child: IconTheme.merge(
             child: text,

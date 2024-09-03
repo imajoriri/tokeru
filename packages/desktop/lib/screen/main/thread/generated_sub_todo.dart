@@ -8,11 +8,12 @@ class _GeneratedSubTodo extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final parent = ref.watch(selectedThreadProvider) as AppTodoItem;
     final provider = generativeSubTodoProvider(parentTodoTitle: parent.title);
+
     return ref.watch(provider).when(
       data: (todos) {
-        if (todos.isEmpty) {
-          return const SizedBox();
-        }
+        // if (todos.isEmpty) {
+        //   return const SizedBox();
+        // }
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,11 +35,40 @@ class _GeneratedSubTodo extends HookConsumerWidget {
                 );
               },
             ),
-            FilledButton(
-              onPressed: () {
-                ref.read(provider.notifier).accept(parentId: parent.id);
-              },
-              child: const Text('Accept'),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: context.appSpacing.small,
+                vertical: context.appSpacing.smallX,
+              ),
+              child: Row(
+                children: [
+                  AppTextButton.small(
+                    text: const Row(
+                      children: [
+                        Icon(CupertinoIcons.check_mark),
+                        SizedBox(width: 4),
+                        Text('Accept'),
+                      ],
+                    ),
+                    onPressed: () {
+                      ref.read(provider.notifier).reject();
+                    },
+                  ),
+                  const SizedBox(width: 8),
+                  AppTextButton.small(
+                    text: const Row(
+                      children: [
+                        Icon(CupertinoIcons.xmark),
+                        SizedBox(width: 4),
+                        Text('Reject'),
+                      ],
+                    ),
+                    onPressed: () {
+                      ref.read(provider.notifier).reject();
+                    },
+                  ),
+                ],
+              ),
             ),
           ],
         );
