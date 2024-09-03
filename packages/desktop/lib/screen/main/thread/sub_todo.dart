@@ -91,7 +91,9 @@ class _SubTodoView extends HookConsumerWidget {
                                     },
                                     onUpdatedTitle: (value) {
                                       ref.read(provider.notifier).updateTitle(
-                                          todoId: todo.id, title: value);
+                                            todoId: todo.id,
+                                            title: value,
+                                          );
                                     },
                                     onToggleDone: (value) {
                                       ref
