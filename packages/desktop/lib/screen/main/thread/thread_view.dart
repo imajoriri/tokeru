@@ -42,6 +42,9 @@ class ThreadView extends HookConsumerWidget {
             maxHeight: MediaQuery.of(context).size.height * 0.5,
           ),
           decoration: BoxDecoration(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(10),
+            ),
             color: context.appColors.surface,
             boxShadow: [
               BoxShadow(
