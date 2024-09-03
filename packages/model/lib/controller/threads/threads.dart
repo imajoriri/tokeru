@@ -52,7 +52,7 @@ class Threads extends _$Threads {
   }
 
   void _setChatSession(String parentId, List<AppAiCommentItem> histories) {
-    final system = '''
+    const system = '''
 あなたはユーザーのタスクのサポートをするために、ユーザーの発散した内容を整理し、タスクのサポートをすることができます。
 今回のタスクは`title`です。
     ''';
