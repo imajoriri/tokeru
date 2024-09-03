@@ -54,13 +54,15 @@ class AppIconButton extends HookWidget {
     return Tooltip(
       message: tooltip,
       child: AppButton(
-        bounce: bounce,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(radius)),
+        style: AppButtonStyle(
+          contentColor: context.appColors.onSurface,
+          backgroundColor: context.appColors.surface,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(radius)),
+          ),
         ),
+        bounce: bounce,
         onPressed: onPressed,
-        contentColor: context.appColors.onSurface,
-        backgroundColor: context.appColors.surface,
         child: Container(
           padding: padding,
           decoration: showBorder

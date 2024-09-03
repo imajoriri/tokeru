@@ -265,19 +265,21 @@ class _ThreadButton extends StatelessWidget {
         : context.appColors.surface;
     return SelectionContainer.disabled(
       child: AppButton(
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(8)),
+        style: AppButtonStyle(
+          contentColor: context.appColors.link,
+          backgroundColor: backgroundColor,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+          ),
+          backgroundColorAnimated: false,
+          // ホバー時などのカラーは、チャットのホバーとかぶってしまうので、
+          // 意図的に指定している。
+          hoveredColor: context.appColors.surface,
+          focusedColor: context.appColors.surface,
+          pressedColor: context.appColors.surface,
         ),
         onPressed: onThread,
-        contentColor: context.appColors.link,
-        backgroundColor: backgroundColor,
         bounce: false,
-        backgroundColorAnimated: false,
-        // ホバー時などのカラーは、チャットのホバーとかぶってしまうので、
-        // 意図的に指定している。
-        hoveredColor: context.appColors.surface,
-        focusedColor: context.appColors.surface,
-        pressedColor: context.appColors.surface,
         child: Container(
           padding: EdgeInsets.all(context.appSpacing.smallX),
           width: double.infinity,

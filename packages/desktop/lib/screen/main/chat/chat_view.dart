@@ -78,10 +78,12 @@ class _ReadButton extends ConsumerWidget {
             onPressed: () => ref
                 .read(readControllerProvider.notifier)
                 .markAsRead(DateTime.now()),
-            contentColor: context.appColors.onPrimary,
-            backgroundColor: context.appColors.primary,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
+            style: AppButtonStyle(
+              contentColor: context.appColors.onPrimary,
+              backgroundColor: context.appColors.primary,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+              ),
             ),
             child: const Padding(
               padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),

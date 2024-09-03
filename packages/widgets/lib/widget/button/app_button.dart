@@ -2,31 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:tokeru_widgets/widget/color/status_color.dart';
 
-/// ボタンとしての基本的な機能を持つWidget
-///
-/// - Hovered, Focused, Pressedの状態に応じて、カラーを変更する。
-/// - Pressed状態の時にbounceする。([bounce]がtrueの時)
-class AppButton extends HookWidget {
-  const AppButton({
-    super.key,
-    required this.child,
-    required this.contentColor,
-    required this.backgroundColor,
-    required this.shape,
-    this.onPressed,
-    this.bounce = true,
-    // カラー周りの設定。
-    this.hoveredColor,
-    this.focusedColor,
-    this.pressedColor,
-    this.disabledColor,
-    this.stateColorAnimated = true,
-    this.backgroundColorAnimated = true,
-    this.skipTraversal = false,
-  });
-
-  final Widget child;
-
+class AppButtonStyle {
   /// ボタンのコンテンツ(中身)のカラー。
   ///
   /// [IconTheme]、[DefaultTextStyle]を使用してコンテンツのカラーとして使用される。
@@ -62,11 +38,44 @@ class AppButton extends HookWidget {
   /// ボタンの背景色のカラーが変更時にアニメーションするかどうか。
   final bool backgroundColorAnimated;
 
-  /// ボタンが押された時のコールバック。
-  final void Function()? onPressed;
-
   /// ボタンの形状。
   final ShapeBorder shape;
+
+  const AppButtonStyle({
+    required this.contentColor,
+    required this.backgroundColor,
+    this.hoveredColor,
+    this.focusedColor,
+    this.pressedColor,
+    this.disabledColor,
+    this.stateColorAnimated = true,
+    this.backgroundColorAnimated = true,
+    this.shape = const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(8)),
+    ),
+  });
+}
+
+/// ボタンとしての基本的な機能を持つWidget
+///
+/// - Hovered, Focused, Pressedの状態に応じて、カラーを変更する。
+/// - Pressed状態の時にbounceする。([bounce]がtrueの時)
+class AppButton extends HookWidget {
+  const AppButton({
+    super.key,
+    required this.style,
+    required this.child,
+    this.onPressed,
+    this.bounce = true,
+    this.skipTraversal = false,
+  });
+
+  final AppButtonStyle style;
+
+  final Widget child;
+
+  /// ボタンが押された時のコールバック。
+  final void Function()? onPressed;
 
   /// Pressed状態の時にbounceするかどうか。
   final bool bounce;
@@ -83,24 +92,24 @@ class AppButton extends HookWidget {
 
     late final Color overlayColor;
     if (!enabled) {
-      overlayColor = disabledColor ?? contentColor.disabled;
+      overlayColor = style.disabledColor ?? style.contentColor.disabled;
     } else if (pressed.value) {
-      overlayColor = pressedColor ?? contentColor.pressed;
+      overlayColor = style.pressedColor ?? style.contentColor.pressed;
     } else if (hover.value) {
-      overlayColor = hoveredColor ?? contentColor.hovered;
+      overlayColor = style.hoveredColor ?? style.contentColor.hovered;
     } else if (focus.value) {
-      overlayColor = focusedColor ?? contentColor.focused;
+      overlayColor = style.focusedColor ?? style.contentColor.focused;
     } else {
-      overlayColor = backgroundColor.withOpacity(0);
+      overlayColor = style.backgroundColor.withOpacity(0);
     }
 
     // ボタンの背景色のアニメーション時間。
     final backgroundColorDuration =
-        Duration(milliseconds: backgroundColorAnimated ? 150 : 0);
+        Duration(milliseconds: style.backgroundColorAnimated ? 150 : 0);
 
     // ボタンのステートによるカラー変更のアニメーション時間。
     final stateColorduration =
-        Duration(milliseconds: stateColorAnimated ? 150 : 0);
+        Duration(milliseconds: style.stateColorAnimated ? 150 : 0);
 
     // ボタンのbounceアニメーション時間。
     const bounceDuration = Duration(milliseconds: 200);
@@ -153,8 +162,8 @@ class AppButton extends HookWidget {
                   child: AnimatedContainer(
                     duration: backgroundColorDuration,
                     decoration: ShapeDecoration(
-                      color: backgroundColor,
-                      shape: shape,
+                      color: style.backgroundColor,
+                      shape: style.shape,
                     ),
                   ),
                 ),
@@ -169,7 +178,7 @@ class AppButton extends HookWidget {
                     duration: stateColorduration,
                     decoration: ShapeDecoration(
                       color: overlayColor,
-                      shape: shape,
+                      shape: style.shape,
                     ),
                   ),
                 ),
@@ -177,13 +186,13 @@ class AppButton extends HookWidget {
                 // Content layer
                 IconTheme.merge(
                   data: IconThemeData(
-                    color: contentColor,
+                    color: style.contentColor,
                   ),
                   child: DefaultTextStyle.merge(
-                    child: child,
                     style: TextStyle(
-                      color: contentColor,
+                      color: style.contentColor,
                     ),
+                    child: child,
                   ),
                 ),
               ],

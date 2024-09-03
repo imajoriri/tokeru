@@ -42,14 +42,17 @@ class AppTextButton extends HookWidget {
       _AppTextButtonType.small => context.appTextTheme.labelSmall,
       _AppTextButtonType.medium => context.appTextTheme.labelMidium,
     };
-    return AppButton(
-      onPressed: onPressed,
-      skipTraversal: skipTraversal,
+    final style = AppButtonStyle(
       contentColor: context.appColors.onSurface,
       backgroundColor: context.appColors.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
+    );
+    return AppButton(
+      onPressed: onPressed,
+      skipTraversal: skipTraversal,
+      style: style,
       child: Padding(
         padding: switch (type) {
           _AppTextButtonType.small => EdgeInsets.symmetric(
