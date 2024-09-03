@@ -31,9 +31,6 @@ dependencies:
   riverpod: ^3.0.0-dev.3
   riverpod_annotation: ^3.0.0-dev.3
   riverpod_generator: ^3.0.0-dev.11
-  # riverpod: ^2.5.1
-  # riverpod_annotation: ^2.2.1
-  # riverpod_generator: ^2.3.11
 
   # freezed
   freezed_annotation: ^2.4.1
@@ -50,6 +47,7 @@ dependencies:
   firebase_analytics: ^11.2.1
   firebase_vertexai: ^0.2.2+4
   google_sign_in: ^6.2.1
+  firebase_app_check: ^0.3.0+5
 
 dev_dependencies:
   flutter_test:
