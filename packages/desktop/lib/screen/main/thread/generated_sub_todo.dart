@@ -51,7 +51,7 @@ class _GeneratedSubTodo extends HookConsumerWidget {
                       ],
                     ),
                     onPressed: () {
-                      ref.read(provider.notifier).reject();
+                      ref.read(provider.notifier).accept(parentId: parent.id);
                     },
                   ),
                   const SizedBox(width: 8),
