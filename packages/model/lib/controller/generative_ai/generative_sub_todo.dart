@@ -40,6 +40,14 @@ class GenerativeSubTodo extends _$GenerativeSubTodo {
   FutureOr<List<String>> build({
     required String parentTodoTitle,
   }) async {
+    const systemPrompt = '''
+与えられたタスクを実行しやすくするためにサブタスクとして分解してください。
+
+また、以下の条件でサブタスクを生成してください。
+- 必ず5つ以上のサブタスクを生成してください。
+- サブタスクは全て「〜〜する」のような動詞で生成してください。
+- 水平思考で考えてください。
+    ''';
     final model = FirebaseVertexAI.instanceFor(
       auth: FirebaseAuth.instance,
       app: Firebase.app(),
@@ -48,14 +56,10 @@ class GenerativeSubTodo extends _$GenerativeSubTodo {
       tools: [
         Tool(functionDeclarations: [generateSubTodoFunction]),
       ],
-      systemInstruction: Content.text(
-        '''
-あなたは特定のタスクを実行しやすくするためにサブタスクを生成するアシスタントです。
-Flutterエンジニアのサブタスクを想定して生成してください。
-なるべく具体的なサブタスクを生成してください。
-サブタスクは全て「〜〜する」のような動詞で生成してください。
-        ''',
+      generationConfig: GenerationConfig(
+        temperature: 0.5,
       ),
+      systemInstruction: Content.text(systemPrompt),
     );
     chat = model.startChat();
     return [];
@@ -63,7 +67,10 @@ Flutterエンジニアのサブタスクを想定して生成してください�
 
   Future<void> generateSubTodo() async {
     state = const AsyncValue.loading();
-    final message = parentTodoTitle;
+    final message = '''
+タスク: $parentTodoTitle
+''';
+
     final prompt = Content.text(message);
 
     try {
@@ -111,12 +118,12 @@ Flutterエンジニアのサブタスクを想定して生成してください�
     final repository = ref.read(appItemRepositoryProvider(user.id));
 
     try {
+      state = const AsyncValue.data([]);
       await repository.addAll(subTodos);
       await repository.incrementSubTodoCount(
         id: parentId,
         count: subTodos.length,
       );
-      state = const AsyncValue.data([]);
     } catch (e, s) {
       await FirebaseCrashlytics.instance.recordError(e, s);
     }
