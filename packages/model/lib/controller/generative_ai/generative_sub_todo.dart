@@ -128,6 +128,15 @@ class GenerativeSubTodo extends _$GenerativeSubTodo {
       await FirebaseCrashlytics.instance.recordError(e, s);
     }
   }
+
+  /// [index]のサブタスクを削除する。
+  void delete({
+    required int index,
+  }) async {
+    final list = [...state.requireValue];
+    list.removeAt(index);
+    state = AsyncValue.data(list);
+  }
 }
 
 Future<Map<String, Object?>> _generateSubTodo(

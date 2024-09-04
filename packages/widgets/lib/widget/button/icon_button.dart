@@ -8,7 +8,7 @@ class AppIconButton extends HookWidget {
   final Widget icon;
 
   /// クリック時の処理。
-  final void Function() onPressed;
+  final void Function()? onPressed;
 
   /// ツールチップ。
   final String? tooltip;
@@ -52,7 +52,7 @@ class AppIconButton extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return Tooltip(
-      message: tooltip,
+      message: tooltip ?? '',
       child: AppButton(
         style: AppButtonStyle(
           contentColor: context.appColors.onSurface,

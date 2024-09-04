@@ -32,6 +32,9 @@ class _GeneratedSubTodo extends HookConsumerWidget {
                   textEditingController:
                       TextEditingController(text: todos[index]),
                   context: context,
+                  onDeleted: () {
+                    ref.read(provider.notifier).delete(index: index);
+                  },
                 );
               },
             ),

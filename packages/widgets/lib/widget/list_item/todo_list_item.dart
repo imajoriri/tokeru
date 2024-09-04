@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -25,18 +26,20 @@ class TodoListItem extends HookWidget {
     this.onSortUp,
     this.onSortDown,
   })  : backgroundColor = null,
-        textColor = null;
+        textColor = null,
+        isShowDeleteButtonOnHover = false;
 
   TodoListItem.generatedAi({
     super.key,
     required this.textEditingController,
     required BuildContext context,
-  })  : isDone = false,
+    required this.onDeleted,
+  })  : isShowDeleteButtonOnHover = true,
+        isDone = false,
         backgroundColor = context.appColors.primary.withOpacity(0.08),
         textColor = null,
         autofocus = false,
         isSelected = false,
-        onDeleted = null,
         onUpdatedTitle = null,
         onToggleDone = null,
         focusDown = null,
@@ -121,6 +124,9 @@ class TodoListItem extends HookWidget {
 
   /// debouce用のDuration
   static const _debounceDuration = Duration(milliseconds: 400);
+
+  /// hover時にチェックボタンが削除ボタンに変わるかどうか
+  final bool isShowDeleteButtonOnHover;
 
   bool get readOnly => onUpdatedTitle == null;
 
@@ -256,14 +262,13 @@ class TodoListItem extends HookWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8, top: 8, left: 8),
-                  child: CheckButton(
-                    onPressed: onToggleDone,
-                    checked: isDone,
-                  ),
+                _CheckButton(
+                  onToggleDone: onToggleDone,
+                  onDeleted: onDeleted,
+                  isDone: isDone,
+                  isShowDeleteButtonOnHover: isShowDeleteButtonOnHover,
+                  isHover: onHover.value,
                 ),
-                const SizedBox(width: 8),
                 Expanded(
                   child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
@@ -332,6 +337,44 @@ class TodoListItem extends HookWidget {
               ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _CheckButton extends StatelessWidget {
+  const _CheckButton({
+    required this.onToggleDone,
+    required this.onDeleted,
+    required this.isDone,
+    required this.isShowDeleteButtonOnHover,
+    required this.isHover,
+  });
+
+  final void Function(bool? p1)? onToggleDone;
+  final void Function()? onDeleted;
+  final bool isDone;
+  final bool isShowDeleteButtonOnHover;
+  final bool isHover;
+
+  @override
+  Widget build(BuildContext context) {
+    if (isShowDeleteButtonOnHover && isHover) {
+      return Padding(
+        // CheckButtonと削除ボタンが入れ替わった時にレアウトシフトが起こらないように調整したPadding
+        padding: const EdgeInsets.all(4),
+        child: AppIconButton.small(
+          onPressed: onDeleted,
+          icon: const Icon(CupertinoIcons.xmark),
+          tooltip: 'Delete',
+        ),
+      );
+    }
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: CheckButton(
+        onPressed: onToggleDone,
+        checked: isDone,
       ),
     );
   }
