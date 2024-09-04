@@ -37,7 +37,7 @@ class _AddSubTodoButton extends ConsumerWidget {
               ref.read(generativeProvider.notifier).generateSubTodo();
             },
             text: const Text('Generate with AI'),
-            isLoading: ref.watch(generativeProvider).isRefreshing,
+            isLoading: ref.watch(generativeProvider).isLoading,
           ),
         ],
       ),
