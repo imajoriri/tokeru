@@ -10,9 +10,11 @@ class _AddSubTodoButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final parent = ref.watch(selectedThreadProvider);
-    final provider = subTodosProvider(parent!.id);
+    final parent = ref.watch(selectedThreadProvider) as AppTodoItem;
+    final provider = subTodosProvider(parent.id);
     final subTodos = ref.watch(provider);
+    final generativeProvider =
+        generativeSubTodoProvider(parentTodoTitle: parent.title);
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: context.appSpacing.small),
@@ -26,24 +28,16 @@ class _AddSubTodoButton extends ConsumerWidget {
                   .addWithIndex(subTodos.valueOrNull?.length ?? 0);
               currentFocusIndex.value = subTodos.valueOrNull?.length ?? 0;
             },
-            text: const Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.add),
-                SizedBox(width: 4),
-                Text('Add sub todo'),
-              ],
-            ),
+            icon: const Icon(Icons.add),
+            text: const Text('Add sub todo'),
           ),
           const SizedBox(width: 8),
           AppTextButton.medium(
             onPressed: () async {
-              final parent = ref.watch(selectedThreadProvider) as AppTodoItem;
-              final provider =
-                  generativeSubTodoProvider(parentTodoTitle: parent.title);
-              ref.read(provider.notifier).generateSubTodo();
+              ref.read(generativeProvider.notifier).generateSubTodo();
             },
             text: const Text('Generate with AI'),
+            isLoading: ref.watch(generativeProvider).isRefreshing,
           ),
         ],
       ),

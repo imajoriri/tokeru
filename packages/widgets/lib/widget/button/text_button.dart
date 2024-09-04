@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:tokeru_widgets/widgets.dart';
@@ -21,6 +22,7 @@ class AppTextButton extends HookWidget {
     this.skipTraversal = false,
     this.buttonType = AppTextButtonType.text,
     this.icon,
+    this.isLoading = false,
   })  : iconSize = 16,
         type = AppTextButtonSize.medium;
 
@@ -31,6 +33,7 @@ class AppTextButton extends HookWidget {
     this.skipTraversal = false,
     this.buttonType = AppTextButtonType.text,
     this.icon,
+    this.isLoading = false,
   })  : iconSize = 16,
         type = AppTextButtonSize.small;
 
@@ -47,6 +50,8 @@ class AppTextButton extends HookWidget {
   final AppTextButtonType buttonType;
 
   final AppTextButtonSize type;
+
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -72,31 +77,46 @@ class AppTextButton extends HookWidget {
       onPressed: onPressed,
       skipTraversal: skipTraversal,
       style: style,
-      child: Padding(
-        padding: switch (type) {
-          AppTextButtonSize.small => EdgeInsets.symmetric(
-              vertical: context.appSpacing.smallX,
-              horizontal: context.appSpacing.small,
-            ),
-          AppTextButtonSize.medium => EdgeInsets.all(context.appSpacing.small),
-        },
-        child: DefaultTextStyle.merge(
-          style: textStyle,
-          child: IconTheme.merge(
-            data: IconThemeData(
-              size: iconSize,
-            ),
-            child: Row(
-              children: [
-                if (icon != null) ...[
-                  icon!,
-                  SizedBox(width: context.appSpacing.smallX),
-                ],
-                text,
-              ],
+      child: Stack(
+        children: [
+          Opacity(
+            opacity: isLoading ? 0 : 1,
+            child: Padding(
+              padding: switch (type) {
+                AppTextButtonSize.small => EdgeInsets.symmetric(
+                    vertical: context.appSpacing.smallX,
+                    horizontal: context.appSpacing.small,
+                  ),
+                AppTextButtonSize.medium =>
+                  EdgeInsets.all(context.appSpacing.small),
+              },
+              child: DefaultTextStyle.merge(
+                style: textStyle,
+                child: IconTheme.merge(
+                  data: IconThemeData(
+                    size: iconSize,
+                  ),
+                  child: Row(
+                    children: [
+                      if (icon != null) ...[
+                        icon!,
+                        SizedBox(width: context.appSpacing.smallX),
+                      ],
+                      text,
+                    ],
+                  ),
+                ),
+              ),
             ),
           ),
-        ),
+          if (isLoading)
+            Positioned.fill(
+              child: CupertinoActivityIndicator(
+                radius: iconSize / 2,
+                color: containerColor,
+              ),
+            ),
+        ],
       ),
     );
   }

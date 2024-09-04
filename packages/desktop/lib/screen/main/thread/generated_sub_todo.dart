@@ -11,9 +11,9 @@ class _GeneratedSubTodo extends HookConsumerWidget {
 
     return ref.watch(provider).when(
       data: (todos) {
-        // if (todos.isEmpty) {
-        //   return const SizedBox();
-        // }
+        if (todos.isEmpty) {
+          return const SizedBox();
+        }
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,

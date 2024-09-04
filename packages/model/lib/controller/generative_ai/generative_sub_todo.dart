@@ -62,20 +62,26 @@ Flutterエンジニアのサブタスクを想定して生成してください�
   }
 
   Future<void> generateSubTodo() async {
+    state = const AsyncValue.loading();
     final message = parentTodoTitle;
     final prompt = Content.text(message);
-    var response = await chat.sendMessage(prompt);
 
-    final functionCalls = response.functionCalls.toList();
-    if (functionCalls.isNotEmpty) {
-      final functionCall = functionCalls.first;
-      final result = switch (functionCall.name) {
-        'generateSubTodo' => await _generateSubTodo(functionCall.args),
-        _ => throw UnimplementedError(
-            'Function not implemented: ${functionCall.name}')
-      };
-      final subTodos = result['subTodos'] as List<String>;
-      state = AsyncValue.data(subTodos);
+    try {
+      var response = await chat.sendMessage(prompt);
+      final functionCalls = response.functionCalls.toList();
+      if (functionCalls.isNotEmpty) {
+        final functionCall = functionCalls.first;
+        final result = switch (functionCall.name) {
+          'generateSubTodo' => await _generateSubTodo(functionCall.args),
+          _ => throw UnimplementedError(
+              'Function not implemented: ${functionCall.name}')
+        };
+        final subTodos = result['subTodos'] as List<String>;
+        state = AsyncValue.data(subTodos);
+      }
+    } on Exception catch (e) {
+      await FirebaseCrashlytics.instance.recordError(e, StackTrace.current);
+      state = const AsyncValue.data([]);
     }
   }
 
