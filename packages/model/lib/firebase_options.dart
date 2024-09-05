@@ -4,7 +4,7 @@ import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart'
     show Firebase, FirebaseOptions;
 import 'package:flutter/foundation.dart'
-    show defaultTargetPlatform, kIsWeb, TargetPlatform;
+    show TargetPlatform, defaultTargetPlatform, kIsWeb, kReleaseMode;
 import 'package:tokeru_model/systems/flavor.dart';
 
 Future<void> initializeFirebase() async {
@@ -12,7 +12,8 @@ Future<void> initializeFirebase() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await FirebaseAppCheck.instance.activate(
-    appleProvider: AppleProvider.appAttest,
+    appleProvider:
+        kReleaseMode ? AppleProvider.deviceCheck : AppleProvider.debug,
   );
 }
 
