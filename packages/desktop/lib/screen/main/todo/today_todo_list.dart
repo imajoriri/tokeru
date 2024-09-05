@@ -102,7 +102,6 @@ class _TodoListItem extends HookConsumerWidget {
         isSelected: isSelected,
         isDone: todo.isDone,
         focusNode: focusNode,
-
         index: index,
         textEditingController: textEditingController,
         subTodoCount: todo.subTodoCount,
@@ -120,18 +119,14 @@ class _TodoListItem extends HookConsumerWidget {
             name: AnalyticsEventName.toggleTodoDone.name,
           );
         },
-        focusDown: () {
-          FocusScope.of(context).nextFocus();
-        },
-        focusUp: () {
-          FocusScope.of(context).previousFocus();
-        },
+        focusDown: FocusScope.of(context).nextFocus,
+        focusUp: FocusScope.of(context).previousFocus,
         onNewTodoBelow: () async {
           await ref
               .read(todosProvider.notifier)
               .addTodoWithIndex(index: index + 1);
           WidgetsBinding.instance.addPostFrameCallback((_) async {
-            FocusScope.of(context).nextFocus();
+            currentFocusIndex.value = index + 1;
           });
         },
         // 一番上のTodoは上に移動できない
