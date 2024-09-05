@@ -163,6 +163,7 @@ class _EmptyState extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
             AppTextButton.medium(
+              icon: const Icon(AppIcons.add),
               onPressed: () {
                 ref.read(todosProvider.notifier).addTodoWithIndex(index: 0);
               },

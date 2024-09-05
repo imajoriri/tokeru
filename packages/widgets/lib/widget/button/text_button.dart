@@ -97,6 +97,7 @@ class AppTextButton extends HookWidget {
                     size: iconSize,
                   ),
                   child: Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       if (icon != null) ...[
                         icon!,

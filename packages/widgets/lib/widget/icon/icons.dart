@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AppIcons {
+  /// 追加
+  static const IconData add = Icons.add;
+
   /// 既読を表すアイコン。
   static const IconData read = Icons.mark_chat_read_outlined;
 

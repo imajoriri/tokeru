@@ -28,7 +28,7 @@ class _AddSubTodoButton extends ConsumerWidget {
                   .addWithIndex(subTodos.valueOrNull?.length ?? 0);
               currentFocusIndex.value = subTodos.valueOrNull?.length ?? 0;
             },
-            icon: const Icon(Icons.add),
+            icon: const Icon(AppIcons.add),
             text: const Text('Add sub todo'),
           ),
           const SizedBox(width: 8),
