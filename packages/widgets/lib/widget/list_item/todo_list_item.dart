@@ -34,23 +34,23 @@ class TodoListItem extends HookWidget {
     required this.textEditingController,
     required BuildContext context,
     required this.onDeleted,
+    required this.onUpdatedTitle,
+    required this.focusDown,
+    required this.focusUp,
+    required this.onNewTodoBelow,
+    required this.focusNode,
   })  : isShowDeleteButtonOnHover = true,
         isDone = false,
         backgroundColor = context.appColors.primary.withOpacity(0.08),
         textColor = null,
         autofocus = false,
         isSelected = false,
-        onUpdatedTitle = null,
         onToggleDone = null,
-        focusDown = null,
-        focusUp = null,
-        onNewTodoBelow = null,
         onSortUp = null,
         onSortDown = null,
         index = null,
         subTodoCount = 0,
-        onOpenThread = null,
-        focusNode = null;
+        onOpenThread = null;
 
   final bool isDone;
 

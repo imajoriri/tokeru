@@ -61,12 +61,8 @@ class _SubTodoList extends HookConsumerWidget {
                   onToggleDone: (value) {
                     ref.read(provider.notifier).toggleDone(todoId: todo.id);
                   },
-                  focusDown: () {
-                    FocusScope.of(context).nextFocus();
-                  },
-                  focusUp: () {
-                    FocusScope.of(context).previousFocus();
-                  },
+                  focusDown: FocusScope.of(context).nextFocus,
+                  focusUp: FocusScope.of(context).previousFocus,
                   onNewTodoBelow: () async {
                     await ref.read(provider.notifier).addWithIndex(index + 1);
                     currentFocusIndex.value = index + 1;

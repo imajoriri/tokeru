@@ -143,6 +143,25 @@ class GenerativeSubTodo extends _$GenerativeSubTodo {
     list.removeAt(index);
     state = AsyncValue.data(list);
   }
+
+  /// [index]のサブタスクを更新する。
+  void updateTitle({
+    required int index,
+    required String title,
+  }) async {
+    final list = [...state.requireValue];
+    list[index] = title;
+    state = AsyncValue.data(list);
+  }
+
+  /// [index]のサブタスクを追加する。
+  void addWithIndex({
+    required int index,
+  }) async {
+    final list = [...state.requireValue];
+    list.insert(index, '');
+    state = AsyncValue.data(list);
+  }
 }
 
 Future<Map<String, Object?>> _generateSubTodo(
