@@ -84,7 +84,12 @@ class _GeneratedSubTodo extends HookConsumerWidget {
                       text: const Text('Accept'),
                       onPressed: () {
                         final lastIndex = ref
-                            .read(subTodosProvider(parent.id).notifier)
+                            .read(
+                              subTodosProvider(
+                                parentId: parent.id,
+                                isDone: false,
+                              ).notifier,
+                            )
                             .lastIndex;
                         ref.read(provider.notifier).accept(
                               parentId: parent.id,

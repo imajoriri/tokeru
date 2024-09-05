@@ -11,7 +11,10 @@ class _AddSubTodoButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final parent = ref.watch(selectedThreadProvider) as AppTodoItem;
-    final provider = subTodosProvider(parent.id);
+    final provider = subTodosProvider(
+      parentId: parent.id,
+      isDone: false,
+    );
     final subTodos = ref.watch(provider);
     final generativeProvider =
         generativeSubTodoProvider(parentTodoTitle: parent.title);

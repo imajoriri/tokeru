@@ -23,7 +23,10 @@ class SubTodos extends _$SubTodos {
       state.valueOrNull?.isNotEmpty == true ? state.valueOrNull!.last.index : 0;
 
   @override
-  Stream<List<AppSubTodoItem>> build(String parentId) {
+  Stream<List<AppSubTodoItem>> build({
+    required String parentId,
+    required bool isDone,
+  }) {
     _listen();
 
     ref.onDispose(() {
@@ -43,6 +46,7 @@ class SubTodos extends _$SubTodos {
       userId: user.requireValue.id,
       type: const ['sub_todo'],
       parentId: parentId,
+      isDone: isDone,
     );
     _streamSub = todoQuery.snapshots().listen((event) async {
       state = AsyncData(

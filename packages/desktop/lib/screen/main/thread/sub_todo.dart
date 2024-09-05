@@ -11,7 +11,10 @@ class _SubTodoList extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final parent = ref.watch(selectedThreadProvider)!;
-    final provider = subTodosProvider(parent.id);
+    final provider = subTodosProvider(
+      parentId: parent.id,
+      isDone: false,
+    );
     final subTodos = ref.watch(provider);
     return subTodos.when(
       data: (todos) {

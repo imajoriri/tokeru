@@ -6,7 +6,7 @@ part of 'sub_todos.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$subTodosHash() => r'23f8bdec69fd4bafce242248fd52674535f93244';
+String _$subTodosHash() => r'0bcafe604ca331fd177d3cc68cca52198634c1d1';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -32,10 +32,12 @@ class _SystemHash {
 abstract class _$SubTodos
     extends BuildlessAutoDisposeStreamNotifier<List<AppSubTodoItem>> {
   late final String parentId;
+  late final bool isDone;
 
-  Stream<List<AppSubTodoItem>> build(
-    String parentId,
-  );
+  Stream<List<AppSubTodoItem>> build({
+    required String parentId,
+    required bool isDone,
+  });
 }
 
 /// サブTodoのリストを扱うコントローラー。
@@ -70,11 +72,13 @@ class SubTodosFamily extends Family {
   /// サブTodoのリストを扱うコントローラー。
   ///
   /// Copied from [SubTodos].
-  SubTodosProvider call(
-    String parentId,
-  ) {
+  SubTodosProvider call({
+    required String parentId,
+    required bool isDone,
+  }) {
     return SubTodosProvider(
-      parentId,
+      parentId: parentId,
+      isDone: isDone,
     );
   }
 
@@ -84,7 +88,8 @@ class SubTodosFamily extends Family {
     covariant SubTodosProvider provider,
   ) {
     return call(
-      provider.parentId,
+      parentId: provider.parentId,
+      isDone: provider.isDone,
     );
   }
 
@@ -118,10 +123,13 @@ class SubTodosProvider extends AutoDisposeStreamNotifierProviderImpl<SubTodos,
   /// サブTodoのリストを扱うコントローラー。
   ///
   /// Copied from [SubTodos].
-  SubTodosProvider(
-    String parentId,
-  ) : this._internal(
-          () => SubTodos()..parentId = parentId,
+  SubTodosProvider({
+    required String parentId,
+    required bool isDone,
+  }) : this._internal(
+          () => SubTodos()
+            ..parentId = parentId
+            ..isDone = isDone,
           from: subTodosProvider,
           name: r'subTodosProvider',
           debugGetCreateSourceHash:
@@ -131,6 +139,7 @@ class SubTodosProvider extends AutoDisposeStreamNotifierProviderImpl<SubTodos,
           dependencies: SubTodosFamily._dependencies,
           allTransitiveDependencies: SubTodosFamily._allTransitiveDependencies,
           parentId: parentId,
+          isDone: isDone,
         );
 
   SubTodosProvider._internal(
@@ -141,16 +150,19 @@ class SubTodosProvider extends AutoDisposeStreamNotifierProviderImpl<SubTodos,
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.parentId,
+    required this.isDone,
   }) : super.internal();
 
   final String parentId;
+  final bool isDone;
 
   @override
   Stream<List<AppSubTodoItem>> runNotifierBuild(
     covariant SubTodos notifier,
   ) {
     return notifier.build(
-      parentId,
+      parentId: parentId,
+      isDone: isDone,
     );
   }
 
@@ -159,20 +171,29 @@ class SubTodosProvider extends AutoDisposeStreamNotifierProviderImpl<SubTodos,
     return ProviderOverride(
       origin: this,
       override: SubTodosProvider._internal(
-        () => create()..parentId = parentId,
+        () => create()
+          ..parentId = parentId
+          ..isDone = isDone,
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         parentId: parentId,
+        isDone: isDone,
       ),
     );
   }
 
   @override
-  (String,) get argument {
-    return (parentId,);
+  ({
+    String parentId,
+    bool isDone,
+  }) get argument {
+    return (
+      parentId: parentId,
+      isDone: isDone,
+    );
   }
 
   @override
@@ -185,25 +206,31 @@ class SubTodosProvider extends AutoDisposeStreamNotifierProviderImpl<SubTodos,
     SubTodos Function() create,
   ) {
     return SubTodosProvider._internal(
-      () => create()..parentId = parentId,
+      () => create()
+        ..parentId = parentId
+        ..isDone = isDone,
       name: name,
       dependencies: dependencies,
       allTransitiveDependencies: allTransitiveDependencies,
       debugGetCreateSourceHash: debugGetCreateSourceHash,
       from: from,
       parentId: parentId,
+      isDone: isDone,
     );
   }
 
   @override
   bool operator ==(Object other) {
-    return other is SubTodosProvider && other.parentId == parentId;
+    return other is SubTodosProvider &&
+        other.parentId == parentId &&
+        other.isDone == isDone;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, parentId.hashCode);
+    hash = _SystemHash.combine(hash, isDone.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -213,6 +240,9 @@ mixin SubTodosRef
     on AutoDisposeStreamNotifierProviderRef<List<AppSubTodoItem>> {
   /// The parameter `parentId` of this provider.
   String get parentId;
+
+  /// The parameter `isDone` of this provider.
+  bool get isDone;
 }
 
 class _SubTodosProviderElement extends AutoDisposeStreamNotifierProviderElement<
@@ -221,6 +251,8 @@ class _SubTodosProviderElement extends AutoDisposeStreamNotifierProviderElement<
 
   @override
   String get parentId => (origin as SubTodosProvider).parentId;
+  @override
+  bool get isDone => (origin as SubTodosProvider).isDone;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, inference_failure_on_uninitialized_variable, inference_failure_on_function_return_type, inference_failure_on_untyped_parameter, deprecated_member_use_from_same_package
