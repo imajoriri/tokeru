@@ -16,6 +16,12 @@ class SubTodos extends _$SubTodos {
   StreamSubscription? _streamSub;
   Timer? _updateOrderDebounce;
 
+  /// サブTodoの最後のindexを取得する。
+  ///
+  /// 空やnullの場合は0を返す。
+  int get lastIndex =>
+      state.valueOrNull?.isNotEmpty == true ? state.valueOrNull!.last.index : 0;
+
   @override
   Stream<List<AppSubTodoItem>> build(String parentId) {
     _listen();

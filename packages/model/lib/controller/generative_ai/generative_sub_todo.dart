@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -47,6 +48,7 @@ class GenerativeSubTodo extends _$GenerativeSubTodo {
 - 必ず5つ以上のサブタスクを生成してください。
 - サブタスクは全て「〜〜する」のような動詞で生成してください。
 - 水平思考で考えてください。
+- 言語はタスクの言語に合わせてください。例えば、タスクが英語であれば英語で生成してください。
     ''';
     final model = FirebaseVertexAI.instanceFor(
       auth: FirebaseAuth.instance,
@@ -99,17 +101,21 @@ class GenerativeSubTodo extends _$GenerativeSubTodo {
   }
 
   /// 生成されたサブタスクを保存する。
+  ///
+  /// - [parentId]は、親タスクのID。
+  /// - [firstIndex]は、生成されたサブタスクの最初のインデックス。
   Future<void> accept({
     required String parentId,
+    required int firstIndex,
   }) async {
     final subTodos = state.requireValue
-        .map(
-          (e) => AppSubTodoItem(
+        .mapIndexed(
+          (index, e) => AppSubTodoItem(
             id: const Uuid().v4(),
             createdAt: DateTime.now(),
             title: e,
             isDone: false,
-            index: 0,
+            index: firstIndex + index,
             parentId: parentId,
           ),
         )

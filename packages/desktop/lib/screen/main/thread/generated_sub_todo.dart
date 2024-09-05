@@ -49,7 +49,13 @@ class _GeneratedSubTodo extends HookConsumerWidget {
                     icon: const Icon(CupertinoIcons.check_mark),
                     text: const Text('Accept'),
                     onPressed: () {
-                      ref.read(provider.notifier).accept(parentId: parent.id);
+                      final lastIndex = ref
+                          .read(subTodosProvider(parent.id).notifier)
+                          .lastIndex;
+                      ref.read(provider.notifier).accept(
+                            parentId: parent.id,
+                            firstIndex: lastIndex + 1,
+                          );
                     },
                     buttonType: AppTextButtonType.filled,
                   ),
