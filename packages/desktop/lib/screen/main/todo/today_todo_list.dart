@@ -6,6 +6,10 @@ class TodayTodoList extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final todos = ref.watch(todosProvider);
+    // Todoを一番下や、Enterで1つ下に追加した時にフォーカスを当てるために使用する。
+    // フォーカス後、リビルドごとにフォーカスが当たらないようにするために、nullにする。
+    final currentFocusIndex = useState<int?>(null);
+
     return todos.when(
       data: (todos) {
         if (todos.isEmpty) {
@@ -15,7 +19,7 @@ class TodayTodoList extends HookConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // title
-            const _Header(),
+            _Header(currentFocusIndex: currentFocusIndex),
 
             // TodoList
             Padding(
@@ -40,6 +44,7 @@ class TodayTodoList extends HookConsumerWidget {
                     key: key,
                     todo: todo,
                     index: index,
+                    currentFocusIndex: currentFocusIndex,
                   );
                 },
               ),
@@ -61,16 +66,23 @@ class _TodoListItem extends HookConsumerWidget {
     super.key,
     required this.todo,
     required this.index,
+    required this.currentFocusIndex,
   });
 
   final AppTodoItem todo;
   final int index;
-
+  final ValueNotifier<int?> currentFocusIndex;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isSelected = ref.watch(selectedThreadProvider)?.id == todo.id;
     final textEditingController = useTextEditingController(text: todo.title);
     final focusNode = useFocusNode();
+    if (currentFocusIndex.value == index) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        focusNode.requestFocus();
+        currentFocusIndex.value = null;
+      });
+    }
 
     useEffect(
       () {
@@ -177,7 +189,11 @@ class _EmptyState extends ConsumerWidget {
 }
 
 class _Header extends ConsumerWidget {
-  const _Header();
+  const _Header({
+    required this.currentFocusIndex,
+  });
+
+  final ValueNotifier<int?> currentFocusIndex;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -198,6 +214,8 @@ class _Header extends ConsumerWidget {
               await FirebaseAnalytics.instance.logEvent(
                 name: AnalyticsEventName.addTodo.name,
               );
+              // 先頭にフォーカスする
+              currentFocusIndex.value = 0;
             },
           ),
         ],
