@@ -21,33 +21,24 @@ class TodayTodoList extends HookConsumerWidget {
             // title
             _Header(currentFocusIndex: currentFocusIndex),
 
-            // TodoList
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: ReorderableListView.builder(
-                buildDefaultDragHandles: false,
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: todos.length,
-                onReorder: (oldIndex, newIndex) {
-                  // NOTE: なぜか上から下に移動するときはnewIndexが1つずれるので
-                  // その分を補正する
-                  if (oldIndex < newIndex) {
-                    newIndex -= 1;
-                  }
-                  ref.read(todosProvider.notifier).reorder(oldIndex, newIndex);
-                },
-                itemBuilder: (context, index) {
-                  final key = ValueKey(todos[index].id);
-                  final todo = todos[index];
-                  return _TodoListItem(
-                    key: key,
-                    todo: todo,
-                    index: index,
-                    currentFocusIndex: currentFocusIndex,
-                  );
-                },
-              ),
+            AnimatedReorderableList(
+              items: todos,
+              padding:
+                  EdgeInsets.symmetric(horizontal: context.appSpacing.medium),
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                final key = ValueKey(todos[index].id);
+                final todo = todos[index];
+                return _TodoListItem(
+                  key: key,
+                  todo: todo,
+                  index: index,
+                  currentFocusIndex: currentFocusIndex,
+                );
+              },
+              onReorder: ref.read(todosProvider.notifier).reorder,
+              isSameItem: (oldItem, newItem) => oldItem.id == newItem.id,
             ),
           ],
         );

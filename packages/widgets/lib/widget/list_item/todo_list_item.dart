@@ -168,6 +168,7 @@ class TodoListItem extends HookWidget {
     final effectiveController =
         textEditingController ?? useTextEditingController();
     final effectiveFocusNode = focusNode ?? useFocusNode();
+    final effectiveIsDone = useState(isDone);
     effectiveFocusNode.skipTraversal = readOnly;
     var text = effectiveController.text;
     final hasFocus = useState(effectiveFocusNode.hasFocus);
@@ -218,124 +219,132 @@ class TodoListItem extends HookWidget {
       [effectiveController],
     );
 
-    return CallbackShortcuts(
-      bindings: <ShortcutActivator, VoidCallback>{
-        if (onToggleDone != null)
-          const SingleActivator(meta: true, LogicalKeyboardKey.keyK): () {
-            onToggleDone!(!isDone);
+    // AnimatedReorderableListでドラッグしている際にMaterialがないとエラーになるため。
+    return Material(
+      color: Colors.transparent,
+      child: CallbackShortcuts(
+        bindings: <ShortcutActivator, VoidCallback>{
+          if (onToggleDone != null)
+            const SingleActivator(meta: true, LogicalKeyboardKey.keyK): () {
+              onToggleDone!(!effectiveIsDone.value);
+            },
+          if (onDeleted != null)
+            const SingleActivator(meta: true, LogicalKeyboardKey.keyD):
+                onDeleted!,
+          if (focusUp != null && !isValid.value)
+            const SingleActivator(LogicalKeyboardKey.arrowUp): focusUp!,
+          if (focusDown != null && !isValid.value)
+            const SingleActivator(LogicalKeyboardKey.arrowDown): focusDown!,
+          if (onNewTodoBelow != null && !isValid.value)
+            const SingleActivator(LogicalKeyboardKey.enter): onNewTodoBelow!,
+          if (onSortUp != null)
+            const SingleActivator(meta: true, LogicalKeyboardKey.arrowUp):
+                onSortUp!,
+          if (onSortDown != null)
+            const SingleActivator(meta: true, LogicalKeyboardKey.arrowDown):
+                onSortDown!,
+        },
+        child: MouseRegion(
+          onHover: (event) {
+            onHover.value = true;
           },
-        if (onDeleted != null)
-          const SingleActivator(meta: true, LogicalKeyboardKey.keyD):
-              onDeleted!,
-        if (focusUp != null && !isValid.value)
-          const SingleActivator(LogicalKeyboardKey.arrowUp): focusUp!,
-        if (focusDown != null && !isValid.value)
-          const SingleActivator(LogicalKeyboardKey.arrowDown): focusDown!,
-        if (onNewTodoBelow != null && !isValid.value)
-          const SingleActivator(LogicalKeyboardKey.enter): onNewTodoBelow!,
-        if (onSortUp != null)
-          const SingleActivator(meta: true, LogicalKeyboardKey.arrowUp):
-              onSortUp!,
-        if (onSortDown != null)
-          const SingleActivator(meta: true, LogicalKeyboardKey.arrowDown):
-              onSortDown!,
-      },
-      child: MouseRegion(
-        onHover: (event) {
-          onHover.value = true;
-        },
-        onExit: (event) {
-          onHover.value = false;
-        },
-        child: Stack(
-          fit: StackFit.passthrough,
-          children: [
-            // TextFieldを囲っているContainerに色を付けると
-            // リビルド時にfocusが外れてしまうため、stackでContainerを分けている
-            _Background(
-              backgroundColor: effectiveBackgroundColor(
-                onHover: onHover.value,
-                isSelected: isSelected,
-                context: context,
-              ),
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _CheckButton(
-                  onToggleDone: onToggleDone,
-                  onDeleted: onDeleted,
-                  isDone: isDone,
-                  isShowDeleteButtonOnHover: isShowDeleteButtonOnHover,
-                  isHover: onHover.value,
+          onExit: (event) {
+            onHover.value = false;
+          },
+          child: Stack(
+            fit: StackFit.passthrough,
+            children: [
+              // TextFieldを囲っているContainerに色を付けると
+              // リビルド時にfocusが外れてしまうため、stackでContainerを分けている
+              _Background(
+                backgroundColor: effectiveBackgroundColor(
+                  onHover: onHover.value,
+                  isSelected: isSelected,
+                  context: context,
                 ),
-                Expanded(
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () {
-                      effectiveFocusNode.requestFocus();
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _CheckButton(
+                    onToggleDone: (value) {
+                      onToggleDone?.call(value);
+                      effectiveIsDone.value = value ?? false;
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        top: 8,
-                        bottom: 8,
-                      ),
-                      child: Focus(
-                        skipTraversal: true,
-                        onKeyEvent: (node, event) {
-                          if (event is KeyDownEvent) {
-                            // バックスペースキー & カーソルが先頭の場合
-                            if (event.logicalKey ==
-                                    LogicalKeyboardKey.backspace &&
-                                effectiveController.selection.baseOffset == 0 &&
-                                effectiveController.selection.extentOffset ==
-                                    0) {
-                              // 空文字の場合は削除
-                              if (effectiveController.text.isEmpty) {
-                                onDeleted?.call();
-                                return KeyEventResult.handled;
+                    onDeleted: onDeleted,
+                    isDone: effectiveIsDone.value,
+                    isShowDeleteButtonOnHover: isShowDeleteButtonOnHover,
+                    isHover: onHover.value,
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        effectiveFocusNode.requestFocus();
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          top: 8,
+                          bottom: 8,
+                        ),
+                        child: Focus(
+                          skipTraversal: true,
+                          onKeyEvent: (node, event) {
+                            if (event is KeyDownEvent) {
+                              // バックスペースキー & カーソルが先頭の場合
+                              if (event.logicalKey ==
+                                      LogicalKeyboardKey.backspace &&
+                                  effectiveController.selection.baseOffset ==
+                                      0 &&
+                                  effectiveController.selection.extentOffset ==
+                                      0) {
+                                // 空文字の場合は削除
+                                if (effectiveController.text.isEmpty) {
+                                  onDeleted?.call();
+                                  return KeyEventResult.handled;
+                                }
                               }
                             }
-                          }
-                          return KeyEventResult.ignored;
-                        },
-                        child: TextField(
-                          controller: effectiveController,
-                          focusNode: effectiveFocusNode,
-                          style: context.appTextTheme.bodyMedium.copyWith(
-                            color: effectiveTextColor(
-                              onHover: onHover.value,
-                              isSelected: isSelected,
-                              context: context,
+                            return KeyEventResult.ignored;
+                          },
+                          child: TextField(
+                            controller: effectiveController,
+                            focusNode: effectiveFocusNode,
+                            style: context.appTextTheme.bodyMedium.copyWith(
+                              color: effectiveTextColor(
+                                onHover: onHover.value,
+                                isSelected: isSelected,
+                                context: context,
+                              ),
                             ),
-                          ),
-                          autofocus: autofocus,
-                          cursorHeight: 16,
-                          readOnly: readOnly,
-                          maxLines: null,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'New Todo',
-                            isCollapsed: true,
+                            autofocus: autofocus,
+                            cursorHeight: 16,
+                            readOnly: readOnly,
+                            maxLines: null,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              hintText: 'New Todo',
+                              isCollapsed: true,
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                // スレッド数。
-                _Count(
-                  onHover: onHover.value,
-                  subTodoCount: subTodoCount,
-                ),
-              ],
-            ),
-            if (onHover.value)
-              _HoveredWidget(
-                index: index,
-                onOpenThread: onOpenThread,
+                  // スレッド数。
+                  _Count(
+                    onHover: onHover.value,
+                    subTodoCount: subTodoCount,
+                  ),
+                ],
               ),
-          ],
+              if (onHover.value)
+                _HoveredWidget(
+                  index: index,
+                  onOpenThread: onOpenThread,
+                ),
+            ],
+          ),
         ),
       ),
     );

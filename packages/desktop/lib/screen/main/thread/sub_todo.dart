@@ -16,22 +16,14 @@ class _SubTodoList extends HookConsumerWidget {
       isDone: false,
     );
     final subTodos = ref.watch(provider);
+
     return subTodos.when(
       data: (todos) {
-        return ReorderableListView.builder(
-          buildDefaultDragHandles: false,
+        return AnimatedReorderableList(
+          items: todos,
+          padding: EdgeInsets.symmetric(horizontal: context.appSpacing.small),
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemCount: todos.length,
-          padding: EdgeInsets.symmetric(horizontal: context.appSpacing.small),
-          onReorder: (oldIndex, newIndex) {
-            // NOTE: なぜか上から下に移動するときはnewIndexが1つずれるので
-            // その分を補正する
-            if (oldIndex < newIndex) {
-              newIndex -= 1;
-            }
-            ref.read(provider.notifier).reorder(oldIndex, newIndex);
-          },
           itemBuilder: (context, index) {
             final key = ValueKey(todos[index].id);
             final todo = todos[index];
@@ -86,6 +78,8 @@ class _SubTodoList extends HookConsumerWidget {
               },
             );
           },
+          onReorder: ref.read(provider.notifier).reorder,
+          isSameItem: (oldItem, newItem) => oldItem.id == newItem.id,
         );
       },
       loading: () {
