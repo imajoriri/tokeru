@@ -7,7 +7,6 @@ import 'package:tokeru_model/controller/todos/todos.dart';
 import 'package:tokeru_model/model.dart';
 import 'package:tokeru_desktop/widget/actions/new_todo.dart/new_todo_action.dart';
 import 'package:tokeru_desktop/widget/focus_nodes.dart';
-import 'package:tokeru_desktop/widget/shortcutkey.dart';
 import 'package:tokeru_widgets/widgets.dart';
 
 part 'today_todo_list.dart';
@@ -17,15 +16,39 @@ class TodoView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FocusScope(
-      node: todoViewFocusNode,
-      child: CustomScrollView(
-        slivers: [
-          SliverList(
-            delegate: SliverChildListDelegate([const TodayTodoList()]),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 40, 16, 8),
+          child: Row(
+            children: [
+              AppTextButton.small(
+                onPressed: () async {},
+                text: const Text('To-Do'),
+                buttonType: AppTextButtonType.textSelected,
+              ),
+              const SizedBox(width: 4),
+              AppTextButton.small(
+                onPressed: () async {},
+                text: const Text('Completed'),
+                buttonType: AppTextButtonType.textNotSelected,
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+        Expanded(
+          child: FocusScope(
+            node: todoViewFocusNode,
+            child: CustomScrollView(
+              slivers: [
+                SliverList(
+                  delegate: SliverChildListDelegate([const TodayTodoList()]),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

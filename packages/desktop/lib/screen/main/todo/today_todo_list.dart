@@ -15,32 +15,23 @@ class TodayTodoList extends HookConsumerWidget {
         if (todos.isEmpty) {
           return const _EmptyState();
         }
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // title
-            _Header(currentFocusIndex: currentFocusIndex),
-
-            AnimatedReorderableList(
-              items: todos,
-              padding:
-                  EdgeInsets.symmetric(horizontal: context.appSpacing.medium),
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                final key = ValueKey(todos[index].id);
-                final todo = todos[index];
-                return _TodoListItem(
-                  key: key,
-                  todo: todo,
-                  index: index,
-                  currentFocusIndex: currentFocusIndex,
-                );
-              },
-              onReorder: ref.read(todosProvider.notifier).reorder,
-              isSameItem: (oldItem, newItem) => oldItem.id == newItem.id,
-            ),
-          ],
+        return AnimatedReorderableList(
+          items: todos,
+          padding: EdgeInsets.symmetric(horizontal: context.appSpacing.medium),
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemBuilder: (context, index) {
+            final key = ValueKey(todos[index].id);
+            final todo = todos[index];
+            return _TodoListItem(
+              key: key,
+              todo: todo,
+              index: index,
+              currentFocusIndex: currentFocusIndex,
+            );
+          },
+          onReorder: ref.read(todosProvider.notifier).reorder,
+          isSameItem: (oldItem, newItem) => oldItem.id == newItem.id,
         );
       },
       error: (e, s) => const Text('Error'),
@@ -169,42 +160,6 @@ class _EmptyState extends ConsumerWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _Header extends ConsumerWidget {
-  const _Header({
-    required this.currentFocusIndex,
-  });
-
-  final ValueNotifier<int?> currentFocusIndex;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 24, 24, 4),
-      child: Row(
-        children: [
-          Text(
-            "To-Dos",
-            style: context.appTextTheme.titleSmall,
-          ),
-          SizedBox(width: context.appSpacing.small),
-          AppIconButton.medium(
-            icon: const Icon(Icons.add),
-            tooltip: ShortcutActivatorType.newTodo.longLabel,
-            onPressed: () async {
-              await ref.read(todosProvider.notifier).addTodoWithIndex(index: 0);
-              await FirebaseAnalytics.instance.logEvent(
-                name: AnalyticsEventName.addTodo.name,
-              );
-              // 先頭にフォーカスする
-              currentFocusIndex.value = 0;
-            },
-          ),
-        ],
       ),
     );
   }

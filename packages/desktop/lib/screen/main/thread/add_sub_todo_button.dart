@@ -47,8 +47,9 @@ class _AddSubTodoButton extends ConsumerWidget {
             onPressed: () async {
               ref.read(threadListModeProvider.notifier).toggle();
             },
+            buttonType: AppTextButtonType.textSubtle,
             text: switch (ref.watch(threadListModeProvider)) {
-              ThreadListModeType.todo => const Text('show done todos'),
+              ThreadListModeType.todo => const Text('show completed'),
               ThreadListModeType.done => const Text('show todos'),
             },
           ),

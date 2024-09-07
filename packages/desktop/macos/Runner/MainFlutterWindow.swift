@@ -40,8 +40,11 @@ class MainFlutterWindow: NSWindow {
     self.setDefaultWindow()
 
     // タイトルを非表示にする
+    let customToolbar = NSToolbar()
+    self.toolbar = customToolbar
     self.titleVisibility = .hidden
     self.titlebarAppearsTransparent = true
+
     self.styleMask.insert(.fullSizeContentView)
 
     // 画面どこを持っても移動できるようにする

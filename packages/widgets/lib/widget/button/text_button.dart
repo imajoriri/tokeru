@@ -9,6 +9,9 @@ enum AppTextButtonSize {
 
 enum AppTextButtonType {
   text,
+  textSelected,
+  textNotSelected,
+  textSubtle,
   filled,
 }
 
@@ -60,12 +63,19 @@ class AppTextButton extends HookWidget {
     };
     final containerColor = switch (buttonType) {
       AppTextButtonType.text => context.appColors.onSurface,
+      AppTextButtonType.textSubtle => context.appColors.onSurfaceSubtle,
+      AppTextButtonType.textSelected => context.appColors.onSurface,
+      AppTextButtonType.textNotSelected => context.appColors.onSurfaceSubtle,
       AppTextButtonType.filled => context.appColors.onPrimary,
     };
     final style = AppButtonStyle(
       contentColor: containerColor,
       backgroundColor: switch (buttonType) {
         AppTextButtonType.text => context.appColors.surface,
+        AppTextButtonType.textSubtle => context.appColors.surface,
+        AppTextButtonType.textSelected =>
+          context.appColors.onSurface.withOpacity(0.10),
+        AppTextButtonType.textNotSelected => context.appColors.surface,
         AppTextButtonType.filled => context.appColors.primary,
       },
       shape: const RoundedRectangleBorder(
