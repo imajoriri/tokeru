@@ -13,13 +13,19 @@ class _SubTodoList extends HookConsumerWidget {
     final parent = ref.watch(selectedThreadProvider)!;
     final provider = subTodosProvider(
       parentId: parent.id,
-      isDone: false,
+      isDone: switch (ref.watch(threadListModeProvider)) {
+        ThreadListModeType.todo => false,
+        ThreadListModeType.done => true,
+      },
     );
     final subTodos = ref.watch(provider);
 
     return subTodos.when(
       data: (todos) {
         return AnimatedReorderableList(
+          key: Key(
+            'sub_todo_list_${ref.watch(threadListModeProvider)}',
+          ),
           items: todos,
           padding: EdgeInsets.symmetric(horizontal: context.appSpacing.small),
           physics: const NeverScrollableScrollPhysics(),

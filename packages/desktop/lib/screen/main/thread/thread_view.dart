@@ -10,6 +10,7 @@ import 'package:tokeru_model/controller/generative_ai/generative_sub_todo.dart';
 import 'package:tokeru_model/controller/sub_todos/sub_todos.dart';
 import 'package:tokeru_model/controller/thread/thread.dart';
 import 'package:tokeru_model/controller/thread/thread_chats.dart';
+import 'package:tokeru_model/controller/thread/thread_list_mode.dart';
 import 'package:tokeru_model/model/app_item/app_item.dart';
 import 'package:tokeru_widgets/widgets.dart';
 

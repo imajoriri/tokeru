@@ -42,6 +42,16 @@ class _AddSubTodoButton extends ConsumerWidget {
             text: const Text('Generate with AI'),
             isLoading: ref.watch(generativeProvider).isLoading,
           ),
+          const Spacer(),
+          AppTextButton.small(
+            onPressed: () async {
+              ref.read(threadListModeProvider.notifier).toggle();
+            },
+            text: switch (ref.watch(threadListModeProvider)) {
+              ThreadListModeType.todo => const Text('show done todos'),
+              ThreadListModeType.done => const Text('show todos'),
+            },
+          ),
         ],
       ),
     );
