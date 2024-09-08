@@ -52,6 +52,8 @@ class TodoListItem extends HookWidget {
         subTodoCount = 0,
         onOpenThread = null;
 
+  const factory TodoListItem.loading() = _Loading;
+
   final bool isDone;
 
   final TextEditingController? textEditingController;
@@ -505,6 +507,18 @@ class _HoveredWidget extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _Loading extends TodoListItem {
+  const _Loading() : super(isDone: false);
+
+  @override
+  Widget build(BuildContext context) {
+    return const SkeletonCard(
+      width: double.infinity,
+      height: 32,
     );
   }
 }

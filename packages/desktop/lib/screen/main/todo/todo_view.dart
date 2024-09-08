@@ -1,5 +1,6 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tokeru_model/controller/thread/thread.dart';
@@ -24,11 +25,14 @@ class TodoView extends ConsumerWidget {
     return Column(
       children: [
         const _ListModeButtons(),
-        Expanded(
-          child: switch (listMode) {
-            ListModeType.todo => const TodoList(),
-            ListModeType.done => const CompletedTodoList(),
-          },
+        Flexible(
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 200),
+            child: switch (listMode) {
+              ListModeType.todo => const TodoList(),
+              ListModeType.done => const CompletedTodoList(),
+            },
+          ),
         ),
       ],
     );

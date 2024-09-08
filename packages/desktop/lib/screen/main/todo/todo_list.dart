@@ -12,35 +12,34 @@ class TodoList extends HookConsumerWidget {
 
     return FocusScope(
       node: todoViewFocusNode,
-      child: todos.when(
-        data: (todos) {
-          if (todos.isEmpty) {
-            return const _EmptyState();
-          }
-          return AnimatedReorderableList(
-            items: todos,
-            padding:
-                EdgeInsets.symmetric(horizontal: context.appSpacing.medium),
-            // physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              final key = ValueKey(todos[index].id);
-              final todo = todos[index];
-              return _TodoListItem(
-                key: key,
-                todo: todo,
-                index: index,
-                currentFocusIndex: currentFocusIndex,
-              );
-            },
-            onReorder: ref.read(todosProvider.notifier).reorder,
-            isSameItem: (oldItem, newItem) => oldItem.id == newItem.id,
-          );
-        },
-        error: (e, s) => const Text('Error'),
-        loading: () => const Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Text('Loading...'),
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 200),
+        child: todos.when(
+          data: (todos) {
+            if (todos.isEmpty) {
+              return const _EmptyState();
+            }
+            return AnimatedReorderableList(
+              items: todos,
+              padding:
+                  EdgeInsets.symmetric(horizontal: context.appSpacing.medium),
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                final key = ValueKey(todos[index].id);
+                final todo = todos[index];
+                return _TodoListItem(
+                  key: key,
+                  todo: todo,
+                  index: index,
+                  currentFocusIndex: currentFocusIndex,
+                );
+              },
+              onReorder: ref.read(todosProvider.notifier).reorder,
+              isSameItem: (oldItem, newItem) => oldItem.id == newItem.id,
+            );
+          },
+          error: (e, s) => const Text('Error'),
+          loading: () => const SizedBox.shrink(),
         ),
       ),
     );

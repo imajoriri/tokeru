@@ -35,6 +35,7 @@ class Todos extends _$Todos {
   }
 
   _listen() {
+    // 5秒待つ
     final user = ref.watch(userControllerProvider);
     if (user.hasError || user.valueOrNull == null) {
       return const Stream.empty();

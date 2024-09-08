@@ -47,10 +47,7 @@ class CompletedTodoList extends HookConsumerWidget {
         );
       },
       error: (e, s) => const Text('Error'),
-      loading: () => const Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Text('Loading...'),
-      ),
+      loading: () => const SizedBox.shrink(),
     );
   }
 }
