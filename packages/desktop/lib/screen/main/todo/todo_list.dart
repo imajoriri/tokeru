@@ -14,32 +14,50 @@ class TodoList extends HookConsumerWidget {
       node: todoViewFocusNode,
       child: AnimatedSwitcher(
         duration: const Duration(milliseconds: 200),
-        child: todos.when(
-          data: (todos) {
-            if (todos.isEmpty) {
-              return const _EmptyState();
-            }
-            return AnimatedReorderableList(
-              items: todos,
-              padding:
-                  EdgeInsets.symmetric(horizontal: context.appSpacing.medium),
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                final key = ValueKey(todos[index].id);
-                final todo = todos[index];
-                return _TodoListItem(
-                  key: key,
-                  todo: todo,
-                  index: index,
-                  currentFocusIndex: currentFocusIndex,
-                );
-              },
-              onReorder: ref.read(todosProvider.notifier).reorder,
-              isSameItem: (oldItem, newItem) => oldItem.id == newItem.id,
-            );
-          },
-          error: (e, s) => const Text('Error'),
-          loading: () => const SizedBox.shrink(),
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: context.appSpacing.medium,
+                vertical: context.appSpacing.small,
+              ),
+              child: ChatTextField.todo(
+                onSubmit: (value) {
+                  ref.read(todosProvider.notifier).addTodoWithIndex(index: 0);
+                },
+              ),
+            ),
+            Expanded(
+              child: todos.when(
+                data: (todos) {
+                  if (todos.isEmpty) {
+                    return const _EmptyState();
+                  }
+                  return AnimatedReorderableList(
+                    items: todos,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: context.appSpacing.medium,
+                    ),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      final key = ValueKey(todos[index].id);
+                      final todo = todos[index];
+                      return _TodoListItem(
+                        key: key,
+                        todo: todo,
+                        index: index,
+                        currentFocusIndex: currentFocusIndex,
+                      );
+                    },
+                    onReorder: ref.read(todosProvider.notifier).reorder,
+                    isSameItem: (oldItem, newItem) => oldItem.id == newItem.id,
+                  );
+                },
+                error: (e, s) => const Text('Error'),
+                loading: () => const SizedBox.shrink(),
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -8,7 +8,7 @@ class _ChatTextField extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-      child: ChatTextField(
+      child: ChatTextField.chat(
         focusNode: threadViewFocusNode,
         onSubmit: (message) async {
           final selectedAppItem = ref.watch(selectedThreadProvider);

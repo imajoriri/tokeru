@@ -45,7 +45,7 @@ class ChatView extends HookConsumerWidget {
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-          child: ChatTextField(
+          child: ChatTextField.chat(
             focusNode: chatFocusNode,
             onSubmit: (message) {
               ref.read(chatsProvider.notifier).addChat(message: message);

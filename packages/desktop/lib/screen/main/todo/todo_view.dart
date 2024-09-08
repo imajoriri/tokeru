@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:tokeru_desktop/widget/text_field/chat_text_field.dart';
 import 'package:tokeru_model/controller/thread/thread.dart';
 import 'package:tokeru_model/controller/todos/todos.dart';
 import 'package:tokeru_model/controller/list_mode/list_mode.dart';

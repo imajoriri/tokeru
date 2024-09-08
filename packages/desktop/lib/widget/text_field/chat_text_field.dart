@@ -6,19 +6,32 @@ import 'package:tokeru_widgets/widgets.dart';
 
 /// チャットのTextField。
 class ChatTextField extends HookConsumerWidget {
-  const ChatTextField({
-    Key? key,
-    required this.focusNode,
+  const ChatTextField.chat({
+    super.key,
     required this.onSubmit,
+    this.focusNode,
     this.textEditingController,
-  }) : super(key: key);
+  })  : hintText = 'Talk to myself',
+        maxLines = null;
 
-  final FocusNode focusNode;
+  const ChatTextField.todo({
+    super.key,
+    required this.onSubmit,
+  })  : textEditingController = null,
+        focusNode = null,
+        maxLines = 1,
+        hintText = 'Add To-Do';
+
+  final FocusNode? focusNode;
 
   /// submitボタンを押した時の処理。
   final void Function(String message) onSubmit;
 
   final TextEditingController? textEditingController;
+
+  final String hintText;
+
+  final int? maxLines;
 
   Future<void> _send({
     required TextEditingController textEditingController,
@@ -32,13 +45,21 @@ class ChatTextField extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final effectiveTextController =
-        textEditingController ?? useTextEditingController();
     final hasFocus = useState(false);
     final canSubmit = useState(false);
 
+    final effectiveTextController =
+        textEditingController ?? useTextEditingController();
     effectiveTextController.addListener(() {
       canSubmit.value = effectiveTextController.text.isNotEmpty;
+    });
+
+    final effectiveFocusNode = focusNode ?? useFocusNode();
+    // 日本語入力などでの変換中は無視するためのフラグ
+    final isValid = useState(false);
+    effectiveFocusNode.onKeyEvent = ((node, event) {
+      isValid.value = effectiveTextController.value.composing.isValid;
+      return KeyEventResult.ignored;
     });
 
     final animationController =
@@ -56,15 +77,15 @@ class ChatTextField extends HookConsumerWidget {
       animation: animationController,
       child: CallbackShortcuts(
         bindings: <ShortcutActivator, VoidCallback>{
-          const SingleActivator(LogicalKeyboardKey.enter, meta: true): () =>
-              _send(
-                textEditingController: effectiveTextController,
-                ref: ref,
-              ),
+          if (!isValid.value)
+            const SingleActivator(LogicalKeyboardKey.enter): () => _send(
+                  textEditingController: effectiveTextController,
+                  ref: ref,
+                ),
         },
         child: Focus(
           onFocusChange: (value) {
-            hasFocus.value = focusNode.hasFocus;
+            hasFocus.value = effectiveFocusNode.hasFocus;
             if (value) {
               animationController.forward();
             } else {
@@ -74,7 +95,7 @@ class ChatTextField extends HookConsumerWidget {
           child: Padding(
             padding: EdgeInsets.symmetric(
               horizontal: context.appSpacing.small,
-              vertical: context.appSpacing.small,
+              vertical: context.appSpacing.smallX,
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -82,24 +103,30 @@ class ChatTextField extends HookConsumerWidget {
                 Expanded(
                   child: TextField(
                     controller: effectiveTextController,
-                    maxLines: null,
-                    focusNode: focusNode,
+                    maxLines: maxLines,
+                    focusNode: effectiveFocusNode,
                     style: context.appTextTheme.bodyMedium,
                     cursorColor: Colors.black,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       isDense: true,
                       border: InputBorder.none,
-                      hintText: 'Talk to myself',
+                      hintText: hintText,
                     ),
                   ),
                 ),
-                SubmitButton(
-                  onPressed: canSubmit.value
-                      ? () => _send(
-                            textEditingController: effectiveTextController,
-                            ref: ref,
-                          )
-                      : null,
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 2),
+                  child: AppTextButton.small(
+                    onPressed: canSubmit.value
+                        ? () => _send(
+                              textEditingController: effectiveTextController,
+                              ref: ref,
+                            )
+                        : null,
+                    text: const Text('Add'),
+                    icon: const Icon(Icons.add),
+                    buttonType: AppTextButtonType.filled,
+                  ),
                 ),
               ],
             ),

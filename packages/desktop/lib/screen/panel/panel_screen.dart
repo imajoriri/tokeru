@@ -141,7 +141,7 @@ class PanelScreen extends HookConsumerWidget {
                 SizedBox(height: context.appSpacing.smallX),
 
                 // Chat text field
-                ChatTextField(
+                ChatTextField.chat(
                   focusNode: focusNode,
                   textEditingController: textEditingConroller,
                   onSubmit: (value) {
