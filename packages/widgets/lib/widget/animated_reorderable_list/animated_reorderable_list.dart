@@ -41,16 +41,7 @@ class AnimatedReorderableList<E extends Object> extends HookWidget {
       physics: physics,
       itemBuilder: itemBuilder,
       padding: padding,
-      insertDuration: const Duration(milliseconds: 100),
-      insertItemBuilder: (child, animation) {
-        return SizeTransition(
-          sizeFactor: animation,
-          child: FadeTransition(
-            opacity: animation,
-            child: child,
-          ),
-        );
-      },
+      insertDuration: const Duration(milliseconds: 0),
       removeDuration: removeDuration,
       removeItemBuilder: (child, animation) {
         final ease = animation.drive(
