@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:collection/collection.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -17,7 +16,6 @@ part 'todos.g.dart';
 /// ユーザーがログインしていない場合は空を返す。
 @riverpod
 class Todos extends _$Todos {
-  Timer? _deleteDonesDebounce;
   Timer? _updateOrderDebounce;
 
   StreamSubscription? _streamSub;
@@ -189,8 +187,6 @@ class Todos extends _$Todos {
   /// - [onUpdated]: 更新後に実行するコールバック。
   void toggleTodoDone({
     required String todoId,
-    int milliseconds = 200,
-    VoidCallback? onUpdated,
   }) async {
     late final AppTodoItem todo;
     state = AsyncData(
@@ -202,34 +198,9 @@ class Todos extends _$Todos {
         return e;
       }).toList(),
     );
-    _filterDoneIsTrueWithDebounce(
-      todo: todo,
-      milliseconds: milliseconds,
-      onDeleted: onUpdated,
-    );
-  }
-
-  /// 現在のListの順番をindexとして更新する。
-  ///
-  /// 新規作成後や削除後に並び替えをリセットするために使用する。
-  /// ショートカットでの移動時に連続で呼ばれる可能性があるため、APIの呼び出しはデバウンスしている。
-  Future<void> _filterDoneIsTrueWithDebounce({
-    required AppTodoItem todo,
-    int milliseconds = 200,
-    VoidCallback? onDeleted,
-  }) async {
-    _deleteDonesDebounce?.cancel();
-
-    _deleteDonesDebounce =
-        Timer(Duration(milliseconds: milliseconds), () async {
-      final user = ref.read(userControllerProvider);
-      final repository = ref.read(appItemRepositoryProvider(user.value!.id));
-      await repository.update(item: todo);
-      updateCurrentOrder();
-      state = AsyncData(
-        state.valueOrNull!.where((e) => e.isDone == false).toList(),
-      );
-      onDeleted?.call();
-    });
+    final user = ref.read(userControllerProvider);
+    final repository = ref.read(appItemRepositoryProvider(user.value!.id));
+    await repository.update(item: todo);
+    updateCurrentOrder();
   }
 }
