@@ -23,7 +23,10 @@ class TodoList extends HookConsumerWidget {
               ),
               child: ChatTextField.todo(
                 onSubmit: (value) {
-                  ref.read(todosProvider.notifier).addTodoWithIndex(index: 0);
+                  ref.read(todosProvider.notifier).addTodoWithIndex(
+                        index: 0,
+                        title: value,
+                      );
                 },
               ),
             ),

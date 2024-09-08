@@ -82,10 +82,11 @@ class Todos extends _$Todos {
   /// [index]が配列の長さを超えている場合は、最後に追加される。
   Future<void> addTodoWithIndex({
     required int index,
+    String title = '',
   }) async {
     final todo = AppTodoItem(
       id: const Uuid().v4(),
-      title: '',
+      title: title,
       isDone: false,
       index: index,
       createdAt: DateTime.now(),
