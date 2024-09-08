@@ -7,10 +7,15 @@ enum ListModeType {
   done,
 }
 
+/// メインViewのリストに何を表示するか。
 @riverpod
 class ListMode extends _$ListMode {
   @override
   ListModeType build() {
     return ListModeType.todo;
+  }
+
+  void change(ListModeType type) {
+    state = type;
   }
 }

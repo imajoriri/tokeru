@@ -10,7 +10,6 @@ import 'package:tokeru_model/controller/generative_ai/generative_sub_todo.dart';
 import 'package:tokeru_model/controller/sub_todos/sub_todos.dart';
 import 'package:tokeru_model/controller/thread/thread.dart';
 import 'package:tokeru_model/controller/thread/thread_chats.dart';
-import 'package:tokeru_model/controller/thread/thread_list_mode.dart';
 import 'package:tokeru_model/model/app_item/app_item.dart';
 import 'package:tokeru_widgets/widgets.dart';
 
@@ -36,6 +35,8 @@ class ThreadView extends HookConsumerWidget {
     // Todoを一番下や、Enterで1つ下に追加した時にフォーカスを当てるために使用する。
     // フォーカス後、リビルドごとにフォーカスが当たらないようにするために、nullにする。
     final currentFocusIndex = useState<int?>(null);
+
+    final isDone = useState(false);
 
     return Column(
       children: [
@@ -68,6 +69,7 @@ class ThreadView extends HookConsumerWidget {
                     const SizedBox(height: 8),
                     _SubTodoList(
                       currentFocusIndex: currentFocusIndex,
+                      isDone: isDone,
                     ),
                   ],
                 ),
@@ -77,9 +79,17 @@ class ThreadView extends HookConsumerWidget {
               SliverList(
                 delegate: SliverChildListDelegate(
                   [
+                    // 生成されたサブタスク
                     const _GeneratedSubTodo(),
+
                     SizedBox(height: context.appSpacing.smallX),
-                    _AddSubTodoButton(currentFocusIndex: currentFocusIndex),
+
+                    // サブタスク等追加のボタン
+                    _AddSubTodoButton(
+                      currentFocusIndex: currentFocusIndex,
+                      isDone: isDone,
+                    ),
+
                     SizedBox(height: context.appSpacing.smallX),
                   ],
                 ),

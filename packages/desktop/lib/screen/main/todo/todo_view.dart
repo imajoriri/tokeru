@@ -4,38 +4,23 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tokeru_model/controller/thread/thread.dart';
 import 'package:tokeru_model/controller/todos/todos.dart';
+import 'package:tokeru_model/controller/list_mode/list_mode.dart';
 import 'package:tokeru_model/model.dart';
 import 'package:tokeru_desktop/widget/actions/new_todo.dart/new_todo_action.dart';
 import 'package:tokeru_desktop/widget/focus_nodes.dart';
 import 'package:tokeru_widgets/widgets.dart';
 
 part 'today_todo_list.dart';
+part 'list_mode_buttons.dart';
 
-class TodoView extends StatelessWidget {
+class TodoView extends HookWidget {
   const TodoView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 40, 16, 8),
-          child: Row(
-            children: [
-              AppTextButton.small(
-                onPressed: () async {},
-                text: const Text('To-Do'),
-                buttonType: AppTextButtonType.textSelected,
-              ),
-              const SizedBox(width: 4),
-              AppTextButton.small(
-                onPressed: () async {},
-                text: const Text('Completed'),
-                buttonType: AppTextButtonType.textNotSelected,
-              ),
-            ],
-          ),
-        ),
+        const _ListModeButtons(),
         Expanded(
           child: FocusScope(
             node: todoViewFocusNode,

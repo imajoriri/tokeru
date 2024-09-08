@@ -4,9 +4,11 @@ part of 'thread_view.dart';
 class _AddSubTodoButton extends ConsumerWidget {
   const _AddSubTodoButton({
     required this.currentFocusIndex,
+    required this.isDone,
   });
 
   final ValueNotifier<int?> currentFocusIndex;
+  final ValueNotifier<bool> isDone;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -45,13 +47,12 @@ class _AddSubTodoButton extends ConsumerWidget {
           const Spacer(),
           AppTextButton.small(
             onPressed: () async {
-              ref.read(threadListModeProvider.notifier).toggle();
+              isDone.value = !isDone.value;
             },
             buttonType: AppTextButtonType.textSubtle,
-            text: switch (ref.watch(threadListModeProvider)) {
-              ThreadListModeType.todo => const Text('show completed'),
-              ThreadListModeType.done => const Text('show todos'),
-            },
+            text: isDone.value
+                ? const Text('show todos')
+                : const Text('show completed'),
           ),
         ],
       ),

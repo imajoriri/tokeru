@@ -4,27 +4,23 @@ part of 'thread_view.dart';
 class _SubTodoList extends HookConsumerWidget {
   const _SubTodoList({
     required this.currentFocusIndex,
+    required this.isDone,
   });
 
   final ValueNotifier<int?> currentFocusIndex;
-
+  final ValueNotifier<bool> isDone;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final parent = ref.watch(selectedThreadProvider)!;
-    final provider = subTodosProvider(
-      parentId: parent.id,
-      isDone: switch (ref.watch(threadListModeProvider)) {
-        ThreadListModeType.todo => false,
-        ThreadListModeType.done => true,
-      },
-    );
+    final provider =
+        subTodosProvider(parentId: parent.id, isDone: isDone.value);
     final subTodos = ref.watch(provider);
 
     return subTodos.when(
       data: (todos) {
         return AnimatedReorderableList(
           key: Key(
-            'sub_todo_list_${ref.watch(threadListModeProvider)}',
+            'sub_todo_list_${isDone.value}',
           ),
           items: todos,
           padding: EdgeInsets.symmetric(horizontal: context.appSpacing.small),
