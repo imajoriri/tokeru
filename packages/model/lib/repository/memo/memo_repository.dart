@@ -6,18 +6,16 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'memo_repository.g.dart';
 
 @riverpod
-MemoRepository memoRepository(MemoRepositoryRef ref, String userId) =>
-    MemoRepository(ref: ref, userId: userId);
+MemoRepository memoRepository(MemoRepositoryRef ref) =>
+    MemoRepository(ref: ref);
 
 class MemoRepository {
   MemoRepository({
     required this.ref,
-    required this.userId,
   });
   final Ref ref;
-  final String userId;
 
-  Future<Memo> fetchMemo() async {
+  Future<Memo> fetchMemo({required String userId}) async {
     final result = await ref.read(userDocumentProvider(userId)).get();
     if (result.exists) {
       final data = result.data() as Map<String, dynamic>;
@@ -27,7 +25,10 @@ class MemoRepository {
     return const Memo(content: '');
   }
 
-  Future<void> updateMemo(Memo memo) async {
+  Future<void> updateMemo({
+    required Memo memo,
+    required String userId,
+  }) async {
     await ref.read(userDocumentProvider(userId)).set({'content': memo.content});
   }
 }

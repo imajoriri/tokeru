@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:tokeru_desktop/screen/main/memo/memo_view.dart';
 import 'package:tokeru_desktop/screen/main/thread/thread_view.dart';
 import 'package:tokeru_desktop/screen/main/todo/todo_view.dart';
 import 'package:tokeru_widgets/widgets.dart';
@@ -29,6 +30,7 @@ class MainScreen extends HookConsumerWidget {
                     child: TodoView(),
                   ),
                 ),
+                MemoView(),
               ],
             ),
           ),
