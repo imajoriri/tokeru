@@ -6,9 +6,11 @@ part of 'list_mode.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$listModeHash() => r'7124efe6d3cc427351c56747c24d55f5b452867b';
+String _$listModeHash() => r'446e3d7f08c4308fba83aa9a959b14a1f7b99518';
 
-/// See also [ListMode].
+/// メインViewのリストに何を表示するか。
+///
+/// Copied from [ListMode].
 @ProviderFor(ListMode)
 final listModeProvider =
     AutoDisposeNotifierProvider<ListMode, ListModeType>.internal(

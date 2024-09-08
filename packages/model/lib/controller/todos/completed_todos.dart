@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:collection/collection.dart';
 import 'package:tokeru_model/controller/refresh/refresh_controller.dart';
 import 'package:tokeru_model/controller/user/user_controller.dart';
 import 'package:tokeru_model/model.dart';
@@ -44,8 +43,7 @@ class CompletedTodos extends _$CompletedTodos {
       state = AsyncData(
         event.docs
             .map((doc) => AppTodoItem.fromJson(doc.data()..['id'] = doc.id))
-            .toList()
-            .sorted((a, b) => a.index.compareTo(b.index)),
+            .toList(),
       );
     });
   }

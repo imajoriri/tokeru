@@ -1,7 +1,7 @@
 part of 'todo_view.dart';
 
-class TodayTodoList extends HookConsumerWidget {
-  const TodayTodoList({super.key});
+class TodoList extends HookConsumerWidget {
+  const TodoList({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -10,34 +10,38 @@ class TodayTodoList extends HookConsumerWidget {
     // フォーカス後、リビルドごとにフォーカスが当たらないようにするために、nullにする。
     final currentFocusIndex = useState<int?>(null);
 
-    return todos.when(
-      data: (todos) {
-        if (todos.isEmpty) {
-          return const _EmptyState();
-        }
-        return AnimatedReorderableList(
-          items: todos,
-          padding: EdgeInsets.symmetric(horizontal: context.appSpacing.medium),
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            final key = ValueKey(todos[index].id);
-            final todo = todos[index];
-            return _TodoListItem(
-              key: key,
-              todo: todo,
-              index: index,
-              currentFocusIndex: currentFocusIndex,
-            );
-          },
-          onReorder: ref.read(todosProvider.notifier).reorder,
-          isSameItem: (oldItem, newItem) => oldItem.id == newItem.id,
-        );
-      },
-      error: (e, s) => const Text('Error'),
-      loading: () => const Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Text('Loading...'),
+    return FocusScope(
+      node: todoViewFocusNode,
+      child: todos.when(
+        data: (todos) {
+          if (todos.isEmpty) {
+            return const _EmptyState();
+          }
+          return AnimatedReorderableList(
+            items: todos,
+            padding:
+                EdgeInsets.symmetric(horizontal: context.appSpacing.medium),
+            // physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              final key = ValueKey(todos[index].id);
+              final todo = todos[index];
+              return _TodoListItem(
+                key: key,
+                todo: todo,
+                index: index,
+                currentFocusIndex: currentFocusIndex,
+              );
+            },
+            onReorder: ref.read(todosProvider.notifier).reorder,
+            isSameItem: (oldItem, newItem) => oldItem.id == newItem.id,
+          );
+        },
+        error: (e, s) => const Text('Error'),
+        loading: () => const Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Text('Loading...'),
+        ),
       ),
     );
   }
@@ -107,9 +111,7 @@ class _TodoListItem extends HookConsumerWidget {
           await ref
               .read(todosProvider.notifier)
               .addTodoWithIndex(index: index + 1);
-          WidgetsBinding.instance.addPostFrameCallback((_) async {
-            currentFocusIndex.value = index + 1;
-          });
+          currentFocusIndex.value = index + 1;
         },
         // 一番上のTodoは上に移動できない
         onSortUp: index != 0
