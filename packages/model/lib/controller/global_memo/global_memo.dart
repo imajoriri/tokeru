@@ -5,6 +5,7 @@ import 'package:tokeru_model/repository/memo/memo_repository.dart';
 
 part 'global_memo.g.dart';
 
+/// グローバルなメモを管理するController。
 @riverpod
 class GlobalMemo extends _$GlobalMemo {
   @override

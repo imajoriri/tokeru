@@ -6,9 +6,11 @@ part of 'global_memo.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$globalMemoHash() => r'17dc1cbc7d1389cd602efb141cf412d0b4872aef';
+String _$globalMemoHash() => r'4d84bf910374b9182308a424cce9da0c3cb780d1';
 
-/// See also [GlobalMemo].
+/// グローバルなメモを管理するController。
+///
+/// Copied from [GlobalMemo].
 @ProviderFor(GlobalMemo)
 final globalMemoProvider =
     AutoDisposeAsyncNotifierProvider<GlobalMemo, Memo>.internal(
