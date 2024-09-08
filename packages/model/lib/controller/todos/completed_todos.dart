@@ -38,6 +38,7 @@ class CompletedTodos extends _$CompletedTodos {
       userId: user.requireValue.id,
       type: const ['todo'],
       isDone: true,
+      limit: 50,
     );
     _streamSub = todoQuery.snapshots().listen((event) async {
       state = AsyncData(

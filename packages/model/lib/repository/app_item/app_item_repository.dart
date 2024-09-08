@@ -47,6 +47,7 @@ class AppItemRepository {
     List<String> type = const [],
     String? parentId,
     bool? isDone,
+    int? limit,
   }) {
     var query = FirebaseFirestore.instance
         .collection('users')
@@ -62,7 +63,9 @@ class AppItemRepository {
     if (isDone != null) {
       query = query.where('isDone', isEqualTo: isDone);
     }
-
+    if (limit != null) {
+      query = query.limit(limit);
+    }
     return query;
   }
 
