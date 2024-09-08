@@ -35,12 +35,14 @@ class ChatTextField extends HookConsumerWidget {
 
   Future<void> _send({
     required TextEditingController textEditingController,
+    required FocusNode focusNode,
     required WidgetRef ref,
   }) async {
     if (textEditingController.text.isEmpty) return;
 
     onSubmit(textEditingController.text);
     textEditingController.clear();
+    focusNode.requestFocus();
   }
 
   @override
@@ -81,6 +83,7 @@ class ChatTextField extends HookConsumerWidget {
             const SingleActivator(LogicalKeyboardKey.enter): () => _send(
                   textEditingController: effectiveTextController,
                   ref: ref,
+                  focusNode: effectiveFocusNode,
                 ),
         },
         child: Focus(
@@ -121,6 +124,7 @@ class ChatTextField extends HookConsumerWidget {
                         ? () => _send(
                               textEditingController: effectiveTextController,
                               ref: ref,
+                              focusNode: effectiveFocusNode,
                             )
                         : null,
                     text: const Text('Add'),
