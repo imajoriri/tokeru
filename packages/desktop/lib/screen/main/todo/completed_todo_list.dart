@@ -18,27 +18,18 @@ class CompletedTodoList extends HookConsumerWidget {
           shrinkWrap: true,
           itemBuilder: (context, index) {
             final todo = todos[index];
+            final key = ValueKey(todos[index].id);
             return HookBuilder(
+              key: key,
               builder: (context) {
                 final textEditingController =
                     useTextEditingController(text: todo.title);
-                return TodoListItem(
-                  isDone: todo.isDone,
-                  index: index,
+                return TodoListItem.completed(
                   textEditingController: textEditingController,
-                  subTodoCount: todo.subTodoCount,
-                  onDeleted: () async {
-                    ref
-                        .read(todosProvider.notifier)
-                        .deleteTodo(todoId: todo.id);
-                  },
                   onToggleDone: (value) {
                     ref
-                        .read(todosProvider.notifier)
+                        .read(completedTodosProvider.notifier)
                         .toggleTodoDone(todoId: todo.id);
-                    FirebaseAnalytics.instance.logEvent(
-                      name: AnalyticsEventName.toggleTodoDone.name,
-                    );
                   },
                 );
               },

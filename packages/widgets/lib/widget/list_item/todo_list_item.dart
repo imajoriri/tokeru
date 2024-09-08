@@ -52,6 +52,28 @@ class TodoListItem extends HookWidget {
         subTodoCount = 0,
         onOpenThread = null;
 
+  const TodoListItem.completed({
+    super.key,
+    required this.textEditingController,
+    required this.onToggleDone,
+  })  : isShowDeleteButtonOnHover = false,
+        isDone = true,
+        backgroundColor = null,
+        textColor = null,
+        autofocus = false,
+        isSelected = false,
+        onDeleted = null,
+        onUpdatedTitle = null,
+        focusDown = null,
+        focusUp = null,
+        onNewTodoBelow = null,
+        focusNode = null,
+        onSortUp = null,
+        onSortDown = null,
+        index = null,
+        subTodoCount = 0,
+        onOpenThread = null;
+
   const factory TodoListItem.loading() = _Loading;
 
   final bool isDone;

@@ -47,4 +47,22 @@ class CompletedTodos extends _$CompletedTodos {
       );
     });
   }
+
+  void toggleTodoDone({
+    required String todoId,
+  }) async {
+    late final AppTodoItem todo;
+    state = AsyncData(
+      state.valueOrNull!.map((e) {
+        if (e.id == todoId) {
+          todo = e.copyWith(isDone: !e.isDone);
+          return todo;
+        }
+        return e;
+      }).toList(),
+    );
+    final user = ref.read(userControllerProvider);
+    final repository = ref.read(appItemRepositoryProvider(user.value!.id));
+    await repository.update(item: todo);
+  }
 }
