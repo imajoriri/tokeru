@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:tokeru_desktop/screen/main/chat_modal/chat_modal.dart';
 import 'package:tokeru_desktop/screen/main/memo/memo_view.dart';
 import 'package:tokeru_desktop/screen/main/thread/thread_view.dart';
 import 'package:tokeru_desktop/screen/main/todo/todo_view.dart';
@@ -18,35 +19,46 @@ class MainScreen extends HookConsumerWidget {
     const minWidth = 300.0;
     return Scaffold(
       backgroundColor: Colors.grey[300],
-      body: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      body: Stack(
+        alignment: Alignment.bottomCenter,
         children: [
-          // Chat
-          const Expanded(
-            child: Column(
-              children: [
-                Expanded(
-                  child: _PanelContainer(
-                    child: TodoView(),
-                  ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Chat
+              const Expanded(
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: _PanelContainer(
+                        child: TodoView(),
+                      ),
+                    ),
+                    MemoView(),
+                  ],
                 ),
-                MemoView(),
-              ],
-            ),
+              ),
+
+              _Divider(
+                onHorizontalDragUpdate: (event) {
+                  // 右側のpanelにwidthを指定しているのでプラスではなくマイナスにしている。
+                  final newWidth = threadWidth.value - event.delta.dx;
+                  if (newWidth >= minWidth && newWidth <= maxWidth) {
+                    threadWidth.value = newWidth;
+                  }
+                },
+              ),
+              _PanelContainer(
+                width: threadWidth.value,
+                child: const ThreadView(),
+              ),
+            ],
           ),
 
-          _Divider(
-            onHorizontalDragUpdate: (event) {
-              // 右側のpanelにwidthを指定しているのでプラスではなくマイナスにしている。
-              final newWidth = threadWidth.value - event.delta.dx;
-              if (newWidth >= minWidth && newWidth <= maxWidth) {
-                threadWidth.value = newWidth;
-              }
-            },
-          ),
-          _PanelContainer(
-            width: threadWidth.value,
-            child: const ThreadView(),
+          // Chatのモーダル
+          const Positioned(
+            bottom: 24,
+            child: ChatModal(),
           ),
         ],
       ),

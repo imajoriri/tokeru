@@ -12,9 +12,9 @@ class ChatListItems<T extends AppItem> extends StatelessWidget {
     required List<AppChatItem> chats,
     this.bottomSpace = 0,
     this.readTime,
-    required this.onRead,
-    required this.onThread,
-    required this.onConvertTodo,
+    this.onRead,
+    this.onThread,
+    this.onConvertTodo,
   })  : appItems = chats,
         super(key: key);
 
