@@ -20,6 +20,7 @@ part 'chat_text_field.dart';
 part 'chat_list_item.dart';
 part 'add_sub_todo_button.dart';
 part 'generated_sub_todo.dart';
+part 'memo.dart';
 
 class ThreadView extends HookConsumerWidget {
   const ThreadView({super.key});
@@ -66,6 +67,8 @@ class ThreadView extends HookConsumerWidget {
                 delegate: SliverChildListDelegate(
                   [
                     const _ThreadHeader(),
+                    const SizedBox(height: 8),
+                    const _Memo(),
                     const SizedBox(height: 8),
                     _SubTodoList(
                       currentFocusIndex: currentFocusIndex,

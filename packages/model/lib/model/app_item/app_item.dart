@@ -64,6 +64,9 @@ sealed class AppItem with _$AppItem {
     /// タイトル。
     required String title,
 
+    /// 内容。
+    @Default('') String content,
+
     /// 完了フラグ。
     required bool isDone,
 

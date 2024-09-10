@@ -34,4 +34,15 @@ class SelectedThread extends _$SelectedThread {
       state = event;
     });
   }
+
+  /// [AppTodoItem]のメモを更新する。
+  Future<void> updateMemo(String content) async {
+    final user = ref.read(userControllerProvider).requireValue;
+    final repository = ref.watch(appItemRepositoryProvider(user.id));
+    if (state == null || state is! AppTodoItem) {
+      return;
+    }
+    final item = (state as AppTodoItem).copyWith(content: content);
+    await repository.update(item: item);
+  }
 }

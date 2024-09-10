@@ -71,6 +71,7 @@ _$AppTodoItemImpl _$$AppTodoItemImplFromJson(Map<String, dynamic> json) =>
     _$AppTodoItemImpl(
       id: json['id'] as String,
       title: json['title'] as String,
+      content: json['content'] as String? ?? '',
       isDone: json['isDone'] as bool,
       index: (json['index'] as num).toInt(),
       threadCount: (json['threadCount'] as num?)?.toInt() ?? 0,
@@ -84,6 +85,7 @@ Map<String, dynamic> _$$AppTodoItemImplToJson(_$AppTodoItemImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
+      'content': instance.content,
       'isDone': instance.isDone,
       'index': instance.index,
       'threadCount': instance.threadCount,

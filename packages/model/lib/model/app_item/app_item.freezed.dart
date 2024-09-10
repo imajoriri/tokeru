@@ -57,6 +57,7 @@ mixin _$AppItem {
     required TResult Function(
             String id,
             String title,
+            String content,
             bool isDone,
             int index,
             int threadCount,
@@ -85,6 +86,7 @@ mixin _$AppItem {
     TResult? Function(
             String id,
             String title,
+            String content,
             bool isDone,
             int index,
             int threadCount,
@@ -113,6 +115,7 @@ mixin _$AppItem {
     TResult Function(
             String id,
             String title,
+            String content,
             bool isDone,
             int index,
             int threadCount,
@@ -332,6 +335,7 @@ class _$AppChatItemImpl implements AppChatItem {
     required TResult Function(
             String id,
             String title,
+            String content,
             bool isDone,
             int index,
             int threadCount,
@@ -363,6 +367,7 @@ class _$AppChatItemImpl implements AppChatItem {
     TResult? Function(
             String id,
             String title,
+            String content,
             bool isDone,
             int index,
             int threadCount,
@@ -394,6 +399,7 @@ class _$AppChatItemImpl implements AppChatItem {
     TResult Function(
             String id,
             String title,
+            String content,
             bool isDone,
             int index,
             int threadCount,
@@ -627,6 +633,7 @@ class _$AppThreadItemImpl implements AppThreadItem {
     required TResult Function(
             String id,
             String title,
+            String content,
             bool isDone,
             int index,
             int threadCount,
@@ -658,6 +665,7 @@ class _$AppThreadItemImpl implements AppThreadItem {
     TResult? Function(
             String id,
             String title,
+            String content,
             bool isDone,
             int index,
             int threadCount,
@@ -689,6 +697,7 @@ class _$AppThreadItemImpl implements AppThreadItem {
     TResult Function(
             String id,
             String title,
+            String content,
             bool isDone,
             int index,
             int threadCount,
@@ -937,6 +946,7 @@ class _$AppAiCommentItemImpl implements AppAiCommentItem {
     required TResult Function(
             String id,
             String title,
+            String content,
             bool isDone,
             int index,
             int threadCount,
@@ -968,6 +978,7 @@ class _$AppAiCommentItemImpl implements AppAiCommentItem {
     TResult? Function(
             String id,
             String title,
+            String content,
             bool isDone,
             int index,
             int threadCount,
@@ -999,6 +1010,7 @@ class _$AppAiCommentItemImpl implements AppAiCommentItem {
     TResult Function(
             String id,
             String title,
+            String content,
             bool isDone,
             int index,
             int threadCount,
@@ -1117,6 +1129,7 @@ abstract class _$$AppTodoItemImplCopyWith<$Res>
   $Res call(
       {String id,
       String title,
+      String content,
       bool isDone,
       int index,
       int threadCount,
@@ -1137,6 +1150,7 @@ class __$$AppTodoItemImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? title = null,
+    Object? content = null,
     Object? isDone = null,
     Object? index = null,
     Object? threadCount = null,
@@ -1151,6 +1165,10 @@ class __$$AppTodoItemImplCopyWithImpl<$Res>
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      content: null == content
+          ? _value.content
+          : content // ignore: cast_nullable_to_non_nullable
               as String,
       isDone: null == isDone
           ? _value.isDone
@@ -1182,6 +1200,7 @@ class _$AppTodoItemImpl implements AppTodoItem {
   const _$AppTodoItemImpl(
       {required this.id,
       required this.title,
+      this.content = '',
       required this.isDone,
       required this.index,
       this.threadCount = 0,
@@ -1200,6 +1219,11 @@ class _$AppTodoItemImpl implements AppTodoItem {
   /// タイトル。
   @override
   final String title;
+
+  /// 内容。
+  @override
+  @JsonKey()
+  final String content;
 
   /// 完了フラグ。
   @override
@@ -1229,7 +1253,7 @@ class _$AppTodoItemImpl implements AppTodoItem {
 
   @override
   String toString() {
-    return 'AppItem.todo(id: $id, title: $title, isDone: $isDone, index: $index, threadCount: $threadCount, subTodoCount: $subTodoCount, createdAt: $createdAt)';
+    return 'AppItem.todo(id: $id, title: $title, content: $content, isDone: $isDone, index: $index, threadCount: $threadCount, subTodoCount: $subTodoCount, createdAt: $createdAt)';
   }
 
   @override
@@ -1239,6 +1263,7 @@ class _$AppTodoItemImpl implements AppTodoItem {
             other is _$AppTodoItemImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
+            (identical(other.content, content) || other.content == content) &&
             (identical(other.isDone, isDone) || other.isDone == isDone) &&
             (identical(other.index, index) || other.index == index) &&
             (identical(other.threadCount, threadCount) ||
@@ -1251,8 +1276,8 @@ class _$AppTodoItemImpl implements AppTodoItem {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, title, isDone, index,
-      threadCount, subTodoCount, createdAt);
+  int get hashCode => Object.hash(runtimeType, id, title, content, isDone,
+      index, threadCount, subTodoCount, createdAt);
 
   @JsonKey(ignore: true)
   @override
@@ -1275,6 +1300,7 @@ class _$AppTodoItemImpl implements AppTodoItem {
     required TResult Function(
             String id,
             String title,
+            String content,
             bool isDone,
             int index,
             int threadCount,
@@ -1288,7 +1314,8 @@ class _$AppTodoItemImpl implements AppTodoItem {
             String id, int index, @TimestampConverter() DateTime createdAt)
         divider,
   }) {
-    return todo(id, title, isDone, index, threadCount, subTodoCount, createdAt);
+    return todo(id, title, content, isDone, index, threadCount, subTodoCount,
+        createdAt);
   }
 
   @override
@@ -1306,6 +1333,7 @@ class _$AppTodoItemImpl implements AppTodoItem {
     TResult? Function(
             String id,
             String title,
+            String content,
             bool isDone,
             int index,
             int threadCount,
@@ -1319,8 +1347,8 @@ class _$AppTodoItemImpl implements AppTodoItem {
             String id, int index, @TimestampConverter() DateTime createdAt)?
         divider,
   }) {
-    return todo?.call(
-        id, title, isDone, index, threadCount, subTodoCount, createdAt);
+    return todo?.call(id, title, content, isDone, index, threadCount,
+        subTodoCount, createdAt);
   }
 
   @override
@@ -1338,6 +1366,7 @@ class _$AppTodoItemImpl implements AppTodoItem {
     TResult Function(
             String id,
             String title,
+            String content,
             bool isDone,
             int index,
             int threadCount,
@@ -1353,8 +1382,8 @@ class _$AppTodoItemImpl implements AppTodoItem {
     required TResult orElse(),
   }) {
     if (todo != null) {
-      return todo(
-          id, title, isDone, index, threadCount, subTodoCount, createdAt);
+      return todo(id, title, content, isDone, index, threadCount, subTodoCount,
+          createdAt);
     }
     return orElse();
   }
@@ -1414,6 +1443,7 @@ abstract class AppTodoItem implements AppItem {
   const factory AppTodoItem(
           {required final String id,
           required final String title,
+          final String content,
           required final bool isDone,
           required final int index,
           final int threadCount,
@@ -1431,6 +1461,9 @@ abstract class AppTodoItem implements AppItem {
 
   /// タイトル。
   String get title;
+
+  /// 内容。
+  String get content;
 
   /// 完了フラグ。
   bool get isDone;
@@ -1609,6 +1642,7 @@ class _$AppSubTodoItemImpl implements AppSubTodoItem {
     required TResult Function(
             String id,
             String title,
+            String content,
             bool isDone,
             int index,
             int threadCount,
@@ -1640,6 +1674,7 @@ class _$AppSubTodoItemImpl implements AppSubTodoItem {
     TResult? Function(
             String id,
             String title,
+            String content,
             bool isDone,
             int index,
             int threadCount,
@@ -1671,6 +1706,7 @@ class _$AppSubTodoItemImpl implements AppSubTodoItem {
     TResult Function(
             String id,
             String title,
+            String content,
             bool isDone,
             int index,
             int threadCount,
@@ -1891,6 +1927,7 @@ class _$AppDividerItemImpl implements AppDividerItem {
     required TResult Function(
             String id,
             String title,
+            String content,
             bool isDone,
             int index,
             int threadCount,
@@ -1922,6 +1959,7 @@ class _$AppDividerItemImpl implements AppDividerItem {
     TResult? Function(
             String id,
             String title,
+            String content,
             bool isDone,
             int index,
             int threadCount,
@@ -1953,6 +1991,7 @@ class _$AppDividerItemImpl implements AppDividerItem {
     TResult Function(
             String id,
             String title,
+            String content,
             bool isDone,
             int index,
             int threadCount,
